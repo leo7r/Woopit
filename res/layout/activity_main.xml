@@ -21,7 +21,7 @@
      android:layout_width="fill_parent"
      android:textColor="#fff"
      android:layout_height="wrap_content"
-     android:text="-27.617136"
+     android:text="10.428015"
       >
  </EditText>
 
@@ -41,7 +41,7 @@
      android:textColor="#fff"
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
-     android:text="-48.446299"
+     android:text="-66.877930"
      >
  </EditText>
 

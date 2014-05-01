@@ -13,6 +13,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -27,6 +29,7 @@ import android.location.LocationManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
+import android.opengl.GLUtils;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.Surface;
@@ -59,8 +62,12 @@ public class MainActivity extends Activity {
 	String latitud = "";
 	String longitud = "";
 	String acelerometro = "X";
+	private FloatBuffer mTextureBuffer;
 	static final float ALPHA = 0.15f;
-	GLClearRenderer render = new GLClearRenderer();
+	private int mTextureId = -1;
+	 Bitmap bitmap;
+	 int indice = 0;
+	GLClearRenderer render;
 	  AlertDialog a;
 	   SensorEventListener listener = new SensorEventListener(){
 		 
@@ -118,11 +125,12 @@ public class MainActivity extends Activity {
 
   
         setContentView(R.layout.activity_main);
-
+        bitmap = BitmapFactory.decodeResource(super.getApplicationContext().getResources(), R.drawable.images);
         Button bSuma = (Button) findViewById(R.id.botonSuma);
         bSuma.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
+				render = new GLClearRenderer();
 				crearCamara();
 			}});
         
@@ -303,8 +311,11 @@ public class MainActivity extends Activity {
     	    private FloatBuffer mVertexBuffer;
     	    private FloatBuffer mColorBuffer;
     	    private ByteBuffer  mIndexBuffer;
-    	        
-    		private float vertices[] = {
+    	    
+    	   ;
+    	 // Tell OpenGL to generate textures.
+    	
+    	/*	private float vertices[] = {
     			      -1.0f,  1.0f, 0.0f,  // 0, Top Left
     			      -1.0f, -1.0f, 0.0f,  // 1, Bottom Left
     			       1.0f, -1.0f, 0.0f,  // 2, Bottom Right
@@ -324,8 +335,69 @@ public class MainActivity extends Activity {
     	    private byte indices[] = {
     	                              0, 1, 2, 0, 2, 3,
    
-    	                              };
-    	                
+    	                              };*/
+    	    private float vertices[] = {
+    	    		-1.0f,
+    	            -1.0f,
+    	            1.0f, // Vertex 0
+    	            1.0f,
+    	            -1.0f,
+    	            1.0f, // v1
+    	            -1.0f,
+    	            1.0f,
+    	            1.0f, // v2
+    	            1.0f,
+    	            1.0f,
+    	            1.0f, // v3
+
+    	            1.0f,
+    	            -1.0f,
+    	            1.0f, // ...
+    	            1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
+
+    	            1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f,
+    	            1.0f, -1.0f,
+
+    	            -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f,
+    	            1.0f, 1.0f,
+
+    	            -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
+    	            -1.0f, 1.0f,
+
+    	            -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f,
+    	            1.0f, -1.0f,
+                    };
+    	    private float colors[] = {
+                    0.0f,  1.0f,  0.0f,  1.0f,
+                    0.0f,  1.0f,  0.0f,  1.0f,
+                    1.0f,  0.5f,  0.0f,  1.0f,
+                    1.0f,  0.5f,  0.0f,  1.0f,
+                    1.0f,  0.0f,  0.0f,  1.0f,
+                    1.0f,  0.0f,  0.0f,  1.0f,
+                    0.0f,  0.0f,  1.0f,  1.0f,
+                    1.0f,  0.0f,  1.0f,  1.0f
+                 };
+    	    private byte indices[] = {
+    	    		 0, 1, 3, 0, 3,
+    	             2, // Face front
+    	             4, 5, 7, 4, 7,
+    	             6, // Face right
+    	             8, 9, 11, 8, 11,
+    	             10, // ...
+    	             12, 13, 15, 12, 15, 14, 16, 17, 19, 16, 19, 18, 20, 21, 23, 20, 23,
+    	             22,};
+    	    float textureCoordinates[] = {  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+    	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+    	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+    	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+    	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+    	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,};
+
     	    public Cube() {
     	            ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
     	            byteBuf.order(ByteOrder.nativeOrder());
@@ -333,31 +405,58 @@ public class MainActivity extends Activity {
     	            mVertexBuffer.put(vertices);
     	            mVertexBuffer.position(0);
     	                
-    	            byteBuf = ByteBuffer.allocateDirect(colors.length * 4);
+    	            /*byteBuf = ByteBuffer.allocateDirect(colors.length * 4);
     	            byteBuf.order(ByteOrder.nativeOrder());
     	            mColorBuffer = byteBuf.asFloatBuffer();
     	            mColorBuffer.put(colors);
-    	            mColorBuffer.position(0);
-    	                
+    	            mColorBuffer.position(0);*/
+
+    	            //GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+    	            byteBuf = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
+    	        	byteBuf.order(ByteOrder.nativeOrder());
+    	        	mTextureBuffer = byteBuf.asFloatBuffer();
+    	        	mTextureBuffer.put(textureCoordinates);
+    	        	mTextureBuffer.position(0);
+    	        	
     	            mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
     	            mIndexBuffer.put(indices);
     	            mIndexBuffer.position(0);
+    	            
     	    }
 
-    	    public void draw(GL10 gl) {             
-    	            gl.glFrontFace(GL10.GL_CW);
+    	    public void draw(GL10 gl) {        
+    	    	
+	            //--------------------------------------------
+	            gl.glEnable(GL10.GL_TEXTURE_2D);
+	            // Tell OpenGL where our texture is located.
+	            // Tell OpenGL to enable the use of UV coordinates.
+	            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+	            // Telling OpenGL where our UV coordinates are.
+	            ///----------------------------------------------
+    	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureId);
+
+    	        gl.glFrontFace(GL10.GL_CW);
     	            
-    	            gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
-    	            gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
+    	        // gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
     	            
-    	            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-    	            gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-    	             
-    	            gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_BYTE, 
+    	        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+    	        //   gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+    	         
+    	        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
+       	        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
+
+
+
+    	         
+    	        gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_BYTE, 
     	                            mIndexBuffer);
     	                
     	            gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-    	            gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+    	           // gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+    	         // Disable the use of UV coordinates.
+    	            gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+    	            // Disable the use of textures.
+    	            gl.glDisable(GL10.GL_TEXTURE_2D);
     	    }
     	}
     	public static boolean isNumeric(String str)  
@@ -373,21 +472,44 @@ public class MainActivity extends Activity {
     	  return true;  
     	}
     	public class GLClearRenderer implements Renderer {
+    		private float mCubeRotation;
     	    private Cube mCube = new Cube();
     	    private float rotation = 0.0f;
+    	    int[] textures = new int[1];
     	    private float desplazamientoZ = -10.0f;
     	    public void onDrawFrame( GL10 gl ) {
       	        c -= 1.0f;
     	        gl.glClearColor( 0.1f,0.1f,0.1f, 0.1f );
-    	        
-    	        gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
-  
+    	        gl.glClearDepthf(1.0f);   
+    	        gl.glEnable(GL10.GL_DEPTH_TEST); 
+    	        gl.glDepthFunc(GL10.GL_LEQUAL);   
+   	        gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
+    	        gl.glEnable(GL10.GL_TEXTURE_2D);
     	        gl.glPushMatrix();
+    	        
+    	        if(indice == 0){
+    	        	gl.glGenTextures(1, textures, 0);
+        			gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
+        			mTextureId = textures[0];
+        			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+        					GL10.GL_LINEAR);
+        			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
+        					GL10.GL_LINEAR);
+        			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+
+        			indice++;
+    	        }
+    	       
+    	       
     	        
     	        gl.glRotatef(rotation, 0,1, 0);
     	        gl.glTranslatef(0.0f, 0.0f, desplazamientoZ);
+    	        gl.glRotatef(mCubeRotation, 1.0f, 1.0f, 1.0f);
                 mCube.draw(gl);
+
                 gl.glPopMatrix();
+   
+                mCubeRotation -= 0.70f; 
           
 
     	    }
@@ -402,7 +524,9 @@ public class MainActivity extends Activity {
     	        // This is called whenever the dimensions of the surface have changed.
     	        // We need to adapt this change for the GL viewport.
     	        gl.glViewport( 0, 0, width, height );
-    	        
+    	        gl.glClearDepthf(1.0f);
+                gl.glEnable(GL10.GL_DEPTH_TEST);
+                gl.glDepthFunc(GL10.GL_LEQUAL);
     	    	gl.glMatrixMode(GL10.GL_PROJECTION);
     			// Reset the projection matrix
     			gl.glLoadIdentity();
@@ -413,6 +537,10 @@ public class MainActivity extends Activity {
     			gl.glMatrixMode(GL10.GL_MODELVIEW);
     			// Reset the modelview matrix
     			gl.glLoadIdentity();
+    			
+    			/////////////////
+    			
+
     	    }
     	    
     	    public void onSurfaceCreated( GL10 gl, EGLConfig config ) {
