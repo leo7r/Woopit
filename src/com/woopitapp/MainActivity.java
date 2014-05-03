@@ -7,8 +7,6 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.example.prueba.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -45,7 +43,7 @@ public class MainActivity extends Activity {
 	
 	public final static String EXTRA_MESSAGE = "com.woopitapp.MESSAGE";
 	
-	public SensorManager sensorMan; 
+	public SensorManager sensorMan;
 	GLSurfaceView glView;
 	CameraView cameraView;
 	float x = 0.0f;
@@ -68,7 +66,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
-        bitmap = BitmapFactory.decodeResource(super.getApplicationContext().getResources(), R.drawable.images);
+        bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.box_texture2);
         Button bSuma = (Button) findViewById(R.id.botonSuma);
         bSuma.setOnClickListener(new OnClickListener(){
         	@Override
@@ -236,7 +234,7 @@ public class MainActivity extends Activity {
 	    }
 	    
 	}
-
+	
 	/* Listeners */
 	SensorEventListener listener = new SensorEventListener(){
 		 
@@ -352,7 +350,7 @@ public class MainActivity extends Activity {
     	}
  		
     	}; 
-
+    
     /* Camara Views */
     
     public class CustomCameraView extends SurfaceView{
@@ -471,12 +469,16 @@ public class MainActivity extends Activity {
 		private float desplazamientoZ = -10.0f;
 		
 		public void onDrawFrame( GL10 gl ) {
+			
 			c -= 1.0f;
+			
 			gl.glClearColor( 0.1f,0.1f,0.1f, 0.1f );
-			gl.glClearDepthf(1.0f);
-			gl.glEnable(GL10.GL_DEPTH_TEST); 
+	        gl.glClearDepthf(1.0f);
+	        //gl.glDepthMask(true);
+	        gl.glEnable(GL10.GL_DEPTH_TEST);
 	        gl.glDepthFunc(GL10.GL_LEQUAL);
-	        gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
+            gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
+            gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
 	        gl.glEnable(GL10.GL_TEXTURE_2D);
 	        gl.glPushMatrix();
 	        
@@ -484,10 +486,10 @@ public class MainActivity extends Activity {
 	        	gl.glGenTextures(1, textures, 0);
     			gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
     			mTextureId = textures[0];
-    			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-    					GL10.GL_LINEAR);
-    			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
-    					GL10.GL_LINEAR);
+    	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+    	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+    	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+    	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
     			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 
     			indice++;
