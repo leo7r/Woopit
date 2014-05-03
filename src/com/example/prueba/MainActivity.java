@@ -125,7 +125,11 @@ public class MainActivity extends Activity {
 
   
         setContentView(R.layout.activity_main);
-        bitmap = BitmapFactory.decodeResource(super.getApplicationContext().getResources(), R.drawable.images);
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        bitmap =
+        BitmapFactory.decodeResource(this.getResources(),R.drawable.images, options);
+
         Button bSuma = (Button) findViewById(R.id.botonSuma);
         bSuma.setOnClickListener(new OnClickListener(){
 			@Override
@@ -384,9 +388,15 @@ public class MainActivity extends Activity {
     	             6, // Face right
     	             8, 9, 11, 8, 11,
     	             10, // ...
-    	             12, 13, 15, 12, 15, 14, 16, 17, 19, 16, 19, 18, 20, 21, 23, 20, 23,
+    	             12, 13, 15,
+    	             12, 15, 14, 
+    	             16, 17, 19, 
+    	             16, 19, 18,
+    	             20, 21, 23, 
+    	             20, 23,
     	             22,};
-    	    float textureCoordinates[] = {  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+    	    float textureCoordinates[] = {  
+    	    		0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 
     	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 
@@ -405,13 +415,13 @@ public class MainActivity extends Activity {
     	            mVertexBuffer.put(vertices);
     	            mVertexBuffer.position(0);
     	                
-    	            /*byteBuf = ByteBuffer.allocateDirect(colors.length * 4);
+    	          /*  byteBuf = ByteBuffer.allocateDirect(colors.length * 4);
     	            byteBuf.order(ByteOrder.nativeOrder());
     	            mColorBuffer = byteBuf.asFloatBuffer();
     	            mColorBuffer.put(colors);
     	            mColorBuffer.position(0);*/
 
-    	            //GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+    	           // GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
     	            byteBuf = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
     	        	byteBuf.order(ByteOrder.nativeOrder());
     	        	mTextureBuffer = byteBuf.asFloatBuffer();
@@ -421,16 +431,15 @@ public class MainActivity extends Activity {
     	            mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
     	            mIndexBuffer.put(indices);
     	            mIndexBuffer.position(0);
-    	            
+  
     	    }
 
     	    public void draw(GL10 gl) {        
     	    	
 	            //--------------------------------------------
-	            gl.glEnable(GL10.GL_TEXTURE_2D);
+	           gl.glEnable(GL10.GL_TEXTURE_2D);
 	            // Tell OpenGL where our texture is located.
 	            // Tell OpenGL to enable the use of UV coordinates.
-	            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	            // Telling OpenGL where our UV coordinates are.
 	            ///----------------------------------------------
     	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureId);
@@ -438,21 +447,24 @@ public class MainActivity extends Activity {
     	        gl.glFrontFace(GL10.GL_CW);
     	            
     	        // gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
-    	            
     	        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-    	        //   gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-    	         
     	        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
+
+    	        //  gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
        	        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
 
+	            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
 
-    	         
+
+
+
+//gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
     	        gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_BYTE, 
-    	                            mIndexBuffer);
+    	                           mIndexBuffer);
     	                
     	            gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-    	           // gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+    	        //    gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
     	         // Disable the use of UV coordinates.
     	            gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
     	            // Disable the use of textures.
@@ -480,10 +492,12 @@ public class MainActivity extends Activity {
     	    public void onDrawFrame( GL10 gl ) {
       	        c -= 1.0f;
     	        gl.glClearColor( 0.1f,0.1f,0.1f, 0.1f );
-    	        gl.glClearDepthf(1.0f);   
+    	        gl.glClearDepthf(1.0f);
+    	        //gl.glDepthMask(true);
     	        gl.glEnable(GL10.GL_DEPTH_TEST); 
     	        gl.glDepthFunc(GL10.GL_LEQUAL);   
-   	        gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
+   	            gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
+   	            gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
     	        gl.glEnable(GL10.GL_TEXTURE_2D);
     	        gl.glPushMatrix();
     	        
@@ -491,10 +505,10 @@ public class MainActivity extends Activity {
     	        	gl.glGenTextures(1, textures, 0);
         			gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
         			mTextureId = textures[0];
-        			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-        					GL10.GL_LINEAR);
-        			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
-        					GL10.GL_LINEAR);
+        	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+        	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+        	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+        	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
         			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 
         			indice++;
@@ -524,9 +538,9 @@ public class MainActivity extends Activity {
     	        // This is called whenever the dimensions of the surface have changed.
     	        // We need to adapt this change for the GL viewport.
     	        gl.glViewport( 0, 0, width, height );
-    	        gl.glClearDepthf(1.0f);
-                gl.glEnable(GL10.GL_DEPTH_TEST);
-                gl.glDepthFunc(GL10.GL_LEQUAL);
+    	     //   gl.glClearDepthf(1.0f);
+               // gl.glEnable(GL10.GL_DEPTH_TEST);
+                //gl.glDepthFunc(GL10.GL_LEQUAL);
     	    	gl.glMatrixMode(GL10.GL_PROJECTION);
     			// Reset the projection matrix
     			gl.glLoadIdentity();
