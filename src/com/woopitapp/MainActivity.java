@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
 	String longitud = "";
 	String acelerometro = "X";
 	private FloatBuffer mTextureBuffer;
-	static final float ALPHA = 0.15f;
+	static final float ALPHA = 0.1f;
 	private int mTextureId = -1;
 	Bitmap bitmap;
 	int indice = 0;
@@ -261,7 +261,7 @@ public class MainActivity extends Activity {
     	public void onSensorChanged(SensorEvent evt){
     		
     		float azimut = 0.0f;
-    		
+    		float vertical = 0.0f;
     		if (evt.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
     			mGravity =  lowPass(evt.values.clone(), mGravity);
     		}
@@ -292,13 +292,17 @@ public class MainActivity extends Activity {
 		        	float orientation[] = new float[3];
 		        	SensorManager.getOrientation(R2, orientation);
 		        	azimut =(int) Math.round(Math.toDegrees(orientation[0]));
+		        	vertical =(int) Math.round(Math.toDegrees(orientation[1]));
+
 		        }
     		
     		}
     		
     		int offset =  (int) (azimut + angulo);
+    	
     		// direccion.setText(" azimut: "+(azimut) + " angulo: " + angulo );
-    		render.rotarMundo(offset);
+    		render.rotarMundoX(offset);
+    		render.rotarMundoY(vertical);
     		// Set the Icon for the Dialog
     	}
 
@@ -464,7 +468,8 @@ public class MainActivity extends Activity {
     	
     	private float mCubeRotation;
 		private Cube mCube = new Cube();
-		private float rotation = 0.0f;
+		private float rotationX = 0.0f;
+		private float rotationY = 0.0f;
 		int[] textures = new int[1];
 		private float desplazamientoZ = -10.0f;
 		
@@ -495,7 +500,8 @@ public class MainActivity extends Activity {
     			indice++;
 	        }
 	        
-	        gl.glRotatef(rotation, 0,1, 0);
+	        gl.glRotatef(rotationX, 0,1, 0);
+	        gl.glRotatef(rotationY,1 ,0, 0);
 	        gl.glTranslatef(0.0f, 0.0f, desplazamientoZ);
 	        gl.glRotatef(mCubeRotation, 1.0f, 1.0f, 1.0f);
             mCube.draw(gl);
@@ -509,9 +515,14 @@ public class MainActivity extends Activity {
 			desplazamientoZ = z;
 		}
 		
-		public void rotarMundo(float x){
-			rotation = (x);
+		public void rotarMundoX(float x){
+			rotationX = (x);
 		}
+		
+		public void rotarMundoY(float y){
+			rotationY = (y);
+		}
+		
 		
 		public void onSurfaceChanged( GL10 gl, int width, int height ) {
 			
