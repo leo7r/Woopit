@@ -24,22 +24,26 @@ public final class R {
         public static final int box_texture=0x7f020000;
         public static final int box_texture2=0x7f020001;
         public static final int ic_launcher=0x7f020002;
-        public static final int images=0x7f020003;
+        public static final int notif_icon=0x7f020003;
+        public static final int profile2=0x7f020004;
     }
     public static final class id {
-        public static final int action_settings=0x7f080008;
+        public static final int action_settings=0x7f08000a;
         public static final int botonSuma=0x7f080007;
+        public static final int image=0x7f080008;
         public static final int latitud=0x7f080001;
         public static final int longitud=0x7f080003;
         public static final int rdbOne=0x7f080005;
         public static final int rdbTwo=0x7f080006;
         public static final int rdgGrupo=0x7f080004;
         public static final int texto=0x7f080000;
+        public static final int texto1=0x7f080009;
         public static final int texto2=0x7f080002;
     }
     public static final class layout {
         public static final int activity_display_message=0x7f030000;
         public static final int activity_main=0x7f030001;
+        public static final int notification=0x7f030002;
     }
     public static final class menu {
         public static final int display_message=0x7f070000;
