@@ -655,8 +655,9 @@ public class MainActivity extends Activity {
 	        }
 	        gl.glRotatef(rotationX, 0,1, 0);
 	        gl.glRotatef(rotationY,1 ,0, 0);
-	        gl.glTranslatef(0.0f, -5.0f, desplazamientoZ);
+	        gl.glTranslatef(0.0f, -3.0f, desplazamientoZ);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
+	        gl.glScalef(0.7f, 0.7f, 0.7f);
             mCube.draw(gl);
             
             gl.glPopMatrix();
@@ -787,7 +788,7 @@ public class MainActivity extends Activity {
     			//WindowManager.LayoutParams.FLAG_FULLSCREEN );
     			direccion = new TextView(this);
     			direccion.setTextColor(Color.RED);
-    			direccion.setText("AQUI ");
+    			//direccion.setText("AQUI ");
     			glView = new GLSurfaceView( this );
     			glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
     			glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
