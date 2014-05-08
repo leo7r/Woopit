@@ -1,8 +1,15 @@
 package com.woopitapp;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -66,12 +73,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
-        bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.box_texture2);
+        bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.texturacorazon);
         Button bSuma = (Button) findViewById(R.id.botonSuma);
         bSuma.setOnClickListener(new OnClickListener(){
         	@Override
 			public void onClick(View arg0) {
-				render = new GLClearRenderer();
+				
 				crearCamara();
 			}
         });
@@ -84,7 +91,7 @@ public class MainActivity extends Activity {
         
 	    private FloatBuffer mVertexBuffer;
 	    private FloatBuffer mColorBuffer;
-	    private ByteBuffer  mIndexBuffer;
+	    private ShortBuffer  mIndexBuffer;
 	    	
 	/*	private float vertices[] = {
 			-1.0f,  1.0f, 0.0f,		// 0, Top Left
@@ -106,38 +113,19 @@ public class MainActivity extends Activity {
 	   
 	    private byte indices[] = {0, 1, 2, 0, 2, 3};
 	    */
-	    
-	    private float vertices[] = {
-			-1.0f,
-			-1.0f,
-			1.0f, // Vertex 0
-			1.0f,
-			-1.0f,
-			1.0f, // v1
-			-1.0f,
-			1.0f,
-			1.0f, // v2
-			1.0f,
-			1.0f,
-			1.0f, // v3
-			
-			1.0f,
-			-1.0f,
-			1.0f, // ...
-			1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
-			
-			1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f,
-			1.0f, -1.0f,
-			
-			-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f,
-			1.0f, 1.0f,
-			
-			-1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
-			-1.0f, 1.0f,
-			
-			-1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f,
-			1.0f, -1.0f,
-	    	};
+	    float textureCoordinates[] = {  
+	    		0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+
+	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,};
+	    private Vector<Float>  vertices = new Vector();
 	    
 	    private float colors[] = {
 			0.0f,  1.0f,  0.0f,  1.0f,
@@ -150,57 +138,204 @@ public class MainActivity extends Activity {
 			1.0f,  0.0f,  1.0f,  1.0f
 	    };
 	    
-	    private byte indices[] = {
-			0, 1, 3, 0, 3,
-			2, // Face front
-			4, 5, 7, 4, 7,
-			6, // Face right
-			8, 9, 11, 8, 11,
-			10, // ...
-			12, 13, 15, 12, 15, 14, 16, 17, 19, 16, 19, 18, 20, 21, 23, 20, 23,
-			22
-	    };
-	    
-	    float textureCoordinates[] = {  
-			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			
-			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			
-			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			
-			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			
-			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			
-			0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f
-		};
+	    private Vector<Integer> indices = new Vector();
+	    private Vector normals = new Vector();
+	    private Vector<Float> textureCoor = new Vector();
+	    private Vector faceNormals = new Vector();
+	    private Vector textureIndex = new Vector();
 
+	    protected int parseInt(String val) {
+			if (val.length() == 0) {
+				return -1;
+			}
+			return Integer.parseInt(val);
+		}
+
+		protected int[] parseIntTriple(String face) {
+			int ix = face.indexOf("/");
+			if (ix == -1)
+				return new int[] {Integer.parseInt(face)-1};
+			else {
+				int ix2 = face.indexOf("/", ix+1);
+				if (ix2 == -1) {
+					return new int[] 
+					               {Integer.parseInt(face.substring(0,ix))-1,
+							Integer.parseInt(face.substring(ix+1))-1};
+				}
+				else {
+					return new int[] 
+					               {parseInt(face.substring(0,ix))-1,
+							parseInt(face.substring(ix+1,ix2))-1,
+							parseInt(face.substring(ix2+1))-1
+					               };
+				}
+			}
+		}
+		public void leerArchivo(InputStream in){
+			boolean file_normal = false;
+			int nCount = 0;
+			float[] coord = new float[2];
+		
+			LineNumberReader input = new LineNumberReader(new InputStreamReader(in));	    
+			String line = null;
+			try {
+				for (line = input.readLine(); 
+				line != null; 
+				line = input.readLine())
+				{
+					if (line.length() > 0) {
+						if (line.startsWith("v ")) {
+							float[] vertex = new float[3];
+							StringTokenizer tok = new StringTokenizer(line);
+							tok.nextToken();
+							vertex[0] = Float.parseFloat(tok.nextToken());
+							vertex[1] = Float.parseFloat(tok.nextToken());
+							vertex[2] = Float.parseFloat(tok.nextToken());
+							vertices.addElement(vertex[0]);
+							vertices.addElement(vertex[1]);
+							vertices.addElement(vertex[2]);
+						}
+						else if (line.startsWith("vt ")) {
+							StringTokenizer tok = new StringTokenizer(line);
+							tok.nextToken();
+							coord[0] = Float.parseFloat(tok.nextToken());
+							coord[1] = Float.parseFloat(tok.nextToken());
+							textureCoor.addElement(coord[0]);
+							textureCoor.addElement(coord[1]);
+						}
+						else if (line.startsWith("f ")) {
+							int[] face = new int[3];
+							int[] face_n_ix = new int[3];
+							int[] face_tx_ix = new int[3];
+							int[] val;
+		
+							StringTokenizer tok = new StringTokenizer(line);
+							tok.nextToken();
+							val = parseIntTriple(tok.nextToken());
+							face[0] = val[0];
+							if (val.length > 1 && val[1] > -1)
+								face_tx_ix[0] = val[1];
+							if (val.length > 2 && val[2] > -1)
+								face_n_ix[0] = val[2];
+		
+							val = parseIntTriple(tok.nextToken());
+							face[1] = val[0];
+							if (val.length > 1 && val[1] > -1)
+								face_tx_ix[1] = val[1];
+							if (val.length > 2 && val[2] > -1)
+								face_n_ix[1] = val[2];
+		
+							val = parseIntTriple(tok.nextToken());
+							face[2] = val[0];
+							if (val.length > 1 && val[1] > -1) {
+								face_tx_ix[2] = val[1];
+								textureIndex.addElement(face_tx_ix);
+							}
+							if (val.length > 2 && val[2] > -1) {
+								face_n_ix[2] = val[2];
+								faceNormals.addElement(face_n_ix);
+							}
+							indices.addElement(face[0]);
+							indices.addElement(face[1]);
+							indices.addElement(face[2]);
+							if (tok.hasMoreTokens()) {
+								val = parseIntTriple(tok.nextToken());
+								face[1] = face[2];
+								face[2] = val[0];
+								if (val.length > 1 && val[1] > -1) {
+									face_tx_ix[1] = face_tx_ix[2];
+									face_tx_ix[2] = val[1];
+									textureIndex.addElement(face_tx_ix);
+								}
+								if (val.length > 2 && val[2] > -1) {
+									face_n_ix[1] = face_n_ix[2];
+									face_n_ix[2] = val[2];
+									faceNormals.addElement(face_n_ix);
+								}
+								//indices.addElement(face);
+							}
+		
+						}
+						else if (line.startsWith("vn ")) {
+							nCount++;
+							float[] norm = new float[3];
+							StringTokenizer tok = new StringTokenizer(line);
+							tok.nextToken();
+							norm[0] = Float.parseFloat(tok.nextToken());
+							norm[1] = Float.parseFloat(tok.nextToken());
+							norm[2] = Float.parseFloat(tok.nextToken());
+							normals.addElement(norm);
+							file_normal = true;
+						}
+					}
+				}
+			}
+			catch (Exception ex) {
+				System.err.println("Error parsing file:");
+				System.err.println(input.getLineNumber()+" : "+line);
+			}
+		
+			//for (int i=0;i<vertex_normals.size();i++) {
+			//m.setVertexNormal(i, vertex_normals.get(i));
+			//}
+			
+		}
+		public  float[] convertFloats(Float[] floats)
+		{
+			float[] r = new float[floats.length];
+		    for (int i=0; i < floats.length; i++)
+		    {
+		        r[i] = floats[i];
+		    }
+		    return r;
+		}
+		public  short[] convertInts(Integer[] ints)
+		{
+			short[] r = new short[ints.length];
+		    for (int i=0; i < ints.length; i++)
+		    {
+		        r[i] = Short.parseShort(ints[i]+"");
+		    }
+		    return r;
+		}
 	    public Cube() {
+	    	try{
+	    		
+	    		InputStream in =   getAssets().open("corazon.obj");
+	    		direccion.setText("PASOO");
+	    		leerArchivo(in);
+	    		
+	    		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.size() * 4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				mVertexBuffer = byteBuf.asFloatBuffer();
+				
+				mVertexBuffer.put(convertFloats(vertices.toArray(new Float[vertices.size()])));
+				mVertexBuffer.position(0);
+				    
+				/*
+				byteBuf = ByteBuffer.allocateDirect(colors.length * 4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				mColorBuffer = byteBuf.asFloatBuffer();
+				mColorBuffer.put(colors);
+				mColorBuffer.position(0);*/
+				
+				
+				//GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+				byteBuf = ByteBuffer.allocateDirect(textureCoor.size() * 4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				mTextureBuffer = byteBuf.asFloatBuffer();
+				mTextureBuffer.put(convertFloats(textureCoor.toArray(new Float[textureCoor.size()])));
+				mTextureBuffer.position(0);
+				
+				mIndexBuffer = ShortBuffer.allocate(indices.size());
+				mIndexBuffer.put(convertInts(indices.toArray(new Integer[indices.size()])));
+				mIndexBuffer.position(0);
+	    	}catch(Exception e){
+	    		direccion.setText("err: " + e);
+
+	    	}
 	    	
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			mVertexBuffer = byteBuf.asFloatBuffer();
-			mVertexBuffer.put(vertices);
-			mVertexBuffer.position(0);
-			    
-			/*
-			byteBuf = ByteBuffer.allocateDirect(colors.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			mColorBuffer = byteBuf.asFloatBuffer();
-			mColorBuffer.put(colors);
-			mColorBuffer.position(0);
-			*/
-			
-			//GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-			byteBuf = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			mTextureBuffer = byteBuf.asFloatBuffer();
-			mTextureBuffer.put(textureCoordinates);
-			mTextureBuffer.position(0);
-			
-			mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
-			mIndexBuffer.put(indices);
-			mIndexBuffer.position(0);
+		
 	    }
 
 	    public void draw(GL10 gl) {        
@@ -224,7 +359,7 @@ public class MainActivity extends Activity {
 	        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
    	        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
 
-	        gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_BYTE, mIndexBuffer);
+	        gl.glDrawElements(GL10.GL_TRIANGLES, indices.size(), GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
 	        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	        // gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
 	        // Disable the use of UV coordinates.
@@ -499,11 +634,10 @@ public class MainActivity extends Activity {
 
     			indice++;
 	        }
-	        
 	        gl.glRotatef(rotationX, 0,1, 0);
 	        gl.glRotatef(rotationY,1 ,0, 0);
-	        gl.glTranslatef(0.0f, 0.0f, desplazamientoZ);
-	        gl.glRotatef(mCubeRotation, 1.0f, 1.0f, 1.0f);
+	        gl.glTranslatef(0.0f, -5.0f, desplazamientoZ);
+	        gl.glRotatef(mCubeRotation, 0, 1, 0);
             mCube.draw(gl);
             
             gl.glPopMatrix();
@@ -632,13 +766,15 @@ public class MainActivity extends Activity {
     			//requestWindowFeature( Window.FEATURE_NO_TITLE );
     			//getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
     			//WindowManager.LayoutParams.FLAG_FULLSCREEN );
-   
+    			direccion = new TextView(this);
+    			direccion.setTextColor(Color.RED);
+    			direccion.setText("AQUI ");
     			glView = new GLSurfaceView( this );
     			glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
     			glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
+    			render = new GLClearRenderer();
     			glView.setRenderer(render);
-    			direccion = new TextView(glView.getContext());
-    			direccion.setTextColor(Color.RED);
+
     			setContentView( glView );
     			
     			CustomCameraView cv = new CustomCameraView(this);
@@ -647,6 +783,7 @@ public class MainActivity extends Activity {
     			//cameraView = new CameraView( this );
     			
     			addContentView( cv, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
+
     			addContentView(direccion,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
       
     		}
