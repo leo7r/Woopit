@@ -15,7 +15,11 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -30,10 +34,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
+import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -44,6 +49,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -68,6 +74,8 @@ public class MainActivity extends Activity {
 	int indice = 0;
 	GLClearRenderer render;
 	
+	boolean notif = true;
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +83,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.texturacorazon);
         Button bSuma = (Button) findViewById(R.id.botonSuma);
+        
         bSuma.setOnClickListener(new OnClickListener(){
         	@Override
 			public void onClick(View arg0) {
@@ -82,7 +91,18 @@ public class MainActivity extends Activity {
 				crearCamara();
 			}
         });
-     
+        
+        if ( notif ){
+        	new Handler().postDelayed(new Runnable(){
+
+				@Override
+				public void run() {
+		        	setNotification();
+				}
+			}, 10000);
+        	
+        }
+        
     }
 	
 	/* Imagen en 3D */
@@ -302,7 +322,6 @@ public class MainActivity extends Activity {
 	    	try{
 	    		
 	    		InputStream in =   getAssets().open("corazon.obj");
-	    		direccion.setText("PASOO");
 	    		leerArchivo(in);
 	    		
 	    		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.size() * 4);
@@ -796,6 +815,23 @@ public class MainActivity extends Activity {
     public void recopilar(int num) {
     	TextView editText = (TextView) findViewById(R.id.texto);
     	editText.setText(editText.getText() + "" + num);
+    }
+    
+    /* Video notificacion */
+    public void setNotification(){
+    	
+    	Notification notification = new Notification(R.drawable.notif_icon, null, System.currentTimeMillis());
+		RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification);
+	    
+    	
+	    Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+	    PendingIntent pendingNotificationIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+
+	    notification.contentView = notificationView;
+	    notification.contentIntent = pendingNotificationIntent;
+	    
+	    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    	mNotificationManager.notify(1, notification);
     }
     
 }
