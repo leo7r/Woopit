@@ -5,11 +5,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
 import java.nio.ShortBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import org.lwjgl.opengl.GL11;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -33,12 +35,14 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -73,9 +77,14 @@ public class MainActivity extends Activity {
 	Bitmap bitmap;
 	int indice = 0;
 	GLClearRenderer render;
-	
+	Objeto corazon;
 	boolean notif = true;
-	
+	String vertexShaderSource = "attribute vec4 vPosition; \n"
+			+	"void main () \n"
+			+	"{ \n"
+			+ 	" gl_Position = Matrix*vPosition; \n"
+			+	"} \n";
+	//int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,291 +114,6 @@ public class MainActivity extends Activity {
         
     }
 	
-	/* Imagen en 3D */
-	
-	class Cube {
-        
-	    private FloatBuffer mVertexBuffer;
-	    private FloatBuffer mColorBuffer;
-	    private ShortBuffer  mIndexBuffer;
-	    	
-	/*	private float vertices[] = {
-			-1.0f,  1.0f, 0.0f,		// 0, Top Left
-			-1.0f, -1.0f, 0.0f,		// 1, Bottom Left
-			1.0f, -1.0f, 0.0f,		// 2, Bottom Right
-			1.0f,  1.0f, 0.0f,		// 3, Top Right
-		};
-			
-	    private float colors[] = {
-			0.0f,  1.0f,  0.0f,  1.0f,
-			0.0f,  1.0f,  0.0f,  1.0f,
-			1.0f,  0.5f,  0.0f,  1.0f,
-			1.0f,  0.5f,  0.0f,  1.0f,
-			1.0f,  0.0f,  0.0f,  1.0f,
-			1.0f,  0.0f,  0.0f,  1.0f,
-			0.0f,  0.0f,  1.0f,  1.0f,
-			1.0f,  0.0f,  1.0f,  1.0f
-		};
-	   
-	    private byte indices[] = {0, 1, 2, 0, 2, 3};
-	    */
-	    float textureCoordinates[] = {  
-	    		0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-
-	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-
-	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-
-	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-
-	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-
-	            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,};
-	    private Vector<Float>  vertices = new Vector();
-	    
-	    private float colors[] = {
-			0.0f,  1.0f,  0.0f,  1.0f,
-			0.0f,  1.0f,  0.0f,  1.0f,
-			1.0f,  0.5f,  0.0f,  1.0f,
-			1.0f,  0.5f,  0.0f,  1.0f,
-			1.0f,  0.0f,  0.0f,  1.0f,
-			1.0f,  0.0f,  0.0f,  1.0f,
-			0.0f,  0.0f,  1.0f,  1.0f,
-			1.0f,  0.0f,  1.0f,  1.0f
-	    };
-	    
-	    private Vector<Integer> indices = new Vector();
-	    private Vector normals = new Vector();
-	    private Vector<Float> textureCoor = new Vector();
-	    private Vector faceNormals = new Vector();
-	    private Vector textureIndex = new Vector();
-
-	    protected int parseInt(String val) {
-			if (val.length() == 0) {
-				return -1;
-			}
-			return Integer.parseInt(val);
-		}
-
-		protected int[] parseIntTriple(String face) {
-			int ix = face.indexOf("/");
-			if (ix == -1)
-				return new int[] {Integer.parseInt(face)-1};
-			else {
-				int ix2 = face.indexOf("/", ix+1);
-				if (ix2 == -1) {
-					return new int[] 
-					               {Integer.parseInt(face.substring(0,ix))-1,
-							Integer.parseInt(face.substring(ix+1))-1};
-				}
-				else {
-					return new int[] 
-					               {parseInt(face.substring(0,ix))-1,
-							parseInt(face.substring(ix+1,ix2))-1,
-							parseInt(face.substring(ix2+1))-1
-					               };
-				}
-			}
-		}
-		public void leerArchivo(InputStream in){
-			boolean file_normal = false;
-			int nCount = 0;
-			float[] coord = new float[2];
-		
-			LineNumberReader input = new LineNumberReader(new InputStreamReader(in));	    
-			String line = null;
-			try {
-				for (line = input.readLine(); 
-				line != null; 
-				line = input.readLine())
-				{
-					if (line.length() > 0) {
-						if (line.startsWith("v ")) {
-							float[] vertex = new float[3];
-							StringTokenizer tok = new StringTokenizer(line);
-							tok.nextToken();
-							vertex[0] = Float.parseFloat(tok.nextToken());
-							vertex[1] = Float.parseFloat(tok.nextToken());
-							vertex[2] = Float.parseFloat(tok.nextToken());
-							vertices.addElement(vertex[0]);
-							vertices.addElement(vertex[1]);
-							vertices.addElement(vertex[2]);
-						}
-						else if (line.startsWith("vt ")) {
-							StringTokenizer tok = new StringTokenizer(line);
-							tok.nextToken();
-							coord[0] = Float.parseFloat(tok.nextToken());
-							coord[1] = Float.parseFloat(tok.nextToken());
-							textureCoor.addElement(coord[0]);
-							textureCoor.addElement(coord[1]);
-						}
-						else if (line.startsWith("f ")) {
-							int[] face = new int[3];
-							int[] face_n_ix = new int[3];
-							int[] face_tx_ix = new int[3];
-							int[] val;
-		
-							StringTokenizer tok = new StringTokenizer(line);
-							tok.nextToken();
-							val = parseIntTriple(tok.nextToken());
-							face[0] = val[0];
-							if (val.length > 1 && val[1] > -1)
-								face_tx_ix[0] = val[1];
-							if (val.length > 2 && val[2] > -1)
-								face_n_ix[0] = val[2];
-		
-							val = parseIntTriple(tok.nextToken());
-							face[1] = val[0];
-							if (val.length > 1 && val[1] > -1)
-								face_tx_ix[1] = val[1];
-							if (val.length > 2 && val[2] > -1)
-								face_n_ix[1] = val[2];
-		
-							val = parseIntTriple(tok.nextToken());
-							face[2] = val[0];
-							if (val.length > 1 && val[1] > -1) {
-								face_tx_ix[2] = val[1];
-								textureIndex.addElement(face_tx_ix);
-							}
-							if (val.length > 2 && val[2] > -1) {
-								face_n_ix[2] = val[2];
-								faceNormals.addElement(face_n_ix);
-							}
-							indices.addElement(face[0]);
-							indices.addElement(face[1]);
-							indices.addElement(face[2]);
-							if (tok.hasMoreTokens()) {
-								val = parseIntTriple(tok.nextToken());
-								face[1] = face[2];
-								face[2] = val[0];
-								if (val.length > 1 && val[1] > -1) {
-									face_tx_ix[1] = face_tx_ix[2];
-									face_tx_ix[2] = val[1];
-									textureIndex.addElement(face_tx_ix);
-								}
-								if (val.length > 2 && val[2] > -1) {
-									face_n_ix[1] = face_n_ix[2];
-									face_n_ix[2] = val[2];
-									faceNormals.addElement(face_n_ix);
-								}
-								//indices.addElement(face);
-							}
-		
-						}
-						else if (line.startsWith("vn ")) {
-							nCount++;
-							float[] norm = new float[3];
-							StringTokenizer tok = new StringTokenizer(line);
-							tok.nextToken();
-							norm[0] = Float.parseFloat(tok.nextToken());
-							norm[1] = Float.parseFloat(tok.nextToken());
-							norm[2] = Float.parseFloat(tok.nextToken());
-							normals.addElement(norm);
-							file_normal = true;
-						}
-					}
-				}
-			}
-			catch (Exception ex) {
-				System.err.println("Error parsing file:");
-				System.err.println(input.getLineNumber()+" : "+line);
-			}
-		
-			//for (int i=0;i<vertex_normals.size();i++) {
-			//m.setVertexNormal(i, vertex_normals.get(i));
-			//}
-			
-		}
-		public  float[] convertFloats(Float[] floats)
-		{
-			float[] r = new float[floats.length];
-		    for (int i=0; i < floats.length; i++)
-		    {
-		        r[i] = floats[i];
-		    }
-		    return r;
-		}
-		public  short[] convertInts(Integer[] ints)
-		{
-			short[] r = new short[ints.length];
-		    for (int i=0; i < ints.length; i++)
-		    {
-		        r[i] = Short.parseShort(ints[i]+"");
-		    }
-		    return r;
-		}
-	    public Cube() {
-	    	try{
-	    		
-	    		InputStream in =   getAssets().open("corazon.obj");
-	    		leerArchivo(in);
-	    		
-	    		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.size() * 4);
-				byteBuf.order(ByteOrder.nativeOrder());
-				mVertexBuffer = byteBuf.asFloatBuffer();
-				
-				mVertexBuffer.put(convertFloats(vertices.toArray(new Float[vertices.size()])));
-				mVertexBuffer.position(0);
-				    
-				/*
-				byteBuf = ByteBuffer.allocateDirect(colors.length * 4);
-				byteBuf.order(ByteOrder.nativeOrder());
-				mColorBuffer = byteBuf.asFloatBuffer();
-				mColorBuffer.put(colors);
-				mColorBuffer.position(0);*/
-				
-				
-				//GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-				byteBuf = ByteBuffer.allocateDirect(textureCoor.size() * 4);
-				byteBuf.order(ByteOrder.nativeOrder());
-				mTextureBuffer = byteBuf.asFloatBuffer();
-				mTextureBuffer.put(convertFloats(textureCoor.toArray(new Float[textureCoor.size()])));
-				mTextureBuffer.position(0);
-				
-				mIndexBuffer = ShortBuffer.allocate(indices.size());
-				mIndexBuffer.put(convertInts(indices.toArray(new Integer[indices.size()])));
-				mIndexBuffer.position(0);
-	    	}catch(Exception e){
-	    		direccion.setText("err: " + e);
-
-	    	}
-	    	
-		
-	    }
-
-	    public void draw(GL10 gl) {        
-	    	
-            //--------------------------------------------
-	    	gl.glEnable(GL10.GL_TEXTURE_2D);
-            // Tell OpenGL where our texture is located.
-            // Tell OpenGL to enable the use of UV coordinates.
-            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-            // Telling OpenGL where our UV coordinates are.
-            ///----------------------------------------------
-	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureId);
-
-	        gl.glFrontFace(GL10.GL_CW);
-	            
-	        // gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
-	            
-	        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	        // gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-	         
-	        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
-   	        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
-
-	        gl.glDrawElements(GL10.GL_TRIANGLES, indices.size(), GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
-	        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-	        // gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-	        // Disable the use of UV coordinates.
-	        gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-	        // Disable the use of textures.
-	        gl.glDisable(GL10.GL_TEXTURE_2D);
-	    }
-	    
-	}
-	
-	/* Listeners */
 	SensorEventListener listener = new SensorEventListener(){
 		 
  	   public void onAccuracyChanged(Sensor arg0, int a){
@@ -509,8 +233,7 @@ public class MainActivity extends Activity {
  		
     	}; 
     
-    /* Camara Views */
-    
+ 
     public class CustomCameraView extends SurfaceView{
     	
     	Camera camera;
@@ -616,21 +339,36 @@ public class MainActivity extends Activity {
             camera = null;
         }
     }
-    
+    public int loadShader(int shaderType, String source){
+    	int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
+    	if(shader != 0){
+		    GLES20.glShaderSource(shader,source);
+		    GLES20.glCompileShader(shader);
+		    int[] compiled = new int[1];
+		    GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
+		    if(compiled[0] == 0){
+		    	Log.e("ShaderLoader","Could not compile shader " + shaderType+": ");
+		    	Log.e("ShaderLoader", GLES20.glGetShaderInfoLog(shader));
+		    	GLES20.glDeleteShader(shader);
+		    	shader = 0;
+		    }
+    	}
+    	return shader;
+    }
     /* Renderer */
     public class GLClearRenderer implements Renderer {
     	
     	private float mCubeRotation;
-		private Cube mCube = new Cube();
 		private float rotationX = 0.0f;
 		private float rotationY = 0.0f;
 		int[] textures = new int[1];
-		private float desplazamientoZ = -10.0f;
+		private float desplazamientoZ = -13.0f;
 		
 		public void onDrawFrame( GL10 gl ) {
 			
+            gl.glLoadIdentity();
 			c -= 1.0f;
-			
+                  
 			gl.glClearColor( 0.1f,0.1f,0.1f, 0.1f );
 	        gl.glClearDepthf(1.0f);
 	        //gl.glDepthMask(true);
@@ -638,30 +376,21 @@ public class MainActivity extends Activity {
 	        gl.glDepthFunc(GL10.GL_LEQUAL);
             gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
             gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
-	        gl.glEnable(GL10.GL_TEXTURE_2D);
-	        gl.glPushMatrix();
-	        
-	        if(indice == 0){
-	        	gl.glGenTextures(1, textures, 0);
-    			gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
-    			mTextureId = textures[0];
-    	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-    	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-    	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-    	        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-    			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+            
 
-    			indice++;
-	        }
+	  
+            gl.glPushMatrix();  
+            gl.glLoadIdentity();
 	        gl.glRotatef(rotationX, 0,1, 0);
 	        gl.glRotatef(rotationY,1 ,0, 0);
-	        gl.glTranslatef(0.0f, -3.0f, desplazamientoZ);
+	       
+	        gl.glTranslatef(0.0f, -1.0f, desplazamientoZ);
+	        gl.glRotatef(90f,0 ,1, 0);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
-	        gl.glScalef(0.7f, 0.7f, 0.7f);
-            mCube.draw(gl);
-            
-            gl.glPopMatrix();
+	        corazon.draw(gl);
             mCubeRotation -= 0.70f;
+            gl.glPopMatrix();   
+           
             
 		}
 
@@ -699,10 +428,26 @@ public class MainActivity extends Activity {
     			
     			// Reset the modelview matrix
     			gl.glLoadIdentity();
+    			
+    		     
+                float[] lightAmbient = {0.2f, 0.2f, 0.2f, 0.5f};
+    		    float[] lightDiffuse = {1.0f, 1.0f, 0.1f, 0.5f};
+    		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
+    		    gl.glEnable(GL10.GL_LIGHTING);
+    		    gl.glEnable(GL10.GL_LIGHT0);
+    		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, lightAmbient, 0);
+    		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, lightDiffuse, 0);
+    		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPos, 0);
     		}
 
-		public void onSurfaceCreated( GL10 gl, EGLConfig config ) {}
-    
+		public void onSurfaceCreated( GL10 gl, EGLConfig config ) {
+				
+					
+				 //   loadShader(GLES20.GL_VERTEX_SHADER,vertexShaderSource);
+				    
+
+		}
+		
     }
     
     /* Auxiliares */
@@ -796,7 +541,7 @@ public class MainActivity extends Activity {
     			glView.setRenderer(render);
 
     			setContentView( glView );
-    			
+    			corazon =  new Objeto(getAssets().open("objetos/normal.obj"),getApplicationContext());
     			CustomCameraView cv = new CustomCameraView(this);
     			//setContentView(rl);
     			//rl.addView(cv);
