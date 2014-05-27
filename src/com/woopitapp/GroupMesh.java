@@ -10,9 +10,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 
 
 
@@ -24,7 +21,6 @@ public class GroupMesh{
     private FloatBuffer  mVertexBuffer;
     private FloatBuffer  mNormalBuffer;
     private Vector<Face> caras;
-    private Bitmap bitmap;
     private int primitive = GL10.GL_TRIANGLES;
     
     public GroupMesh(Context context){
@@ -83,9 +79,9 @@ public class GroupMesh{
 		byteBuf.order(ByteOrder.nativeOrder());
 		mTextureBuffer = byteBuf.asFloatBuffer();    
 
-    	int y = 0;
+    
     	for(Face cara : this.caras){
-    		y++;
+    	
     		for(int i : cara.getIndex()){
     			
     			mVertexBuffer.put(vertices.get(i*3));

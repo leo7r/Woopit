@@ -1,13 +1,8 @@
 package com.woopitapp;
 
-import java.util.Vector;
 
 public class Utils {
-	    private static void minus(float[] a, float[] b, float[] result) {
-			float[] res = (result == null)?a:result;
-			for (int i=0;i<Math.min(a.length,b.length);i++)
-			    res[i] = a[i]-b[i];
-	    }
+
 
 	    public static void cross(float[] p1, float[] p2, float[] result) {
 	    	result[0] = p1[1]*p2[2]-p2[1]*p1[2];

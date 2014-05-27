@@ -1,13 +1,13 @@
 package com.woopitapp;
 
-import java.io.FileInputStream;
+
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.Vector;
+
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -35,8 +35,8 @@ public class Material {
 		this.texture = texture;
 	}
 	
-	public static HashMap parseMaterials(String nombreArchivo,Context context){
-		HashMap materiales = new HashMap();
+	public static HashMap<String,Material> parseMaterials(String nombreArchivo,Context context){
+		HashMap<String,Material> materiales = new HashMap<String,Material>();
 		try {
 			InputStream in =   context.getAssets().open("materiales/"+nombreArchivo);
 			LineNumberReader input = new LineNumberReader(new InputStreamReader(in));	    

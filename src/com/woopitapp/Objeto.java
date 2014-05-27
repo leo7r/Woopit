@@ -1,30 +1,17 @@
 package com.woopitapp;
 
-import java.io.FileInputStream;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 import javax.microedition.khronos.opengles.GL10;
-
-import org.lwjgl.opengl.GL11;
-
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
-import android.widget.TextView;
+
  
 
 public class Objeto {
@@ -33,17 +20,14 @@ public class Objeto {
 	private Vector<Normal> normals = new Vector<Normal>();
 	private Vector<TextureCoord> textureCoor = new Vector<TextureCoord>();
 	private Vector<Face> faces = new Vector<Face>();
-	private HashMap materiales = new HashMap();
+	private HashMap<String,Material> materiales = new HashMap<String,Material>();
 	private Vector<GroupMesh> groups;
 	private int renderCount = 0;
 	private int primitive = GL10.GL_TRIANGLES;
-	private FloatBuffer mVertexBuffer;
-	private FloatBuffer mNormalBuffer;
-	private ShortBuffer  mIndexBuffer;
+
 
 	public Objeto(InputStream in,Context context){
 		long startTime = System.currentTimeMillis();
-		boolean file_normal = false;
 		float[] coord = new float[2];
 		groups = new Vector<GroupMesh>();
 		GroupMesh group;
@@ -154,7 +138,6 @@ public class Objeto {
 						norm[2] = Float.parseFloat(tok.nextToken());
 						
 						normals.addElement(new Normal(norm[0],norm[1],norm[2]));
-						file_normal = true;
 					}
 					else if(line.startsWith("mtllib ")){
 						StringTokenizer tok = new StringTokenizer(line);
@@ -282,7 +265,7 @@ public class Objeto {
 	public void setFaces(Vector<Face> faces){
 		this.faces = faces;
 	}
-	public void setMateriales(HashMap materiales){
+	public void setMateriales(HashMap<String,Material> materiales){
 		this.materiales = materiales;
 		
 	}
@@ -299,7 +282,7 @@ public class Objeto {
 	public Vector<Face> getFaces(){
 		return faces;
 	}
-	public HashMap  getMateriales(){
+	public HashMap<String,Material>  getMateriales(){
 		return materiales;
 		
 	}

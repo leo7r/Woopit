@@ -1,6 +1,5 @@
 package com.woopitapp;
 
-import java.util.Vector;
 
 public class Face{
 	
