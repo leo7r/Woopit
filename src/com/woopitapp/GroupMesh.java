@@ -70,30 +70,28 @@ public class GroupMesh{
     	return this.primitive;
     }
     public void crearBuffers(Vector<TextureCoord> textCoord,Vector<Float> vertices, Vector<Normal> normals){
-    	
-    	ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.size()*3*4*3);
+ 
+    	ByteBuffer byteBuf = ByteBuffer.allocateDirect(caras.size()*3*3*4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		mVertexBuffer = byteBuf.asFloatBuffer();
 		
-    	byteBuf = ByteBuffer.allocateDirect(vertices.size()*3*4*3);
+    	byteBuf = ByteBuffer.allocateDirect(caras.size()*3*3*4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		mNormalBuffer = byteBuf.asFloatBuffer();
 		
-		byteBuf = ByteBuffer.allocateDirect(textCoord.size()*2*40);
+		byteBuf = ByteBuffer.allocateDirect(caras.size()*3*2*4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		mTextureBuffer = byteBuf.asFloatBuffer();    
-    	
-		mIndexBuffer = ShortBuffer.allocate(caras.size()*3*40); 
-    	
+
+    	int y = 0;
     	for(Face cara : this.caras){
-    		
+    		y++;
     		for(int i : cara.getIndex()){
     			
     			mVertexBuffer.put(vertices.get(i*3));
     			mVertexBuffer.put(vertices.get(i*3+1));
     			mVertexBuffer.put(vertices.get(i*3+2));
-    			mIndexBuffer.put((short)(i));
-
+    			
     		}	
     		for(int j :cara.getTextCoordIndex()){
     			mTextureBuffer.put(textCoord.get(j).getU());
@@ -107,12 +105,11 @@ public class GroupMesh{
     			mNormalBuffer.put(normals.get(k).getZ());
     		}
     	}
-
     	mNormalBuffer.position(0);
     	mVertexBuffer.position(0);
     	mTextureBuffer.position(0);
-    	mIndexBuffer.position(0);
-    	
+  
+
 		
     }
 }

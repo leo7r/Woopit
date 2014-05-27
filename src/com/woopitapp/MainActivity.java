@@ -373,7 +373,7 @@ public class MainActivity extends Activity {
 	        gl.glClearDepthf(1.0f);
 	        //gl.glDepthMask(true);
 	        gl.glEnable(GL10.GL_DEPTH_TEST);
-	        gl.glDepthFunc(GL10.GL_LEQUAL);
+	        gl.glDepthFunc(GL10.GL_LESS);
             gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
             gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
             
@@ -381,13 +381,13 @@ public class MainActivity extends Activity {
 	  
             gl.glPushMatrix();  
             gl.glLoadIdentity();
-	        gl.glRotatef(rotationX, 0,1, 0);
-	        gl.glRotatef(rotationY,1 ,0, 0);
-	       
-	        gl.glTranslatef(0.0f, -1.0f, desplazamientoZ);
-	        gl.glRotatef(90f,0 ,1, 0);
+	        //gl.glRotatef(rotationX, 0,1, 0);
+	       // gl.glRotatef(rotationY,1 ,0, 0);
+            
+	        gl.glTranslatef(0.0f, -1.5f, desplazamientoZ);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
 	        corazon.draw(gl);
+	        //corazon.draw(gl);
             mCubeRotation -= 0.70f;
             gl.glPopMatrix();   
            
@@ -430,8 +430,8 @@ public class MainActivity extends Activity {
     			gl.glLoadIdentity();
     			
     		     
-                float[] lightAmbient = {0.2f, 0.2f, 0.2f, 0.5f};
-    		    float[] lightDiffuse = {1.0f, 1.0f, 0.1f, 0.5f};
+                float[] lightAmbient = {1.0f, 1.0f, 1.0f, 0.5f};
+    		    float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 0.5f};
     		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
     		    gl.glEnable(GL10.GL_LIGHTING);
     		    gl.glEnable(GL10.GL_LIGHT0);

@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib rosas2.mtl
+mtllib rosas.mtl
 g default
 v 0.000020 5.457261 0.000009
 v -0.005039 1.123198 0.000000

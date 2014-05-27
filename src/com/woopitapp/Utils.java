@@ -36,6 +36,15 @@ public class Utils {
 		    }
 		    return r;
 		}
+		public static float[] convertFloats(double[] floats)
+		{
+			float[] r = new float[floats.length];
+		    for (int i=0; i < floats.length; i++)
+		    {
+		        r[i] = (float)floats[i];
+		    }
+		    return r;
+		}
 
 		public static int parseInt(String val) {
 			
@@ -44,7 +53,7 @@ public class Utils {
 			}
 			return Integer.parseInt(val);
 		}
-		
+
 		public static int[] parseIntTriple(String face) {
 			
 			int ix = face.indexOf("/");
