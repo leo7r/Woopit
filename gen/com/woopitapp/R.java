@@ -1300,7 +1300,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f020066;
         public static final int com_facebook_loginbutton_silver=0x7f020067;
         public static final int com_facebook_logo=0x7f020068;
-        public static final int com_facebook_picker_default_separator_color=0x7f02009f;
+        public static final int com_facebook_picker_default_separator_color=0x7f0200a0;
         public static final int com_facebook_picker_item_background=0x7f020069;
         public static final int com_facebook_picker_list_focused=0x7f02006a;
         public static final int com_facebook_picker_list_longpressed=0x7f02006b;
@@ -1354,7 +1354,8 @@ containing a value of this type.
         public static final int logo=0x7f02009b;
         public static final int notif_icon=0x7f02009c;
         public static final int profile2=0x7f02009d;
-        public static final int texturacorazon=0x7f02009e;
+        public static final int roseleaf=0x7f02009e;
+        public static final int texturacorazon=0x7f02009f;
     }
     public static final class id {
         public static final int action_bar=0x7f060021;

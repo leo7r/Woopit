@@ -1,12 +1,13 @@
 package com.woopitapp;
 
-import java.io.FileInputStream;
+
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.Vector;
+
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -34,8 +35,8 @@ public class Material {
 		this.texture = texture;
 	}
 	
-	public static Vector<Material> parseMaterials(String nombreArchivo,Context context){
-		Vector<Material> materiales = new Vector<Material>();
+	public static HashMap<String,Material> parseMaterials(String nombreArchivo,Context context){
+		HashMap<String,Material> materiales = new HashMap<String,Material>();
 		try {
 			InputStream in =   context.getAssets().open("materiales/"+nombreArchivo);
 			LineNumberReader input = new LineNumberReader(new InputStreamReader(in));	    
@@ -46,6 +47,7 @@ public class Material {
 			float specular[] = new float[3];
 			float nI = 0.0f;
 			float sIndex = 0.0f;
+		
 			Bitmap texture = null;
 			int illum = 0;
 			for (line = input.readLine(); 	line != null; 	line = input.readLine()){
@@ -53,7 +55,7 @@ public class Material {
 			
 					if (line.startsWith("newmtl ")) {
 						if(name != null){
-							materiales.addElement(new Material(name,diffusse,ambient,specular,nI,sIndex,illum,texture));
+							materiales.put(name,new Material(name,diffusse,ambient,specular,nI,sIndex,illum,texture));
 						}
 						StringTokenizer tok = new StringTokenizer(line);
 						tok.nextToken();
@@ -70,21 +72,24 @@ public class Material {
 						diffusse[0] = Float.parseFloat(tok.nextToken());
 						diffusse[1] = Float.parseFloat(tok.nextToken());
 						diffusse[2] = Float.parseFloat(tok.nextToken());
-						diffusse[3] = 1.0f;
+			
+							
 					}else if (line.startsWith("Ka ")){
 						StringTokenizer tok = new StringTokenizer(line);
 						tok.nextToken();
 						ambient[0] = Float.parseFloat(tok.nextToken());
 						ambient[1] = Float.parseFloat(tok.nextToken());
 						ambient[2] = Float.parseFloat(tok.nextToken());
-						ambient[3] = 1.0f;
+						
+				
 					}else if(line.startsWith("Ks ")){
 						StringTokenizer tok = new StringTokenizer(line);
 						tok.nextToken();
 						specular[0] = Float.parseFloat(tok.nextToken());
 						specular[1] = Float.parseFloat(tok.nextToken());
-						specular[2] = Float.parseFloat(tok.nextToken());	
-						specular[3] = 1.0f;
+						specular[2] = Float.parseFloat(tok.nextToken());
+				
+		
 					}else if(line.startsWith("Ni ")){
 						StringTokenizer tok = new StringTokenizer(line);
 						tok.nextToken();
@@ -97,6 +102,12 @@ public class Material {
 						StringTokenizer tok = new StringTokenizer(line);
 						tok.nextToken();
 						illum = Integer.parseInt(tok.nextToken());
+					}else if(line.startsWith("Tf ")){
+							StringTokenizer tok = new StringTokenizer(line);
+							tok.nextToken();
+							diffusse[3] = Float.parseFloat(tok.nextToken()); 
+							ambient[3] =  Float.parseFloat(tok.nextToken());
+							specular[3] = Float.parseFloat(tok.nextToken());
 					}else if(line.startsWith("map_Kd")){
 						try{
 							StringTokenizer tok = new StringTokenizer(line);
@@ -110,8 +121,12 @@ public class Material {
 					}
 				}
 			}
-			
-			materiales.addElement(new Material(name,diffusse,ambient,specular,nI,sIndex,illum,texture));
+			if(diffusse[3] == 0.0f & specular[3] == 0.0f && ambient[3] == 0.0f){
+				diffusse[3] = 1.0f;
+				specular[3] = 1.0f;
+				ambient[3] = 1.0f;
+			}
+			materiales.put(name,new Material(name,diffusse,ambient,specular,nI,sIndex,illum,texture));
 			return materiales;
 		}catch(Exception ex) {
 			System.err.println("Error parsing file: " + ex);
