@@ -14,8 +14,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.PlusClient;
-import com.google.android.gms.plus.PlusClient.OnPersonLoadedListener;
-import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.PlusClient.OnPeopleLoadedListener;
+import com.google.android.gms.plus.model.people.PersonBuffer;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -34,7 +34,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, OnPersonLoadedListener {
+public class LoginFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener {
 	
 	/* Facebook */
 	private static final String TAG = "Signup";
@@ -42,7 +42,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	
 	/* Google+ */
 	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
-
+	
     private ProgressDialog mConnectionProgressDialog;
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
@@ -70,7 +70,13 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		mPlusClient = new PlusClient.Builder(getActivity(), this, this)
     	.setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
     	.build();
-
+		
+        /*mPlusClient =
+        	    new PlusClient.Builder(getActivity(), this, this).setActions(
+        	        "http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
+        	        .setScopes("PLUS_LOGIN") // Space separated list of scopes
+        	        .build();
+*/
 		mConnectionProgressDialog = new ProgressDialog(getActivity());
 		mConnectionProgressDialog.setMessage("Signing in...");
 		
@@ -267,7 +273,8 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		mPlusClient.loadPerson(this, "me");
+		Log.i("FRU", "FRU");
+		//mPlusClient.loadPeople(this, "me");
 	}
 	
 	@Override
@@ -276,23 +283,13 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	}
 
 	@Override
-	public void onPersonLoaded( ConnectionResult status, Person person ) {
+	
+	
+	public void onPeopleLoaded(ConnectionResult arg0, PersonBuffer arg1, String arg2) {
+		// TODO Auto-generated method stub
 		
-		if (status.getErrorCode() == ConnectionResult.SUCCESS) {
-			
-			if ( gp_info_ready )
-				return;
-			
-			String id = person.getId();
-			String email = mPlusClient.getAccountName();
-			
-            Log.i("googleid", id);
-            Log.i("email", email);
-            
-            new WelcomeActivity.LoginTask( getActivity() , email , null , null , id ).execute();
-            gp_info_ready = true;
-	    }
 	}
+
 	
     
 }

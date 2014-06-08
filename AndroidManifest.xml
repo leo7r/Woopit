@@ -23,6 +23,12 @@
         
         <activity
             android:name="com.woopitapp.MainActivity"
+            android:theme="@style/AppTheme"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <activity
+            android:name="com.woopitapp.MessageActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>

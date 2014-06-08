@@ -1,0 +1,90 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#000"
+    >,
+    
+<TextView android:id="@+id/texto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:hint="@string/edit_message"
+         />
+<EditText
+     android:id="@+id/latitud"
+     android:layout_width="fill_parent"
+     android:textColor="#fff"
+     android:layout_height="wrap_content"
+     android:text="10.228597"
+      >
+ </EditText>
+
+<TextView android:id="@+id/texto2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:hint="@string/edit_message2"
+         />
+
+ <EditText
+     android:id="@+id/longitud"
+     android:textColor="#fff"
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:text="-67.335311"
+     >
+ </EditText>
+
+
+<RadioGroup
+        android:id="@+id/rdgGrupo"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/rdbOne"
+        android:layout_column="0"
+        android:layout_span="3">
+        <RadioButton
+            android:id="@+id/rdbOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="z_axis"
+            android:textColor="#fff"/>
+        <RadioButton
+            android:id="@+id/rdbTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:text="y_axis"/>
+
+    </RadioGroup>        
+   
+
+       
+                  
+                               <Button
+                         android:id="@+id/botonSuma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar Mensaje"/>      
+
+      
+                                                                                                                        
+        
+
+  
+                     
+                   
+                                                                              
+                                                                                                                                           
+</LinearLayout>
