@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
 	int indice = 0;
 	GLClearRenderer render;
 	Objeto corazon;
-	boolean notif = true;
+	boolean notif = false;
 	String vertexShaderSource = "attribute vec4 vPosition; \n"
 			+	"void main () \n"
 			+	"{ \n"
