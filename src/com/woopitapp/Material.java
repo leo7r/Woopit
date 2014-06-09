@@ -5,8 +5,8 @@ package com.woopitapp;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 import android.content.Context;
@@ -35,9 +35,9 @@ public class Material {
 		this.texture = texture;
 	}
 	
-	public static HashMap<String,Material> parseMaterials(String nombreArchivo,Context context){
-		HashMap<String,Material> materiales = new HashMap<String,Material>();
-		try {
+	public static Vector<Material> parseMaterials(String nombreArchivo,Context context){
+		Vector<Material> materiales = new Vector<Material>();
+		try {	
 			InputStream in =   context.getAssets().open("materiales/"+nombreArchivo);
 			LineNumberReader input = new LineNumberReader(new InputStreamReader(in));	    
 			String line = null;
@@ -55,7 +55,7 @@ public class Material {
 			
 					if (line.startsWith("newmtl ")) {
 						if(name != null){
-							materiales.put(name,new Material(name,diffusse,ambient,specular,nI,sIndex,illum,texture));
+							materiales.addElement(new Material(name,diffusse,ambient,specular,nI,sIndex,illum,texture));
 						}
 						StringTokenizer tok = new StringTokenizer(line);
 						tok.nextToken();
@@ -126,7 +126,9 @@ public class Material {
 				specular[3] = 1.0f;
 				ambient[3] = 1.0f;
 			}
-			materiales.put(name,new Material(name,diffusse,ambient,specular,nI,sIndex,illum,texture));
+			Material m = new Material(name,diffusse,ambient,specular,nI,sIndex,illum,texture);
+			materiales.addElement(m);
+			
 			return materiales;
 		}catch(Exception ex) {
 			System.err.println("Error parsing file: " + ex);

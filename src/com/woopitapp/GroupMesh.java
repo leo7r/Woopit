@@ -1,36 +1,39 @@
 package com.woopitapp;
 
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
-
-
-import android.content.Context;
+import android.util.Log;
 
 
 
 public class GroupMesh{
 	
 	private Material m;
+	private int carasCount = 0;
     private ShortBuffer  mIndexBuffer;
-    private FloatBuffer  mTextureBuffer;
-    private FloatBuffer  mVertexBuffer;
-    private FloatBuffer  mNormalBuffer;
+    private ByteBuffer  mTextureBuffer;
+    private ByteBuffer  mVertexBuffer;
+    private ByteBuffer  mNormalBuffer;
     private Vector<Face> caras;
+    public int bTextcoord = 0;
+    public int bNormal = 0;
     private int primitive = GL10.GL_TRIANGLES;
     
-    public GroupMesh(Context context){
+    public GroupMesh(){
     	caras = new Vector<Face>();
     	
     }
     public Vector<Face> getCaras(){
     	return this.caras;
     }
-    public GroupMesh(Material m, Vector<Face> subFaces, FloatBuffer mVertexBuffer,FloatBuffer mColorBuffer,ShortBuffer mIndexBuffer,FloatBuffer mNormalBuffer){
+    public GroupMesh(Material m, Vector<Face> subFaces, ByteBuffer mVertexBuffer,FloatBuffer mColorBuffer,ShortBuffer mIndexBuffer,ByteBuffer mNormalBuffer){
     	this.m = m;
     	this.mIndexBuffer = mIndexBuffer;
     	this.mNormalBuffer = mNormalBuffer;
@@ -47,13 +50,13 @@ public class GroupMesh{
     public ShortBuffer getIndexBuffer(){
     	return mIndexBuffer;
     }
-    public FloatBuffer getTextureBuffer(){
+    public ByteBuffer getTextureBuffer(){
     	return mTextureBuffer;
     }
-    public FloatBuffer getVertexBuffer(){
+    public ByteBuffer getVertexBuffer(){
     	return mVertexBuffer;
     }
-    public FloatBuffer getNormalBuffer(){
+    public ByteBuffer getNormalBuffer(){
     	return mNormalBuffer;
     }
     public Material getMaterial(){
@@ -65,47 +68,57 @@ public class GroupMesh{
     public int getPrimitive(){
     	return this.primitive;
     }
-    public void crearBuffers(Vector<TextureCoord> textCoord,Vector<Float> vertices, Vector<Normal> normals){
- 
-    	ByteBuffer byteBuf = ByteBuffer.allocateDirect(caras.size()*3*3*4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		mVertexBuffer = byteBuf.asFloatBuffer();
-		
-    	byteBuf = ByteBuffer.allocateDirect(caras.size()*3*3*4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		mNormalBuffer = byteBuf.asFloatBuffer();
-		
-		byteBuf = ByteBuffer.allocateDirect(caras.size()*3*2*4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		mTextureBuffer = byteBuf.asFloatBuffer();    
+    public void setCarasCount(int carasCount){
+    	this.carasCount = carasCount;
+    }
+    public int getCarasCount(){
+    	return this.carasCount;
+    }
+    public void crearBuffers(FileChannel in,int cantCaras){
+    	try{
 
-    
-    	for(Face cara : this.caras){
-    	
-    		for(int i : cara.getIndex()){
-    			
-    			mVertexBuffer.put(vertices.get(i*3));
-    			mVertexBuffer.put(vertices.get(i*3+1));
-    			mVertexBuffer.put(vertices.get(i*3+2));
-    			
-    		}	
-    		for(int j :cara.getTextCoordIndex()){
-    			mTextureBuffer.put(textCoord.get(j).getU());
-    			mTextureBuffer.put(textCoord.get(j).getV());
-    		}
-    		for(int k :cara.getNormal()){
-    			
-    			
-    			mNormalBuffer.put(normals.get(k).getX());
-    			mNormalBuffer.put(normals.get(k).getY());
-    			mNormalBuffer.put(normals.get(k).getZ());
-    		}
+    		carasCount = cantCaras;
+					
+	    	ByteBuffer byteBuf = ByteBuffer.allocateDirect(cantCaras*3*3*4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			mVertexBuffer = byteBuf;
+			in.read(mVertexBuffer);	
+			Log.e("SI....", "primer float.. " + mVertexBuffer.getFloat(mVertexBuffer.capacity()-4) + " cantcaras " + cantCaras);
+    		
+			byteBuf = ByteBuffer.allocateDirect(4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			ByteBuffer extraBuff = byteBuf;
+			in.read(extraBuff);
+			extraBuff.position(0);
+			
+			Log.e("SI....", "Si.. " + extraBuff.getInt(0));
+			if(extraBuff.getInt(0)>0){
+				byteBuf = ByteBuffer.allocateDirect(cantCaras*3*2*4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				mTextureBuffer = byteBuf;    
+				in.read(mTextureBuffer);	
+			}
+			
+			byteBuf = ByteBuffer.allocateDirect(4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			extraBuff = byteBuf;
+			in.read(extraBuff);
+			extraBuff.position(0);
+			Log.e("SI....", "Si.. " + extraBuff.getInt(0));
+			if(extraBuff.getInt(0)>0){
+				byteBuf = ByteBuffer.allocateDirect(cantCaras*3*3*4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				mNormalBuffer = byteBuf;
+				in.read(mNormalBuffer);
+			}
+
+	    	mNormalBuffer.position(0);
+	    	mVertexBuffer.position(0);
+	    	mTextureBuffer.position(0);
+	  
+    	}catch(Exception e){
+    		Log.e("PASOO---","error: " +  e);
     	}
-    	mNormalBuffer.position(0);
-    	mVertexBuffer.position(0);
-    	mTextureBuffer.position(0);
-  
-
 		
     }
 }

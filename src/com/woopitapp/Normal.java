@@ -1,5 +1,6 @@
 package com.woopitapp;
 
+
 public class Normal{
 	
 	float x;

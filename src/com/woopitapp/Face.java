@@ -3,20 +3,17 @@ package com.woopitapp;
 
 public class Face{
 	
-	private int [] index;
-	private int [] normal;
-	private int [] textCoordIndex;
+
+	private int [] faceArray;
 	private Material material;
 
 	
-	public Face(int[] index, int[] textCoordIndex,int[] normal, Material material){
-		this.index = index;
-		this.normal = normal;
-		this.textCoordIndex = textCoordIndex;
+	public Face(int[] faceArray, Material material){
+		this.faceArray = faceArray;
 		this.material = material;
 
 	}
-	public void setIndex(int[] index){
+	/*public void setIndex(int[] index){
 		this.index = index;
 	}
 	public void setNormal(int[] normal){
@@ -33,10 +30,16 @@ public class Face{
 	}
 	public int[] getNormal(){
 		return normal;
+	}*/
+	public int[] getFace(){
+		return faceArray;
 	}
-	public int[] getTextCoordIndex(){
+	public void setFace(int[] faceArray){
+		this.faceArray = faceArray;
+	}
+	/*public int[] getTextCoordIndex(){
 		return textCoordIndex;
-	}
+	}*/
 	public Material getMaterial(){
 		return material;
 	}
