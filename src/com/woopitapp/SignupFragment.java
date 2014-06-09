@@ -69,15 +69,15 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
         /* Login con Google+ */
         
         
-		mPlusClient = new PlusClient.Builder(getActivity(), this, this)
+		/*mPlusClient = new PlusClient.Builder(getActivity(), this, this)
     	.setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
-    	.build();
+    	.build();*/
 		
-       /* mPlusClient =
+        mPlusClient =
         	    new PlusClient.Builder(getActivity(), this, this).setActions(
         	        "http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
         	        .setScopes("PLUS_LOGIN") // Space separated list of scopes
-        	        .build();*/
+        	        .build();
 
         
 		mConnectionProgressDialog = new ProgressDialog(getActivity());
@@ -88,7 +88,7 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 			@Override
 			public void onClick(View view) {
 				
-				// Se tiene que mostrar esta barra de progreso si no se resuelve el fallo de conexión.
+				// Se tiene que mostrar esta barra de progreso si no se resuelve el fallo de conexiï¿½n.
 				
 			    if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 			        if (mConnectionResult == null) {
@@ -98,7 +98,7 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 			            try {
 			                mConnectionResult.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
 			            } catch (SendIntentException e) {
-			                // Intenta la conexión de nuevo.
+			                // Intenta la conexiï¿½n de nuevo.
 			                mConnectionResult = null;
 			                mPlusClient.connect();
 			            }
@@ -275,7 +275,7 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
                 mPlusClient.connect();
             }
         }
-        // Guarda el resultado y resuelve el fallo de conexión con el clic de un usuario.
+        // Guarda el resultado y resuelve el fallo de conexiï¿½n con el clic de un usuario.
         mConnectionResult = result;
 	}
 

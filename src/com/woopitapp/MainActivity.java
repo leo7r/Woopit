@@ -1,5 +1,6 @@
 package com.woopitapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -28,5 +29,9 @@ public class MainActivity extends FragmentActivity {
 			return rootView;
 		}
 	}
+    public void enviarMensaje(View v){
+    	Intent i = new Intent(this.getApplicationContext(),MessageActivity.class);
+    	startActivity(i);
+    }
 
 }

@@ -85,6 +85,7 @@ public class MessageActivity extends Activity {
 			+ 	" gl_Position = Matrix*vPosition; \n"
 			+	"} \n";
 	//int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -381,13 +382,13 @@ public class MessageActivity extends Activity {
 	  
             gl.glPushMatrix();  
             gl.glLoadIdentity();
-	        //gl.glRotatef(rotationX, 0,1, 0);
-	       // gl.glRotatef(rotationY,1 ,0, 0);
+	        gl.glRotatef(rotationX, 0,1, 0);
+	        gl.glRotatef(rotationY,1 ,0, 0);
             
 	        gl.glTranslatef(0.0f, -1.5f, desplazamientoZ);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
+	   //     corazon.draw(gl);
 	        corazon.draw(gl);
-	        //corazon.draw(gl);
             mCubeRotation -= 0.70f;
             gl.glPopMatrix();   
            
@@ -431,7 +432,7 @@ public class MessageActivity extends Activity {
     			
     		     
                 float[] lightAmbient = {1.0f, 1.0f, 1.0f, 0.5f};
-    		    float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 0.5f};
+    		    float[] lightDiffuse = {1.0f, 0.0f, 0.0f, 0.5f};
     		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
     		    gl.glEnable(GL10.GL_LIGHTING);
     		    gl.glEnable(GL10.GL_LIGHT0);
@@ -541,7 +542,7 @@ public class MessageActivity extends Activity {
     			glView.setRenderer(render);
 
     			setContentView( glView );
-    			corazon =  new Objeto(getAssets().open("objetos/normal.obj"),getApplicationContext());
+    			corazon =  new Objeto("objetos/normal.jet",getApplicationContext());
     			CustomCameraView cv = new CustomCameraView(this);
     			//setContentView(rl);
     			//rl.addView(cv);
@@ -579,5 +580,5 @@ public class MessageActivity extends Activity {
 	    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     	mNotificationManager.notify(1, notification);
     }
-    
+
 }
