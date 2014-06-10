@@ -16,6 +16,9 @@
     <!-- Terminos generales -->
     <string name="error_desconocido">Error desconocido</string>
     <string name="error_de_conexion">Error con tu conexión, intentalo de nuevo</string>
+    <string name="configuracion">Configuración</string>
+    <string name="compartir_woopit">Compartir Woopit</string>
+    <string name="enviar_comentarios">Enviar Comentarios</string>
 
     <!-- Pantalla de Bienvenida, login y registro -->
     <string name="iniciar_sesion">Iniciar Sesión</string>
@@ -31,5 +34,5 @@
     <string name="correo_ya_registrado">Dirección de correo ya registrada</string>
     <string name="error_iniciar_sesion">La dirección de correo y la contraseña no coinciden</string>
     <string name="title_activity_main">MainActivity</string>
-
+    
 </resources>

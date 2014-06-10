@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#131313" >
+        
+    <ImageView 
+		android:id="@+id/user_image"
+		android:layout_width="80dp"
+		android:layout_height="80dp"
+		android:src="@drawable/user"
+		android:padding="4dp"
+		style="@style/user_image"
+		android:layout_gravity="center"
+		android:layout_marginTop="10dp"
+		/>
+
+	<TextView 
+		android:id="@+id/user_name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="@dimen/medium_text"
+		android:textColor="@color/woopit_green"
+		android:layout_gravity="center"
+		/>
+    
+    <ScrollView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="15dp"
+            >
+            
+		    <TextView 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:padding="12dp"
+				android:textSize="@dimen/normal_text"
+		        android:textColor="#fff"
+		        android:text="@string/configuracion"
+		        android:drawableLeft="@drawable/sliding_settings"
+		        android:drawablePadding="20dp"
+		        android:clickable="true"
+		        android:background="@drawable/menu_item_bg"
+		        />
+		    
+		    <TextView 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:padding="12dp"
+				android:textSize="@dimen/normal_text"
+		        android:textColor="#fff"
+		        android:text="@string/compartir_woopit"
+		        android:drawableLeft="@drawable/sliding_share"
+		        android:drawablePadding="20dp"
+		        android:clickable="true"
+		        android:background="@drawable/menu_item_bg"
+		        />
+		    
+		    <TextView 
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:padding="12dp"
+				android:textSize="@dimen/normal_text"
+		        android:textColor="#fff"
+		        android:text="@string/enviar_comentarios"
+		        android:drawableLeft="@drawable/sliding_feedback"
+		        android:drawablePadding="20dp"
+		        android:clickable="true"
+		        android:background="@drawable/menu_item_bg"
+		        />
+		            
+            
+        </LinearLayout>
+        
+    </ScrollView>
+
+</LinearLayout>

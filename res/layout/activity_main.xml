@@ -1,8 +1,77 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.woopitapp.MainActivity"
-    tools:ignore="MergeRootFrame" />
-
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       android:orientation="vertical"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent"
+       android:background="#fff">
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        style="@style/top_bar"
+        >
+        
+        <ImageView 
+	        android:layout_width="100dp"
+	        android:layout_height="28dp"
+	        android:src="@drawable/logo"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentLeft="true"
+	        android:clickable="true"
+	        android:onClick="toggleSlidingMenu"
+	        />
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/new_message"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            />
+        
+    </RelativeLayout>
+    
+	<TabHost
+	    android:id="@android:id/tabhost"
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1"
+	    >
+	    <LinearLayout
+	        android:orientation="vertical"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        >
+	        
+	        <TabWidget
+	            android:id="@android:id/tabs"
+	            android:orientation="horizontal"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:divider="#f4f4f6"
+	            android:layout_weight="0"
+	            android:layout_margin="0dp"
+	            />
+	        
+	        <View 
+	            android:layout_width="match_parent"
+	            android:layout_height="1dp"
+	    		android:background="#66e4e4e6"
+	            />
+	        
+	        <FrameLayout
+	            android:id="@android:id/tabcontent"
+	            android:layout_width="0dp"
+	            android:layout_height="0dp"
+	            android:layout_weight="0"/>
+	
+	        <android.support.v4.view.ViewPager
+	            android:id="@+id/viewpager"
+	            android:layout_width="fill_parent"
+	            android:layout_height="0dp"
+	            android:layout_weight="1"
+	            />
+	    </LinearLayout>
+	</TabHost>
+    
+</LinearLayout>

@@ -25,4 +25,17 @@
         <item name="android:textColor">@color/woopit_orange</item>
     </style>
     
+    <style name="top_bar">
+        <item name="android:background">@color/woopit_green</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    
+    <style name="user_image">
+        <item name="android:background">@drawable/user_bg</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+    
 </resources>
