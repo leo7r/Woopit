@@ -855,29 +855,30 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f04001e;
-        public static final int constrasena=0x7f040047;
-        public static final int contrasena_olvidada=0x7f040048;
-        public static final int correo_electronico=0x7f040046;
-        public static final int correo_ya_registrado=0x7f04004e;
-        public static final int creando_cuenta=0x7f04004c;
+        public static final int constrasena=0x7f040048;
+        public static final int contrasena_olvidada=0x7f040049;
+        public static final int correo_electronico=0x7f040047;
+        public static final int correo_ya_registrado=0x7f04004f;
+        public static final int creando_cuenta=0x7f04004d;
         public static final int edit_message=0x7f04003c;
         public static final int edit_message2=0x7f04003d;
-        public static final int entrando=0x7f04004d;
+        public static final int entrando=0x7f04004e;
+        public static final int error_de_conexion=0x7f040044;
         /**  Terminos generales 
          */
         public static final int error_desconocido=0x7f040043;
-        public static final int error_iniciar_sesion=0x7f04004f;
+        public static final int error_iniciar_sesion=0x7f040050;
         public static final int hello_world=0x7f040040;
         /**  Pantalla de Bienvenida, login y registro 
          */
-        public static final int iniciar_sesion=0x7f040044;
-        public static final int nueva_contrasena=0x7f04004a;
-        public static final int registrarse=0x7f040045;
-        public static final int registro=0x7f040049;
+        public static final int iniciar_sesion=0x7f040045;
+        public static final int nueva_contrasena=0x7f04004b;
+        public static final int registrarse=0x7f040046;
+        public static final int registro=0x7f04004a;
         public static final int title_activity_display_message=0x7f04003f;
-        public static final int title_activity_main=0x7f040050;
+        public static final int title_activity_main=0x7f040051;
         public static final int title_activity_welcome=0x7f040041;
-        public static final int tu_nombre=0x7f04004b;
+        public static final int tu_nombre=0x7f04004c;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

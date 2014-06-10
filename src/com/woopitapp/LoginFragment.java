@@ -15,6 +15,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnPeopleLoadedListener;
+import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 
 import android.app.Activity;
@@ -66,17 +67,12 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
         
         
         /* Login con Google+ */
-        
-	/*	mPlusClient = new PlusClient.Builder(getActivity(), this, this)
-    	.setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
-    	.build();*/
-		
+                
         mPlusClient =
         	    new PlusClient.Builder(getActivity(), this, this).setActions(
         	        "http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
-        	        .setScopes("PLUS_LOGIN") // Space separated list of scopes
         	        .build();
-
+		
 		mConnectionProgressDialog = new ProgressDialog(getActivity());
 		mConnectionProgressDialog.setMessage("Signing in...");
 		
@@ -273,23 +269,26 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		Log.i("FRU", "FRU");
-		//mPlusClient.loadPeople(this, "me");
+		
+		Log.i(TAG, "Conectado");
+		mPlusClient.loadPeople(this, "me");
 	}
 	
+	@Override
+	public void onPeopleLoaded(ConnectionResult status, PersonBuffer personBuffer, String nextPageToken) {
+		
+		Person person = personBuffer.get(0);
+		String id = person.getId();
+		String email = mPlusClient.getAccountName();
+
+        new WelcomeActivity.LoginTask( getActivity() , email , null , null , id ).execute();
+        gp_info_ready = true;				
+	}
+
 	@Override
 	public void onDisconnected() {
-		Log.i(TAG, "disconnected G+");
+		Log.i(TAG, "Desconectado");
 	}
-
-	@Override
-	
-	
-	public void onPeopleLoaded(ConnectionResult arg0, PersonBuffer arg1, String arg2) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
     
 }

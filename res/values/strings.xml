@@ -15,6 +15,7 @@
 
     <!-- Terminos generales -->
     <string name="error_desconocido">Error desconocido</string>
+    <string name="error_de_conexion">Error con tu conexión, intentalo de nuevo</string>
 
     <!-- Pantalla de Bienvenida, login y registro -->
     <string name="iniciar_sesion">Iniciar Sesión</string>

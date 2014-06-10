@@ -30,6 +30,7 @@ import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnPeopleLoadedListener;
 import com.google.android.gms.plus.model.people.Person;
@@ -68,17 +69,11 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
         
         /* Login con Google+ */
         
-        
-		/*mPlusClient = new PlusClient.Builder(getActivity(), this, this)
-    	.setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
-    	.build();*/
-		
         mPlusClient =
         	    new PlusClient.Builder(getActivity(), this, this).setActions(
         	        "http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
-        	        .setScopes("PLUS_LOGIN") // Space separated list of scopes
         	        .build();
-
+        
         
 		mConnectionProgressDialog = new ProgressDialog(getActivity());
 		mConnectionProgressDialog.setMessage("Signing in...");
@@ -281,20 +276,26 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		//mPlusClient.loadPerson(this, "me");
+		
+		Log.i(TAG, "Conectado");
+		mPlusClient.loadPeople(this, "me");
 	}
 	
 	@Override
-	public void onPeopleLoaded(ConnectionResult arg0, PersonBuffer arg1,
-			String arg2) {
-		// TODO Auto-generated method stub
+	public void onPeopleLoaded(ConnectionResult status, PersonBuffer personBuffer, String nextPageToken) {
 		
+		Person person = personBuffer.get(0);
+		String id = person.getId();
+		String email = mPlusClient.getAccountName();
+		String name = person.getDisplayName();
+
+        new WelcomeActivity.NewUser( getActivity() , email , name , null , null , id , true ).execute();
+        gp_info_ready = true;				
 	}
 
 	@Override
 	public void onDisconnected() {
-		// TODO Auto-generated method stub
-		
+		Log.i(TAG, "Desconectado");
 	}
 	
 }

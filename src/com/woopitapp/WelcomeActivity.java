@@ -111,6 +111,11 @@ public class WelcomeActivity extends FragmentActivity {
 			
 			dialog.dismiss();
 			
+			if ( result == null ){
+				Toast.makeText(act, R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
 			if ( result.toLowerCase(Locale.getDefault()).equals("ok")){
 				
 				if ( automaticLogin ){
@@ -164,7 +169,7 @@ public class WelcomeActivity extends FragmentActivity {
 		void onComplete(String result) {
 			
 			dialog.dismiss();
-			
+						
 			if ( result != null && result.length() > 0 ){
 				
 				try{
