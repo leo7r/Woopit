@@ -28,8 +28,9 @@ public class WelcomeActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	   
-		if ( !Preferences.isFirstTime(this) && User.get(this) != null ){
+		
+		if ( !Preferences.isFirstTime(this) && User.get(this) != null && User.get(this).username != null ){
+
 			Intent i = new Intent(this,MainActivity.class);
 			startActivity(i);
 			finish();
@@ -104,7 +105,7 @@ public class WelcomeActivity extends FragmentActivity {
 			this.automaticLogin = automaticLogin;
 			this.dialog = ProgressDialog.show(act, "",act.getResources().getString(R.string.creando_cuenta), true);
 			
-			init("newUser", new Object[]{ email , name , this.password , this.facebook_hash , this.gplus_hash } );
+			init(act,"new_user", new Object[]{ email , name , this.password , this.facebook_hash , this.gplus_hash } );
 			
 		}
 		
@@ -164,7 +165,7 @@ public class WelcomeActivity extends FragmentActivity {
 			this.gplus_hash = gplus_hash != null ? gplus_hash : "";
 			dialog = ProgressDialog.show(act, "",act.getResources().getString(R.string.entrando), true);
 		
-			init("login",new Object[]{ email , this.password , this.facebook_hash , this.gplus_hash });
+			init(act,"login",new Object[]{ email , this.password , this.facebook_hash , this.gplus_hash });
 		}
 
 		@Override
@@ -179,15 +180,27 @@ public class WelcomeActivity extends FragmentActivity {
 					Log.i("Log in", userInfo.toString());
 					
 					int id = userInfo.getInt("i");
+					String username = userInfo.getString("u");
 					String name = userInfo.getString("n");
 					String image = userInfo.getString("m");
 					int facebook_user = userInfo.getInt("f");
 					int gplus_user = userInfo.getInt("g");
 					
+					if ( username.length() == 0 ){
+						username = null;
+					}
+					
 					Data data = new Data(act);
 					data.open();
-					data.insertUser(id, email, name, image, facebook_user, gplus_user);
+					data.insertUser(id, email, username , name, image, facebook_user, gplus_user);
 					data.close();
+					
+					if ( username == null ){
+						Intent i = new Intent(act,ChooseUsernameActivity.class);
+						act.startActivity(i);
+						act.finish();
+						return;
+					}
 					
 					Preferences.setFirstTime(act, false);
 					Intent i = new Intent(act,MainActivity.class);

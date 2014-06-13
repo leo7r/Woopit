@@ -2,6 +2,7 @@ package com.woopitapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
@@ -395,149 +396,14 @@ public class Utils {
 	    return String.valueOf(number);
 	}
 	
-	/* Google Analytics */
-	/*
-	public static void sendEvent( Context con , String category , String action , String label , int value ){
-		sendEvent(  con ,  category ,  action ,  label ,  (long) value );
+	/* Emision de informacion dentro de Woopit */
+	
+	public static void sendBroadcast( Context con , int string_id ){
+
+		Intent i = new Intent(con.getResources().getString(string_id));
+		con.sendBroadcast(i);	
 	}
 	
-	public static void sendEvent( Context con , String category , String action , String label , long value ){
-		
-		GoogleAnalytics mGaInstance = GoogleAnalytics.getInstance(con);
-		Tracker mGaTracker = mGaInstance.getTracker(con.getResources().getString(R.string.google_analytics));
-		mGaTracker.sendEvent(category, action, label , value);
-	}
-	*/
-	
-	/* Send feedback */
-	/*
-	public static FeedbackDialog getFeedbackDialog( Activity act ){
-		
-		FeedbackSettings feedbackSettings = new FeedbackSettings();
-		Resources res = act.getResources();		
-		
-		//SUBMIT-CANCEL BUTTONS
-		feedbackSettings.setCancelButtonText(res.getString(R.string.general_no));
-		feedbackSettings.setSendButtonText(res.getString(R.string.add_song_send));
-
-		//DIALOG TEXT
-		feedbackSettings.setText(res.getString(R.string.feedback_text));
-		feedbackSettings.setYourComments(res.getString(R.string.feedback_question_hint));
-		feedbackSettings.setTitle(res.getString(R.string.feedback_title));
-
-		//TOAST MESSAGE
-		feedbackSettings.setToast(res.getString(R.string.feedback_thanks));
-
-		//RADIO BUTTONS
-		feedbackSettings.setBugLabel(res.getString(R.string.feedback_bug));
-		feedbackSettings.setIdeaLabel(res.getString(R.string.feedback_idea));
-		feedbackSettings.setQuestionLabel(res.getString(R.string.feedback_question));
-
-		//RADIO BUTTONS ORIENTATION AND GRAVITY
-		feedbackSettings.setOrientation(LinearLayout.HORIZONTAL); // Default
-		//feedbackSettings.setOrientation(LinearLayout.VERTICAL);
-		//feedbackSettings.setGravity(Gravity.RIGHT); // Default
-		//feedbackSettings.setGravity(Gravity.LEFT);
-		feedbackSettings.setGravity(Gravity.CENTER);
-
-		//SET DIALOG MODAL
-		feedbackSettings.setModal(true); //Default is false
-
-		//DEVELOPER REPLIES
-		feedbackSettings.setReplyTitle(res.getString(R.string.feedback_answer));
-		feedbackSettings.setReplyCloseButtonText(res.getString(R.string.feedback_close));
-		feedbackSettings.setReplyRateButtonText(res.getString(R.string.rate));
-
-		return new FeedbackDialog(act, act.getResources().getString(R.string.feedback_api), feedbackSettings);
-	}
-	
-	public static void setAd( final Context c , final View v ){
-
-		if ( c == null )
-			return;
-		
-		final AdView adView = (AdView) v.findViewById(R.id.adView);
-        
-        if ( adView.getVisibility() == View.GONE )
-        	return;
-        
-        if ( ads_on )
-        	adView.loadAd(new AdRequest());
-        
-        adView.setAdListener(new AdListener(){
-
-			@Override
-			public void onDismissScreen(Ad arg0) {}
-
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {}
-
-			@Override
-			public void onLeaveApplication(Ad arg0) {}
-
-			@Override
-			public void onPresentScreen(Ad arg0) {}
-
-			@Override
-			public void onReceiveAd(Ad arg0) {
-				final ImageView closeAd = (ImageView) v.findViewById(R.id.closeAd);
-		        closeAd.setVisibility(View.VISIBLE);
-		        closeAd.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View arg0) {
-						adView.setVisibility(View.GONE);
-						closeAd.setVisibility(View.GONE);
-					}
-				});
-			}
-		});
-        
-	}
-	
-	public static void setAd( final Activity act ){
-				
-        final AdView adView = (AdView) act.findViewById(R.id.adView);
-        
-        if ( adView.getVisibility() == View.GONE )
-        	return;
-        
-        if ( ads_on )
-        	adView.loadAd(new AdRequest());
-        
-        adView.setAdListener(new AdListener(){
-
-			@Override
-			public void onDismissScreen(Ad arg0) {}
-
-			@Override
-			public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {}
-
-			@Override
-			public void onLeaveApplication(Ad arg0) {}
-
-			@Override
-			public void onPresentScreen(Ad arg0) {}
-
-			@Override
-			public void onReceiveAd(Ad arg0) {
-				final ImageView closeAd = (ImageView) act.findViewById(R.id.closeAd);
-		        closeAd.setVisibility(View.VISIBLE);
-		        closeAd.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View arg0) {
-						//Toast.makeText(act, "CLOSE AD :D", Toast.LENGTH_SHORT).show();
-						adView.setVisibility(View.GONE);
-						closeAd.setVisibility(View.GONE);
-					}
-				});
-			}
-		});
-        
-	}
-	*/
-		
 }
 
 

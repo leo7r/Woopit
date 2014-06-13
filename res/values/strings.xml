@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="security_token">$2a$12$coAXEDKD1I7e8a4arJEZYOckCD.brXsmHyToJKHcSPWEipb9pUBDi</string>
     <string name="app_name">Woopit</string>
     <string name="action_settings">Settings</string>
     <string name="edit_message">latitud</string>
@@ -10,6 +11,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
 
+    <!-- Broadcasts -->
+    <string name="broadcast_friends_list">com.woopitapp.friends_list</string>
+    
     <!-- FACEBOOK ID -->
     <string name="app_id">280178418831040</string>
 
@@ -19,6 +23,7 @@
     <string name="configuracion">Configuración</string>
     <string name="compartir_woopit">Compartir Woopit</string>
     <string name="enviar_comentarios">Enviar Comentarios</string>
+    <string name="continuar">Continuar</string>
 
     <!-- Pantalla de Bienvenida, login y registro -->
     <string name="iniciar_sesion">Iniciar Sesión</string>
@@ -34,5 +39,17 @@
     <string name="correo_ya_registrado">Dirección de correo ya registrada</string>
     <string name="error_iniciar_sesion">La dirección de correo y la contraseña no coinciden</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_choose_username">ChooseUsernameActivity</string>
+    <string name="elige_nombre_usuario">Elije un Nombre de Usuario</string>
+    <string name="info_nombre_usuario">Tu nombre de usuario es tu identificador exclusivo en Woopit!</string>
+    <string name="nombre_usuario">Nombre de Usuario</string>
+    <string name="verificando_usuario">Verificando Usuario&#8230;</string>
+    <string name="nombre_usuario_ya_tomado">El nombre de usuario <b>%s</b> ya fue tomado.</string>
     
+    <!-- Pantalla de Amigos -->
+	<string name="amigos">Amigos</string>
+	<string name="encontrar_amigos">Encontrar Amigos</string>
+	<string name="buscar_usuarios">Buscar Usuarios&#8230;</string>
+	
+
 </resources>

@@ -3,14 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
     <TextView 
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:text="Friends"
+        android:hint="@string/buscar_usuarios"
+        android:drawableLeft="@drawable/search"
+        android:drawablePadding="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         />
-                                <Button
-                         android:id="@+id/botonEnviar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enviar Mensaje"/>
+
+    
+    <ListView 
+		android:id="@+id/friend_list"
+		android:scrollbarThumbVertical="@drawable/scroll_bar"
+		android:scrollbarSize="2dp"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:fadingEdgeLength="0dip"
+		android:background="@null"
+		android:divider="@null" 
+		/>
+    
+>>>>>>> 6c9e02eba5b3aaa3e6fa28f249e341bde76e1379
 </LinearLayout>

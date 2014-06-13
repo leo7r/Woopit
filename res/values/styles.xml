@@ -13,8 +13,11 @@
         <item name="android:background">@color/woopit_dark_blue</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#fff</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+    
+    <style name="orange_button" parent="big_button">
+        <item name="android:background">@color/woopit_orange</item>
     </style>
     
     <style name="title_center">
@@ -22,6 +25,12 @@
         <item name="android:paddingTop">20dp</item>
         <item name="android:paddingBottom">20dp</item>
         <item name="android:textSize">@dimen/big_text</item>
+        <item name="android:textColor">@color/woopit_orange</item>
+    </style>
+    
+    <style name="small_title">
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">@dimen/medium_text</item>
         <item name="android:textColor">@color/woopit_orange</item>
     </style>
     
