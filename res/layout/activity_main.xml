@@ -22,12 +22,25 @@
 	        />
         
         <ImageView 
+            android:id="@+id/new_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/new_message"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:paddingLeft="20dp"
             />
+        
+        <ImageView 
+            android:id="@+id/find_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/find_friends"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/new_message"
+            android:paddingLeft="20dp"
+            />
+        
         
     </RelativeLayout>
     

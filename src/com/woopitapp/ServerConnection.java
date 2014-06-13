@@ -4,15 +4,13 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 import org.json.JSONArray;
 
+import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public abstract class ServerConnection extends AsyncTask<Void,Void,Void> {
 
@@ -25,10 +23,11 @@ public abstract class ServerConnection extends AsyncTask<Void,Void,Void> {
 	String result;
 	String funName;
 	String[] args;
+	Context con;
 	
-	public void init( String funName , Object[] args ){
+	public void init( Context con , String funName , Object[] args ){
 		this.funName = funName;
-		
+		this.con = con;
 		this.args = new String[args.length];
 		
 		for ( int i = 0 ; i < args.length ; ++i ){
@@ -53,7 +52,8 @@ public abstract class ServerConnection extends AsyncTask<Void,Void,Void> {
 				arg_list.put(st);
 			}
 			
-			message.put(1,arg_list);
+			message.put(1,con.getResources().getString(R.string.security_token));
+			message.put(2,arg_list);
 
 			outStream.writeBytes(message.toString());
 

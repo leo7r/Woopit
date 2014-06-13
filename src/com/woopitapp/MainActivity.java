@@ -3,7 +3,10 @@ package com.woopitapp;
 import java.util.List;
 import java.util.Vector;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,8 +26,11 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     private TabHost mTabHost;
     private ViewPager mViewPager;
     private TabPager mPagerAdapter;
-
+    
 	SlidingMenu menu;
+	
+	// Broadcast receivers
+	FriendsUpdateReceiver f_receiver; 
     
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +44,13 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         
         intialiseViewPager();
         setSlidingMenu();
+        
+        
+        /* Recibe cambios en lista de amigos */
+        f_receiver = new FriendsUpdateReceiver();
+        IntentFilter filter = new IntentFilter(this.getString(R.string.broadcast_friends_list));
+        registerReceiver(f_receiver,filter);
+        
     }
     
     protected void onSaveInstanceState(Bundle outState) {
@@ -149,7 +162,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         tabSpec.setContent(activity.new TabFactory(activity));
         tabHost.addTab(tabSpec);
     }
- 
+    
     public void onTabChanged(String tag) {
     	
         int pos = this.mTabHost.getCurrentTab();    
@@ -157,12 +170,12 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         
         if ( pos == 0 ){
         	mPagerAdapter.notifyDataSetChanged();
-        }        
+        }
     }
  
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
- 
+    
     @Override
     public void onPageSelected(int position) {
         this.mTabHost.setCurrentTab(position);
@@ -203,6 +216,20 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	
     }
     
+    /* Broadcasts receivers */
+    public class FriendsUpdateReceiver extends BroadcastReceiver {
+        
+    	@Override
+    	public void onReceive(Context context, Intent intent) {
+    		
+        	FriendsFragment fragment = (FriendsFragment) mPagerAdapter.getItem(2);
+    		
+        	if ( fragment.isVisible() ){
+        		fragment.updateContent();
+        	}
+    	}
+      
+    }
     
 }
 

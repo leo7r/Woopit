@@ -3,12 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-
-    <TextView 
-        android:layout_width="wrap_content"
+        
+    <EditText 
+        android:id="@+id/search_users"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Friends"
+        android:hint="@string/buscar_usuarios"
+        android:drawableLeft="@drawable/search"
+        android:drawablePadding="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         />
+    
+    <ListView 
+		android:id="@+id/friend_list"
+		android:scrollbarThumbVertical="@drawable/scroll_bar"
+		android:scrollbarSize="2dp"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:fadingEdgeLength="0dip"
+		android:background="@null"
+		android:divider="@null" 
+		/>
     
 </LinearLayout>

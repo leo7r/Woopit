@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+	    
+	    <TextView 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        style="@style/title_center"
+	        android:text="@string/elige_nombre_usuario"
+	        />
+	    
+	     <TextView 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/info_nombre_usuario"
+	        android:gravity="center"
+	        android:textSize="@dimen/medium_text"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="20dp"
+	        />
+	    
+	    <EditText 
+	        android:id="@+id/username"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/nombre_usuario"
+	        android:inputType="textVisiblePassword|textNoSuggestions"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="20dp"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="10dp"
+	        />
+	</LinearLayout>
+    
+    <Button 
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        style="@style/big_button"
+        android:layout_alignParentBottom="true"
+        android:text="@string/continuar"
+        android:onClick="setUsername"
+        />
+    
+</RelativeLayout>
