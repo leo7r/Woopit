@@ -1779,7 +1779,7 @@ containing a value of this type.
         public static final int end=0x7f050013;
         public static final int expand_activities_button=0x7f05003f;
         public static final int expanded_menu=0x7f050045;
-        public static final int find_friends=0x7f050055;
+        public static final int find_friends=0x7f050056;
         public static final int fragment_container=0x7f05008c;
         public static final int friend_list=0x7f05007f;
         public static final int fullscreen=0x7f05001d;
@@ -1805,7 +1805,7 @@ containing a value of this type.
         public static final int monochrome=0x7f050030;
         public static final int name=0x7f05007d;
         public static final int never=0x7f050009;
-        public static final int new_message=0x7f050056;
+        public static final int new_message=0x7f050055;
         public static final int next=0x7f050062;
         public static final int none=0x7f050010;
         public static final int normal=0x7f050000;

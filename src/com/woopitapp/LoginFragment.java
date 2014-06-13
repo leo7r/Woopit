@@ -191,7 +191,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	}
     
 	public void login( View v ){
-		
+		new WelcomeActivity.LoginTask(getActivity(), email.getText().toString(), password.getText().toString(), null, null).execute();
 	}
 	
 	public void showLoginButton(){
