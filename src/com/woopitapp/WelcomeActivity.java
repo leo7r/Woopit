@@ -18,6 +18,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,7 +28,7 @@ public class WelcomeActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+	   
 		if ( !Preferences.isFirstTime(this) && User.get(this) != null ){
 			Intent i = new Intent(this,MainActivity.class);
 			startActivity(i);

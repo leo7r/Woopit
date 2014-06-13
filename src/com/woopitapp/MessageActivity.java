@@ -89,29 +89,10 @@ public class MessageActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        crearCamara();
         setContentView(R.layout.activity_message);
         bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.texturacorazon);
-        Button bSuma = (Button) findViewById(R.id.botonSuma);
-        
-        bSuma.setOnClickListener(new OnClickListener(){
-        	@Override
-			public void onClick(View arg0) {
-				
-				crearCamara();
-			}
-        });
-        
-        if ( notif ){
-        	new Handler().postDelayed(new Runnable(){
-
-				@Override
-				public void run() {
-		        	setNotification();
-				}
-			}, 10000);
-        	
-        }
+       
         
     }
 	

@@ -5,11 +5,14 @@ import java.util.Vector;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
@@ -99,23 +102,23 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         View homeView = createTabView(mTabHost.getContext(), 1 );
         final TabSpec tabHome = mTabHost.newTabSpec("Home").setIndicator(homeView);
         
+        // Friends tab
+        View friendsView = createTabView(mTabHost.getContext(), 3 );
+        final TabSpec tabFriends = mTabHost.newTabSpec("Friends").setIndicator(friendsView);
+        
         // Model tab
         View modelView = createTabView(mTabHost.getContext(), 2 );
         final TabSpec tabModel = mTabHost.newTabSpec("Models").setIndicator(modelView);
         
-        // Friends tab
-        View friendsView = createTabView(mTabHost.getContext(), 3 );
-        final TabSpec tabFriends = mTabHost.newTabSpec("Friends").setIndicator(friendsView);
-
         // Profile tab
         View profileView = createTabView(mTabHost.getContext(), 4 );
         final TabSpec tabProfile = mTabHost.newTabSpec("Profile").setIndicator(profileView);
         
         AddTab(this, mTabHost, tabHome, ( new TabInfo("Home", HomeFragment.class, args)));
-        AddTab(this, mTabHost, tabModel, ( new TabInfo("Models", ModelsFragment.class, args)));
         AddTab(this, mTabHost, tabFriends, ( new TabInfo("Friends", FriendsFragment.class, args)));
+        AddTab(this, mTabHost, tabModel, ( new TabInfo("Models", ModelsFragment.class, args)));
         AddTab(this, mTabHost, tabProfile, ( new TabInfo("Profile", ProfileFragment.class, args)));        
-                
+	         
         mTabHost.setOnTabChangedListener(this);
     }
     
