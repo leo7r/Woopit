@@ -39,6 +39,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/new_message"
             android:paddingLeft="20dp"
+            android:onClick="goFindFriends"
             />
         
         

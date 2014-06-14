@@ -244,6 +244,13 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	
     }
     
+    /* Ir a encontrar amigos */
+    public void goFindFriends( View v ){
+    	
+    	Intent i = new Intent(this,FindFriendsActivity.class);
+    	startActivity(i);    	
+    }
+    
     /* Broadcasts receivers */
     public class FriendsUpdateReceiver extends BroadcastReceiver {
         
