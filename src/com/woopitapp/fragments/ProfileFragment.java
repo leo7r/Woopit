@@ -1,7 +1,6 @@
 package com.woopitapp.fragments;
 
 import com.woopitapp.R;
-import com.woopitapp.R.layout;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

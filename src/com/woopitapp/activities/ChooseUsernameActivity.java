@@ -1,11 +1,9 @@
 package com.woopitapp.activities;
-
-import com.woopitapp.Preferences;
 import com.woopitapp.R;
-import com.woopitapp.Utils;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
-import com.woopitapp.R.string;
+import com.woopitapp.logic.Preferences;
+import com.woopitapp.logic.ServerConnection;
+import com.woopitapp.logic.User;
+import com.woopitapp.logic.Utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -84,6 +82,7 @@ public class ChooseUsernameActivity extends Activity {
 		}
 
 		@Override
+		public
 		void onComplete(String result) {
 			
 			dialog.dismiss();

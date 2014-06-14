@@ -8,14 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
@@ -24,16 +21,14 @@ import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.woopitapp.R;
-import com.woopitapp.TabPager;
-import com.woopitapp.Utils;
-import com.woopitapp.R.drawable;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
-import com.woopitapp.R.string;
+
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
 import com.woopitapp.fragments.ModelsFragment;
 import com.woopitapp.fragments.ProfileFragment;
+import com.woopitapp.logic.TabPager;
+import com.woopitapp.logic.User;
+import com.woopitapp.logic.Utils;
 
 public class MainActivity extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
  
@@ -70,6 +65,14 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString("tab", mTabHost.getCurrentTabTag());
         super.onSaveInstanceState(outState);
+    }
+    
+    protected void onDestroy(){
+    	super.onDestroy();
+    	
+    	if ( f_receiver != null ){
+    		unregisterReceiver(f_receiver);
+    	}
     }
     
     /* Tabs */

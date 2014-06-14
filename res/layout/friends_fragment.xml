@@ -4,11 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView 
-        android:layout_width="wrap_content"
+    <EditText 
+        android:id="@+id/search_users"
+        android:layout_width="match_parent"
 
         android:layout_height="wrap_content"
         android:hint="@string/buscar_usuarios"
+        android:imeOptions="actionSearch"
+		android:singleLine="true"
         android:drawableLeft="@drawable/search"
         android:drawablePadding="5dp"
         android:layout_marginLeft="20dp"
@@ -17,7 +20,7 @@
         />
 
     
-    <ListView 
+    <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView  
 		android:id="@+id/friend_list"
 		android:scrollbarThumbVertical="@drawable/scroll_bar"
 		android:scrollbarSize="2dp"
@@ -26,6 +29,7 @@
 		android:fadingEdgeLength="0dip"
 		android:background="@null"
 		android:divider="@null" 
+	   	android:cacheColorHint="#00000000"
 		/>
     
 >>>>>>> 6c9e02eba5b3aaa3e6fa28f249e341bde76e1379

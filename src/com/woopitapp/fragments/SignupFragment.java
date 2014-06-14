@@ -30,16 +30,12 @@ import com.facebook.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnPeopleLoadedListener;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.woopitapp.R;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
 import com.woopitapp.activities.WelcomeActivity;
-import com.woopitapp.activities.WelcomeActivity.NewUser;
 
 public class SignupFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener {
     

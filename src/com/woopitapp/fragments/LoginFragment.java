@@ -18,10 +18,7 @@ import com.google.android.gms.plus.PlusClient.OnPeopleLoadedListener;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.woopitapp.R;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
 import com.woopitapp.activities.WelcomeActivity;
-import com.woopitapp.activities.WelcomeActivity.LoginTask;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -146,7 +143,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		super.onStop();
 		mPlusClient.disconnect();
 	}
-		
+	
 	@Override
 	public void onResume() {
 	    super.onResume();

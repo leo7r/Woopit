@@ -5,15 +5,14 @@ import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
-import com.woopitapp.Data;
-import com.woopitapp.Preferences;
 import com.woopitapp.R;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
-import com.woopitapp.R.string;
 import com.woopitapp.fragments.LoginFragment;
 import com.woopitapp.fragments.SignupFragment;
 import com.woopitapp.fragments.WelcomeFragment;
+import com.woopitapp.logic.Data;
+import com.woopitapp.logic.Preferences;
+import com.woopitapp.logic.ServerConnection;
+import com.woopitapp.logic.User;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -28,8 +27,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -120,7 +117,7 @@ public class WelcomeActivity extends FragmentActivity {
 		}
 		
 		@Override
-		void onComplete(String result) {
+		public void onComplete(String result) {
 			
 			dialog.dismiss();
 			
@@ -179,7 +176,7 @@ public class WelcomeActivity extends FragmentActivity {
 		}
 
 		@Override
-		void onComplete(String result) {
+		public void onComplete(String result) {
 			
 			dialog.dismiss();
 						

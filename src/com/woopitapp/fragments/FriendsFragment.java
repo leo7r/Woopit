@@ -2,99 +2,258 @@ package com.woopitapp.fragments;
 
 import java.util.ArrayList;
 
-import com.woopitapp.Data;
 import com.woopitapp.R;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
-import com.woopitapp.activities.User;
-import com.woopitapp.activities.User.GetFriends;
+import com.woopitapp.activities.SearchUsers;
+import com.woopitapp.logic.Data;
+import com.woopitapp.logic.FriendRequest;
+import com.woopitapp.logic.User;
+
+
+import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
+import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
+
+import android.annotation.SuppressLint;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Filter;
 
+import android.widget.ImageView;
+
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TextView.OnEditorActionListener;
 
 public class FriendsFragment extends Fragment {
+		
+	StickyListHeadersListView friend_list;
+	ListAdapter fAdapter;
 	
-	ListView friend_list;
-	FriendAdapter fAdapter;
 	ArrayList<User> friends;
+	ArrayList<FriendRequest> friend_requests;
+	ArrayList<Object> list_items;
+	EditText search_users;
 	
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	
         View view = (LinearLayout)inflater.inflate(R.layout.friends_fragment, container, false);
 
     	       
-        friend_list = (ListView) view.findViewById(R.id.friend_list);
+        friend_list = (StickyListHeadersListView) view.findViewById(R.id.friend_list);
+        search_users = (EditText) view.findViewById(R.id.search_users);
+        
+        search_users.setOnEditorActionListener(new OnEditorActionListener(){
+
+			@Override
+			public boolean onEditorAction(TextView tv, int actionId, KeyEvent key) {
+				
+				if ( actionId == EditorInfo.IME_ACTION_SEARCH ){
+					searchUsers(search_users.getText().toString());
+					return true;
+				}
+				
+				return false;
+			}
+		});
         
         Data data = new Data(getActivity());
         data.open();
         friends = data.getFriends();
+        friend_requests = data.getFriendRequests();
+        list_items = new ArrayList<Object>();
+        list_items.addAll(friend_requests);
+        list_items.addAll(friends);
+        
         data.close();
         
-        fAdapter = new FriendAdapter(getActivity(), R.id.friend_list, friends );
+        fAdapter = new ListAdapter(getActivity(), R.id.friend_list, list_items );
         friend_list.setAdapter(fAdapter);
         
-        // Busco en servidor por nuevos amigos
-        new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
+
+        new User.GetFriendRequest(getActivity()).execute();
+        //new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
 
         
         return view;
     }
     
-    public void updateContent(){
+    public void searchUsers( String query ){
     	
-    	Toast.makeText(getActivity(), "Renovando info", Toast.LENGTH_SHORT).show();
+		Intent i = new Intent(getActivity(),SearchUsers.class);
+		
+		i.putExtra("query", query);
+		
+		startActivity(i);
     }
     
-    public class FriendAdapter extends ArrayAdapter<User>{
+    public void updateContent(){
     	
-		ArrayList<User> items;
+    	Data data = new Data(getActivity());
+        data.open();
+        friends = data.getFriends();
+        friend_requests = data.getFriendRequests();
+        list_items = new ArrayList<Object>();
+        list_items.addAll(friend_requests);
+        list_items.addAll(friends);
+        data.close();
+
+        fAdapter = new ListAdapter(getActivity(), R.id.friend_list, list_items );
+        friend_list.setAdapter(fAdapter);
+    	
+        Toast.makeText(getActivity(), "Refrescado", Toast.LENGTH_SHORT).show();
+    }
+    
+	public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
+		
+		ArrayList<Object> l_items;
 		Context context;
 		Filter filter;
-		LayoutInflater inflater;
+		LayoutInflater infalInflater;
 
-		public FriendAdapter(Context context, int textViewResourceId, ArrayList<User> objects){
+		public ListAdapter(Context context, int textViewResourceId, ArrayList<Object> objects) {
+			
 			super(context, textViewResourceId, objects);
-			this.items = objects;
+			this.l_items = objects;
 			this.context = context;
-			inflater = (LayoutInflater)this.context.getSystemService("layout_inflater");
+			infalInflater = (LayoutInflater) context.getSystemService("layout_inflater");
 		}
+		
+		@Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
 
-		public View getView(final int position, View convertView, ViewGroup parent){
+			Object item = getItem(position);
 			
 			if ( convertView == null ){
-				convertView = inflater.inflate(R.layout.friend_item, null);
+				convertView = infalInflater.inflate(R.layout.friend_item, null);
 			}
-			
-			User friend = getItem(position);
-			
+						
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView username = (TextView) convertView.findViewById(R.id.username);
+			final ImageView confirm_friend = (ImageView) convertView.findViewById(R.id.add_friend);
 			
-			name.setText(friend.name);
-			username.setText("@"+friend.username);
-			
+			if ( item instanceof FriendRequest ){
+				final FriendRequest fr = (FriendRequest) item;
+				
+				name.setText(fr.name);
+				username.setText("@"+fr.username);
+				confirm_friend.setImageResource(R.drawable.add_friend);
+				confirm_friend.setVisibility(View.VISIBLE);
+				
+				confirm_friend.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						new AddOrRejectFriend(fr.from_user,fr.id).execute();
+						confirm_friend.setImageResource(R.drawable.friend_added);
+					}
+				});
+				
+			}
+			else{
+				final User user = (User) item;
+
+				name.setText(user.name);
+				username.setText("@"+user.username);
+				confirm_friend.setVisibility(View.GONE);
+			}
+
 			return convertView;
 		}
 		
-		public User getItem( int position ){
-			return items.get(position);
+		@Override
+		public int getCount() {
+
+			return l_items != null ? l_items.size() : 0;
 		}
 		
-    }
+		public Object getItem( int pos ){
+			return l_items.get(pos);
+		}
+		
+		@SuppressLint("DefaultLocale")
+		@Override
+		public View getHeaderView(int position, View convertView, ViewGroup parent) {
 
-    
+			TextView tv;
+			tv = (TextView) infalInflater.inflate(R.layout.list_header,parent, false);
+			
+			if ( getItem( position ) instanceof FriendRequest ){
+				tv.setText(getResources().getString(R.string.solicitudes_de_amistad).toUpperCase());
+			}
+			else{
+				tv.setText(getResources().getString(R.string.amigos).toUpperCase());
+			}
+
+			return tv;
+		}
+
+		@Override
+		public long getHeaderId(int position) {
+
+			int id = 0;
+			
+			if (getItem(position) instanceof FriendRequest) {
+				id = 0;
+			} else {
+				if (getItem(position) instanceof User) {
+					id = 1;
+				}
+			}
+			
+			return id;
+		}
+
+	}
+	
+	// Si ya esta la amistad la rompe, si no esta crea un request, si ya habia un request lo acepta.
+	public class AddOrRejectFriend extends com.woopitapp.logic.ServerConnection{
+			
+			int to_user,friend_request;
+			
+			public AddOrRejectFriend( int to_user , int friend_request ){
+				super();
+				
+				this.to_user = to_user;
+				this.friend_request = friend_request;
+				init(getActivity(),"add_or_reject_friend",new Object[]{ User.get(getActivity()).id , to_user });
+			}
+
+			@Override
+			public void onComplete(String result) {
+				
+				if ( result != null && result.length() > 0 ){
+					
+					int new_status = Integer.parseInt(result);
+										
+					if ( new_status == -1 || new_status == 1 ){
+				        // Refresco lista de amigos
+						
+						Data data = new Data(getActivity());
+						data.open();
+						data.deleteFriendRequest(friend_request);
+						data.close();
+						
+				        new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
+					}
+				}
+				else{
+					Toast.makeText(getActivity(), getResources().getString(R.string.error_de_conexion),Toast.LENGTH_SHORT).show();
+				}
+			}
+			
+		}
+	
 }
         

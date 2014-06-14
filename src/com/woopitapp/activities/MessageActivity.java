@@ -13,11 +13,11 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import org.lwjgl.opengl.GL11;
 
-import com.woopitapp.Objeto;
 import com.woopitapp.R;
 import com.woopitapp.R.drawable;
 import com.woopitapp.R.id;
 import com.woopitapp.R.layout;
+import com.woopitapp.graphics.Objeto;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;

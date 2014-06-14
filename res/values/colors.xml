@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="woopit_text_color">#434348</color>
     <color name="woopit_green">#3fba89</color>
     <color name="woopit_orange">#ff8f63</color>
     <color name="woopit_light_blue">#73d7e6</color>
