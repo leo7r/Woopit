@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.Request;
+import com.facebook.Request.GraphUserCallback;
 import com.facebook.Request.GraphUserListCallback;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -53,6 +54,7 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
     private ConnectionResult mConnectionResult;
 	
     boolean fb_info_ready,gp_info_ready;
+    String facebook_id , gplus_id;
     
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	
@@ -175,34 +177,44 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 		if (state.isOpened()) {
 	        Log.i(TAG, "Logged in...");
 	        
-	        Request friendRequest = Request.newMyFriendsRequest(session, new GraphUserListCallback(){
+	        Request.newMeRequest(session, new GraphUserCallback(){
 
 				@Override
-				public void onCompleted(List<GraphUser> users, Response response) {
+				public void onCompleted(GraphUser user, Response response) {
 					
-					if ( fb_info_ready ){
-						fb_info_ready = false;
-						return;
-					}
+					facebook_id = user.getId();
 					
-					String ids[] = new String[users.size()];
-					
-					for ( int i = 0 ; i < users.size() ; ++i){
+					Request friendRequest = Request.newMyFriendsRequest(session, new GraphUserListCallback(){
 						
-						String id = users.get(i).getId();
-						ids[i] = id;
-					}
+						@Override
+						public void onCompleted(List<GraphUser> users, Response response) {
+							
+							if ( fb_info_ready ){
+								fb_info_ready = false;
+								return;
+							}
+							
+							String ids[] = new String[users.size()];
+							
+							for ( int i = 0 ; i < users.size() ; ++i){
+								
+								String id = users.get(i).getId();
+								ids[i] = id;
+							}
+							
+							fb_info_ready = true;
+							new FindFriends(getActivity(),ids,null).execute();
+						}
+					});
+			        
+			        Bundle params = new Bundle();
+			        params.putString("fields", "id");
+			        friendRequest.setParameters(params);
+			        friendRequest.executeAsync();
 					
-					fb_info_ready = true;
-					new FindFriends(getActivity(),ids,null).execute();
 				}
-			});
-	        
-	        Bundle params = new Bundle();
-	        params.putString("fields", "id");
-	        friendRequest.setParameters(params);
-	        friendRequest.executeAsync();
-	        
+			}).executeAsync();
+	        	        
 	        
 	    } else if (state.isClosed()) {
 	        Log.i(TAG, "Logged out...");
@@ -245,6 +257,9 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 		
 		if ( gp_info_ready )
 			return;
+		
+		Person me = mPlusClient.getCurrentPerson();
+		gplus_id = me.getId();
 		
 		if (status.getErrorCode() == ConnectionResult.SUCCESS) {
 	        try {
@@ -305,10 +320,35 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 				Log.d(TAG,result);
 				
 				((FindFriendsActivity) getActivity()).setFriendsList(result);
+				new SetSocialIds(getActivity()).execute();
 			}
 			else{
 				Toast.makeText(act, act.getResources().getString(R.string.error_de_conexion),Toast.LENGTH_SHORT).show();
 			}
+		}
+		
+	}
+	
+	/* Si no existian mis ids sociales, los coloco */
+	public class SetSocialIds extends ServerConnection{
+
+		Activity act;
+		
+		public SetSocialIds( Activity act ){
+			super();
+			
+			if ( facebook_id == null )
+				facebook_id = "";
+			
+			if ( gplus_id == null )
+				gplus_id = "";
+			
+			init(act,"set_social_ids",new Object[]{ User.get(act).id , facebook_id , gplus_id });
+		}
+		
+		@Override
+		public void onComplete(String result) {
+			
 		}
 		
 	}
