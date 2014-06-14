@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 public class User {
 	
@@ -58,16 +59,16 @@ public class User {
 
 	static class GetFriends extends ServerConnection{
 
-		Activity act;
 		int id_user;
+		Context con;
 		
-		public GetFriends( Activity act , int id_user ){
+		public GetFriends( Context con, int id_user ){
 			super();
 			
-			this.act = act;
+			this.con = con;
 			this.id_user = id_user;
 			
-			init(act,"get_friends",new Object[]{ ""+id_user });
+			init(con,"get_friends",new Object[]{ ""+id_user });
 		}
 
 		@Override
@@ -75,12 +76,12 @@ public class User {
 			
 			if ( result != null ){
 
-				Data data = new Data(act);
+				Data data = new Data(con);
 				data.open();
 				
 				try {
 					JSONArray friends = new JSONArray(result);
-
+					int[] ids = new int[friends.length()];
 					
 					for ( int i = 0 ; i < friends.length() ; ++i ){
 						
@@ -91,7 +92,10 @@ public class User {
 						String image = friend.getString("m");
 						
 						data.insertFriend(id,username,name,image);
+						ids[i] = id;
 					}
+					
+					data.deleteFriendsNotIn(ids);
 
 				} catch (JSONException e) {					
 					e.printStackTrace();
@@ -105,5 +109,52 @@ public class User {
 		}
 	}
 
+	/* Friend Requests */
+	static class GetFriendRequest extends ServerConnection{
+
+		int id_user;
+		Context con;
+		
+		public GetFriendRequest( Context con ){
+			super();
+			
+			this.con = con;
+			
+			init(con,"get_friend_requests",new Object[]{ ""+User.get(con).id });
+		}
+
+		@Override
+		void onComplete(String result) {
+			
+			if ( result != null ){
+
+				Data data = new Data(con);
+				data.open();
+				
+				try {
+					Log.i("FR", result);
+					JSONArray requests = new JSONArray(result);
+					
+					for (int i = 0 ; i < requests.length() ; ++i ){
+						JSONObject request = requests.getJSONObject(i);
+						int id = request.getInt("i");
+						int from_user = request.getInt("f");
+						String username = request.getString("u");
+						String name = request.getString("n");
+						
+						data.insertFriendRequest(id, from_user, username, name);
+					}
+
+				} catch (JSONException e) {					
+					e.printStackTrace();
+				}
+				finally{
+					data.close();
+					Utils.sendBroadcast(con, R.string.broadcast_friends_list);
+				}
+			}
+			
+		}
+	}
 	
 }

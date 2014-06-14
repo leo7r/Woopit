@@ -58,6 +58,14 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         super.onSaveInstanceState(outState);
     }
     
+    protected void onDestroy(){
+    	super.onDestroy();
+    	
+    	if ( f_receiver != null ){
+    		unregisterReceiver(f_receiver);
+    	}
+    }
+    
     /* Tabs */
     private class TabInfo {
          private String tag;

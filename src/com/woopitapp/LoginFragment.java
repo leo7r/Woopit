@@ -141,7 +141,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		super.onStop();
 		mPlusClient.disconnect();
 	}
-		
+	
 	@Override
 	public void onResume() {
 	    super.onResume();

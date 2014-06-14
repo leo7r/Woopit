@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="10dp" >
+    android:padding="10dp"
+    android:background="@drawable/friend_item_bg" >
     
     <ImageView 
         android:id="@+id/image"
@@ -15,8 +16,9 @@
         />
     
     <LinearLayout 
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         >
@@ -26,6 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/normal_text"
+            android:textColor="@drawable/green_text_on_click"
+            android:duplicateParentState="true"
             />
         
         <TextView 
@@ -36,5 +40,14 @@
             />
         
     </LinearLayout>
+    
+    <ImageView 
+        android:id="@+id/add_friend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="10dp"
+        android:visibility="gone"
+        />
 
 </LinearLayout>

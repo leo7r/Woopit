@@ -13,7 +13,7 @@
 
     <!-- Broadcasts -->
     <string name="broadcast_friends_list">com.woopitapp.friends_list</string>
-    
+
     <!-- FACEBOOK ID -->
     <string name="app_id">280178418831040</string>
 
@@ -45,11 +45,14 @@
     <string name="nombre_usuario">Nombre de Usuario</string>
     <string name="verificando_usuario">Verificando Usuario&#8230;</string>
     <string name="nombre_usuario_ya_tomado">El nombre de usuario <b>%s</b> ya fue tomado.</string>
-    
+
     <!-- Pantalla de Amigos -->
-	<string name="amigos">Amigos</string>
-	<string name="encontrar_amigos">Encontrar Amigos</string>
-	<string name="buscar_usuarios">Buscar Usuarios&#8230;</string>
-	
+    <string name="title_activity_search_users">SearchUsers</string>
+    <string name="amigos">Amigos</string>
+    <string name="encontrar_amigos">Encontrar Amigos</string>
+    <string name="buscar_usuarios">Buscar Usuarios&#8230;</string>
+    <string name="buscar_amigos">Buscar Amigos \"%s\"</string>
+    <string name="solicitudes_de_amistad">Solicitudes de amistad</string>
+    
 
 </resources>

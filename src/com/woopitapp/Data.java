@@ -1,19 +1,13 @@
 package com.woopitapp;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.SparseArray;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
 
 public class Data{
 	
@@ -22,6 +16,7 @@ public class Data{
   
 	private String user_colls[] = new String[]{ DBHelper.user_id , DBHelper.user_email , DBHelper.user_username , DBHelper.user_name, DBHelper.user_image, DBHelper.user_fb, DBHelper.user_gp };
 	private String friend_colls[] = new String[]{ DBHelper.friend_id , DBHelper.friend_username , DBHelper.friend_name, DBHelper.friend_image };
+	private String fr_colls[] = new String[]{ DBHelper.fr_id , DBHelper.fr_from_user , DBHelper.fr_username , DBHelper.fr_name };
 	private Context context;
   
 	/* Database methods */
@@ -211,6 +206,17 @@ public class Data{
 		return false;
 	}
 	
+	public void deleteFriendsNotIn( int[] ids ){
+		
+		String[] ids_s = new String[ids.length];
+		for ( int i = 0 ; i < ids.length ; ++i )
+			ids_s[i] = Integer.toString(ids[i]);
+		
+		String where = "("+TextUtils.join(",", ids_s)+")";
+		
+		database.delete(DBHelper.FRIEND_TABLE, DBHelper.friend_id+" NOT IN "+where, null);
+	}
+	
 	public ArrayList<User> getFriends(){
 		
 		Cursor cursor = this.database.query(DBHelper.FRIEND_TABLE,null,null,null,null, null, null);
@@ -230,6 +236,58 @@ public class Data{
 		}
 		
 		return list;
+	}
+
+	/* Solicitudes de amistad */
+
+	public boolean insertFriendRequest( int id , int from_user , String username , String name ){
+		
+		Cursor cursor = this.database.query(DBHelper.FRIEND_REQUEST_TABLE, 
+				fr_colls,
+				DBHelper.fr_id+" = ?",
+				new String[]{ id+"" }, null, null, null);
+				
+		if ( !cursor.moveToFirst() ){
+			
+			ContentValues values = new ContentValues();
+			
+			values.put(DBHelper.fr_id, id);
+			values.put(DBHelper.fr_from_user, from_user);
+			values.put(DBHelper.fr_username, username);
+			values.put(DBHelper.fr_name, name);
+			
+			long res = database.insert(DBHelper.FRIEND_REQUEST_TABLE, null, values);
+			
+			return res != -1;
+		}
+		
+		return false;
+	}
+	
+	public ArrayList<FriendRequest> getFriendRequests(){
+		
+		Cursor cursor = this.database.query(DBHelper.FRIEND_REQUEST_TABLE,null,null,null,null, null, null);
+		cursor.moveToFirst();
+		
+		ArrayList<FriendRequest> list = new ArrayList<FriendRequest>();
+		
+		while ( !cursor.isAfterLast() ){
+			
+			int id = cursor.getInt(cursor.getColumnIndex(DBHelper.fr_id));
+			int from_user = cursor.getInt(cursor.getColumnIndex(DBHelper.fr_from_user));
+			String username = cursor.getString(cursor.getColumnIndex(DBHelper.fr_username));
+			String name = cursor.getString(cursor.getColumnIndex(DBHelper.fr_name));
+			
+			list.add(new FriendRequest( id , from_user , username , name ));
+			cursor.moveToNext();
+		}
+		
+		return list;
+	}
+	
+	public boolean deleteFriendRequest( int id ){
+		
+		return database.delete(DBHelper.FRIEND_REQUEST_TABLE, DBHelper.fr_id+" = ?", new String[]{ id+"" }) != -1;
 	}
 	
 }
