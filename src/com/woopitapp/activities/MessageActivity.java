@@ -1,4 +1,4 @@
-package com.woopitapp;
+package com.woopitapp.activities;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -12,6 +12,12 @@ import java.nio.FloatBuffer;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import org.lwjgl.opengl.GL11;
+
+import com.woopitapp.Objeto;
+import com.woopitapp.R;
+import com.woopitapp.R.drawable;
+import com.woopitapp.R.id;
+import com.woopitapp.R.layout;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -89,11 +95,11 @@ public class MessageActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        crearCamara();
         setContentView(R.layout.activity_message);
-        bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.texturacorazon);
        
-        
+
+		crearCamara();
+	
     }
 	
 	SensorEventListener listener = new SensorEventListener(){
@@ -363,8 +369,8 @@ public class MessageActivity extends Activity {
 	  
             gl.glPushMatrix();  
             gl.glLoadIdentity();
-	        gl.glRotatef(rotationX, 0,1, 0);
-	        gl.glRotatef(rotationY,1 ,0, 0);
+	   //     gl.glRotatef(rotationX, 0,1, 0);
+	    //    gl.glRotatef(rotationY,1 ,0, 0);
             
 	        gl.glTranslatef(0.0f, -1.5f, desplazamientoZ);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
@@ -513,26 +519,28 @@ public class MessageActivity extends Activity {
     			//requestWindowFeature( Window.FEATURE_NO_TITLE );
     			//getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
     			//WindowManager.LayoutParams.FLAG_FULLSCREEN );
+    			
     			direccion = new TextView(this);
     			direccion.setTextColor(Color.RED);
-    			//direccion.setText("AQUI ");
+    			
+    			
     			glView = new GLSurfaceView( this );
     			glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
     			glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
 
-    			setContentView( glView );
-    			corazon =  new Objeto("objetos/normal.jet",getApplicationContext());
+    			
+    			corazon =  new Objeto("objetos/peluche.jet",getApplicationContext());
     			CustomCameraView cv = new CustomCameraView(this);
     			//setContentView(rl);
     			//rl.addView(cv);
     			//cameraView = new CameraView( this );
     			
-    			addContentView( cv, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
+    			setContentView(  cv);
+    			addContentView( glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
 
     			addContentView(direccion,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
-      
     		}
     		catch(Exception e){
     			e.printStackTrace();

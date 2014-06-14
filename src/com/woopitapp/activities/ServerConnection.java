@@ -1,4 +1,4 @@
-package com.woopitapp;
+package com.woopitapp.activities;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -8,6 +8,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.json.JSONArray;
+
+import com.woopitapp.R;
+import com.woopitapp.R.string;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -84,6 +87,7 @@ public abstract class ServerConnection extends AsyncTask<Void,Void,Void> {
 	void onBackground( String result ){
 		
 	}
-
+		
+	
 }
 

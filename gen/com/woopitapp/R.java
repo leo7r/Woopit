@@ -763,7 +763,7 @@ containing a value of this type.
         public static final int user_bg=0x7f020066;
     }
     public static final class id {
-        public static final int action_settings=0x7f040053;
+        public static final int action_settings=0x7f040054;
         public static final int authButton=0x7f04004a;
         public static final int book_now=0x7f040015;
         public static final int botonSuma=0x7f040025;
@@ -799,7 +799,7 @@ containing a value of this type.
         public static final int container=0x7f040026;
         public static final int email=0x7f040048;
         public static final int find_friends=0x7f04001c;
-        public static final int fragment_container=0x7f040052;
+        public static final int fragment_container=0x7f040053;
         public static final int friend_list=0x7f040045;
         public static final int fullscreen=0x7f040003;
         public static final int grayscale=0x7f040017;
@@ -826,14 +826,15 @@ containing a value of this type.
         public static final int rdbOne=0x7f040023;
         public static final int rdbTwo=0x7f040024;
         public static final int rdgGrupo=0x7f040022;
+        public static final int repeatedPassword=0x7f04004e;
         public static final int right=0x7f040001;
         public static final int sandbox=0x7f04000d;
         public static final int satellite=0x7f040007;
         public static final int selected_view=0x7f040004;
         public static final int selectionDetails=0x7f040010;
-        public static final int signUp=0x7f04004e;
+        public static final int signUp=0x7f04004f;
         public static final int sign_in_button=0x7f04004b;
-        public static final int slidingmenumain=0x7f040051;
+        public static final int slidingmenumain=0x7f040052;
         public static final int small=0x7f040019;
         public static final int strict_sandbox=0x7f04000e;
         public static final int tab_image=0x7f040047;
@@ -842,8 +843,8 @@ containing a value of this type.
         public static final int texto=0x7f04001e;
         public static final int texto1=0x7f04004d;
         public static final int texto2=0x7f040020;
-        public static final int user_image=0x7f04004f;
-        public static final int user_name=0x7f040050;
+        public static final int user_image=0x7f040050;
+        public static final int user_name=0x7f040051;
         public static final int username=0x7f040027;
         public static final int viewpager=0x7f04001d;
         public static final int wrap_content=0x7f040012;
@@ -894,7 +895,7 @@ containing a value of this type.
         public static final int action_settings=0x7f05003c;
         /**  Pantalla de Amigos 
          */
-        public static final int amigos=0x7f05005e;
+        public static final int amigos=0x7f05005f;
         /**  FACEBOOK ID 
          */
         public static final int app_id=0x7f050044;
@@ -908,7 +909,7 @@ containing a value of this type.
         /**  Broadcasts 
          */
         public static final int broadcast_friends_list=0x7f050043;
-        public static final int buscar_usuarios=0x7f050060;
+        public static final int buscar_usuarios=0x7f050061;
         public static final int button_send=0x7f05003f;
         public static final int com_facebook_choose_friends=0x7f05002f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f050020;
@@ -1031,36 +1032,37 @@ containing a value of this type.
         public static final int continuar=0x7f05004a;
         public static final int contrasena_olvidada=0x7f05004f;
         public static final int correo_electronico=0x7f05004d;
-        public static final int correo_ya_registrado=0x7f050055;
-        public static final int creando_cuenta=0x7f050053;
+        public static final int correo_ya_registrado=0x7f050056;
+        public static final int creando_cuenta=0x7f050054;
         public static final int edit_message=0x7f05003d;
         public static final int edit_message2=0x7f05003e;
-        public static final int elige_nombre_usuario=0x7f050059;
-        public static final int encontrar_amigos=0x7f05005f;
-        public static final int entrando=0x7f050054;
+        public static final int elige_nombre_usuario=0x7f05005a;
+        public static final int encontrar_amigos=0x7f050060;
+        public static final int entrando=0x7f050055;
         public static final int enviar_comentarios=0x7f050049;
         public static final int error_de_conexion=0x7f050046;
         /**  Terminos generales 
          */
         public static final int error_desconocido=0x7f050045;
-        public static final int error_iniciar_sesion=0x7f050056;
+        public static final int error_iniciar_sesion=0x7f050057;
         public static final int hello_world=0x7f050041;
-        public static final int info_nombre_usuario=0x7f05005a;
+        public static final int info_nombre_usuario=0x7f05005b;
         /**  Pantalla de Bienvenida, login y registro 
          */
         public static final int iniciar_sesion=0x7f05004b;
-        public static final int nombre_usuario=0x7f05005b;
-        public static final int nombre_usuario_ya_tomado=0x7f05005d;
+        public static final int nombre_usuario=0x7f05005c;
+        public static final int nombre_usuario_ya_tomado=0x7f05005e;
         public static final int nueva_contrasena=0x7f050051;
         public static final int registrarse=0x7f05004c;
         public static final int registro=0x7f050050;
+        public static final int repetir_contrasena=0x7f050052;
         public static final int security_token=0x7f05003a;
-        public static final int title_activity_choose_username=0x7f050058;
+        public static final int title_activity_choose_username=0x7f050059;
         public static final int title_activity_display_message=0x7f050040;
-        public static final int title_activity_main=0x7f050057;
+        public static final int title_activity_main=0x7f050058;
         public static final int title_activity_welcome=0x7f050042;
-        public static final int tu_nombre=0x7f050052;
-        public static final int verificando_usuario=0x7f05005c;
+        public static final int tu_nombre=0x7f050053;
+        public static final int verificando_usuario=0x7f05005d;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

@@ -1,9 +1,19 @@
-package com.woopitapp;
+package com.woopitapp.activities;
 
 import java.util.Locale;
 import java.util.regex.Pattern;
 
 import org.json.JSONObject;
+
+import com.woopitapp.Data;
+import com.woopitapp.Preferences;
+import com.woopitapp.R;
+import com.woopitapp.R.id;
+import com.woopitapp.R.layout;
+import com.woopitapp.R.string;
+import com.woopitapp.fragments.LoginFragment;
+import com.woopitapp.fragments.SignupFragment;
+import com.woopitapp.fragments.WelcomeFragment;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -66,7 +76,7 @@ public class WelcomeActivity extends FragmentActivity {
 	}
 	
 	/* Coloca un email del usuario de una vez */
-	static void setGoogleEmail( EditText editT , Context context ){
+	public static void setGoogleEmail( EditText editT , Context context ){
 		
 		Pattern emailPattern = Patterns.EMAIL_ADDRESS;
 		Account[] accounts = AccountManager.get(context).getAccounts();
@@ -81,7 +91,7 @@ public class WelcomeActivity extends FragmentActivity {
 		
 	}
 	
-	static class NewUser extends ServerConnection{
+	public static class NewUser extends ServerConnection{
 
 		Activity act;
 		String email;
@@ -146,7 +156,7 @@ public class WelcomeActivity extends FragmentActivity {
 		
 	}
 	
-	static class LoginTask extends ServerConnection{
+	public static class LoginTask extends ServerConnection{
 
 		Activity act;
 		String email;

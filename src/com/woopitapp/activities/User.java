@@ -1,16 +1,26 @@
-package com.woopitapp;
+package com.woopitapp.activities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.woopitapp.Data;
+import com.woopitapp.R;
+import com.woopitapp.Utils;
+import com.woopitapp.R.string;
 
 import android.app.Activity;
 import android.content.Context;
 
 public class User {
 	
-	int id, facebook_user, gplus_user;
-	String email, username, name, image;
+	public int id;
+	int facebook_user;
+	int gplus_user;
+	public String email;
+	public String username;
+	public String name;
+	String image;
 	
 	// Solicitud enviada, rechazada o sin solicitud
 	int request_status;
@@ -56,7 +66,7 @@ public class User {
 	
 	/* Friends */
 
-	static class GetFriends extends ServerConnection{
+	public static class GetFriends extends ServerConnection{
 
 		Activity act;
 		int id_user;

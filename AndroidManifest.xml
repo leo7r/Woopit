@@ -38,7 +38,7 @@
         <!-- Actividades de Woopit -->
         
         <activity
-            android:name="com.woopitapp.WelcomeActivity"
+            android:name="com.woopitapp.activities.WelcomeActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
@@ -49,19 +49,19 @@
         </activity>
         
         <activity
-            android:name="com.woopitapp.MainActivity"
+            android:name="com.woopitapp.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" >
         </activity>
         
         <activity
-            android:name="com.woopitapp.MessageActivity"
+            android:name="com.woopitapp.activities.MessageActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         
         <activity
-            android:name="com.woopitapp.ChooseUsernameActivity"
+            android:name="com.woopitapp.activities.ChooseUsernameActivity"
             android:label="@string/title_activity_choose_username"
             android:windowSoftInputMode="adjustResize" >
         </activity>

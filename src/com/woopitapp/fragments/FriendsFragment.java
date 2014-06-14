@@ -1,6 +1,13 @@
-package com.woopitapp;
+package com.woopitapp.fragments;
 
 import java.util.ArrayList;
+
+import com.woopitapp.Data;
+import com.woopitapp.R;
+import com.woopitapp.R.id;
+import com.woopitapp.R.layout;
+import com.woopitapp.activities.User;
+import com.woopitapp.activities.User.GetFriends;
 
 import android.content.Context;
 import android.os.Bundle;

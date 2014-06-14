@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
+import com.woopitapp.activities.User;
+
 public class Data{
 	
 	private SQLiteDatabase database;

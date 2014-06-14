@@ -1,4 +1,11 @@
-package com.woopitapp;
+package com.woopitapp.activities;
+
+import com.woopitapp.Preferences;
+import com.woopitapp.R;
+import com.woopitapp.Utils;
+import com.woopitapp.R.id;
+import com.woopitapp.R.layout;
+import com.woopitapp.R.string;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

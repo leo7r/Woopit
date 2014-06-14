@@ -33,6 +33,7 @@
     <string name="contrasena_olvidada">¿Has olvidado tu contraseña?</string>
     <string name="registro">Registro</string>
     <string name="nueva_contrasena">Nueva contraseña</string>
+    <string name="repetir_contrasena">Repetir contraseña</string>
     <string name="tu_nombre">Tu nombre</string>
     <string name="creando_cuenta">Creando nueva cuenta&#8230;</string>
     <string name="entrando">Iniciando Sesión&#8230;</string>

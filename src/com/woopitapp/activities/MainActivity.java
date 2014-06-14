@@ -1,4 +1,4 @@
-package com.woopitapp;
+package com.woopitapp.activities;
 
 import java.util.List;
 import java.util.Vector;
@@ -23,6 +23,17 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.woopitapp.R;
+import com.woopitapp.TabPager;
+import com.woopitapp.Utils;
+import com.woopitapp.R.drawable;
+import com.woopitapp.R.id;
+import com.woopitapp.R.layout;
+import com.woopitapp.R.string;
+import com.woopitapp.fragments.FriendsFragment;
+import com.woopitapp.fragments.HomeFragment;
+import com.woopitapp.fragments.ModelsFragment;
+import com.woopitapp.fragments.ProfileFragment;
 
 public class MainActivity extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
  
@@ -47,7 +58,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         
         intialiseViewPager();
         setSlidingMenu();
-        
+        initMessageButton();
         
         /* Recibe cambios en lista de amigos */
         f_receiver = new FriendsUpdateReceiver();
@@ -91,13 +102,24 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         }
  
     }
-    
+    private void initMessageButton(){
+    	ImageView bMessage = (ImageView) findViewById(R.id.new_message);
+    	bMessage.setOnClickListener(new  View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent newMessagei =  new  Intent(v.getContext(),MessageActivity.class);
+				startActivity(newMessagei);
+			}
+		});
+    	
+    }
     private void intialiseViewPager() {
  
         List<Fragment> fragments = new Vector<Fragment>();
         fragments.add(Fragment.instantiate(this, HomeFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, ModelsFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, FriendsFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, ModelsFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, ProfileFragment.class.getName()));
         mPagerAdapter  = new TabPager(getSupportFragmentManager(), fragments);
         
@@ -116,11 +138,11 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         final TabSpec tabHome = mTabHost.newTabSpec("Home").setIndicator(homeView);
         
         // Friends tab
-        View friendsView = createTabView(mTabHost.getContext(), 3 );
+        View friendsView = createTabView(mTabHost.getContext(), 2 );
         final TabSpec tabFriends = mTabHost.newTabSpec("Friends").setIndicator(friendsView);
         
         // Model tab
-        View modelView = createTabView(mTabHost.getContext(), 2 );
+        View modelView = createTabView(mTabHost.getContext(), 3 );
         final TabSpec tabModel = mTabHost.newTabSpec("Models").setIndicator(modelView);
         
         // Profile tab
@@ -146,10 +168,10 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         	iv.setImageResource(R.drawable.home_tab_image);
     		break;
     	case 2:
-        	iv.setImageResource(R.drawable.models_tab_image);
+         	iv.setImageResource(R.drawable.friends_tab_image);
     		break;
     	case 3:
-        	iv.setImageResource(R.drawable.friends_tab_image);
+        	iv.setImageResource(R.drawable.models_tab_image);
     		break;
     	case 4:
         	iv.setImageResource(R.drawable.profile_tab_image);
@@ -225,7 +247,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	@Override
     	public void onReceive(Context context, Intent intent) {
     		
-        	FriendsFragment fragment = (FriendsFragment) mPagerAdapter.getItem(2);
+        	FriendsFragment fragment = (FriendsFragment) mPagerAdapter.getItem(1);
     		
         	if ( fragment.isVisible() ){
         		fragment.updateContent();
