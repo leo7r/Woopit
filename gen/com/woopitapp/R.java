@@ -1639,7 +1639,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f020067;
         public static final int com_facebook_loginbutton_silver=0x7f020068;
         public static final int com_facebook_logo=0x7f020069;
-        public static final int com_facebook_picker_default_separator_color=0x7f0200c4;
+        public static final int com_facebook_picker_default_separator_color=0x7f0200c8;
         public static final int com_facebook_picker_item_background=0x7f02006a;
         public static final int com_facebook_picker_list_focused=0x7f02006b;
         public static final int com_facebook_picker_list_longpressed=0x7f02006c;
@@ -1706,30 +1706,34 @@ containing a value of this type.
         public static final int logo=0x7f0200a9;
         public static final int menu_item_bg=0x7f0200aa;
         public static final int menu_shadow=0x7f0200ab;
-        public static final int models_tab_image=0x7f0200ac;
-        public static final int new_message=0x7f0200ad;
-        public static final int notif_icon=0x7f0200ae;
-        public static final int powered_by_google_dark=0x7f0200af;
-        public static final int powered_by_google_light=0x7f0200b0;
-        public static final int profile2=0x7f0200b1;
-        public static final int profile_tab_image=0x7f0200b2;
-        public static final int roseleaf=0x7f0200b3;
-        public static final int scroll_bar=0x7f0200b4;
-        public static final int search=0x7f0200b5;
-        public static final int sliding_feedback=0x7f0200b6;
-        public static final int sliding_settings=0x7f0200b7;
-        public static final int sliding_share=0x7f0200b8;
-        public static final int tab_friends=0x7f0200b9;
-        public static final int tab_friends_active=0x7f0200ba;
-        public static final int tab_home=0x7f0200bb;
-        public static final int tab_home_active=0x7f0200bc;
-        public static final int tab_models=0x7f0200bd;
-        public static final int tab_models_active=0x7f0200be;
-        public static final int tab_profile=0x7f0200bf;
-        public static final int tab_profile_active=0x7f0200c0;
-        public static final int texturacorazon=0x7f0200c1;
-        public static final int user=0x7f0200c2;
-        public static final int user_bg=0x7f0200c3;
+        public static final int model_image=0x7f0200ac;
+        public static final int models_tab_image=0x7f0200ad;
+        public static final int new_message=0x7f0200ae;
+        public static final int notif_icon=0x7f0200af;
+        public static final int powered_by_google_dark=0x7f0200b0;
+        public static final int powered_by_google_light=0x7f0200b1;
+        public static final int price_bg=0x7f0200b2;
+        public static final int profile2=0x7f0200b3;
+        public static final int profile_image_bg=0x7f0200b4;
+        public static final int profile_tab_image=0x7f0200b5;
+        public static final int roseleaf=0x7f0200b6;
+        public static final int scroll_bar=0x7f0200b7;
+        public static final int search=0x7f0200b8;
+        public static final int sliding_feedback=0x7f0200b9;
+        public static final int sliding_menu_bg=0x7f0200ba;
+        public static final int sliding_settings=0x7f0200bb;
+        public static final int sliding_share=0x7f0200bc;
+        public static final int tab_friends=0x7f0200bd;
+        public static final int tab_friends_active=0x7f0200be;
+        public static final int tab_home=0x7f0200bf;
+        public static final int tab_home_active=0x7f0200c0;
+        public static final int tab_models=0x7f0200c1;
+        public static final int tab_models_active=0x7f0200c2;
+        public static final int tab_profile=0x7f0200c3;
+        public static final int tab_profile_active=0x7f0200c4;
+        public static final int texturacorazon=0x7f0200c5;
+        public static final int user=0x7f0200c6;
+        public static final int user_bg=0x7f0200c7;
     }
     public static final class id {
         public static final int action_bar=0x7f050035;
@@ -1812,7 +1816,7 @@ containing a value of this type.
         public static final int left=0x7f05001a;
         public static final int listMode=0x7f050001;
         public static final int list_item=0x7f050042;
-        public static final int loading=0x7f050092;
+        public static final int loading=0x7f050094;
         public static final int login=0x7f05008c;
         public static final int longitud=0x7f05005b;
         public static final int map=0x7f050090;
@@ -1820,6 +1824,7 @@ containing a value of this type.
         public static final int margin=0x7f05001c;
         public static final int match_parent=0x7f050029;
         public static final int middle=0x7f050012;
+        public static final int models_list=0x7f050093;
         public static final int monochrome=0x7f050030;
         public static final int name=0x7f050083;
         public static final int never=0x7f050009;
@@ -1830,6 +1835,7 @@ containing a value of this type.
         public static final int normal=0x7f050000;
         public static final int password=0x7f05008a;
         public static final int picker_subtitle=0x7f050072;
+        public static final int price=0x7f050091;
         public static final int production=0x7f050024;
         public static final int progress_circular=0x7f050018;
         public static final int progress_horizontal=0x7f050019;
@@ -1837,7 +1843,7 @@ containing a value of this type.
         public static final int rdbOne=0x7f05005d;
         public static final int rdbTwo=0x7f05005e;
         public static final int rdgGrupo=0x7f05005c;
-        public static final int repeatedPassword=0x7f050093;
+        public static final int repeatedPassword=0x7f050095;
         public static final int right=0x7f05001b;
         public static final int sandbox=0x7f050025;
         public static final int satellite=0x7f05001f;
@@ -1860,7 +1866,7 @@ containing a value of this type.
         public static final int showCustom=0x7f050007;
         public static final int showHome=0x7f050004;
         public static final int showTitle=0x7f050006;
-        public static final int signUp=0x7f050094;
+        public static final int signUp=0x7f050096;
         public static final int sign_in_button=0x7f05008b;
         public static final int slidingmenumain=0x7f050097;
         public static final int small=0x7f050031;
@@ -1872,15 +1878,13 @@ containing a value of this type.
         public static final int tabsLayout=0x7f050087;
         public static final int terrain=0x7f050020;
         public static final int texto=0x7f050058;
-        public static final int texto1=0x7f050091;
+        public static final int texto1=0x7f050092;
         public static final int texto2=0x7f05005a;
         public static final int title=0x7f050044;
         public static final int top_action_bar=0x7f050039;
         public static final int up=0x7f05003a;
         public static final int useLogo=0x7f050003;
-        public static final int user_image=0x7f050095;
         public static final int user_list=0x7f05007f;
-        public static final int user_name=0x7f050096;
         public static final int username=0x7f050061;
         public static final int viewpager=0x7f050057;
         public static final int withText=0x7f05000c;
@@ -1967,16 +1971,17 @@ containing a value of this type.
         public static final int login_fragment=0x7f030033;
         public static final int map=0x7f030034;
         public static final int map_fragment=0x7f030035;
-        public static final int models_fragment=0x7f030036;
-        public static final int notification=0x7f030037;
-        public static final int profile_fragment=0x7f030038;
-        public static final int search_users=0x7f030039;
-        public static final int signup_fragment=0x7f03003a;
-        public static final int sliding_menu=0x7f03003b;
-        public static final int slidingmenumain=0x7f03003c;
-        public static final int support_simple_spinner_dropdown_item=0x7f03003d;
-        public static final int welcome=0x7f03003e;
-        public static final int welcome_fragment=0x7f03003f;
+        public static final int model_item=0x7f030036;
+        public static final int models_fragment=0x7f030037;
+        public static final int notification=0x7f030038;
+        public static final int profile_fragment=0x7f030039;
+        public static final int search_users=0x7f03003a;
+        public static final int signup_fragment=0x7f03003b;
+        public static final int sliding_menu=0x7f03003c;
+        public static final int slidingmenumain=0x7f03003d;
+        public static final int support_simple_spinner_dropdown_item=0x7f03003e;
+        public static final int welcome=0x7f03003f;
+        public static final int welcome_fragment=0x7f030040;
     }
     public static final class menu {
         public static final int choose_username=0x7f0c0000;
@@ -2027,10 +2032,10 @@ containing a value of this type.
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
         public static final int action_settings=0x7f0a0049;
-        public static final int amigos=0x7f0a006f;
+        public static final int amigos=0x7f0a0070;
         /**  FACEBOOK ID 
          */
-        public static final int app_id=0x7f0a0051;
+        public static final int app_id=0x7f0a0052;
         public static final int app_name=0x7f0a0048;
         public static final int auth_client_needs_enabling_title=0x7f0a000e;
         public static final int auth_client_needs_installation_title=0x7f0a000f;
@@ -2041,14 +2046,15 @@ containing a value of this type.
         /**  Broadcasts 
          */
         public static final int broadcast_friends_list=0x7f0a0050;
-        public static final int buscando_amigos=0x7f0a0075;
-        public static final int buscar_amigos=0x7f0a0073;
-        public static final int buscar_lugar=0x7f0a007b;
-        public static final int buscar_usuarios=0x7f0a0072;
+        public static final int broadcast_profile_models_list=0x7f0a0051;
+        public static final int buscando_amigos=0x7f0a0076;
+        public static final int buscar_amigos=0x7f0a0074;
+        public static final int buscar_lugar=0x7f0a007c;
+        public static final int buscar_usuarios=0x7f0a0073;
         public static final int button_send=0x7f0a004c;
         /**  Pantalla del mapa 
          */
-        public static final int cargando_mapa=0x7f0a007a;
+        public static final int cargando_mapa=0x7f0a007b;
         public static final int com_facebook_choose_friends=0x7f0a003c;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f0a002d;
         public static final int com_facebook_internet_permission_error_message=0x7f0a0040;
@@ -2164,64 +2170,68 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f0a002b;
-        public static final int compartir_woopit=0x7f0a0056;
-        public static final int compartir_woopit_texto=0x7f0a0078;
-        public static final int configuracion=0x7f0a0055;
-        public static final int constrasena=0x7f0a005c;
-        public static final int continuar=0x7f0a0058;
-        public static final int contrasena_olvidada=0x7f0a005d;
-        public static final int correo_electronico=0x7f0a005b;
-        public static final int correo_ya_registrado=0x7f0a0064;
-        public static final int creando_cuenta=0x7f0a0062;
+        public static final int compartir_woopit=0x7f0a0057;
+        public static final int compartir_woopit_texto=0x7f0a0079;
+        public static final int configuracion=0x7f0a0056;
+        public static final int constrasena=0x7f0a005d;
+        public static final int continuar=0x7f0a0059;
+        public static final int contrasena_olvidada=0x7f0a005e;
+        public static final int correo_electronico=0x7f0a005c;
+        public static final int correo_ya_registrado=0x7f0a0065;
+        public static final int creando_cuenta=0x7f0a0063;
         public static final int edit_message=0x7f0a004a;
         public static final int edit_message2=0x7f0a004b;
-        public static final int elige_nombre_usuario=0x7f0a0068;
-        public static final int encontrar_amigos=0x7f0a0070;
-        public static final int encontrar_amigos_info=0x7f0a0071;
-        public static final int entrando=0x7f0a0063;
-        public static final int enviar_comentarios=0x7f0a0057;
-        public static final int enviar_woop=0x7f0a007f;
-        public static final int error_buscando_lugar=0x7f0a007d;
-        public static final int error_de_conexion=0x7f0a0054;
+        public static final int elige_nombre_usuario=0x7f0a0069;
+        public static final int encontrar_amigos=0x7f0a0071;
+        public static final int encontrar_amigos_info=0x7f0a0072;
+        public static final int entrando=0x7f0a0064;
+        public static final int enviar_comentarios=0x7f0a0058;
+        public static final int enviar_woop=0x7f0a0080;
+        public static final int error_buscando_lugar=0x7f0a007e;
+        public static final int error_de_conexion=0x7f0a0055;
         /**  Terminos generales 
          */
-        public static final int error_desconocido=0x7f0a0053;
-        public static final int error_iniciar_sesion=0x7f0a0065;
+        public static final int error_desconocido=0x7f0a0054;
+        public static final int error_iniciar_sesion=0x7f0a0066;
         /**  Google Maps API KEY 
          */
-        public static final int gmaps_key=0x7f0a0052;
+        public static final int gmaps_key=0x7f0a0053;
         public static final int hello_world=0x7f0a004e;
-        public static final int info_nombre_usuario=0x7f0a0069;
+        public static final int info_nombre_usuario=0x7f0a006a;
         /**  Pantalla de Bienvenida, login y registro 
          */
-        public static final int iniciar_sesion=0x7f0a0059;
-        public static final int invitalos=0x7f0a0077;
-        public static final int lugar_no_encontrado=0x7f0a007e;
-        public static final int ningun_amigo=0x7f0a0076;
-        public static final int nombre_usuario=0x7f0a006a;
-        public static final int nombre_usuario_ya_tomado=0x7f0a006c;
-        public static final int nueva_contrasena=0x7f0a005f;
-        public static final int podra_ver_woop=0x7f0a007c;
-        public static final int registrarse=0x7f0a005a;
-        public static final int registro=0x7f0a005e;
-        public static final int repetir_contrasena=0x7f0a0060;
+        public static final int iniciar_sesion=0x7f0a005a;
+        public static final int invitalos=0x7f0a0078;
+        public static final int lugar_no_encontrado=0x7f0a007f;
+        public static final int mis_modelos=0x7f0a0082;
+        public static final int ningun_amigo=0x7f0a0077;
+        public static final int nombre_usuario=0x7f0a006b;
+        public static final int nombre_usuario_ya_tomado=0x7f0a006d;
+        public static final int nueva_contrasena=0x7f0a0060;
+        public static final int podra_ver_woop=0x7f0a007d;
+        public static final int registrarse=0x7f0a005b;
+        public static final int registro=0x7f0a005f;
+        public static final int repetir_contrasena=0x7f0a0061;
         public static final int security_token=0x7f0a0047;
-        public static final int solicitudes_de_amistad=0x7f0a0074;
-        public static final int title_activity_choose_username=0x7f0a0067;
+        public static final int solicitudes_de_amistad=0x7f0a0075;
+        public static final int title_activity_choose_username=0x7f0a0068;
         public static final int title_activity_display_message=0x7f0a004d;
-        public static final int title_activity_find_friends=0x7f0a006e;
-        public static final int title_activity_main=0x7f0a0066;
-        public static final int title_activity_map=0x7f0a0079;
+        public static final int title_activity_find_friends=0x7f0a006f;
+        public static final int title_activity_main=0x7f0a0067;
+        public static final int title_activity_map=0x7f0a007a;
         /**  Pantalla de Amigos 
          */
-        public static final int title_activity_search_users=0x7f0a006d;
+        public static final int title_activity_search_users=0x7f0a006e;
         public static final int title_activity_welcome=0x7f0a004f;
-        public static final int tu_nombre=0x7f0a0061;
-        public static final int verificando_usuario=0x7f0a006b;
+        public static final int tu_nombre=0x7f0a0062;
+        public static final int verificando_usuario=0x7f0a006c;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
         public static final int wallet_buy_button_place_holder=0x7f0a002c;
+        /**  Pantalla de perfil 
+         */
+        public static final int woops=0x7f0a0081;
     }
     public static final class style {
         /** 
@@ -2441,12 +2451,14 @@ containing a value of this type.
         public static final int com_facebook_loginview_silver_style=0x7f0b0088;
         public static final int facebook_button=0x7f0b008e;
         public static final int gplus_button=0x7f0b008f;
+        public static final int medium_title=0x7f0b0091;
+        public static final int normal_title=0x7f0b0092;
         public static final int orange_button=0x7f0b008d;
-        public static final int small_title=0x7f0b0091;
+        public static final int profile_image=0x7f0b0094;
         public static final int title_center=0x7f0b0090;
         public static final int tooltip_bubble_text=0x7f0b0089;
-        public static final int top_bar=0x7f0b0092;
-        public static final int user_image=0x7f0b0093;
+        public static final int top_bar=0x7f0b0093;
+        public static final int user_image=0x7f0b0095;
     }
     public static final class styleable {
         /**  ============================================ 

@@ -39,7 +39,8 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	SlidingMenu menu;
 	
 	// Broadcast receivers
-	FriendsUpdateReceiver f_receiver; 
+	FriendsUpdateReceiver f_receiver;
+	ProfileModelsUpdateReceiver pm_receiver;
     
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +58,11 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         
         /* Recibe cambios en lista de amigos */
         f_receiver = new FriendsUpdateReceiver();
-        IntentFilter filter = new IntentFilter(this.getString(R.string.broadcast_friends_list));
-        registerReceiver(f_receiver,filter);
+        registerReceiver(f_receiver,new IntentFilter(this.getString(R.string.broadcast_friends_list)));
+        
+        /* Recibe cambios en lista de modelos de usuario */
+        pm_receiver = new ProfileModelsUpdateReceiver();
+        registerReceiver(pm_receiver,new IntentFilter(this.getString(R.string.broadcast_profile_models_list)));
         
     }
     
@@ -72,6 +76,10 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	
     	if ( f_receiver != null ){
     		unregisterReceiver(f_receiver);
+    	}
+    	
+    	if ( pm_receiver != null ){
+    		unregisterReceiver(pm_receiver);
     	}
     }
     
@@ -89,7 +97,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
  
     }
    
-    class TabFactory implements TabContentFactory {
+    public class TabFactory implements TabContentFactory {
  
         private final Context mContext;
  
@@ -105,6 +113,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         }
  
     }
+    
     private void initMessageButton(){
     	ImageView bMessage = (ImageView) findViewById(R.id.new_message);
     	bMessage.setOnClickListener(new  View.OnClickListener() {
@@ -117,6 +126,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 		});
     	
     }
+    
     private void intialiseViewPager() {
  
         List<Fragment> fragments = new Vector<Fragment>();
@@ -193,8 +203,12 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     
     public void onTabChanged(String tag) {
     	
-        int pos = this.mTabHost.getCurrentTab();    
-        this.mViewPager.setCurrentItem(pos);
+        int pos = this.mTabHost.getCurrentTab();
+        
+        if ( mViewPager == null )
+        	return;
+        	
+        mViewPager.setCurrentItem(pos);
         
         if ( pos == 0 ){
         	mPagerAdapter.notifyDataSetChanged();
@@ -219,8 +233,8 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         menu = new SlidingMenu(this);
         menu.setMode(SlidingMenu.LEFT);
         menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-        menu.setShadowWidth(Utils.dpToPx(30, getApplicationContext()));
-        menu.setShadowDrawable(R.drawable.menu_shadow);
+        //menu.setShadowWidth(Utils.dpToPx(30, getApplicationContext()));
+        //menu.setShadowDrawable(R.drawable.menu_shadow);
         menu.setBehindWidth(Utils.dpToPx(250, getApplicationContext()));
         menu.setFadeDegree(0.35f);
         menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
@@ -228,9 +242,13 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         
         User u = User.get(this);
         
-        TextView user_name = (TextView ) menu.findViewById(R.id.user_name);
-        user_name.setText(u.name);
+        TextView name = (TextView ) menu.findViewById(R.id.name);
+        TextView username = (TextView ) menu.findViewById(R.id.username);
+        ImageView image = (ImageView ) menu.findViewById(R.id.image);
         
+        name.setText(u.name);
+        username.setText("@"+u.username);
+        image.setImageBitmap(u.getImage(this));
     }
  
     public void toggleSlidingMenu( View v ){
@@ -271,6 +289,21 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	}
       
     }
+    
+    public class ProfileModelsUpdateReceiver extends BroadcastReceiver {
+        
+    	@Override
+    	public void onReceive(Context context, Intent intent) {
+    		
+        	ProfileFragment fragment = (ProfileFragment) mPagerAdapter.getItem(3);
+    		
+        	if ( fragment.isVisible() ){
+        		fragment.updateContent();
+        	}
+    	}
+      
+    }
+    
     
 }
 

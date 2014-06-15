@@ -47,7 +47,7 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/small_title"
+        style="@style/medium_title"
         android:text="@string/buscar_amigos"
         />
     

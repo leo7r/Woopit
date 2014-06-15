@@ -13,6 +13,7 @@
 
     <!-- Broadcasts -->
     <string name="broadcast_friends_list">com.woopitapp.friends_list</string>
+    <string name="broadcast_profile_models_list">com.woopitapp.profile_models_list</string>
 
     <!-- FACEBOOK ID -->
     <string name="app_id">280178418831040</string>
@@ -71,5 +72,9 @@
     <string name="error_buscando_lugar">Error buscando lugar</string>
     <string name="lugar_no_encontrado">El lugar %s no fue encontrado</string>
     <string name="enviar_woop">Enviar Woop</string>
+    
+    <!-- Pantalla de perfil -->
+    <string name="woops">Woops</string>
+    <string name="mis_modelos">Mis modelos</string>
 
 </resources>

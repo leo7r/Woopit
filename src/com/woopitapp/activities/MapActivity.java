@@ -240,9 +240,10 @@ public class MapActivity extends FragmentActivity implements
 		
 		currentLocation = locationClient.getLastLocation();
 		
-		LatLng location = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-		
-		mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( location , default_zoom) );
+		if ( currentLocation != null ){
+			LatLng location = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+			mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( location , default_zoom) );
+		}
 	}
 
 	@Override
