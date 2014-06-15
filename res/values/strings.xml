@@ -16,6 +16,8 @@
 
     <!-- FACEBOOK ID -->
     <string name="app_id">280178418831040</string>
+    <!-- Google Maps API KEY -->
+    <string name="gmaps_key">AIzaSyB8nR-M0jXzZDpJCDTcsabTNmIEVXlzpDU</string>
 
     <!-- Terminos generales -->
     <string name="error_desconocido">Error desconocido</string>
@@ -46,7 +48,7 @@
     <string name="nombre_usuario">Nombre de Usuario</string>
     <string name="verificando_usuario">Verificando Usuario&#8230;</string>
     <string name="nombre_usuario_ya_tomado">El nombre de usuario <b>%s</b> ya fue tomado.</string>
-	
+
     <!-- Pantalla de Amigos -->
     <string name="title_activity_search_users">SearchUsers</string>
     <string name="title_activity_find_friends">FindFriendsActivity</string>
@@ -60,5 +62,14 @@
     <string name="ningun_amigo">No encontramos ningún amigo que use Woopit :(</string>
     <string name="invitalos">¡Invítalos!</string>
     <string name="compartir_woopit_texto">Ey acabo de probar Woopit. Es un chat con realidad aumentada que esta genial! www.woopitapp.com/dl</string>
+    <string name="title_activity_map">MapActivity</string>
+    
+    <!-- Pantalla del mapa -->
+    <string name="cargando_mapa">Cargando mapa</string>
+    <string name="buscar_lugar">Buscar lugar&#8230;</string>
+    <string name="podra_ver_woop">podrá ver tu Woop en esta área</string>
+    <string name="error_buscando_lugar">Error buscando lugar</string>
+    <string name="lugar_no_encontrado">El lugar %s no fue encontrado</string>
+    <string name="enviar_woop">Enviar Woop</string>
 
 </resources>

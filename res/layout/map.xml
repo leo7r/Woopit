@@ -1,0 +1,55 @@
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    >
+	    
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="55dp"
+	        android:background="#fff"
+	        >
+	        
+	        <EditText 
+	            android:id="@+id/search_address"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="20dp"
+	            android:layout_marginRight="20dp"
+	            android:hint="@string/buscar_lugar"
+	            android:layout_gravity="center_vertical"
+		        android:imeOptions="actionSearch"
+				android:singleLine="true"
+		        android:drawableLeft="@drawable/search"
+		        android:drawablePadding="5dp"
+	            />
+	        
+	    </LinearLayout>
+	    
+	    <FrameLayout 
+	        android:id="@+id/map_container"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="1"
+	        />
+	    
+	</LinearLayout>
+	
+    <Button 
+        android:id="@+id/send_woop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/big_button"
+        android:text="@string/enviar_woop"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        />
+    
+</RelativeLayout>
+

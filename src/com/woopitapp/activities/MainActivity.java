@@ -251,6 +251,12 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	startActivity(i);    	
     }
     
+    public void goMap( View v ){
+
+    	Intent i = new Intent(this,MapActivity.class);
+    	startActivity(i);    	
+    }
+    
     /* Broadcasts receivers */
     public class FriendsUpdateReceiver extends BroadcastReceiver {
         

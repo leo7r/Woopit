@@ -2,9 +2,14 @@
 <resources>
     <color name="woopit_text_color">#434348</color>
     <color name="woopit_green">#3fba89</color>
+    <color name="woopit_light_green">#90DEBF</color>
     <color name="woopit_orange">#ff8f63</color>
     <color name="woopit_light_blue">#73d7e6</color>
     <color name="woopit_dark_blue">#21818e</color>
     <color name="facebook_color">#3b5998</color>
     <color name="gplus_color">#d34836</color>
+    
+    <color name="map_area_fill">#4421818e</color>
+    <color name="map_area_stroke">@color/woopit_dark_blue</color>
+    
 </resources>
