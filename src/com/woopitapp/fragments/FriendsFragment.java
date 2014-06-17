@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.woopitapp.R;
 import com.woopitapp.activities.SearchUsers;
-import com.woopitapp.logic.Data;
-import com.woopitapp.logic.FriendRequest;
-import com.woopitapp.logic.User;
+import com.woopitapp.services.Data;
+import com.woopitapp.services.FriendRequest;
+import com.woopitapp.services.User;
 
 
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
@@ -218,7 +218,7 @@ public class FriendsFragment extends Fragment {
 	}
 	
 	// Si ya esta la amistad la rompe, si no esta crea un request, si ya habia un request lo acepta.
-	public class AddOrRejectFriend extends com.woopitapp.logic.ServerConnection{
+	public class AddOrRejectFriend extends com.woopitapp.services.ServerConnection{
 			
 			int to_user,friend_request;
 			

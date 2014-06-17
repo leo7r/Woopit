@@ -1,4 +1,4 @@
-package com.woopitapp.logic;
+package com.woopitapp.services;
 
 //Copyright (c) 2006 Damien Miller <djm@mindrot.org>
 //

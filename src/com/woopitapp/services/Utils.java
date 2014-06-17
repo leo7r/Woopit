@@ -1,4 +1,4 @@
-package com.woopitapp.logic;
+package com.woopitapp.services;
 
 import android.app.Activity;
 import android.content.Context;

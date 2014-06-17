@@ -1,4 +1,4 @@
-package com.woopitapp.logic;
+package com.woopitapp.services;
 
 public class FriendRequest {
 

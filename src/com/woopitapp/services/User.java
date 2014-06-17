@@ -1,4 +1,4 @@
-package com.woopitapp.logic;
+package com.woopitapp.services;
 
 import org.json.JSONArray;
 import org.json.JSONException;

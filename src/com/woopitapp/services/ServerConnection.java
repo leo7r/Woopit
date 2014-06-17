@@ -1,4 +1,4 @@
-package com.woopitapp.logic;
+package com.woopitapp.services;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

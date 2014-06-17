@@ -1,4 +1,4 @@
-package com.woopitapp.logic;
+package com.woopitapp.services;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

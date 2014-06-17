@@ -9,10 +9,10 @@ import com.woopitapp.R;
 import com.woopitapp.fragments.LoginFragment;
 import com.woopitapp.fragments.SignupFragment;
 import com.woopitapp.fragments.WelcomeFragment;
-import com.woopitapp.logic.Data;
-import com.woopitapp.logic.Preferences;
-import com.woopitapp.logic.ServerConnection;
-import com.woopitapp.logic.User;
+import com.woopitapp.services.Data;
+import com.woopitapp.services.Preferences;
+import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.User;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

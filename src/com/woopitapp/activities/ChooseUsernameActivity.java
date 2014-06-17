@@ -1,9 +1,9 @@
 package com.woopitapp.activities;
 import com.woopitapp.R;
-import com.woopitapp.logic.Preferences;
-import com.woopitapp.logic.ServerConnection;
-import com.woopitapp.logic.User;
-import com.woopitapp.logic.Utils;
+import com.woopitapp.services.Preferences;
+import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.User;
+import com.woopitapp.services.Utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
