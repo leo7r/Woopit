@@ -20,6 +20,14 @@
         <item name="android:background">@color/woopit_orange</item>
     </style>
     
+    <style name="facebook_button" parent="big_button">
+        <item name="android:background">@color/facebook_color</item>
+    </style>
+    
+    <style name="gplus_button" parent="big_button">
+        <item name="android:background">@color/gplus_color</item>
+    </style>
+    
     <style name="title_center">
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">20dp</item>
@@ -28,9 +36,15 @@
         <item name="android:textColor">@color/woopit_orange</item>
     </style>
     
-    <style name="small_title">
+    <style name="medium_title">
         <item name="android:padding">10dp</item>
         <item name="android:textSize">@dimen/medium_text</item>
+        <item name="android:textColor">@color/woopit_orange</item>
+    </style>
+    
+    <style name="normal_title">
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">@dimen/normal_text</item>
         <item name="android:textColor">@color/woopit_orange</item>
     </style>
     
@@ -39,6 +53,12 @@
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:gravity">center_vertical</item>
+    </style>
+    
+    <style name="profile_image">
+        <item name="android:background">@drawable/profile_image_bg</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
     
     <style name="user_image">

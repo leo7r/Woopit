@@ -78,11 +78,13 @@ public class SearchUsers extends Activity {
 			}
 			
 			final User user = getItem(position);
-			
+
+			ImageView image = (ImageView) convertView.findViewById(R.id.image);	
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView username = (TextView) convertView.findViewById(R.id.username);
 			ImageView add_friend = (ImageView) convertView.findViewById(R.id.add_friend);			
 			
+			image.setImageBitmap(user.getImage(getApplicationContext()));
 			name.setText(user.name);
 			username.setText("@"+user.username);
 			add_friend.setVisibility(View.VISIBLE);

@@ -10,7 +10,7 @@
         android:id="@+id/image"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        style="@style/user_image"
+        style="@style/profile_image"
         android:src="@drawable/user"
         android:layout_gravity="center_vertical"
         />

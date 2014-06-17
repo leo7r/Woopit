@@ -4,12 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.woopitapp.R;
-import com.woopitapp.R.string;
-
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+
+import com.woopitapp.R;
 
 public class User {
 	
@@ -52,6 +52,20 @@ public class User {
 		data.close();
 				
 		return u;
+	}
+	
+	public Bitmap getImage( Context c ){
+		
+		Bitmap bm;
+		
+		if ( image != null && image.length() > 0 ){
+	        bm = BitmapFactory.decodeResource(c.getResources(), R.drawable.user);
+		}
+		else{
+	        bm = BitmapFactory.decodeResource(c.getResources(), R.drawable.user);			
+		}
+		
+        return Utils.round(bm, Utils.dpToPx(100, c));
 	}
 	
 	public void update_username( Context c , String username ){

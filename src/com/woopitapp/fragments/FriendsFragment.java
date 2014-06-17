@@ -80,13 +80,15 @@ public class FriendsFragment extends Fragment {
         
         fAdapter = new ListAdapter(getActivity(), R.id.friend_list, list_items );
         friend_list.setAdapter(fAdapter);
-        
 
-        new User.GetFriendRequest(getActivity()).execute();
-        //new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
-
-        
         return view;
+    }
+
+    public void onStart(){
+    	super.onStart();
+    	
+    	new User.GetFriendRequest(getActivity()).execute();
+        //new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
     }
     
     public void searchUsers( String query ){
@@ -138,7 +140,8 @@ public class FriendsFragment extends Fragment {
 			if ( convertView == null ){
 				convertView = infalInflater.inflate(R.layout.friend_item, null);
 			}
-						
+
+			ImageView image = (ImageView) convertView.findViewById(R.id.image);
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView username = (TextView) convertView.findViewById(R.id.username);
 			final ImageView confirm_friend = (ImageView) convertView.findViewById(R.id.add_friend);
@@ -150,6 +153,7 @@ public class FriendsFragment extends Fragment {
 				username.setText("@"+fr.username);
 				confirm_friend.setImageResource(R.drawable.add_friend);
 				confirm_friend.setVisibility(View.VISIBLE);
+		        image.setImageBitmap(fr.getImage(getActivity()));
 				
 				confirm_friend.setOnClickListener(new OnClickListener(){
 
@@ -167,8 +171,9 @@ public class FriendsFragment extends Fragment {
 				name.setText(user.name);
 				username.setText("@"+user.username);
 				confirm_friend.setVisibility(View.GONE);
+		        image.setImageBitmap(user.getImage(getActivity()));
 			}
-
+			
 			return convertView;
 		}
 		

@@ -13,9 +13,12 @@
 
     <!-- Broadcasts -->
     <string name="broadcast_friends_list">com.woopitapp.friends_list</string>
+    <string name="broadcast_profile_models_list">com.woopitapp.profile_models_list</string>
 
     <!-- FACEBOOK ID -->
     <string name="app_id">280178418831040</string>
+    <!-- Google Maps API KEY -->
+    <string name="gmaps_key">AIzaSyB8nR-M0jXzZDpJCDTcsabTNmIEVXlzpDU</string>
 
     <!-- Terminos generales -->
     <string name="error_desconocido">Error desconocido</string>
@@ -49,11 +52,29 @@
 
     <!-- Pantalla de Amigos -->
     <string name="title_activity_search_users">SearchUsers</string>
+    <string name="title_activity_find_friends">FindFriendsActivity</string>
     <string name="amigos">Amigos</string>
     <string name="encontrar_amigos">Encontrar Amigos</string>
+    <string name="encontrar_amigos_info">Woopit utiliza las redes sociales para ayudarte a encontrar a tus amigos. No enviaremos ningún mensaje sin tu aprobación.</string>
     <string name="buscar_usuarios">Buscar Usuarios&#8230;</string>
     <string name="buscar_amigos">Buscar Amigos \"%s\"</string>
     <string name="solicitudes_de_amistad">Solicitudes de amistad</string>
+    <string name="buscando_amigos">Buscando amigos&#8230;</string>
+    <string name="ningun_amigo">No encontramos ningún amigo que use Woopit :(</string>
+    <string name="invitalos">¡Invítalos!</string>
+    <string name="compartir_woopit_texto">Ey acabo de probar Woopit. Es un chat con realidad aumentada que esta genial! www.woopitapp.com/dl</string>
+    <string name="title_activity_map">MapActivity</string>
     
+    <!-- Pantalla del mapa -->
+    <string name="cargando_mapa">Cargando mapa</string>
+    <string name="buscar_lugar">Buscar lugar&#8230;</string>
+    <string name="podra_ver_woop">podrá ver tu Woop en esta área</string>
+    <string name="error_buscando_lugar">Error buscando lugar</string>
+    <string name="lugar_no_encontrado">El lugar %s no fue encontrado</string>
+    <string name="enviar_woop">Enviar Woop</string>
+    
+    <!-- Pantalla de perfil -->
+    <string name="woops">Woops</string>
+    <string name="mis_modelos">Mis modelos</string>
 
 </resources>

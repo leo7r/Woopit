@@ -65,7 +65,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
         uiHelper.onCreate(savedInstanceState);
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
-        authButton.setReadPermissions(Arrays.asList("email","public_profile"));
+        authButton.setReadPermissions(Arrays.asList("email","public_profile","user_friends"));
         
         
         /* Login con Google+ */
@@ -282,6 +282,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		Person person = personBuffer.get(0);
 		String id = person.getId();
 		String email = mPlusClient.getAccountName();
+		personBuffer.close();
 
         new WelcomeActivity.LoginTask( getActivity() , email , null , null , id ).execute();
         gp_info_ready = true;				

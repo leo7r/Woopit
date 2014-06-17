@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper{
 	
-  static final int DATABASE_VERSION = 5;
+  static final int DATABASE_VERSION = 6;
   static final String DATABASE_NAME = "woopit";
   Context context;
   
@@ -34,6 +34,13 @@ public class DBHelper extends SQLiteOpenHelper{
   static final String fr_name = "name";
   private static final String CREATE_FRIEND_REQUEST = "CREATE TABLE "+FRIEND_REQUEST_TABLE+" ( "+fr_id+" integer primary key, "+fr_from_user+" integer, "+fr_username+" text , "+fr_name+" text );";
   
+  static final String MODEL_TABLE = "model";
+  static final String model_id = "id";
+  static final String model_name = "name";
+  static final String model_price = "price";
+  private static final String CREATE_MODEL = "CREATE TABLE "+MODEL_TABLE+" ( "+model_id+" integer primary key, "+model_name+" text, "+model_price+" text );";
+  
+  
   DBHelper(Context context){
     super(context, DATABASE_NAME, null, DATABASE_VERSION);
   }
@@ -42,6 +49,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	  db.execSQL(CREATE_USER);
 	  db.execSQL(CREATE_FRIEND);
 	  db.execSQL(CREATE_FRIEND_REQUEST);
+	  db.execSQL(CREATE_MODEL);
   }
 
   public void onUpgrade(SQLiteDatabase db, int oldV, int newV){
@@ -59,7 +67,9 @@ public class DBHelper extends SQLiteOpenHelper{
 	  case 4:
 		  db.execSQL("DROP TABLE IF EXISTS "+FRIEND_REQUEST_TABLE);
 		  db.execSQL(CREATE_FRIEND_REQUEST);
-		  
+	  case 5:
+		  db.execSQL(CREATE_MODEL);
+		 
 	  }
       
   }

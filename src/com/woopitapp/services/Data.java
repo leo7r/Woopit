@@ -19,6 +19,7 @@ public class Data{
 	private String user_colls[] = new String[]{ DBHelper.user_id , DBHelper.user_email , DBHelper.user_username , DBHelper.user_name, DBHelper.user_image, DBHelper.user_fb, DBHelper.user_gp };
 	private String friend_colls[] = new String[]{ DBHelper.friend_id , DBHelper.friend_username , DBHelper.friend_name, DBHelper.friend_image };
 	private String fr_colls[] = new String[]{ DBHelper.fr_id , DBHelper.fr_from_user , DBHelper.fr_username , DBHelper.fr_name };
+	private String model_colls[] = new String[]{ DBHelper.model_id , DBHelper.model_name , DBHelper.model_price };
 	private Context context;
   
 	/* Database methods */
@@ -291,5 +292,52 @@ public class Data{
 		
 		return database.delete(DBHelper.FRIEND_REQUEST_TABLE, DBHelper.fr_id+" = ?", new String[]{ id+"" }) != -1;
 	}
+	
+	/* Modelos */
+	
+	public boolean insertModel( int id , String name , String price ){
+		
+		Cursor cursor = this.database.query(DBHelper.MODEL_TABLE, 
+				model_colls,
+				DBHelper.model_id+" = ?",
+				new String[]{ id+"" }, null, null, null);
+				
+		if ( !cursor.moveToFirst() ){
+			
+			ContentValues values = new ContentValues();
+			
+			values.put(DBHelper.model_id, id);
+			values.put(DBHelper.model_name, name);
+			values.put(DBHelper.model_price, price);
+			
+			long res = database.insert(DBHelper.MODEL_TABLE, null, values);
+			
+			return res != -1;
+		}
+		
+		return false;
+	}
+	
+	public ArrayList<Model> getModels(){
+		
+		Cursor cursor = this.database.query(DBHelper.MODEL_TABLE,null,null,null,null, null, null);
+		cursor.moveToFirst();
+		
+		ArrayList<Model> list = new ArrayList<Model>();
+		
+		while ( !cursor.isAfterLast() ){
+			
+			int id = cursor.getInt(cursor.getColumnIndex(DBHelper.model_id));
+			String name = cursor.getString(cursor.getColumnIndex(DBHelper.model_name));
+			String price = cursor.getString(cursor.getColumnIndex(DBHelper.model_price));
+			
+			list.add(new Model( id , name , price ));
+			cursor.moveToNext();
+		}
+		
+		return list;
+	}
+	
+	
 	
 }
