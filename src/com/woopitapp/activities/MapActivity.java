@@ -35,7 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.woopitapp.R;
-import com.woopitapp.logic.Utils;
+import com.woopitapp.services.Utils;
 
 public class MapActivity extends FragmentActivity implements 
 	GooglePlayServicesClient.ConnectionCallbacks,
@@ -171,7 +171,7 @@ public class MapActivity extends FragmentActivity implements
 	    .fillColor(getResources().getColor(R.color.map_area_fill))
 	    .strokeColor(getResources().getColor(R.color.map_area_stroke))
 	    .strokeWidth(2)
-	    .radius(200);
+	    .radius(30);
 		
 		if ( area != null ){
 			area.remove();

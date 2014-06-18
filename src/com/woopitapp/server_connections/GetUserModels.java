@@ -1,7 +1,7 @@
 package com.woopitapp.server_connections;
 
 import android.content.Context;
-import com.woopitapp.logic.ServerConnection;
+import com.woopitapp.services.ServerConnection;
 
 /* User models */
 public abstract class GetUserModels extends ServerConnection{
