@@ -2,6 +2,9 @@ package com.woopitapp.services;
 
 import java.util.ArrayList;
 
+import com.woopitapp.entities.Model;
+import com.woopitapp.entities.User;
+
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +12,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 
 
 public class Data{
@@ -19,7 +23,7 @@ public class Data{
 	private String user_colls[] = new String[]{ DBHelper.user_id , DBHelper.user_email , DBHelper.user_username , DBHelper.user_name, DBHelper.user_image, DBHelper.user_fb, DBHelper.user_gp };
 	private String friend_colls[] = new String[]{ DBHelper.friend_id , DBHelper.friend_username , DBHelper.friend_name, DBHelper.friend_image };
 	private String fr_colls[] = new String[]{ DBHelper.fr_id , DBHelper.fr_from_user , DBHelper.fr_username , DBHelper.fr_name };
-	private String model_colls[] = new String[]{ DBHelper.model_id , DBHelper.model_name , DBHelper.model_price };
+	private String model_colls[] = new String[]{ DBHelper.model_id , DBHelper.model_name , DBHelper.model_price ,DBHelper.model_enable};
 	private Context context;
   
 	/* Database methods */
@@ -320,6 +324,25 @@ public class Data{
 	
 	public ArrayList<Model> getModels(){
 		
+		Cursor cursor = this.database.query(DBHelper.MODEL_TABLE,null,null,null,null, null, null,null);
+		cursor.moveToFirst();
+		
+		ArrayList<Model> list = new ArrayList<Model>();
+
+		while ( !cursor.isAfterLast() ){
+
+			int id = cursor.getInt(cursor.getColumnIndex(DBHelper.model_id));
+			String name = cursor.getString(cursor.getColumnIndex(DBHelper.model_name));
+			String price = cursor.getString(cursor.getColumnIndex(DBHelper.model_price));
+			Boolean enable = cursor.getInt(cursor.getColumnIndex(DBHelper.model_enable))==1;
+			list.add(new Model( id , name , price ,"",enable));
+			cursor.moveToNext();
+		}
+		
+		return list;
+	}
+
+	public ArrayList<Model> getModelsTobuy() {
 		Cursor cursor = this.database.query(DBHelper.MODEL_TABLE,null,null,null,null, null, null);
 		cursor.moveToFirst();
 		
@@ -331,11 +354,12 @@ public class Data{
 			String name = cursor.getString(cursor.getColumnIndex(DBHelper.model_name));
 			String price = cursor.getString(cursor.getColumnIndex(DBHelper.model_price));
 			
-			list.add(new Model( id , name , price ));
+			list.add(new Model( id , name , price ,"",false));
 			cursor.moveToNext();
 		}
 		
 		return list;
+		
 	}
 	
 	

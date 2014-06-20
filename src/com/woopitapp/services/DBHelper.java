@@ -38,7 +38,8 @@ public class DBHelper extends SQLiteOpenHelper{
   static final String model_id = "id";
   static final String model_name = "name";
   static final String model_price = "price";
-  private static final String CREATE_MODEL = "CREATE TABLE "+MODEL_TABLE+" ( "+model_id+" integer primary key, "+model_name+" text, "+model_price+" text );";
+  static final String model_enable = "enable";
+  private static final String CREATE_MODEL = "CREATE TABLE "+MODEL_TABLE+" ( "+model_id+" integer primary key, "+model_name+" text, "+model_price+" text, "+model_enable+" integer );";
   
   
   DBHelper(Context context){

@@ -779,8 +779,9 @@ containing a value of this type.
         public static final int user_bg=0x7f020070;
     }
     public static final class id {
-        public static final int action_settings=0x7f040060;
+        public static final int action_settings=0x7f040065;
         public static final int add_friend=0x7f04004b;
+        public static final int add_model=0x7f040059;
         public static final int authButton=0x7f040046;
         public static final int book_now=0x7f040015;
         public static final int botonSuma=0x7f040025;
@@ -815,6 +816,7 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f040041;
         public static final int container=0x7f040026;
         public static final int email=0x7f040050;
+        public static final int enviarA=0x7f04005d;
         public static final int facebook_button=0x7f040047;
         public static final int find_friends=0x7f04001c;
         public static final int fragment_container=0x7f040043;
@@ -829,14 +831,15 @@ containing a value of this type.
         public static final int large=0x7f04001a;
         public static final int latitud=0x7f04001f;
         public static final int left=0x7f040000;
-        public static final int loading=0x7f04005c;
+        public static final int loading=0x7f040061;
         public static final int login=0x7f040053;
         public static final int longitud=0x7f040021;
         public static final int map=0x7f040057;
         public static final int map_container=0x7f040055;
         public static final int margin=0x7f040002;
         public static final int match_parent=0x7f040011;
-        public static final int models_list=0x7f04005a;
+        public static final int model_list=0x7f04005b;
+        public static final int models_list=0x7f04005f;
         public static final int monochrome=0x7f040018;
         public static final int name=0x7f04004a;
         public static final int new_message=0x7f04001b;
@@ -846,32 +849,34 @@ containing a value of this type.
         public static final int normal=0x7f040006;
         public static final int password=0x7f040051;
         public static final int picker_subtitle=0x7f040038;
+        public static final int previewCanvas=0x7f04005c;
         public static final int price=0x7f040058;
         public static final int production=0x7f04000c;
         public static final int rdbOne=0x7f040023;
         public static final int rdbTwo=0x7f040024;
         public static final int rdgGrupo=0x7f040022;
-        public static final int repeatedPassword=0x7f04005d;
+        public static final int repeatedPassword=0x7f040062;
         public static final int right=0x7f040001;
         public static final int sandbox=0x7f04000d;
         public static final int satellite=0x7f040007;
         public static final int search_address=0x7f040054;
+        public static final int search_models=0x7f04005a;
         public static final int search_users=0x7f04004c;
         public static final int selected_view=0x7f040004;
         public static final int selectionDetails=0x7f040010;
         public static final int send_woop=0x7f040056;
-        public static final int signUp=0x7f04005e;
+        public static final int signUp=0x7f040063;
         public static final int sign_in_button=0x7f040052;
-        public static final int slidingmenumain=0x7f04005f;
+        public static final int slidingmenumain=0x7f040064;
         public static final int small=0x7f040019;
         public static final int strict_sandbox=0x7f04000e;
         public static final int tab_image=0x7f04004f;
         public static final int tabsLayout=0x7f04004e;
         public static final int terrain=0x7f040008;
         public static final int texto=0x7f04001e;
-        public static final int texto1=0x7f040059;
+        public static final int texto1=0x7f04005e;
         public static final int texto2=0x7f040020;
-        public static final int title=0x7f04005b;
+        public static final int title=0x7f040060;
         public static final int user_list=0x7f040045;
         public static final int username=0x7f040027;
         public static final int viewpager=0x7f04001d;
@@ -913,15 +918,19 @@ containing a value of this type.
         public static final int map=0x7f03001d;
         public static final int map_fragment=0x7f03001e;
         public static final int model_item=0x7f03001f;
-        public static final int models_fragment=0x7f030020;
-        public static final int notification=0x7f030021;
-        public static final int profile_fragment=0x7f030022;
-        public static final int search_users=0x7f030023;
-        public static final int signup_fragment=0x7f030024;
-        public static final int sliding_menu=0x7f030025;
-        public static final int slidingmenumain=0x7f030026;
-        public static final int welcome=0x7f030027;
-        public static final int welcome_fragment=0x7f030028;
+        public static final int model_list=0x7f030020;
+        public static final int model_message_item=0x7f030021;
+        public static final int model_message_list=0x7f030022;
+        public static final int model_preview=0x7f030023;
+        public static final int models_fragment=0x7f030024;
+        public static final int notification=0x7f030025;
+        public static final int profile_fragment=0x7f030026;
+        public static final int search_users=0x7f030027;
+        public static final int signup_fragment=0x7f030028;
+        public static final int sliding_menu=0x7f030029;
+        public static final int slidingmenumain=0x7f03002a;
+        public static final int welcome=0x7f03002b;
+        public static final int welcome_fragment=0x7f03002c;
     }
     public static final class menu {
         public static final int choose_username=0x7f0a0000;
@@ -949,12 +958,12 @@ containing a value of this type.
         public static final int broadcast_profile_models_list=0x7f050044;
         public static final int buscando_amigos=0x7f050069;
         public static final int buscar_amigos=0x7f050067;
-        public static final int buscar_lugar=0x7f05006f;
+        public static final int buscar_lugar=0x7f050072;
         public static final int buscar_usuarios=0x7f050066;
         public static final int button_send=0x7f05003f;
         /**  Pantalla del mapa 
          */
-        public static final int cargando_mapa=0x7f05006e;
+        public static final int cargando_mapa=0x7f050071;
         public static final int com_facebook_choose_friends=0x7f05002f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f050020;
         public static final int com_facebook_internet_permission_error_message=0x7f050033;
@@ -1085,9 +1094,12 @@ containing a value of this type.
         public static final int encontrar_amigos=0x7f050064;
         public static final int encontrar_amigos_info=0x7f050065;
         public static final int entrando=0x7f050057;
+        public static final int enviar_a=0x7f05006e;
+        public static final int enviar_actual=0x7f05006f;
         public static final int enviar_comentarios=0x7f05004b;
-        public static final int enviar_woop=0x7f050073;
-        public static final int error_buscando_lugar=0x7f050071;
+        public static final int enviar_mapa=0x7f050070;
+        public static final int enviar_woop=0x7f050076;
+        public static final int error_buscando_lugar=0x7f050074;
         public static final int error_de_conexion=0x7f050048;
         /**  Terminos generales 
          */
@@ -1102,13 +1114,14 @@ containing a value of this type.
          */
         public static final int iniciar_sesion=0x7f05004d;
         public static final int invitalos=0x7f05006b;
-        public static final int lugar_no_encontrado=0x7f050072;
-        public static final int mis_modelos=0x7f050075;
+        public static final int lugar_no_encontrado=0x7f050075;
+        public static final int mis_modelos=0x7f050078;
+        public static final int modelos_a_comprar=0x7f050079;
         public static final int ningun_amigo=0x7f05006a;
         public static final int nombre_usuario=0x7f05005e;
         public static final int nombre_usuario_ya_tomado=0x7f050060;
         public static final int nueva_contrasena=0x7f050053;
-        public static final int podra_ver_woop=0x7f050070;
+        public static final int podra_ver_woop=0x7f050073;
         public static final int registrarse=0x7f05004e;
         public static final int registro=0x7f050052;
         public static final int repetir_contrasena=0x7f050054;
@@ -1131,7 +1144,7 @@ containing a value of this type.
         public static final int wallet_buy_button_place_holder=0x7f05001f;
         /**  Pantalla de perfil 
          */
-        public static final int woops=0x7f050074;
+        public static final int woops=0x7f050077;
     }
     public static final class style {
         /** 

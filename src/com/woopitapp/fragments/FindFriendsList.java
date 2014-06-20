@@ -24,8 +24,8 @@ import android.widget.Toast;
 
 import com.woopitapp.R;
 import com.woopitapp.activities.SearchUsers.UserAdapter;
+import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
-import com.woopitapp.services.User;
 
 public class FindFriendsList extends Fragment {
 

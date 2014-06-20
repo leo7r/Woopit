@@ -22,12 +22,12 @@ import android.widget.TextView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.woopitapp.R;
 
+import com.woopitapp.entities.User;
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
 import com.woopitapp.fragments.ModelsFragment;
 import com.woopitapp.fragments.ProfileFragment;
 import com.woopitapp.services.TabPager;
-import com.woopitapp.services.User;
 import com.woopitapp.services.Utils;
 
 public class MainActivity extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {

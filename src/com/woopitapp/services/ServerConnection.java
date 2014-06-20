@@ -13,6 +13,7 @@ import com.woopitapp.R;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public abstract class ServerConnection extends AsyncTask<Void,Void,Void> {
 
@@ -63,13 +64,10 @@ public abstract class ServerConnection extends AsyncTask<Void,Void,Void> {
 			onBackground(result);
 			
 		} catch (UnknownHostException e) {
-			
 			e.printStackTrace();
 		} catch (IOException e) {
-			
 			e.printStackTrace();
 		} catch (Exception e) {
-			
 			e.printStackTrace();
 		}
 		

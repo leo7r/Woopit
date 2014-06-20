@@ -3,10 +3,12 @@ package com.woopitapp.fragments;
 import java.util.ArrayList;
 
 import com.woopitapp.R;
+import com.woopitapp.activities.ModelListActivity;
+import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.SearchUsers;
+import com.woopitapp.entities.User;
 import com.woopitapp.services.Data;
 import com.woopitapp.services.FriendRequest;
-import com.woopitapp.services.User;
 
 
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
@@ -88,7 +90,7 @@ public class FriendsFragment extends Fragment {
     	super.onStart();
     	
     	new User.GetFriendRequest(getActivity()).execute();
-        //new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
+        new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
     }
     
     public void searchUsers( String query ){
@@ -116,7 +118,11 @@ public class FriendsFragment extends Fragment {
     	
         Toast.makeText(getActivity(), "Refrescado", Toast.LENGTH_SHORT).show();
     }
-    
+    public void goToMessage(User u){
+    	Intent i = new Intent(getActivity(),ModelListActivity.class);
+		i.putExtra("userId", u.id);
+		startActivity(i);
+    }
 	public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
 		
 		ArrayList<Object> l_items;
@@ -172,6 +178,13 @@ public class FriendsFragment extends Fragment {
 				username.setText("@"+user.username);
 				confirm_friend.setVisibility(View.GONE);
 		        image.setImageBitmap(user.getImage(getActivity()));
+		        convertView.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						goToMessage(user);
+					}
+				});
 			}
 			
 			return convertView;

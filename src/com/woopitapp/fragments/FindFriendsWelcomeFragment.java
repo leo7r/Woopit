@@ -37,8 +37,8 @@ import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.woopitapp.R;
 import com.woopitapp.activities.FindFriendsActivity;
+import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
-import com.woopitapp.services.User;
 
 public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener  {
 	

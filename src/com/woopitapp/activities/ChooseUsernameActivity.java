@@ -1,8 +1,8 @@
 package com.woopitapp.activities;
 import com.woopitapp.R;
+import com.woopitapp.entities.User;
 import com.woopitapp.services.Preferences;
 import com.woopitapp.services.ServerConnection;
-import com.woopitapp.services.User;
 import com.woopitapp.services.Utils;
 
 import android.app.Activity;

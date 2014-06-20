@@ -64,6 +64,9 @@
     <string name="invitalos">¡Invítalos!</string>
     <string name="compartir_woopit_texto">Ey acabo de probar Woopit. Es un chat con realidad aumentada que esta genial! www.woopitapp.com/dl</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name = "enviar_a">Enviar a:</string>
+    <string name="enviar_actual">Ubicacion actual</string>
+    <string name="enviar_mapa">Ver mapa</string>
     
     <!-- Pantalla del mapa -->
     <string name="cargando_mapa">Cargando mapa</string>
@@ -76,5 +79,6 @@
     <!-- Pantalla de perfil -->
     <string name="woops">Woops</string>
     <string name="mis_modelos">Mis modelos</string>
+    <string name="modelos_a_comprar">Mercado de modelos</string>
 
 </resources>
