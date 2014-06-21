@@ -83,7 +83,7 @@ public class FriendsFragment extends Fragment {
 
         return view;
     }
-
+    
     public void onStart(){
     	super.onStart();
     	

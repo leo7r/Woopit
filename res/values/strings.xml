@@ -76,5 +76,6 @@
     <!-- Pantalla de perfil -->
     <string name="woops">Woops</string>
     <string name="mis_modelos">Mis modelos</string>
+    <string name="no_creditos">No tienes créditos</string>
 
 </resources>

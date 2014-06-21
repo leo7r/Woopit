@@ -37,7 +37,7 @@ public class WelcomeActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		
 		if ( !Preferences.isFirstTime(this) && User.get(this) != null && User.get(this).username != null ){
-
+			
 			Intent i = new Intent(this,MainActivity.class);
 			startActivity(i);
 			finish();
