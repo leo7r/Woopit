@@ -13,7 +13,7 @@ public class Model {
 	public String name, price, preview;
 	public boolean enable;
 	
-	public Model( int id , String name , String price, String preview,boolean enable){
+	public Model( int id , String name , String price, String preview , boolean enable){
 		this.id = id;
 		this.name = name;
 		this.price = price;

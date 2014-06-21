@@ -24,6 +24,13 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.woopitapp.R;
 
 
 public class Utils {
@@ -397,6 +404,36 @@ public class Utils {
 
 		Intent i = new Intent(con.getResources().getString(string_id));
 		con.sendBroadcast(i);	
+	}
+	
+	static ImageLoader imageLoader;
+	
+	public static ImageLoader getImageLoader( Context con ){
+		
+		if ( imageLoader == null ){
+			imageLoader = ImageLoader.getInstance();
+			imageLoader.init(ImageLoaderConfiguration.createDefault(con));
+		}
+		
+		return imageLoader;
+	}
+	
+	public static String getUserImageURI( int id ){
+		return "http://"+ServerConnection.HOST+":7778/users/images/"+id+".jpg";
+	}
+	
+	public static void setUserImage( Context con , ImageView iv , int id_user ){
+		
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showStubImage(R.drawable.user)
+        .showImageForEmptyUri(R.drawable.user)
+        .showImageOnFail(R.drawable.user)
+        .cacheOnDisc()
+        .displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, con)))
+        .build();
+		
+		imageLoader = getImageLoader(con);		
+		imageLoader.displayImage(getUserImageURI(id_user), iv, options );
 	}
 	
 }

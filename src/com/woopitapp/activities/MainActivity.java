@@ -26,7 +26,6 @@ import com.woopitapp.entities.User;
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
 import com.woopitapp.fragments.ModelsFragment;
-import com.woopitapp.fragments.ProfileFragment;
 import com.woopitapp.services.TabPager;
 import com.woopitapp.services.Utils;
 
@@ -40,7 +39,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	
 	// Broadcast receivers
 	FriendsUpdateReceiver f_receiver;
-	ProfileModelsUpdateReceiver pm_receiver;
     
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +58,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         f_receiver = new FriendsUpdateReceiver();
         registerReceiver(f_receiver,new IntentFilter(this.getString(R.string.broadcast_friends_list)));
         
-        /* Recibe cambios en lista de modelos de usuario */
-        pm_receiver = new ProfileModelsUpdateReceiver();
-        registerReceiver(pm_receiver,new IntentFilter(this.getString(R.string.broadcast_profile_models_list)));
-        
     }
     
     protected void onSaveInstanceState(Bundle outState) {
@@ -76,10 +70,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	
     	if ( f_receiver != null ){
     		unregisterReceiver(f_receiver);
-    	}
-    	
-    	if ( pm_receiver != null ){
-    		unregisterReceiver(pm_receiver);
     	}
     }
     
@@ -133,7 +123,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         fragments.add(Fragment.instantiate(this, HomeFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, FriendsFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, ModelsFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, ProfileFragment.class.getName()));
         mPagerAdapter  = new TabPager(getSupportFragmentManager(), fragments);
         
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -164,8 +153,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         
         AddTab(this, mTabHost, tabHome, ( new TabInfo("Home", HomeFragment.class, args)));
         AddTab(this, mTabHost, tabFriends, ( new TabInfo("Friends", FriendsFragment.class, args)));
-        AddTab(this, mTabHost, tabModel, ( new TabInfo("Models", ModelsFragment.class, args)));
-        AddTab(this, mTabHost, tabProfile, ( new TabInfo("Profile", ProfileFragment.class, args)));        
+        AddTab(this, mTabHost, tabModel, ( new TabInfo("Models", ModelsFragment.class, args)));       
 	         
         mTabHost.setOnTabChangedListener(this);
     }
@@ -248,7 +236,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         
         name.setText(u.name);
         username.setText("@"+u.username);
-        image.setImageBitmap(u.getImage(this));
+        Utils.setUserImage(getApplicationContext(), image, u.id);
     }
  
     public void toggleSlidingMenu( View v ){
@@ -268,11 +256,18 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	Intent i = new Intent(this,FindFriendsActivity.class);
     	startActivity(i);    	
     }
-    
-
-    
+        
     public void goEditProfile( View v ){
     	
+    }
+    
+    public void goMyProfile( View v ){
+    	
+    	Intent i = new Intent(this,ProfileActivity.class);
+    	
+    	i.putExtra("id_user", User.get(getApplicationContext()).id);
+    	
+    	startActivity(i);
     }
     
     /* Broadcasts receivers */
@@ -289,21 +284,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	}
       
     }
-    
-    public class ProfileModelsUpdateReceiver extends BroadcastReceiver {
         
-    	@Override
-    	public void onReceive(Context context, Intent intent) {
-    		
-        	ProfileFragment fragment = (ProfileFragment) mPagerAdapter.getItem(3);
-    		
-        	if ( fragment.isVisible() ){
-        		fragment.updateContent();
-        	}
-    	}
-      
-    }
-    
     
 }
 

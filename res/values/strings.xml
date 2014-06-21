@@ -14,6 +14,7 @@
     <!-- Broadcasts -->
     <string name="broadcast_friends_list">com.woopitapp.friends_list</string>
     <string name="broadcast_profile_models_list">com.woopitapp.profile_models_list</string>
+    <string name="broadcast_profile_update">com.woopitapp.profile_update</string>
 
     <!-- FACEBOOK ID -->
     <string name="app_id">280178418831040</string>
@@ -65,11 +66,10 @@
     <string name="invitalos">¡Invítalos!</string>
     <string name="compartir_woopit_texto">Ey acabo de probar Woopit. Es un chat con realidad aumentada que esta genial! www.woopitapp.com/dl</string>
     <string name="title_activity_map">MapActivity</string>
-    <string name = "enviar_a">Enviar a:</string>
+    <string name="enviar_a">Enviar a:</string>
     <string name="enviar_actual">Ubicacion actual</string>
     <string name="enviar_mapa">Ver mapa</string>
-    
-    
+
     <!-- Pantalla del mapa -->
     <string name="cargando_mapa">Cargando mapa</string>
     <string name="buscar_lugar">Buscar lugar&#8230;</string>
@@ -77,10 +77,20 @@
     <string name="error_buscando_lugar">Error buscando lugar</string>
     <string name="lugar_no_encontrado">El lugar %s no fue encontrado</string>
     <string name="enviar_woop">Enviar Woop</string>
-    
+
     <!-- Pantalla de perfil -->
     <string name="woops">Woops</string>
     <string name="mis_modelos">Mis modelos</string>
     <string name="no_creditos">No tienes créditos</string>
     <string name="modelos_a_comprar">Mercado de modelos</string>
+    <string name="editar_perfil">Editar Perfil</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="guardar_cambios">Guardar cambios</string>
+    <string name="cambiar_imagen"><u>Cambiar Imagen</u></string>
+    <string name="informacion_actualizada">Información actualizada</string>
+    <string name="guardando_informacion">Guardando información&#8230;</string>
+    
+    
+
 </resources>
