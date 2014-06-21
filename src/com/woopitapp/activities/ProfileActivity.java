@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
@@ -25,10 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woopitapp.R;
-import com.woopitapp.activities.MainActivity.FriendsUpdateReceiver;
 import com.woopitapp.entities.Model;
 import com.woopitapp.entities.User;
-import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.services.Data;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
@@ -54,6 +53,8 @@ public class ProfileActivity extends Activity {
 		
 		if ( extras.containsKey("id_user") ){
 			
+			ImageView edit_profile = (ImageView) findViewById(R.id.edit_profile);
+			
 			int id_user = extras.getInt("id_user");
 			
 			if ( id_user == user.id ){
@@ -66,10 +67,22 @@ public class ProfileActivity extends Activity {
 		        ArrayList<Model> list = data.getModels();
 		        data.close();
 		        
+		        edit_profile.setVisibility(View.VISIBLE);
+		        edit_profile.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						goEditProfile(v);
+					}
+				});
+		        
 		        setModelList( list );				
 			}
 			else{
 				is_my_profile = false;
+				
+				edit_profile.setVisibility(View.INVISIBLE);
+				
 				new GetUserInfo(getApplicationContext(),id_user).execute();
 			}
 			
@@ -92,7 +105,6 @@ public class ProfileActivity extends Activity {
 	public void setProfile(){
 		
         ImageView image = (ImageView) findViewById(R.id.image);
-        ImageView edit_profile = (ImageView) findViewById(R.id.edit_profile);
         TextView name = (TextView) findViewById(R.id.name);
         TextView username = (TextView) findViewById(R.id.username);
         
@@ -100,14 +112,7 @@ public class ProfileActivity extends Activity {
         
         name.setText(current_user.name);
         username.setText("@"+current_user.username);
-        
-        if ( !is_my_profile ){
-        	edit_profile.setVisibility(View.GONE);
-        }
-        else{
-        	edit_profile.setVisibility(View.VISIBLE);
-        }
-        
+                
         new GetUserModels( getApplicationContext() , current_user.id ).execute();
         
         RelativeLayout progress = (RelativeLayout) findViewById(R.id.loading_layout);

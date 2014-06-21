@@ -529,7 +529,6 @@ public class MessageActivity extends Activity {
     			glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
-
     			
     			corazon =  new Objeto("objetos/peluche.jet",getApplicationContext());
     			CustomCameraView cv = new CustomCameraView(this);

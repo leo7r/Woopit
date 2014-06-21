@@ -1640,7 +1640,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f020068;
         public static final int com_facebook_loginbutton_silver=0x7f020069;
         public static final int com_facebook_logo=0x7f02006a;
-        public static final int com_facebook_picker_default_separator_color=0x7f0200ca;
+        public static final int com_facebook_picker_default_separator_color=0x7f0200cb;
         public static final int com_facebook_picker_item_background=0x7f02006b;
         public static final int com_facebook_picker_list_focused=0x7f02006c;
         public static final int com_facebook_picker_list_longpressed=0x7f02006d;
@@ -1721,21 +1721,22 @@ containing a value of this type.
         public static final int roseleaf=0x7f0200b8;
         public static final int scroll_bar=0x7f0200b9;
         public static final int search=0x7f0200ba;
-        public static final int sliding_feedback=0x7f0200bb;
-        public static final int sliding_menu_bg=0x7f0200bc;
-        public static final int sliding_settings=0x7f0200bd;
-        public static final int sliding_share=0x7f0200be;
-        public static final int tab_friends=0x7f0200bf;
-        public static final int tab_friends_active=0x7f0200c0;
-        public static final int tab_home=0x7f0200c1;
-        public static final int tab_home_active=0x7f0200c2;
-        public static final int tab_models=0x7f0200c3;
-        public static final int tab_models_active=0x7f0200c4;
-        public static final int tab_profile=0x7f0200c5;
-        public static final int tab_profile_active=0x7f0200c6;
-        public static final int texturacorazon=0x7f0200c7;
-        public static final int user=0x7f0200c8;
-        public static final int user_bg=0x7f0200c9;
+        public static final int send_message=0x7f0200bb;
+        public static final int sliding_feedback=0x7f0200bc;
+        public static final int sliding_menu_bg=0x7f0200bd;
+        public static final int sliding_settings=0x7f0200be;
+        public static final int sliding_share=0x7f0200bf;
+        public static final int tab_friends=0x7f0200c0;
+        public static final int tab_friends_active=0x7f0200c1;
+        public static final int tab_home=0x7f0200c2;
+        public static final int tab_home_active=0x7f0200c3;
+        public static final int tab_models=0x7f0200c4;
+        public static final int tab_models_active=0x7f0200c5;
+        public static final int tab_profile=0x7f0200c6;
+        public static final int tab_profile_active=0x7f0200c7;
+        public static final int texturacorazon=0x7f0200c8;
+        public static final int user=0x7f0200c9;
+        public static final int user_bg=0x7f0200ca;
     }
     public static final class id {
         public static final int action_bar=0x7f050035;

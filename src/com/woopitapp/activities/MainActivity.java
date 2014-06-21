@@ -110,7 +110,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			
 			@Override
 			public void onClick(View v) {
-				Intent newMessagei =  new  Intent(v.getContext(),MessageActivity.class);
+				Intent newMessagei =  new  Intent(getApplicationContext(),MessageActivity.class);
 				startActivity(newMessagei);
 			}
 		});
@@ -258,15 +258,15 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     }
         
     public void goEditProfile( View v ){
-    	
+    	Intent i = new Intent(this,EditProfileActivity.class);    	
+    	startActivity(i);
     }
     
     public void goMyProfile( View v ){
     	
     	Intent i = new Intent(this,ProfileActivity.class);
     	
-    	i.putExtra("id_user", User.get(getApplicationContext()).id);
-    	
+    	i.putExtra("id_user", User.get(getApplicationContext()).id);    	
     	startActivity(i);
     }
     

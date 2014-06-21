@@ -18,8 +18,9 @@ public class Woopit extends Application {
         
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
         .defaultDisplayImageOptions(options)
-        .build();        
-                
+        .build();
+        
+        com.nostra13.universalimageloader.utils.L.disableLogging();
         
         ImageLoader.getInstance().init(config);
     }

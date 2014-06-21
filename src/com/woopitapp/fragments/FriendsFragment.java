@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import com.woopitapp.R;
 import com.woopitapp.activities.ModelListActivity;
 import com.woopitapp.activities.ModelPreviewActivity;
+import com.woopitapp.activities.ProfileActivity;
 import com.woopitapp.activities.SearchUsers;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.Data;
 import com.woopitapp.services.FriendRequest;
+import com.woopitapp.services.Utils;
 
 
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
@@ -126,6 +128,14 @@ public class FriendsFragment extends Fragment {
 		startActivity(i);
     }
 	
+    public void goToUserProfile( int id_user ){
+        	
+    	Intent i = new Intent(getActivity(),ProfileActivity.class);
+    	
+    	i.putExtra("id_user", id_user );
+    	startActivity(i);
+    }
+    
     public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
 		
 		ArrayList<Object> l_items;
@@ -154,6 +164,7 @@ public class FriendsFragment extends Fragment {
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView username = (TextView) convertView.findViewById(R.id.username);
 			final ImageView confirm_friend = (ImageView) convertView.findViewById(R.id.add_friend);
+			confirm_friend.setVisibility(View.VISIBLE);
 			
 			if ( item instanceof FriendRequest ){
 				final FriendRequest fr = (FriendRequest) item;
@@ -161,15 +172,22 @@ public class FriendsFragment extends Fragment {
 				name.setText(fr.name);
 				username.setText("@"+fr.username);
 				confirm_friend.setImageResource(R.drawable.add_friend);
-				confirm_friend.setVisibility(View.VISIBLE);
-		        image.setImageBitmap(fr.getImage(getActivity()));
-				
+				Utils.setUserImage(getContext(), image, fr.from_user);
+		        				
 				confirm_friend.setOnClickListener(new OnClickListener(){
-
+					
 					@Override
 					public void onClick(View arg0) {
 						new AddOrRejectFriend(fr.from_user,fr.id).execute();
 						confirm_friend.setImageResource(R.drawable.friend_added);
+					}
+				});
+				
+				convertView.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						goToUserProfile(fr.from_user);
 					}
 				});
 				
@@ -179,16 +197,28 @@ public class FriendsFragment extends Fragment {
 
 				name.setText(user.name);
 				username.setText("@"+user.username);
-				confirm_friend.setVisibility(View.GONE);
-		        image.setImageBitmap(user.getImage(getActivity()));
-		        convertView.setOnClickListener(new OnClickListener(){
-
+				confirm_friend.setImageResource(R.drawable.send_message);
+				Utils.setUserImage(getContext(), image, user.id);
+		        
+		        confirm_friend.setOnClickListener(new OnClickListener(){
+		        	
 					@Override
 					public void onClick(View arg0) {
 						goToMessage(user);
 					}
 				});
+		        
+		        convertView.setOnClickListener(new OnClickListener(){
+		        	
+					@Override
+					public void onClick(View v) {
+						goToUserProfile(user.id);
+					}
+				});
+		        
 			}
+			
+			
 			
 			return convertView;
 		}

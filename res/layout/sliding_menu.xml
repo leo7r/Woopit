@@ -64,7 +64,7 @@
 		        android:background="@drawable/menu_item_bg"
 		        android:layout_marginTop="2dp"
 		        android:layout_marginBottom="2dp"
-		        android:onClick="goMyProfile"
+		        android:onClick="goEditProfile"
 		        />
             
 		    <TextView 
