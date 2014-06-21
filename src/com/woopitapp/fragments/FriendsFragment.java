@@ -121,6 +121,7 @@ public class FriendsFragment extends Fragment {
     public void goToMessage(User u){
     	Intent i = new Intent(getActivity(),ModelListActivity.class);
 		i.putExtra("userId", u.id);
+		i.putExtra("userName", u.name);
 		startActivity(i);
     }
 	public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {

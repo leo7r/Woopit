@@ -10,7 +10,7 @@
         android:id="@+id/search_models"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/buscar_usuarios"
+        android:hint="@string/buscar_modelos"
         android:imeOptions="actionSearch"
 		android:singleLine="true"
         android:drawableLeft="@drawable/search"

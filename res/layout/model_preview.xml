@@ -3,7 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+        <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:orientation="vertical"
+        android:background="@color/woopit_green"
+        >
+        
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/enviar_a"
+        android:textColor="#fff"
+        android:textSize="@dimen/medium_text"
+        ></TextView>
+    </LinearLayout>    
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -13,46 +28,39 @@
         android:id="@+id/previewCanvas"
         >
     </LinearLayout>
-    <TextView
-        android:id="@+id/enviarA"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:background="#f7fef7"
-        android:text="@string/enviar_a"
-        >
-        
-    </TextView>
+
     <LinearLayout  
         android:layout_height="0dp" 
-        android:layout_weight="1"
+        android:layout_weight="0.7"
         android:layout_width="match_parent"
 		
         android:orientation="horizontal">
         
         <Button 
+            android:id="@+id/enviarMapa"
             android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-	    android:text="@string/enviar_mapa"
-	    android:textAllCaps="true"
-        android:background="@color/woopit_light_blue"
-        android:textColor="#fff"
-        android:textSize="@dimen/big_text"
-        android:onClick="goLogin"
-        android:layout_weight="1"
+	        android:layout_height="match_parent"
+		    android:text="@string/enviar_mapa"
+		    android:textAllCaps="true"
+	        android:background="@color/woopit_orange"
+	        android:textColor="#fff"
+	        android:textSize="@dimen/medium_text"
+	        android:onClick="goLogin"
+	        android:layout_weight="1"
 	    />
 	
 	<Button 
+	    android:id="@+id/enviarActual"
 	    android:layout_width="fill_parent"
 	    android:layout_height="match_parent"
 	    android:text="@string/enviar_actual"
 	    android:textAllCaps="true"
-        android:background="@color/woopit_orange"
+        android:background="@color/woopit_dark_blue"
         android:textColor="#fff"
-        android:textSize="@dimen/big_text"
+        android:textSize="@dimen/medium_text"
         android:onClick="goSignup"
         android:layout_weight="1"
-	    /></LinearLayout>
+	  /></LinearLayout>
 	
     
 </LinearLayout>

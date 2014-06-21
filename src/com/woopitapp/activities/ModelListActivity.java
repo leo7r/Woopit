@@ -40,6 +40,7 @@ public class ModelListActivity extends Activity {
 	StickyListHeadersListView model_list;
 	ListAdapter fAdapter;
 	String userId;
+	String userName;
 	ArrayList<Model> models;
 	ArrayList<Model> models_tobuy;
 	ArrayList<Object> list_items;
@@ -52,6 +53,8 @@ public class ModelListActivity extends Activity {
 		Intent intent = getIntent();
 		
 		this.userId = intent.getStringExtra("userId");
+		this.userName = intent.getStringExtra("userName");
+		
 		new getUserModelsList(getApplicationContext(),User.get(getApplicationContext()).id).execute();
 
 		model_list = (StickyListHeadersListView) findViewById(R.id.model_list);
@@ -169,6 +172,7 @@ public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeade
 		private void goToMessage(String userId,String modelId) {
 	    	Intent i = new Intent(this.getContext(),ModelPreviewActivity.class);
 			i.putExtra("userId", userId);
+			i.putExtra("userName",userName);
 			i.putExtra("modelId", modelId);
 			startActivity(i);
 		}

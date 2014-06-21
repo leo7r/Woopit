@@ -57,6 +57,7 @@
     <string name="encontrar_amigos">Encontrar Amigos</string>
     <string name="encontrar_amigos_info">Woopit utiliza las redes sociales para ayudarte a encontrar a tus amigos. No enviaremos ningún mensaje sin tu aprobación.</string>
     <string name="buscar_usuarios">Buscar Usuarios&#8230;</string>
+    <string name="buscar_modelos">Buscar Modelos &#8230;</string>
     <string name="buscar_amigos">Buscar Amigos \"%s\"</string>
     <string name="solicitudes_de_amistad">Solicitudes de amistad</string>
     <string name="buscando_amigos">Buscando amigos&#8230;</string>
@@ -67,6 +68,7 @@
     <string name = "enviar_a">Enviar a:</string>
     <string name="enviar_actual">Ubicacion actual</string>
     <string name="enviar_mapa">Ver mapa</string>
+    
     
     <!-- Pantalla del mapa -->
     <string name="cargando_mapa">Cargando mapa</string>

@@ -13,6 +13,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class ModelPreviewActivity extends Activity {
@@ -20,6 +22,7 @@ public class ModelPreviewActivity extends Activity {
 	GLClearRenderer render;
 	String userId;
 	String modelId;
+	String userName;
 	Objeto o;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +30,34 @@ public class ModelPreviewActivity extends Activity {
 		 setContentView(R.layout.model_preview);
 		 Intent intent = getIntent();
 		 this.userId = intent.getStringExtra("userId");
+		 this.userName = intent.getStringExtra("userName");
 		 this.modelId = intent.getStringExtra("modelId");
 		 iniciarPreview();
 		 LinearLayout previewCanvas =  (LinearLayout) findViewById(R.id.previewCanvas);
 		 previewCanvas.addView(glView);
 		 iniciarModelo("objetos/" + modelId+".jet");
+		 Button bMapa = (Button)findViewById(R.id.enviarMapa);
+		 bMapa.setOnClickListener(new  View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent lookOnMapi =  new  Intent(v.getContext(),MapActivity.class);
+					lookOnMapi.putExtra("userName", userName);
+					startActivity(lookOnMapi);
+				}
+			});
+		 Button bUbiacionActual = (Button)findViewById(R.id.enviarActual);
+		 bUbiacionActual.setOnClickListener(new  View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					enviarActual();
+				}
+			});
+		 
+	}
+	public void enviarActual(){
+		
 	}
 	public class GLClearRenderer implements Renderer {
 	    	
@@ -92,7 +118,7 @@ public class ModelPreviewActivity extends Activity {
 	    			
 	    		     
 	                float[] lightAmbient = {1.0f, 1.0f, 1.0f, 0.5f};
-	    		    float[] lightDiffuse = {1.0f, 0.0f, 0.0f, 0.5f};
+	    		    float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 0.5f};
 	    		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
 	    		    gl.glEnable(GL10.GL_LIGHTING);
 	    		    gl.glEnable(GL10.GL_LIGHT0);
