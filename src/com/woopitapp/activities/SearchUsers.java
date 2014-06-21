@@ -11,8 +11,8 @@ import com.woopitapp.R.drawable;
 import com.woopitapp.R.id;
 import com.woopitapp.R.layout;
 import com.woopitapp.R.string;
-import com.woopitapp.logic.ServerConnection;
-import com.woopitapp.logic.User;
+import com.woopitapp.entities.User;
+import com.woopitapp.services.ServerConnection;
 
 import android.app.Activity;
 import android.content.Context;

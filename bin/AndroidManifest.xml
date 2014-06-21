@@ -85,6 +85,14 @@
             android:name="com.woopitapp.activities.MapActivity"
             android:label="@string/title_activity_map" >
         </activity>
+        <activity
+            android:name="com.woopitapp.activities.ModelPreviewActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
+        <activity
+            android:name="com.woopitapp.activities.ModelListActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
     </application>
 
 </manifest>

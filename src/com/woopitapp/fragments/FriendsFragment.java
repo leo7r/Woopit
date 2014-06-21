@@ -3,10 +3,12 @@ package com.woopitapp.fragments;
 import java.util.ArrayList;
 
 import com.woopitapp.R;
+import com.woopitapp.activities.ModelListActivity;
+import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.SearchUsers;
-import com.woopitapp.logic.Data;
-import com.woopitapp.logic.FriendRequest;
-import com.woopitapp.logic.User;
+import com.woopitapp.entities.User;
+import com.woopitapp.services.Data;
+import com.woopitapp.services.FriendRequest;
 
 
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
@@ -88,7 +90,7 @@ public class FriendsFragment extends Fragment {
     	super.onStart();
     	
     	new User.GetFriendRequest(getActivity()).execute();
-        //new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
+        new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
     }
     
     public void searchUsers( String query ){
@@ -117,7 +119,14 @@ public class FriendsFragment extends Fragment {
         Toast.makeText(getActivity(), "Refrescado", Toast.LENGTH_SHORT).show();
     }
     
-	public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
+    public void goToMessage(User u){
+    	Intent i = new Intent(getActivity(),ModelListActivity.class);
+		i.putExtra("userId", u.id);
+		i.putExtra("userName", u.name);
+		startActivity(i);
+    }
+	
+    public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
 		
 		ArrayList<Object> l_items;
 		Context context;
@@ -172,6 +181,13 @@ public class FriendsFragment extends Fragment {
 				username.setText("@"+user.username);
 				confirm_friend.setVisibility(View.GONE);
 		        image.setImageBitmap(user.getImage(getActivity()));
+		        convertView.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						goToMessage(user);
+					}
+				});
 			}
 			
 			return convertView;
@@ -223,7 +239,7 @@ public class FriendsFragment extends Fragment {
 	}
 	
 	// Si ya esta la amistad la rompe, si no esta crea un request, si ya habia un request lo acepta.
-	public class AddOrRejectFriend extends com.woopitapp.logic.ServerConnection{
+	public class AddOrRejectFriend extends com.woopitapp.services.ServerConnection{
 			
 			int to_user,friend_request;
 			

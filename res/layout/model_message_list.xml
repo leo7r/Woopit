@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:focusable="true" 
+    android:focusableInTouchMode="true">
+
+    <EditText 
+        android:id="@+id/search_models"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/buscar_modelos"
+        android:imeOptions="actionSearch"
+		android:singleLine="true"
+        android:drawableLeft="@drawable/search"
+        android:drawablePadding="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        />
+
+    
+    <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView  
+		android:id="@+id/model_list"
+		android:scrollbarThumbVertical="@drawable/scroll_bar"
+		android:scrollbarSize="2dp"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:fadingEdgeLength="0dip"
+		android:background="@null"
+		android:divider="@null" 
+	   	android:cacheColorHint="#00000000"
+		/>
+    
+</LinearLayout>

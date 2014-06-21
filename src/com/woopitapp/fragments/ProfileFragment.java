@@ -25,10 +25,10 @@ import android.widget.Toast;
 
 import com.woopitapp.R;
 import com.woopitapp.activities.SearchUsers.UserAdapter;
-import com.woopitapp.logic.Data;
-import com.woopitapp.logic.Model;
-import com.woopitapp.logic.User;
-import com.woopitapp.logic.Utils;
+import com.woopitapp.entities.Model;
+import com.woopitapp.entities.User;
+import com.woopitapp.services.Data;
+import com.woopitapp.services.Utils;
 import com.woopitapp.server_connections.GetUserModels;
 
 public class ProfileFragment extends Fragment{

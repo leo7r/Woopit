@@ -79,7 +79,9 @@ public class Objeto {
 	        gl.glFrontFace(GL10.GL_CCW);
 	
 	        gl.glEnable(GL10.GL_CULL_FACE);
+	        
 	        gl.glNormalPointer(GL10.GL_FLOAT, 0, g.getNormalBuffer());
+	        
 	        if( g.getTextureBuffer() != null){
 	        	gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, g.getTextureBuffer());
 	        }

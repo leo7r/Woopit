@@ -35,7 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.woopitapp.R;
-import com.woopitapp.logic.Utils;
+import com.woopitapp.services.Utils;
 
 public class MapActivity extends FragmentActivity implements 
 	GooglePlayServicesClient.ConnectionCallbacks,
@@ -58,12 +58,18 @@ public class MapActivity extends FragmentActivity implements
 	double selectedLatitude,selectedLongitude;
 	Circle area;
 	float default_zoom = 17.0f;
+	String userId;
+	String userName;
+	String modelId;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
-		
+		Intent i = getIntent();
+		this.userId = i.getStringExtra("userId");
+		this.userName = i.getStringExtra("userName");
+		this.modelId = i.getStringExtra("modelId");
 		search_address = (EditText) findViewById(R.id.search_address);
 		send_woop = (Button) findViewById(R.id.send_woop);
         
@@ -150,7 +156,7 @@ public class MapActivity extends FragmentActivity implements
 		
 		marker = mMap.addMarker(new MarkerOptions()
         .position(latlng)
-        .title("Tal persona")
+        .title(userName)
         .snippet(getResources().getString(R.string.podra_ver_woop)));
         //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 		
@@ -171,7 +177,7 @@ public class MapActivity extends FragmentActivity implements
 	    .fillColor(getResources().getColor(R.color.map_area_fill))
 	    .strokeColor(getResources().getColor(R.color.map_area_stroke))
 	    .strokeWidth(2)
-	    .radius(200);
+	    .radius(30);
 		
 		if ( area != null ){
 			area.remove();

@@ -11,11 +11,5 @@
         android:text="Home"
         />
     
-    <Button 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ir al mapa"
-        android:onClick="goMap"
-        />
-    
+
 </LinearLayout>
