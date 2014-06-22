@@ -6,15 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.woopitapp.R;
-import com.woopitapp.R.drawable;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
-import com.woopitapp.R.string;
-import com.woopitapp.entities.User;
-import com.woopitapp.services.ServerConnection;
-
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +21,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SearchUsers extends Activity {
+import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
+import com.woopitapp.entities.User;
+import com.woopitapp.services.ServerConnection;
+
+public class SearchUsers extends WoopitActivity {
 
 	String query;
 	ListView user_list;

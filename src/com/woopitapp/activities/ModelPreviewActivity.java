@@ -3,19 +3,22 @@ package com.woopitapp.activities;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.woopitapp.R;
-import com.woopitapp.graphics.Objeto;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
+import android.opengl.GLU;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.woopitapp.R;
+import com.woopitapp.graphics.Objeto;
 
 public class ModelPreviewActivity extends Activity {
 	GLSurfaceView glView;
@@ -27,38 +30,87 @@ public class ModelPreviewActivity extends Activity {
 	@Override
 	
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-		 setContentView(R.layout.model_preview);
-		 
-		 Bundle extras = getIntent().getExtras();
-		 
-		 userId = extras.getInt("userId");
-		 userName = extras.getString("userName");
-		 modelId = extras.getInt("modelId");
-		 
-		 iniciarPreview();
-		 LinearLayout previewCanvas =  (LinearLayout) findViewById(R.id.previewCanvas);
-		 previewCanvas.addView(glView);
-		 iniciarModelo("objetos/" + modelId+".jet");
-		 Button bMapa = (Button)findViewById(R.id.enviarMapa);
-		 bMapa.setOnClickListener(new  View.OnClickListener() {
+		setContentView(R.layout.model_preview);
+		
+		Bundle extras = getIntent().getExtras();
+		modelId = extras.getInt("modelId");
+		
+		iniciarPreview();
+		LinearLayout previewCanvas =  (LinearLayout) findViewById(R.id.previewCanvas);
+		LinearLayout sendButtons =  (LinearLayout) findViewById(R.id.send_buttons);
+		LinearLayout buyOrSendModel =  (LinearLayout) findViewById(R.id.buy_or_send_model);
+		TextView enviarA = (TextView) findViewById(R.id.enviar_a);
+		
+		previewCanvas.addView(glView);
+		iniciarModelo("objetos/" + modelId+".jet");
+
+		if ( extras.containsKey("userId") && extras.containsKey("userName") && extras.containsKey("enable") && extras.getBoolean("enable") ){
+
+			userId = extras.getInt("userId");
+			userName = extras.getString("userName");
+			enviarA.setText(getResources().getString(R.string.enviar_a,userName));			
+
+			Button bMapa = (Button)findViewById(R.id.enviarMapa);
+			
+			bMapa.setOnClickListener(new  View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					Intent lookOnMapi =  new  Intent(v.getContext(),MapActivity.class);
+					Intent lookOnMapi =  new  Intent(getApplicationContext(),MapActivity.class);
 					lookOnMapi.putExtra("userName", userName);
 					startActivity(lookOnMapi);
 				}
 			});
-		 Button bUbiacionActual = (Button)findViewById(R.id.enviarActual);
-		 bUbiacionActual.setOnClickListener(new  View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					enviarActual();
-				}
-			});
 		 
+			Button bUbiacionActual = (Button)findViewById(R.id.enviarActual);
+			
+			bUbiacionActual.setOnClickListener(new  View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						enviarActual();
+					}
+			});
+			
+		}
+		else{
+			
+			TextView previewText = (TextView) findViewById(R.id.previewText);
+			Button button = (Button) findViewById(R.id.buy_or_send_button);
+			
+			sendButtons.setVisibility(View.GONE);
+			buyOrSendModel.setVisibility(View.VISIBLE);
+			
+			if ( extras.containsKey("enable") && extras.getBoolean("enable") ){
+				button.setText(R.string.enviar_woop);
+				button.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						
+						Intent i = new Intent(getApplicationContext(),ChooseFriendActivity.class);
+						i.putExtra("modelId", modelId);
+						startActivity(i);
+					}
+				});
+			}
+			else{
+				button.setText(R.string.comprar_modelo);
+				button.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						Toast.makeText(getApplicationContext(), "NOT YET :D", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+			
+			enviarA.setVisibility(View.GONE);
+			previewText.setVisibility(View.VISIBLE);
+		}
+		
 	}
 	
 	public void enviarActual(){
@@ -143,16 +195,16 @@ public class ModelPreviewActivity extends Activity {
 			
 	    }
 	
-	  public void iniciarModelo(String nombre){
-		  o = new Objeto(nombre,getApplicationContext());
-	  }
-	  
-	  public void iniciarPreview(){
-		 glView = new GLSurfaceView( this );
-		 glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
-		 glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
-		 render = new GLClearRenderer();
-		 glView.setRenderer(render);
+	public void iniciarModelo(String nombre){
+		o = new Objeto(nombre,getApplicationContext());
+	}
+	
+	public void iniciarPreview(){
 		
+		glView = new GLSurfaceView( this );
+		glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
+		glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
+		render = new GLClearRenderer();
+		glView.setRenderer(render);
 	}
 }

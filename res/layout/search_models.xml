@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff" >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        style="@style/top_bar">
+        
+        <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="@string/busqueda"
+	        android:layout_alignParentLeft="true"
+	        style="@style/back_button"
+	        />
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/find_friends_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            />
+        
+    </RelativeLayout>
+    
+    <TextView 
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/medium_title"
+        />
+	
+	<ListView 
+        android:id="@+id/models_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+	    android:gravity="center"
+        />
+    
+</LinearLayout>

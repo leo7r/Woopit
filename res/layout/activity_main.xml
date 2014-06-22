@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         style="@style/top_bar"
+        android:paddingLeft="10dp"
         >
         
         <ImageView 
@@ -21,27 +22,26 @@
 	        android:onClick="toggleSlidingMenu"
 	        />
         
+        
+        <ImageView 
+            android:id="@+id/find_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/find_friends_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            />
+        
         <ImageView 
             android:id="@+id/new_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/new_message"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="20dp"
+            android:layout_toLeftOf="@id/find_friends"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             />
-        
-        <ImageView 
-            android:id="@+id/find_friends"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/find_friends"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/new_message"
-            android:paddingLeft="20dp"
-            android:onClick="goFindFriends"
-            />
-        
         
     </RelativeLayout>
     

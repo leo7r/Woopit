@@ -117,8 +117,6 @@ public class FriendsFragment extends Fragment {
 
         fAdapter = new ListAdapter(getActivity(), R.id.friend_list, list_items );
         friend_list.setAdapter(fAdapter);
-    	
-        Toast.makeText(getActivity(), "Refrescado", Toast.LENGTH_SHORT).show();
     }
     
     public void goToMessage(User u){
@@ -194,17 +192,17 @@ public class FriendsFragment extends Fragment {
 			}
 			else{
 				final User user = (User) item;
-
+				
 				name.setText(user.name);
 				username.setText("@"+user.username);
-				confirm_friend.setImageResource(R.drawable.send_message);
+				confirm_friend.setVisibility(View.GONE);
 				Utils.setUserImage(getContext(), image, user.id);
 		        
-		        confirm_friend.setOnClickListener(new OnClickListener(){
+		        image.setOnClickListener(new OnClickListener(){
 		        	
 					@Override
 					public void onClick(View arg0) {
-						goToMessage(user);
+						goToUserProfile(user.id);
 					}
 				});
 		        
@@ -212,7 +210,7 @@ public class FriendsFragment extends Fragment {
 		        	
 					@Override
 					public void onClick(View v) {
-						goToUserProfile(user.id);
+						goToMessage(user);
 					}
 				});
 		        

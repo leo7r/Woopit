@@ -3,15 +3,15 @@ package com.woopitapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.woopitapp.R;
+import com.woopitapp.WoopitFragmentActivity;
 import com.woopitapp.fragments.FindFriendsList;
 import com.woopitapp.fragments.FindFriendsWelcomeFragment;
 
-public class FindFriendsActivity extends FragmentActivity {
+public class FindFriendsActivity extends WoopitFragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

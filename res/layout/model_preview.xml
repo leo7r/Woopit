@@ -3,64 +3,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-        <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:orientation="vertical"
-        android:background="@color/woopit_green"
-        >
-        
-    <TextView 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/enviar_a"
-        android:textColor="#fff"
-        android:textSize="@dimen/medium_text"
-        ></TextView>
-    </LinearLayout>    
+    
+	<TextView 
+	    android:id="@+id/enviar_a"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="#fff"
+		android:padding="5dp"
+		android:background="@color/woopit_green"
+		android:textSize="@dimen/medium_text" />
+	
+	<TextView 
+	    android:id="@+id/previewText"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/vista_previa"
+	    android:textColor="#fff"
+		android:textSize="@dimen/medium_text"
+		android:padding="5dp"
+	    android:gravity="center"
+	    android:visibility="gone"
+	    android:background="#000"
+	    />
+      
     <LinearLayout 
+        android:id="@+id/previewCanvas"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
         android:orientation="vertical"
         android:background="#f7fef7"
-        android:id="@+id/previewCanvas"
         >
     </LinearLayout>
 
     <LinearLayout  
-        android:layout_height="0dp" 
-        android:layout_weight="0.7"
+        android:id="@+id/send_buttons"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-		
         android:orientation="horizontal">
         
         <Button 
             android:id="@+id/enviarMapa"
-            android:layout_width="fill_parent"
-	        android:layout_height="match_parent"
-		    android:text="@string/enviar_mapa"
-		    android:textAllCaps="true"
-	        android:background="@color/woopit_orange"
-	        android:textColor="#fff"
-	        android:textSize="@dimen/medium_text"
-	        android:onClick="goLogin"
+            android:layout_width="0dp"
 	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+		    android:text="@string/enviar_mapa"
+		    style="@style/big_button"
+	        android:background="@color/woopit_orange"
 	    />
 	
-	<Button 
-	    android:id="@+id/enviarActual"
-	    android:layout_width="fill_parent"
-	    android:layout_height="match_parent"
-	    android:text="@string/enviar_actual"
-	    android:textAllCaps="true"
-        android:background="@color/woopit_dark_blue"
-        android:textColor="#fff"
-        android:textSize="@dimen/medium_text"
-        android:onClick="goSignup"
-        android:layout_weight="1"
-	  /></LinearLayout>
+		<Button 
+		    android:id="@+id/enviarActual"
+            android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+		    android:text="@string/enviar_actual"
+		    style="@style/big_button"
+	        android:background="@color/woopit_dark_blue"
+		  />
+    
+    </LinearLayout>
 	
+    <LinearLayout 
+        android:id="@+id/buy_or_send_model"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+        
+        <Button 
+            android:id="@+id/buy_or_send_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/big_button"
+            />
+        
+    </LinearLayout>
     
 </LinearLayout>

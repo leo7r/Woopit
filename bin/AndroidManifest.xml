@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-	
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -91,7 +91,8 @@
         </activity>
         <activity
             android:name="com.woopitapp.activities.ModelListActivity"
-            android:label="@string/title_activity_map" >
+            android:label="@string/title_activity_map"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
         </activity>
         <activity
             android:name="com.woopitapp.activities.ProfileActivity"
@@ -100,6 +101,18 @@
         <activity
             android:name="com.woopitapp.activities.EditProfileActivity"
             android:label="@string/title_activity_edit_profile" >
+        </activity>
+        <activity
+            android:name="com.woopitapp.activities.ChooseFriendActivity"
+            android:label="@string/title_activity_choose_friend" >
+        </activity>
+        <activity
+            android:name="com.woopitapp.activities.TestActivity"
+            android:label="@string/title_activity_test" >
+        </activity>
+        <activity
+            android:name="com.woopitapp.activities.SearchModelsActivity"
+            android:label="@string/title_activity_search_models" >
         </activity>
     </application>
 

@@ -413,6 +413,8 @@ public class Utils {
 		if ( imageLoader == null ){
 			imageLoader = ImageLoader.getInstance();
 			imageLoader.init(ImageLoaderConfiguration.createDefault(con));
+				        
+	        com.nostra13.universalimageloader.utils.L.disableLogging();
 		}
 		
 		return imageLoader;

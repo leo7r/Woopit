@@ -122,12 +122,14 @@ public class User {
 					
 					data.deleteFriendsNotIn(ids);
 
-				} catch (JSONException e) {					
+				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				finally{
-					data.close();
-					Utils.sendBroadcast(con, R.string.broadcast_friends_list);
+					if ( data != null ){
+						data.close();
+						Utils.sendBroadcast(con, R.string.broadcast_friends_list);
+					}
 				}
 			}
 			

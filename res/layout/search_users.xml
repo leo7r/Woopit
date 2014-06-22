@@ -8,37 +8,22 @@
     <RelativeLayout 
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        style="@style/top_bar"
-        >
+        style="@style/top_bar">
         
-        <ImageView 
-	        android:layout_width="100dp"
-	        android:layout_height="28dp"
-	        android:src="@drawable/logo"
-	        android:layout_centerVertical="true"
+        <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="@string/busqueda"
 	        android:layout_alignParentLeft="true"
-	        android:clickable="true"
-	        android:onClick="toggleSlidingMenu"
+	        style="@style/back_button"
 	        />
         
         <ImageView 
-            android:id="@+id/new_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/new_message"
+            style="@style/find_friends_button"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:paddingLeft="20dp"
-            />
-        
-        <ImageView 
-            android:id="@+id/find_friends"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/find_friends"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/new_message"
-            android:paddingLeft="20dp"
             />
         
     </RelativeLayout>
@@ -48,7 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/medium_title"
-        android:text="@string/buscar_amigos"
         />
     
     <ProgressBar 

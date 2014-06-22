@@ -20,8 +20,6 @@ public class Woopit extends Application {
         .defaultDisplayImageOptions(options)
         .build();
         
-        com.nostra13.universalimageloader.utils.L.disableLogging();
-        
         ImageLoader.getInstance().init(config);
     }
 }

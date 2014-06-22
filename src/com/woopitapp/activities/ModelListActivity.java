@@ -5,45 +5,36 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.Model;
-import com.woopitapp.entities.ModelToBuy;
 import com.woopitapp.entities.User;
-import com.woopitapp.server_connections.GetUserModels;
-import com.woopitapp.services.Data;
-import com.woopitapp.services.FriendRequest;
 
-import android.widget.ArrayAdapter;
-
-public class ModelListActivity extends Activity {
-	StickyListHeadersListView model_list;
-	ListAdapter fAdapter;
+public class ModelListActivity extends WoopitActivity {
+	GridView model_list;
+	ListAdapter mAdapter;
 	int userId;
 	String userName;
-	ArrayList<Model> models;
-	ArrayList<Model> models_tobuy;
-	ArrayList<Object> list_items;
+	ArrayList<Model> models_list;
 	EditText search_model;
 	
 	@Override
@@ -58,29 +49,39 @@ public class ModelListActivity extends Activity {
 		
 		new getUserModelsList(getApplicationContext(),User.get(getApplicationContext()).id).execute();
 		
-		model_list = (StickyListHeadersListView) findViewById(R.id.model_list);
-		search_model = (EditText) findViewById(R.id.search_models);
+		model_list = (GridView) findViewById(R.id.models_list);
 	    
-	    search_model.setOnEditorActionListener(new OnEditorActionListener(){
+		search_model = (EditText) findViewById(R.id.search_models);
+		search_model.setOnEditorActionListener(new OnEditorActionListener(){
 
-		@Override
-		public boolean onEditorAction(TextView tv, int actionId, KeyEvent key) {
+			@Override
+			public boolean onEditorAction(TextView tv, int actionId, KeyEvent key) {
 				
-			return false;}
+				String query = search_model.getText().toString();
+				
+				if ( actionId == EditorInfo.IME_ACTION_SEARCH && query.length() > 3 ){
+					
+					Intent i = new Intent( getApplicationContext(), SearchModelsActivity.class );
+					i.putExtra("query", query );
+					startActivity(i);
+					
+					return true;
+				}
+				
+				return false;
+			}
 		});
-	        
-
-
+	    
 	}
 	
-	public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
+	public class ListAdapter extends ArrayAdapter<Model> {
 		
-		ArrayList<Object> l_items;
+		ArrayList<Model> l_items;
 		Context context;
 		Filter filter;
 		LayoutInflater infalInflater;
 		
-		public ListAdapter(Context context, int textViewResourceId, ArrayList<Object> objects) {
+		public ListAdapter(Context context, int textViewResourceId, ArrayList<Model> objects) {
 			
 			super(context, textViewResourceId, objects);
 			this.l_items = objects;
@@ -91,40 +92,28 @@ public class ModelListActivity extends Activity {
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 
-			Object item = getItem(position);
+			final Model model = getItem(position);
 			
 			if ( convertView == null ){
-				convertView = infalInflater.inflate(R.layout.model_message_item, null);
+				convertView = infalInflater.inflate(R.layout.model_item, null);
 			}
 
 			ImageView image = (ImageView) convertView.findViewById(R.id.image);
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView price = (TextView) convertView.findViewById(R.id.price);
 			
-			if ( item instanceof ModelToBuy ){
-				final ModelToBuy model = (ModelToBuy) item;
-				
-				name.setText(model.name);
-				price.setText("$"+model.price);
-		        image.setImageBitmap(model.getImage(this.getContext()));
-				
-			}
-			else{
-				final Model model = (Model) item;
+			image.setImageResource(R.drawable.model_image);
+			
+			name.setText(model.name);
+			price.setText(model.price);
+	        convertView.setOnClickListener(new OnClickListener(){
 
-				name.setText(model.name);
-				price.setText(model.price);
-			    image.setImageBitmap(model.getImage(this.getContext()));
-		        convertView.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View arg0) {
+					goToMessage(userId,model);
+				}
 
-					@Override
-					public void onClick(View arg0) {
-						goToMessage(userId,model.id);
-					}
-
-
-				});
-			}
+			});
 			
 			return convertView;
 		}
@@ -135,56 +124,26 @@ public class ModelListActivity extends Activity {
 			return l_items != null ? l_items.size() : 0;
 		}
 		
-		public Object getItem( int pos ){
+		public Model getItem( int pos ){
 			return l_items.get(pos);
 		}
 		
-		@SuppressLint("DefaultLocale")
-		@Override
-		public View getHeaderView(int position, View convertView, ViewGroup parent) {
-
-			TextView tv;
-			tv = (TextView) infalInflater.inflate(R.layout.list_header,parent, false);
-			
-			if ( getItem( position ) instanceof FriendRequest ){
-				tv.setText(getResources().getString(R.string.modelos_a_comprar).toUpperCase());
-			}
-			else{
-				tv.setText(getResources().getString(R.string.mis_modelos).toUpperCase());
-			}
-
-			return tv;
-		}
-
-		@Override
-		public long getHeaderId(int position) {
-
-			int id = 0;
-			
-			if (getItem(position) instanceof ModelToBuy) {
-				id = 0;
-			} else {
-				if (getItem(position) instanceof Model) {
-					id = 1;
-				}
-			}
-			
-			return id;
-		}
-		
 	}
-
-	public void goToMessage(int userId , int modelId) {
+		
+	public void goToMessage(int userId , Model m) {
 		
     	Intent i = new Intent(getApplicationContext(),ModelPreviewActivity.class);
 		i.putExtra("userId", userId);
 		i.putExtra("userName",userName);
-		i.putExtra("modelId", modelId);
+		i.putExtra("modelId", m.id);
+		i.putExtra("enable", m.enable);
 		startActivity(i);
 	}
 	
 	public class getUserModelsList extends com.woopitapp.server_connections.GetUserModels{
+		
 		Context con;
+		
 		public getUserModelsList(Context con, int user_id) {
 			super(con, user_id);
 			this.con = con;
@@ -194,13 +153,11 @@ public class ModelListActivity extends Activity {
 		public void onComplete(String result) {
 			//ProgressBar loading = (ProgressBar) findViewById(R.id.loading);
 			//loading.setVisibility(View.GONE);
-			list_items = new ArrayList<Object>();
 			if ( result != null && result.length() > 0 ){
 								
 				try {
 					JSONArray models = new JSONArray(result);
-
-					ArrayList<Model> list = new ArrayList<Model>();
+					models_list = new ArrayList<Model>();
 					
 					for ( int i = 0 ; i < models.length() ; ++i ){
 						
@@ -212,17 +169,19 @@ public class ModelListActivity extends Activity {
 						
 						Model m = new Model(id,name,price,"",is_enable);
 						
-						list.add(m);
+						models_list.add(m);
 					}
-					list_items.addAll(list);
+					
 				}catch(Exception e){
-
+					e.printStackTrace();
 				}
 			}
 			
-		    fAdapter = new ListAdapter(con, R.id.model_list, list_items);
-		    model_list.setAdapter(fAdapter);
+		    mAdapter = new ListAdapter(con, R.id.models_list, models_list);
+		    
+		    model_list.setAdapter(mAdapter);
 		}
 			
 	}
+	
 }
