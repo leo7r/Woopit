@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff" >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        style="@style/top_bar">
+        
+        <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="@string/enviar_woop"
+	        android:layout_alignParentLeft="true"
+	        style="@style/back_button"
+	        />
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/find_friends_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            />
+        
+    </RelativeLayout>
+    
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/normal_title"
+        android:text="@string/escoger_amigo"
+        />
+    
+    <LinearLayout 
+        android:id="@+id/no_friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+        
+		<TextView 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/ningun_amigo"
+	        android:layout_margin="20dp"
+	        android:layout_gravity="center"
+	        android:textColor="@color/woopit_dark_blue"
+	        android:gravity="center"
+	        />
+	    
+	    <Button
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        style="@style/big_button"
+	        android:layout_margin="20dp"
+	        android:text="@string/invitalos"
+	        android:onClick="inviteFriends"
+	        />
+	</LinearLayout>
+    
+    <ListView 
+		android:id="@+id/user_list"
+		android:scrollbarThumbVertical="@drawable/scroll_bar"
+		android:scrollbarSize="2dp"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:fadingEdgeLength="0dip"
+		android:background="@null"
+		android:divider="@null" 
+		/>
+    
+
+</LinearLayout>

@@ -1,22 +1,278 @@
 package com.woopitapp.fragments;
 
-import com.woopitapp.R;
+import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.TextView.OnEditorActionListener;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
+import com.scythe.bucket.BucketListAdapter;
+import com.woopitapp.R;
+import com.woopitapp.activities.ModelPreviewActivity;
+import com.woopitapp.activities.SearchModelsActivity;
+import com.woopitapp.entities.Model;
+import com.woopitapp.entities.User;
+import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class ModelsFragment extends Fragment {
-		
+
+	ListView models_list;
+	ModelAdapter mAdapter;
+	int page = 0;
+	boolean loadingMore;
+	LinearLayout list_loading;
+	EditText search;
+	
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	
         View view = (LinearLayout)inflater.inflate(R.layout.models_fragment, container, false);
-    	
+        
+        models_list = (ListView) view.findViewById(R.id.models_list);
+        list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
+        models_list.addFooterView(list_loading);
+                
+        PauseOnScrollListener listener = new PauseOnScrollListener(Utils.getImageLoader(getActivity()), true, true, new OnScrollListener(){
+
+			@Override
+			public void onScroll(AbsListView list, int firstVisible, int visibleItems, int totalItems) {
+				
+				int lastInScreen = firstVisible + visibleItems;
+				
+				if( lastInScreen == totalItems && totalItems != 0 && !loadingMore && mAdapter != null ){
+					
+					if ( getActivity() != null ){
+						page++;
+        	        	new GetUserModels( getActivity() , page ).execute();
+    					loadingMore = true;
+    				}
+				}
+			}
+
+			@Override
+			public void onScrollStateChanged(AbsListView arg0, int arg1) {}
+		});
+        
+        models_list.setOnScrollListener(listener);
+        
+        new GetUserModels( getActivity() , page ).execute();
+        
+        search = (EditText) view.findViewById(R.id.search_models);
+        search.setOnEditorActionListener(new OnEditorActionListener(){
+
+			@Override
+			public boolean onEditorAction(TextView tv, int actionId, KeyEvent key) {
+				
+				String query = search.getText().toString();
+				
+				if ( actionId == EditorInfo.IME_ACTION_SEARCH && query.length() > 3 ){
+					
+					Intent i = new Intent( getActivity() , SearchModelsActivity.class );
+					i.putExtra("query", query );
+					startActivity(i);
+					
+					return true;
+				}
+				
+				return false;
+			}
+		});
+        
         return view;
     }
+    
+    /*
+    public class ModelAdapter extends ArrayAdapter<Model>{
+    	
+		ArrayList<Model> items;
+		Context context;
+		Filter filter;
+		LayoutInflater inflater;
 
+		public ModelAdapter(Context context, int textViewResourceId, ArrayList<Model> objects){
+			super(context, textViewResourceId, objects);
+			this.items = objects;
+			this.context = context;
+			inflater = (LayoutInflater)this.context.getSystemService("layout_inflater");
+		}
+		
+		public View getView(final int position, View convertView, ViewGroup parent){
+			
+			if ( convertView == null ){
+				convertView = inflater.inflate(R.layout.model_item, null);
+			}
+			
+			final Model model = getItem(position);
+
+			TextView name = (TextView) convertView.findViewById(R.id.name);
+			TextView price = (TextView) convertView.findViewById(R.id.price);
+			ImageView image = (ImageView) convertView.findViewById(R.id.image);
+			
+			name.setText(model.name);
+			price.setText(model.price);
+			image.setImageResource(R.drawable.model_image);
+			
+			convertView.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View arg0) {
+					
+					Intent i = new Intent(getActivity(),ModelPreviewActivity.class);
+					i.putExtra("modelId", model.id);
+					i.putExtra("enable", model.enable);
+					startActivity(i);
+					
+				}
+			});
+			
+			return convertView;
+		}
+		
+		public Model getItem( int position ){
+			return items.get(position);
+		}
+		
+    }
+    */
+    
+    public class ModelAdapter extends BucketListAdapter<Model> {
+
+		LayoutInflater inflater;
+		
+    	public ModelAdapter(Activity ctx, ArrayList<Model> elements,Integer bucketSize) {
+    		super(ctx, elements, bucketSize);
+
+			inflater = (LayoutInflater) ctx.getSystemService("layout_inflater");
+    	}
+    	
+		@Override
+		protected View getBucketElement(int position, final Model model, View convertView) {
+			
+			if ( convertView == null ){
+				convertView = inflater.inflate(R.layout.model_item, null);
+			}
+			
+			TextView name = (TextView) convertView.findViewById(R.id.name);
+			TextView price = (TextView) convertView.findViewById(R.id.price);
+			ImageView image = (ImageView) convertView.findViewById(R.id.image);
+			
+			name.setText(model.name);
+			price.setText(model.price);
+			image.setImageResource(R.drawable.model_image);
+			
+			convertView.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View arg0) {
+					
+					Intent i = new Intent(getActivity(),ModelPreviewActivity.class);
+					i.putExtra("modelId", model.id);
+					i.putExtra("enable", model.enable);
+					startActivity(i);
+					
+				}
+			});
+			
+			return convertView;
+		}
+
+    }
+    
+    public void setModelList( ArrayList<Model> list ){
+        mAdapter = new ModelAdapter(getActivity(), list , 2 );
+        models_list.setAdapter(mAdapter);
+	}
+
+    class GetUserModels extends ServerConnection{
+    	
+    	Context con;
+    	int user_id;
+    	int page;
+    	
+    	public GetUserModels( Context con , int page ){
+    		super();
+    		
+    		this.con = con;
+    		this.user_id = User.get(con).id;
+    		this.page = page;
+    		
+    		init(con,"get_user_models",new Object[]{ user_id+"" , page });
+    	}
+    	
+		@Override
+		public void onComplete(String result) {
+			
+			if ( result != null && result.length() > 0 ){
+				
+				//Log.i("Models", result);
+				
+				try {
+					JSONArray models = new JSONArray(result);
+					
+					ArrayList<Model> models_list = new ArrayList<Model>();
+					
+					for ( int i = 0 ; i < models.length() ; ++i ){
+						
+						JSONObject model = models.getJSONObject(i);
+						int id = model.getInt("i");
+						String name = model.getString("n");
+						String price = model.getString("p");
+						boolean is_enable = model.getInt("e") == 1;
+						
+						models_list.add(new Model(id,name,price,id+"",is_enable));
+					}
+					
+					if ( mAdapter != null ){
+						mAdapter.addAll(models_list);
+						mAdapter.notifyDataSetChanged();
+					}
+					else{
+						setModelList(models_list);
+					}
+					
+					if ( models_list.size() > 0 ){
+
+			            loadingMore = false;
+					}
+					else{
+						loadingMore = true;
+						list_loading.setVisibility(View.GONE);
+					}
+					
+				} catch (JSONException e) {	
+					e.printStackTrace();
+				}
+				
+			}
+			else{
+				Toast.makeText(con, R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+    	
+    }
+    
+    
 }
-        

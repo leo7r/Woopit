@@ -1,14 +1,15 @@
 package com.woopitapp.graphics;
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import javax.microedition.khronos.opengles.GL10;
 
+import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -215,7 +216,8 @@ public class Objeto {
 	}
 	private  void crearBuffers(Context context,String nombre){
 			try{
-				AssetFileDescriptor afd = context.getAssets().openFd(nombre);  
+				AssetFileDescriptor afd = context.getAssets().openFd(nombre);
+				
 				FileInputStream fis = afd.createInputStream();
 				FileChannel in =  fis.getChannel();
 				

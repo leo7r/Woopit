@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,13 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.Model;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.Data;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends WoopitActivity {
 
 	GridView models_list;
 	ModelAdapter mAdapter;
@@ -162,6 +162,19 @@ public class ProfileActivity extends Activity {
 			price.setText(model.price);
 			image.setImageResource(R.drawable.model_image);
 			
+			convertView.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View arg0) {
+					
+					Intent i = new Intent(getApplicationContext(),ModelPreviewActivity.class);
+					i.putExtra("modelId", model.id);
+					i.putExtra("enable", model.enable);
+					startActivity(i);
+					
+				}
+			});
+			
 			return convertView;
 		}
 		
@@ -181,7 +194,7 @@ public class ProfileActivity extends Activity {
     		
     		this.con = con;
     		this.user_id = user_id;
-    		init(con,"get_created_models",new Object[]{ ""+user_id });
+    		init(con,"get_created_models",new Object[]{ ""+user_id , User.get(con).id+"" });
     	}
 
 		@Override
@@ -204,12 +217,13 @@ public class ProfileActivity extends Activity {
 						int id = model.getInt("i");
 						String name = model.getString("n");
 						String price = model.getString("p");
+						boolean is_enable = model.getInt("e") == 1;
 						
 						if ( is_my_profile ){
 							data.insertModel(id, name, price);
 						}
 						else{
-							models_list.add(new Model(id,name,price,id+"",true));
+							models_list.add(new Model(id,name,price,id+"",is_enable));
 						}
 					}
 					

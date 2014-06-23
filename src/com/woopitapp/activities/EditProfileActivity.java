@@ -23,12 +23,13 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.Data;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
-public class EditProfileActivity extends Activity {
+public class EditProfileActivity extends WoopitActivity {
 
 	User user;
 	TextView edit_name;

@@ -28,6 +28,7 @@
     <string name="compartir_woopit">Compartir Woopit</string>
     <string name="enviar_comentarios">Enviar Comentarios</string>
     <string name="continuar">Continuar</string>
+    <string name="busqueda">Busqueda</string>
 
     <!-- Pantalla de Bienvenida, login y registro -->
     <string name="iniciar_sesion">Iniciar Sesión</string>
@@ -66,9 +67,6 @@
     <string name="invitalos">¡Invítalos!</string>
     <string name="compartir_woopit_texto">Ey acabo de probar Woopit. Es un chat con realidad aumentada que esta genial! www.woopitapp.com/dl</string>
     <string name="title_activity_map">MapActivity</string>
-    <string name="enviar_a">Enviar a:</string>
-    <string name="enviar_actual">Ubicacion actual</string>
-    <string name="enviar_mapa">Ver mapa</string>
 
     <!-- Pantalla del mapa -->
     <string name="cargando_mapa">Cargando mapa</string>
@@ -79,10 +77,12 @@
     <string name="enviar_woop">Enviar Woop</string>
 
     <!-- Pantalla de perfil -->
+    <string name="perfil">Perfil</string>
     <string name="woops">Woops</string>
     <string name="mis_modelos">Mis modelos</string>
     <string name="no_creditos">No tienes créditos</string>
-    <string name="modelos_a_comprar">Mercado de modelos</string>
+    <string name="modelos_disponibles">Modelos disponibles</string>
+    <string name="modelos_a_comprar">Modelos pagos</string>
     <string name="editar_perfil">Editar Perfil</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
@@ -90,7 +90,24 @@
     <string name="cambiar_imagen"><u>Cambiar Imagen</u></string>
     <string name="informacion_actualizada">Información actualizada</string>
     <string name="guardando_informacion">Guardando información&#8230;</string>
+
+    <!-- Pantalla de listado -->
+    <string name="encuentra_mas_modelos">Encuentra mas Modelos</string>
+    <string name="lista_de_modelos">Listado</string>
     
-    
+    <!-- Pantalla de busqueda de modelos -->
+    <string name="busqueda_modelos">Busqueda de modelos \"%s\"</string>
+
+    <!-- Pantalla de Preview -->
+    <string name="enviar_a">Enviar a: %s</string>
+    <string name="enviar_actual">Ubicacion actual</string>
+    <string name="enviar_mapa">Ver mapa</string>
+    <string name="vista_previa">Vista previa</string>
+    <string name="comprar_modelo">Comprar modelo</string>
+    <string name="title_activity_choose_friend">ChooseFriendActivity</string>
+    <string name="escoger_amigo">Escoge un amigo</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="descargando_modelo">Descargando modelo&#8230;</string>
+    <string name="title_activity_search_models">SearchModelsActivity</string>
 
 </resources>

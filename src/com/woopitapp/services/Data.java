@@ -290,7 +290,7 @@ public class Data{
 		}
 		
 		return list;
-	}
+	}	
 	
 	public boolean deleteFriendRequest( int id ){
 		
@@ -313,6 +313,7 @@ public class Data{
 			values.put(DBHelper.model_id, id);
 			values.put(DBHelper.model_name, name);
 			values.put(DBHelper.model_price, price);
+			values.put(DBHelper.model_enable, true);
 			
 			long res = database.insert(DBHelper.MODEL_TABLE, null, values);
 			

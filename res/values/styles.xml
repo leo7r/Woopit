@@ -50,8 +50,6 @@
     
     <style name="top_bar">
         <item name="android:background">@color/woopit_green</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
         <item name="android:gravity">center_vertical</item>
     </style>
     
@@ -65,6 +63,27 @@
         <item name="android:background">@drawable/user_bg</item>
         <item name="android:padding">3dp</item>
         <item name="android:scaleType">centerCrop</item>
+    </style>
+    
+    <style name="back_button">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">@dimen/medium_text</item>
+        <item name="android:drawableLeft">@drawable/back</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:onClick">goBack</item>
+        <item name="android:background">@drawable/back_button_bg</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
+    
+    <style name="find_friends_button">
+        <item name="android:src">@drawable/find_friends</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:onClick">goFindFriends</item>
     </style>
     
 </resources>

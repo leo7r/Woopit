@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,7 @@ import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.woopitapp.R;
-
+import com.woopitapp.WoopitFragmentActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
@@ -29,7 +28,7 @@ import com.woopitapp.fragments.ModelsFragment;
 import com.woopitapp.services.TabPager;
 import com.woopitapp.services.Utils;
 
-public class MainActivity extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
  
     private TabHost mTabHost;
     private ViewPager mViewPager;
@@ -250,13 +249,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     	
     }
     
-    /* Ir a encontrar amigos */
-    public void goFindFriends( View v ){
-    	
-    	Intent i = new Intent(this,FindFriendsActivity.class);
-    	startActivity(i);    	
-    }
-        
     public void goEditProfile( View v ){
     	Intent i = new Intent(this,EditProfileActivity.class);    	
     	startActivity(i);

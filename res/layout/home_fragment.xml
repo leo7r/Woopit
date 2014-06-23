@@ -11,5 +11,13 @@
         android:text="Home"
         />
     
+    
+    <Button
+        android:id="@+id/boton_prueba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="prueba"
+        />
+    
 
 </LinearLayout>
