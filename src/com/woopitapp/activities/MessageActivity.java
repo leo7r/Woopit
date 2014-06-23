@@ -419,7 +419,7 @@ public class MessageActivity extends Activity {
     			
     		     
                 float[] lightAmbient = {1.0f, 1.0f, 1.0f, 0.5f};
-    		    float[] lightDiffuse = {1.0f, 0.0f, 0.0f, 0.5f};
+    		    float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 0.5f};
     		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
     		    gl.glEnable(GL10.GL_LIGHTING);
     		    gl.glEnable(GL10.GL_LIGHT0);
@@ -530,7 +530,7 @@ public class MessageActivity extends Activity {
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
     			
-    			corazon =  new Objeto("objetos/peluche.jet",getApplicationContext());
+    			corazon =  new Objeto("objetos/rosas.jet",getApplicationContext());
     			CustomCameraView cv = new CustomCameraView(this);
     			//setContentView(rl);
     			//rl.addView(cv);

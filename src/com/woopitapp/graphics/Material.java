@@ -35,6 +35,9 @@ public class Material {
 		this.texture = texture;
 	}
 	
+	public Material() {
+	}
+
 	public static Vector<Material> parseMaterials(String nombreArchivo,Context context){
 		Vector<Material> materiales = new Vector<Material>();
 		try {	

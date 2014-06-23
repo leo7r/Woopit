@@ -12,6 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.util.Log;
 
@@ -104,14 +105,124 @@ public class Objeto {
 			this.materiales.addAll(Material.parseMaterials(tok.nextToken(),context));
 		}
 	}
+	private void crearMateriales(FileChannel in){
+		try{
+			while(true){
+				
+				Material m = new Material();
+				
+				//setear nombrea material
+				ByteBuffer byteBuf = ByteBuffer.allocateDirect(4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				ByteBuffer matBuff = byteBuf;
+				in.read(matBuff);	
+				matBuff.position(0);
+				int tamMat = matBuff.getInt();
+				matBuff.clear();
+				if(tamMat == -1){
+					break;
+				}
+				byteBuf = ByteBuffer.allocateDirect(tamMat*2);
+				byteBuf.order(ByteOrder.nativeOrder());
+				matBuff = byteBuf;
+				in.read(matBuff);	
+				matBuff.position(0);
+				String lineaNombre = "";
+				for(int i = 0; i < tamMat;i++){
+					lineaNombre += matBuff.getChar(i*2);
+
+				}
+				m.setName(lineaNombre);
+				
+				//setear Ambient
+				byteBuf = ByteBuffer.allocateDirect(4*4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				ByteBuffer extraBuff = byteBuf;
+				in.read(extraBuff);	
+				extraBuff.position(0);
+				
+				float aR = extraBuff.getFloat();
+				float aG = extraBuff.getFloat();
+				float aB = extraBuff.getFloat();
+				float aA = extraBuff.getFloat();
+				float [] ambient = {aR,aG,aB,aA};
+				m.setAmbient(ambient);
+				
+				//setear Diffuse
+				byteBuf = ByteBuffer.allocateDirect(4*4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				extraBuff = byteBuf;
+				in.read(extraBuff);	
+				extraBuff.position(0);
+				
+				float dR = extraBuff.getFloat();
+				float dG = extraBuff.getFloat();
+				float dB = extraBuff.getFloat();
+				float dA = extraBuff.getFloat();
+				float [] diffuse = {dR,dG,dB,dA};
+				m.setDiffusse(diffuse);
+				
+				//setear Specular
+				byteBuf = ByteBuffer.allocateDirect(4*4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				extraBuff = byteBuf;
+				in.read(extraBuff);	
+				extraBuff.position(0);
+				
+				float sR = extraBuff.getFloat();
+				float sG = extraBuff.getFloat();
+				float sB = extraBuff.getFloat();
+				float sA = extraBuff.getFloat();
+				float [] specular = {sR,sG,sB,sA};
+				m.setSpecular(specular);
+				
+				//setear Ni, Si
+				byteBuf = ByteBuffer.allocateDirect(4*2);
+				byteBuf.order(ByteOrder.nativeOrder());
+				extraBuff = byteBuf;
+				in.read(extraBuff);	
+				extraBuff.position(0);
+				
+				float Ni = extraBuff.getFloat();
+				float Si = extraBuff.getFloat();
+				
+				m.setNi(Ni);
+				m.setSIndex(Si);
+				
+				byteBuf = ByteBuffer.allocateDirect(4);
+				byteBuf.order(ByteOrder.nativeOrder());
+				extraBuff = byteBuf;
+				in.read(extraBuff);	
+				extraBuff.position(0);
+				
+				int tamTex = extraBuff.getInt();
+				if(tamTex > 0){
+					Log.e("","PASSSSSSS " + tamTex);
+					byteBuf = ByteBuffer.allocateDirect(tamTex);
+					byteBuf.order(ByteOrder.nativeOrder());
+					extraBuff = byteBuf;
+					in.read(extraBuff);	
+					extraBuff.position(0);
+					m.setTexture(BitmapFactory.decodeByteArray(extraBuff.array(), 0, tamTex));
+				}
+				byteBuf.clear();
+				extraBuff.clear();
+				this.materiales.add(m);
+			}
+		}catch(Exception e){
+			
+		}
+	}
 	private  void crearBuffers(Context context,String nombre){
 			try{
 				AssetFileDescriptor afd = context.getAssets().openFd(nombre);  
 				FileInputStream fis = afd.createInputStream();
 				FileChannel in =  fis.getChannel();
 				
+				crearMateriales(in);
+				
 				ByteBuffer byteBuf = ByteBuffer.allocateDirect(4);
-				byteBuf.order(ByteOrder.nativeOrder());
+				/*byteBuf.order(ByteOrder.nativeOrder());
 				ByteBuffer matBuff = byteBuf;
 				in.read(matBuff);	
 				matBuff.position(0);
@@ -130,7 +241,7 @@ public class Objeto {
 
 				}
 				cargarMateriales(lineaMaterial,context);
-				
+				*/
 				while(true){
 					
 					GroupMesh group = new GroupMesh();
