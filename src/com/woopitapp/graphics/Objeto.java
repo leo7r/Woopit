@@ -3,6 +3,7 @@ package com.woopitapp.graphics;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -15,6 +16,7 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+import android.os.Environment;
 import android.util.Log;
 
  
@@ -198,7 +200,6 @@ public class Objeto {
 				
 				int tamTex = extraBuff.getInt();
 				if(tamTex > 0){
-					Log.e("","PASSSSSSS " + tamTex);
 					byteBuf = ByteBuffer.allocateDirect(tamTex);
 					byteBuf.order(ByteOrder.nativeOrder());
 					extraBuff = byteBuf;
@@ -216,34 +217,15 @@ public class Objeto {
 	}
 	private  void crearBuffers(Context context,String nombre){
 			try{
-				AssetFileDescriptor afd = context.getAssets().openFd(nombre);
-				
-				FileInputStream fis = afd.createInputStream();
-				FileChannel in =  fis.getChannel();
+				File dir = Environment.getExternalStorageDirectory();
+				File woopitDir = new File(dir,"/Woopit/models/"+nombre);
+				FileInputStream inStream = new FileInputStream(woopitDir);
+				FileChannel in =  inStream.getChannel();
 				
 				crearMateriales(in);
 				
 				ByteBuffer byteBuf = ByteBuffer.allocateDirect(4);
-				/*byteBuf.order(ByteOrder.nativeOrder());
-				ByteBuffer matBuff = byteBuf;
-				in.read(matBuff);	
-				matBuff.position(0);
-				int tamMat = matBuff.getInt();
-				matBuff.clear();
-				
-				byteBuf = ByteBuffer.allocateDirect(tamMat*2);
-				byteBuf.order(ByteOrder.nativeOrder());
-				matBuff = byteBuf;
-				in.read(matBuff);
-				matBuff.position(0);
-				String lineaMaterial = "";
-				
-				for(int i = 0; i < tamMat;i++){
-					lineaMaterial += matBuff.getChar(i*2);
 
-				}
-				cargarMateriales(lineaMaterial,context);
-				*/
 				while(true){
 					
 					GroupMesh group = new GroupMesh();
@@ -264,6 +246,7 @@ public class Objeto {
 					groups.add(group);
 					
 				}
+				inStream.close();
 			}catch(Exception e){
 				Log.e("PASO","Error " + e);
 			}

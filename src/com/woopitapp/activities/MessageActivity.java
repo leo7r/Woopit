@@ -530,7 +530,7 @@ public class MessageActivity extends Activity {
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
     			
-    			corazon =  new Objeto("objetos/rosas.jet",getApplicationContext());
+    			corazon =  new Objeto("1.jet",getApplicationContext());
     			CustomCameraView cv = new CustomCameraView(this);
     			//setContentView(rl);
     			//rl.addView(cv);

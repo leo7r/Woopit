@@ -44,7 +44,7 @@ public class ModelPreviewActivity extends Activity {
 		TextView enviarA = (TextView) findViewById(R.id.enviar_a);
 		
 		previewCanvas.addView(glView);
-		iniciarModelo("objetos/" + modelId+".jet");
+		iniciarModelo( modelId+".jet");
 
 		if ( extras.containsKey("userId") && extras.containsKey("userName") && extras.containsKey("enable") && extras.getBoolean("enable") ){
 
