@@ -3,6 +3,8 @@ package com.woopitapp.fragments;
 import java.util.ArrayList;
 
 import com.woopitapp.R;
+import com.woopitapp.Woopit;
+import com.woopitapp.activities.MainActivity;
 import com.woopitapp.activities.ModelListActivity;
 import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.ProfileActivity;
@@ -17,11 +19,13 @@ import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +36,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
+import android.widget.TabHost;
 
 import android.widget.ImageView;
 
@@ -42,9 +47,10 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class FriendsFragment extends Fragment {
 		
+	private static final int REQUEST_SEND_MESSAGE = 0;
 	StickyListHeadersListView friend_list;
 	ListAdapter fAdapter;
-	
+	TabHost tabHost;
 	ArrayList<User> friends;
 	ArrayList<FriendRequest> friend_requests;
 	ArrayList<Object> list_items;
@@ -54,7 +60,6 @@ public class FriendsFragment extends Fragment {
     	
         View view = (LinearLayout)inflater.inflate(R.layout.friends_fragment, container, false);
 
-    	       
         friend_list = (StickyListHeadersListView) view.findViewById(R.id.friend_list);
         search_users = (EditText) view.findViewById(R.id.search_users);
         
@@ -123,7 +128,7 @@ public class FriendsFragment extends Fragment {
     	Intent i = new Intent(getActivity(),ModelListActivity.class);
 		i.putExtra("userId", u.id);
 		i.putExtra("userName", u.name);
-		startActivity(i);
+		startActivityForResult(i, REQUEST_SEND_MESSAGE);
     }
 	
     public void goToUserProfile( int id_user ){
@@ -133,7 +138,16 @@ public class FriendsFragment extends Fragment {
     	i.putExtra("id_user", id_user );
     	startActivity(i);
     }
-    
+    @Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	     if ( requestCode == REQUEST_SEND_MESSAGE ) {
+	          if (resultCode == Activity.RESULT_OK) {
+	        	MainActivity a =  ((MainActivity)getActivity());
+	        	a.setActualTab(0);
+	          }
+	      }
+	 }
     public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
 		
 		ArrayList<Object> l_items;

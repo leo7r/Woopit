@@ -84,6 +84,7 @@ public class MessageActivity extends Activity {
 	int indice = 0;
 	GLClearRenderer render;
 	Objeto corazon;
+	int modelo;
 	boolean notif = false;
 	String vertexShaderSource = "attribute vec4 vPosition; \n"
 			+	"void main () \n"
@@ -96,7 +97,11 @@ public class MessageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-       
+        Intent i  = getIntent();
+        Log.e("intent es","null " + (i == null));
+        latitud = i.getStringExtra("latitud")+"";
+        longitud = i.getStringExtra("longitud")+"";
+        modelo = Integer.parseInt(i.getStringExtra("modelo"));
 
 		crearCamara();
 	
@@ -369,6 +374,11 @@ public class MessageActivity extends Activity {
 	  
             gl.glPushMatrix();  
             gl.glLoadIdentity();
+            double latitudVal = Double.parseDouble(latitud);
+            if(-180.0<latitudVal && latitudVal<180.0){
+            	gl.glRotatef(rotationX, 0,1, 0);
+        	    gl.glRotatef(rotationY,1 ,0, 0);
+            }
 	   //     gl.glRotatef(rotationX, 0,1, 0);
 	    //    gl.glRotatef(rotationY,1 ,0, 0);
             
@@ -530,7 +540,7 @@ public class MessageActivity extends Activity {
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
     			
-    			corazon =  new Objeto("1.jet",getApplicationContext());
+    			corazon =  new Objeto(modelo+".jet",getApplicationContext());
     			CustomCameraView cv = new CustomCameraView(this);
     			//setContentView(rl);
     			//rl.addView(cv);

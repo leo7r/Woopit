@@ -109,5 +109,5 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="descargando_modelo">Descargando modelo&#8230;</string>
     <string name="title_activity_search_models">SearchModelsActivity</string>
-
+	<string name ="mensaje_enviado">Mensaje Enviado</string>
 </resources>

@@ -11,6 +11,7 @@ import java.net.URL;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,8 +32,8 @@ public class TestActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.test);
-		
-		int modelId = 1;
+		Intent i = this.getIntent();
+		int modelId = Integer.parseInt(i.getStringExtra("model"));
 		
 		File dir = Environment.getExternalStorageDirectory();
 		File modelFile = new File(dir, base_url+modelId+".jet");

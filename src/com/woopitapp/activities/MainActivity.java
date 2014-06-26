@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -58,7 +59,10 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         registerReceiver(f_receiver,new IntentFilter(this.getString(R.string.broadcast_friends_list)));
         
     }
-    
+    public void setActualTab(int id){
+    	Log.e("ID", id+"");
+    	mTabHost.setCurrentTab(id);
+    }
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString("tab", mTabHost.getCurrentTabTag());
         super.onSaveInstanceState(outState);

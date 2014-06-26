@@ -4,25 +4,35 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woopitapp.R;
+import com.woopitapp.entities.User;
 import com.woopitapp.graphics.Objeto;
+import com.woopitapp.services.ServerConnection;
 
 public class ModelPreviewActivity extends Activity {
 	GLSurfaceView glView;
 	GLClearRenderer render;
+	User user;
 	int userId;
 	int modelId;
 	String userName;
@@ -33,7 +43,7 @@ public class ModelPreviewActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.model_preview);
-		
+		user = User.get(getApplicationContext());
 		Bundle extras = getIntent().getExtras();
 		modelId = extras.getInt("modelId");
 		
@@ -114,6 +124,10 @@ public class ModelPreviewActivity extends Activity {
 	}
 	
 	public void enviarActual(){
+		
+		Send_Message sm = new Send_Message(getApplicationContext(), "","",500,500);
+		sm.execute();
+		
 		
 	}
 	
@@ -200,11 +214,48 @@ public class ModelPreviewActivity extends Activity {
 	}
 	
 	public void iniciarPreview(){
-		
 		glView = new GLSurfaceView( this );
 		glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
 		glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
 		render = new GLClearRenderer();
 		glView.setRenderer(render);
+	}
+	class Send_Message extends ServerConnection{
+    	Context con;
+		public Send_Message(Context context,String title,String text,double latitud, double longitud){
+			this.con = context;
+			
+			init(con,"send_message",new Object[]{user.id,userId,modelId,title,text,latitud,longitud});
+		}
+
+		@Override
+		public void onComplete(String result) {
+			if(result.equals("OK")){
+				setResult(RESULT_OK, null);
+			    finish();
+				LayoutInflater inflater = getLayoutInflater();
+				 
+				View layout = inflater.inflate(R.layout.sent_message_toast,
+				  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
+
+				// set a dummy image
+				ImageView image = (ImageView) layout.findViewById(R.id.image);
+				image.setImageResource(R.drawable.message_sent);
+
+				// set a message
+				TextView text = (TextView) layout.findViewById(R.id.text);
+				text.setTextColor(getResources().getColor(R.color.woopit_green));
+				text.setText(R.string.mensaje_enviado);
+
+				// Toast...
+				Toast toast = new Toast(getApplicationContext());
+				toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+				toast.setDuration(Toast.LENGTH_SHORT);
+				toast.setView(layout);
+				toast.show();
+			}else{
+				Log.e("Error","eeee");
+			}
+		}
 	}
 }

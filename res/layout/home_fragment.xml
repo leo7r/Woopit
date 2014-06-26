@@ -5,19 +5,16 @@
     android:orientation="vertical" >
     
 
-    <TextView 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home"
-        />
-    
-    
-    <Button
-        android:id="@+id/boton_prueba"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="prueba"
-        />
-    
+       <GridView 
+		android:id="@+id/messages_list"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:numColumns="1"
+		android:verticalSpacing="7dp"
+		android:horizontalSpacing="7dp"
+		android:padding="7dp"
+		android:stretchMode="columnWidth"
+		android:gravity="center"
+		/>
 
 </LinearLayout>

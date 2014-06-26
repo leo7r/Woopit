@@ -30,6 +30,8 @@ import com.woopitapp.entities.Model;
 import com.woopitapp.entities.User;
 
 public class ModelListActivity extends WoopitActivity {
+
+	private static final int REQUEST_SEND_MESSAGE = 0;
 	GridView model_list;
 	ListAdapter mAdapter;
 	int userId;
@@ -73,7 +75,17 @@ public class ModelListActivity extends WoopitActivity {
 		});
 	    
 	}
-	
+	 @Override
+	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	     if ( requestCode == REQUEST_SEND_MESSAGE ) {
+	          if (resultCode == RESULT_OK) {
+	        	 setResult(RESULT_OK);
+	             this.finish();
+
+	          }
+	      }
+	 }
 	public class ListAdapter extends ArrayAdapter<Model> {
 		
 		ArrayList<Model> l_items;
@@ -137,7 +149,7 @@ public class ModelListActivity extends WoopitActivity {
 		i.putExtra("userName",userName);
 		i.putExtra("modelId", m.id);
 		i.putExtra("enable", m.enable);
-		startActivity(i);
+		startActivityForResult(i, REQUEST_SEND_MESSAGE);
 	}
 	
 	public class getUserModelsList extends com.woopitapp.server_connections.GetUserModels{
