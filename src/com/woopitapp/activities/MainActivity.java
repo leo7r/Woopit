@@ -59,10 +59,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         registerReceiver(f_receiver,new IntentFilter(this.getString(R.string.broadcast_friends_list)));
         
     }
-    public void setActualTab(int id){
-    	Log.e("ID", id+"");
-    	mTabHost.setCurrentTab(id);
-    }
+    
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString("tab", mTabHost.getCurrentTabTag());
         super.onSaveInstanceState(outState);
@@ -77,6 +74,12 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     }
     
     /* Tabs */
+
+    public void setActualTab(int id){
+    	Log.e("ID", id+"");
+    	mTabHost.setCurrentTab(id);
+    }
+    
     private class TabInfo {
          private String tag;
          private Class<?> clss;

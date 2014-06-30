@@ -108,6 +108,7 @@ public class Objeto {
 			this.materiales.addAll(Material.parseMaterials(tok.nextToken(),context));
 		}
 	}
+	
 	private void crearMateriales(FileChannel in){
 		try{
 			while(true){
@@ -215,6 +216,7 @@ public class Objeto {
 			
 		}
 	}
+	
 	private  void crearBuffers(Context context,String nombre){
 			try{
 				File dir = Environment.getExternalStorageDirectory();

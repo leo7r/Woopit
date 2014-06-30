@@ -95,6 +95,7 @@ public class HomeFragment extends Fragment {
         new get_messages(this.getActivity().getApplicationContext(),User.get(this.getActivity().getApplicationContext()).id).execute();
         return view;
     }
+    
     public class get_messages extends ServerConnection{
     	Context con;
     	int user_id;
@@ -152,9 +153,10 @@ public class HomeFragment extends Fragment {
 			
 		}
     }
+    
     @Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	
 	     if ( requestCode == REQUEST_DOWNLOAD_MODEL ) {
 	          if (resultCode == Activity.RESULT_OK) {
 	        	  int model = Integer.parseInt(data.getStringExtra("model"));
@@ -170,14 +172,16 @@ public class HomeFragment extends Fragment {
 	          }
 	      }
 	 }
+    
     public void verMensaje(int modelo, double latitud, double longitud){
     		
-			Intent newMessagei =  new  Intent(this.getActivity().getApplicationContext(),MessageActivity.class);
-			newMessagei.putExtra("latitud", latitud+"");
-			newMessagei.putExtra("longitud",longitud+"");
-			newMessagei.putExtra("modelo",modelo+"");			
-			startActivity(newMessagei);
+		Intent newMessagei =  new  Intent(getActivity(),MessageActivity.class);
+		newMessagei.putExtra("latitud", latitud+"");
+		newMessagei.putExtra("longitud",longitud+"");
+		newMessagei.putExtra("modelo",modelo);			
+		startActivity(newMessagei);
 	}
+    
     class UpdateMessageStatus extends ServerConnection{
 
     	Context con;
@@ -217,6 +221,7 @@ public class HomeFragment extends Fragment {
 		}
     	
     }
+    
     public class ListAdapter extends ArrayAdapter<Object>{
 		
  		ArrayList<Object> l_items;
@@ -239,18 +244,18 @@ public class HomeFragment extends Fragment {
  			
  			if ( convertView == null ){
  				convertView = infalInflater.inflate(R.layout.message_item, null);
- 			}else{
- 				convertView.setOnClickListener(null);
  			}
  			
  			
  			ImageView imagen = (ImageView) convertView.findViewById(R.id.image);
+ 			
  			if(item.receiver == user_id){
  				imagen.setImageResource(R.drawable.mensaje_recibido);
 				convertView.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
+						/*
 						Intent i = new Intent(getActivity(),TestActivity.class);
 						i.putExtra("model",item.model+"");
 						i.putExtra("latitud",item.latitud+"");
@@ -258,11 +263,14 @@ public class HomeFragment extends Fragment {
 						i.putExtra("message", item.id+"");
 						i.putExtra("status", item.status+"");
 						i.putExtra("caller", "HomeFragment");
-						startActivityForResult(i,REQUEST_DOWNLOAD_MODEL);						
+						startActivityForResult(i,REQUEST_DOWNLOAD_MODEL);
+						*/
+						verMensaje(item.model,item.latitud,item.longitud);
 					}
 				});
 
- 				}else{
+ 			}
+ 			else{
  				if(item.sender == user_id){ 
  				
  					if(item.status == 0){
@@ -271,6 +279,8 @@ public class HomeFragment extends Fragment {
  					}else{
  						imagen.setImageResource(R.drawable.mensaje_leido);
  					}
+ 					
+ 					convertView.setOnClickListener(null);
  				}
  			}
  			TextView name = (TextView) convertView.findViewById(R.id.name);
@@ -302,7 +312,6 @@ public class HomeFragment extends Fragment {
 
 	
  	}
-    
- 	
+	
 }
         

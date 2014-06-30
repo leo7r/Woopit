@@ -1,9 +1,15 @@
 package com.woopitapp.activities;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.ShortBuffer;
@@ -18,6 +24,8 @@ import com.woopitapp.R.drawable;
 import com.woopitapp.R.id;
 import com.woopitapp.R.layout;
 import com.woopitapp.graphics.Objeto;
+import com.woopitapp.server_connections.ModelDownloader;
+import com.woopitapp.services.ServerConnection;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -26,8 +34,11 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -46,7 +57,9 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -61,6 +74,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MessageActivity extends Activity {
 	
@@ -98,13 +112,14 @@ public class MessageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        Intent i  = getIntent();
-        Log.e("intent es","null " + (i == null));
-        latitud = i.getStringExtra("latitud")+"";
-        longitud = i.getStringExtra("longitud")+"";
-        modelo = Integer.parseInt(i.getStringExtra("modelo"));
-
-		crearCamara();
+        Bundle extras = getIntent().getExtras();
+                
+        latitud = extras.getString("latitud");
+        longitud = extras.getString("longitud");
+        modelo = extras.getInt("modelo");
+        
+        new MDownloader(this,modelo).execute();
+		//crearCamara();
 	
     }
 	
@@ -389,7 +404,7 @@ public class MessageActivity extends Activity {
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
 	   //     corazon.draw(gl);
 	        if(sensorOk){
-	        	Log.e("PASO", "Modeloooo");
+	        	//Log.e("PASO", "Modeloooo");
 	        	corazon.draw(gl);
 	        }
             mCubeRotation -= 0.70f;
@@ -568,21 +583,27 @@ public class MessageActivity extends Activity {
     	editText.setText(editText.getText() + "" + num);
     }
     
-    /* Video notificacion */
-    public void setNotification(){
-    	
-    	Notification notification = new Notification(R.drawable.notif_icon, null, System.currentTimeMillis());
-		RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification);
-	    
-    	
-	    Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-	    PendingIntent pendingNotificationIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+    /* Descarga el modelo si no esta ya descargado */
+    
+    class MDownloader extends ModelDownloader{
 
-	    notification.contentView = notificationView;
-	    notification.contentIntent = pendingNotificationIntent;
-	    
-	    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    	mNotificationManager.notify(1, notification);
+		public MDownloader(Activity act, int modelId) {
+			super(act, modelId);
+		}
+
+		@Override
+		protected void onPostExecute(Boolean success) {
+			
+			if ( success ){
+
+				crearCamara();
+			}
+			else{
+				Toast.makeText(getApplicationContext(), "ERROR EN MODEL DOWNLOADER", Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+    	
     }
-
+    
 }

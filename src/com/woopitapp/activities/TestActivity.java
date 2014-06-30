@@ -24,7 +24,7 @@ import com.woopitapp.R.string;
 import com.woopitapp.services.ServerConnection;
 
 public class TestActivity extends Activity {
-
+	
 	String base_url = "Woopit/models/";
 	String caller;
 	int modelId;
