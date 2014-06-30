@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ParseException;
@@ -31,11 +32,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.woopitapp.R;
+import com.woopitapp.activities.MainActivity;
 import com.woopitapp.activities.MessageActivity;
 import com.woopitapp.activities.TestActivity;
 import com.woopitapp.entities.Message;
@@ -49,6 +52,7 @@ import com.woopitapp.services.Utils;
 
 public class HomeFragment extends Fragment {
 	
+	private static final int REQUEST_DOWNLOAD_MODEL = 0;
 	GridView message_list;
 	ListAdapter mAdapter;
 	TabHost tabHost;
@@ -148,6 +152,71 @@ public class HomeFragment extends Fragment {
 			
 		}
     }
+    @Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	     if ( requestCode == REQUEST_DOWNLOAD_MODEL ) {
+	          if (resultCode == Activity.RESULT_OK) {
+	        	  int model = Integer.parseInt(data.getStringExtra("model"));
+	        	  double latitud = Double.parseDouble(data.getStringExtra("latitud"));
+	        	  double longitud = Double.parseDouble(data.getStringExtra("longitud"));
+	        	  int messageId = Integer.parseInt(data.getStringExtra("message"));
+	        	  int status = Integer.parseInt(data.getStringExtra("status"));
+	        	  if(status == 0){
+	        		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), messageId).execute();
+	        	  }
+	        	  verMensaje(model,latitud,longitud);
+	        	  
+	          }
+	      }
+	 }
+    public void verMensaje(int modelo, double latitud, double longitud){
+    		
+			Intent newMessagei =  new  Intent(this.getActivity().getApplicationContext(),MessageActivity.class);
+			newMessagei.putExtra("latitud", latitud+"");
+			newMessagei.putExtra("longitud",longitud+"");
+			newMessagei.putExtra("modelo",modelo+"");			
+			startActivity(newMessagei);
+	}
+    class UpdateMessageStatus extends ServerConnection{
+
+    	Context con;
+    	int user_id;
+    	
+    	public UpdateMessageStatus( Context con ,int message_id ){
+    		super();
+    		
+    		this.con = con;
+    		this.user_id = user_id;
+    		init(con,"update_message_status",new Object[]{ ""+ message_id });
+    	}
+    	
+		@Override
+		public void onComplete(String result) {
+			
+			if ( result != null ){
+				
+				/*try{
+					JSONObject user = new JSONObject(result);
+				
+					int id = user.getInt("i");
+					String name = user.getString("n");
+					String username = user.getString("u");
+					String image = user.getString("m");
+					
+					User u = new User(id,username,name,image);
+					current_user = u;
+					setProfile();
+				}
+				catch( Exception e ){
+					e.printStackTrace()	;
+				}	*/
+			}else{
+				//Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+			}				
+		}
+    	
+    }
     public class ListAdapter extends ArrayAdapter<Object>{
 		
  		ArrayList<Object> l_items;
@@ -162,14 +231,7 @@ public class HomeFragment extends Fragment {
  			this.context = context;
  			infalInflater = (LayoutInflater) context.getSystemService("layout_inflater");
  		}
- 		public void verMensaje(int modelo, double latitud, double longitud){
- 			Intent newMessagei =  new  Intent(this.getContext(),MessageActivity.class);
- 			newMessagei.putExtra("latitud", latitud+"");
- 			newMessagei.putExtra("longitud",longitud+"");
- 			newMessagei.putExtra("modelo",modelo+"");
- 			Log.e("modelop","modelo " + modelo);
-			startActivity(newMessagei);
- 		}
+ 		
  		@Override
  		public View getView(final int position, View convertView, ViewGroup parent) {
  			int user_id = User.get(this.context).id;
@@ -177,20 +239,26 @@ public class HomeFragment extends Fragment {
  			
  			if ( convertView == null ){
  				convertView = infalInflater.inflate(R.layout.message_item, null);
+ 			}else{
+ 				convertView.setOnClickListener(null);
  			}
+ 			
+ 			
  			ImageView imagen = (ImageView) convertView.findViewById(R.id.image);
  			if(item.receiver == user_id){
  				imagen.setImageResource(R.drawable.mensaje_recibido);
- 				
 				convertView.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
-						//Intent i = new Intent(getActivity(),TestActivity.class);
-						//startActivity(i);
-						Log.e("modelo","AOSI.........." + item.model+"");
-		 				verMensaje(item.model,item.latitud,item.longitud);
-
+						Intent i = new Intent(getActivity(),TestActivity.class);
+						i.putExtra("model",item.model+"");
+						i.putExtra("latitud",item.latitud+"");
+						i.putExtra("longitud", item.longitud+"");
+						i.putExtra("message", item.id+"");
+						i.putExtra("status", item.status+"");
+						i.putExtra("caller", "HomeFragment");
+						startActivityForResult(i,REQUEST_DOWNLOAD_MODEL);						
 					}
 				});
 
@@ -219,12 +287,6 @@ public class HomeFragment extends Fragment {
  			fecha.setText(fechaVal);
  			confirm_friend.setVisibility(View.GONE);
 
-
- 		        
- 			
- 			
- 			
- 			
  			return convertView;
  		}
  		
@@ -240,6 +302,7 @@ public class HomeFragment extends Fragment {
 
 	
  	}
+    
  	
 }
         
