@@ -85,6 +85,7 @@ public class MessageActivity extends Activity {
 	GLClearRenderer render;
 	Objeto corazon;
 	int modelo;
+	boolean sensorOk = false;
 	boolean notif = false;
 	String vertexShaderSource = "attribute vec4 vPosition; \n"
 			+	"void main () \n"
@@ -114,9 +115,9 @@ public class MessageActivity extends Activity {
  	   }
 
  	   public void onSensorChanged(SensorEvent evt){
- 		   
  		   float vals[] = evt.values;
  		   float direction = vals[0];
+
  	   }
  	};
 	
@@ -174,6 +175,8 @@ public class MessageActivity extends Activity {
     		// direccion.setText(" azimut: "+(azimut) + " angulo: " + angulo );
     		render.rotarMundoX(offset);
     		render.rotarMundoY(vertical);
+  		   sensorOk = true;
+
     		// Set the Icon for the Dialog
     	}
 
@@ -385,7 +388,10 @@ public class MessageActivity extends Activity {
 	        gl.glTranslatef(0.0f, -1.5f, desplazamientoZ);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
 	   //     corazon.draw(gl);
-	        corazon.draw(gl);
+	        if(sensorOk){
+	        	Log.e("PASO", "Modeloooo");
+	        	corazon.draw(gl);
+	        }
             mCubeRotation -= 0.70f;
             gl.glPopMatrix();   
            
