@@ -4,17 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-
-       <GridView 
+       <ListView 
 		android:id="@+id/messages_list"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:numColumns="1"
-		android:verticalSpacing="7dp"
-		android:horizontalSpacing="7dp"
-		android:padding="7dp"
-		android:stretchMode="columnWidth"
-		android:gravity="center"
+		android:scrollbarThumbVertical="@drawable/scroll_bar"
+		android:scrollbarSize="2dp"
+		android:fadingEdgeLength="0dp"
+		android:background="@null"
+		android:divider="@null" 
 		/>
 
 </LinearLayout>

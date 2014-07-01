@@ -4,7 +4,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -13,23 +12,25 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.graphics.Objeto;
+import com.woopitapp.server_connections.ModelDownloader;
 import com.woopitapp.services.ServerConnection;
 
-public class ModelPreviewActivity extends Activity {
+public class ModelPreviewActivity extends WoopitActivity {
+
+	private final int REQUEST_SEND_MESSAGE = 0;
 	GLSurfaceView glView;
 	GLClearRenderer render;
 	User user;
@@ -37,30 +38,49 @@ public class ModelPreviewActivity extends Activity {
 	int modelId;
 	String userName;
 	Objeto o;
-	@Override
 	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.model_preview);
-		user = User.get(getApplicationContext());
+		
 		Bundle extras = getIntent().getExtras();
+		user = User.get(getApplicationContext());
 		modelId = extras.getInt("modelId");
 		
+		new MDownloader( this , modelId ).execute();
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if ( requestCode == REQUEST_SEND_MESSAGE ) {
+			if (resultCode == RESULT_OK) {
+				setResult(RESULT_OK);
+				finish();
+			}
+		}
+	}
+
+	public void init( ){
+
+		Bundle extras = getIntent().getExtras();
+		
 		iniciarPreview();
-		LinearLayout previewCanvas =  (LinearLayout) findViewById(R.id.previewCanvas);
+		RelativeLayout previewCanvas =  (RelativeLayout) findViewById(R.id.previewCanvas);
 		LinearLayout sendButtons =  (LinearLayout) findViewById(R.id.send_buttons);
 		LinearLayout buyOrSendModel =  (LinearLayout) findViewById(R.id.buy_or_send_model);
-		TextView enviarA = (TextView) findViewById(R.id.enviar_a);
+		TextView title = (TextView) findViewById(R.id.title);
+		final EditText text = (EditText) findViewById(R.id.message_text);
 		
 		previewCanvas.addView(glView);
 		iniciarModelo( modelId+".jet");
 
 		if ( extras.containsKey("userId") && extras.containsKey("userName") && extras.containsKey("enable") && extras.getBoolean("enable") ){
-
+			
 			userId = extras.getInt("userId");
 			userName = extras.getString("userName");
-			enviarA.setText(getResources().getString(R.string.enviar_a,userName));			
+			title.setText(getResources().getString(R.string.enviar_a,userName));
 
 			Button bMapa = (Button)findViewById(R.id.enviarMapa);
 			
@@ -69,8 +89,11 @@ public class ModelPreviewActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					Intent lookOnMapi =  new  Intent(getApplicationContext(),MapActivity.class);
+					lookOnMapi.putExtra("userId", userId);
 					lookOnMapi.putExtra("userName", userName);
-					startActivity(lookOnMapi);
+					lookOnMapi.putExtra("message", text.getText().toString());
+					
+					startActivityForResult(lookOnMapi,REQUEST_SEND_MESSAGE);
 				}
 			});
 		 
@@ -86,8 +109,7 @@ public class ModelPreviewActivity extends Activity {
 			
 		}
 		else{
-			
-			TextView previewText = (TextView) findViewById(R.id.previewText);
+			text.setVisibility(View.GONE);
 			Button button = (Button) findViewById(R.id.buy_or_send_button);
 			
 			sendButtons.setVisibility(View.GONE);
@@ -117,18 +139,15 @@ public class ModelPreviewActivity extends Activity {
 				});
 			}
 			
-			enviarA.setVisibility(View.GONE);
-			previewText.setVisibility(View.VISIBLE);
 		}
-		
 	}
 	
 	public void enviarActual(){
 		
-		Send_Message sm = new Send_Message(getApplicationContext(), "","",500,500);
-		sm.execute();
+		String message = ((EditText)findViewById(R.id.message_text)).getText().toString();
 		
-		
+		Send_Message sm = new Send_Message(getApplicationContext(), "",message,500,500);
+		sm.execute();		
 	}
 	
 	public class GLClearRenderer implements Renderer {
@@ -220,8 +239,11 @@ public class ModelPreviewActivity extends Activity {
 		render = new GLClearRenderer();
 		glView.setRenderer(render);
 	}
+	
 	class Send_Message extends ServerConnection{
-    	Context con;
+    	
+		Context con;
+		
 		public Send_Message(Context context,String title,String text,double latitud, double longitud){
 			this.con = context;
 			
@@ -230,32 +252,49 @@ public class ModelPreviewActivity extends Activity {
 
 		@Override
 		public void onComplete(String result) {
-			if(result.equals("OK")){
-				setResult(RESULT_OK, null);
+			
+			if( result != null && result.equals("OK") ){
+				
+				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
+				setResult(RESULT_OK);
 			    finish();
-				LayoutInflater inflater = getLayoutInflater();
-				 
-				View layout = inflater.inflate(R.layout.sent_message_toast,
-				  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
-
-				// set a dummy image
-				ImageView image = (ImageView) layout.findViewById(R.id.image);
-				image.setImageResource(R.drawable.message_sent);
-
-				// set a message
-				TextView text = (TextView) layout.findViewById(R.id.text);
-				text.setTextColor(getResources().getColor(R.color.woopit_green));
-				text.setText(R.string.mensaje_enviado);
-
-				// Toast...
-				Toast toast = new Toast(getApplicationContext());
-				toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-				toast.setDuration(Toast.LENGTH_SHORT);
-				toast.setView(layout);
-				toast.show();
-			}else{
-				Log.e("Error","eeee");
+				
+			}
+			else{
+				
+				if ( result == null ){
+					Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), R.string.error_desconocido, Toast.LENGTH_SHORT).show();
+					Log.e("Error sending message","result: "+result);
+				}
+				
 			}
 		}
 	}
+
+    /* Descarga el modelo si no esta ya descargado */
+    
+    class MDownloader extends ModelDownloader{
+
+		public MDownloader(Activity act, int modelId) {
+			super(act, modelId);
+		}
+
+		@Override
+		protected void onPostExecute(Boolean success) {
+			
+			if ( success ){
+				init();
+			}
+			else{
+				Toast.makeText(getApplicationContext(), "ERROR EN MODEL DOWNLOADER", Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+    	
+    }
+    
+	
 }

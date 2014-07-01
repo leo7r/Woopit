@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +12,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
@@ -23,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.Model;
@@ -48,6 +46,9 @@ public class ModelListActivity extends WoopitActivity {
 		
 		userId = extras.getInt("userId");
 		userName = extras.getString("userName");
+		
+		TextView title = (TextView) findViewById(R.id.title);
+		title.setText(getResources().getString(R.string.enviar_a,userName));
 		
 		new getUserModelsList(getApplicationContext(),User.get(getApplicationContext()).id).execute();
 		
@@ -75,17 +76,17 @@ public class ModelListActivity extends WoopitActivity {
 		});
 	    
 	}
-	 @Override
-	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-	     if ( requestCode == REQUEST_SEND_MESSAGE ) {
-	          if (resultCode == RESULT_OK) {
-	        	 setResult(RESULT_OK);
-	             this.finish();
-
-	          }
-	      }
-	 }
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if ( requestCode == REQUEST_SEND_MESSAGE ) {
+			if (resultCode == RESULT_OK) {
+				setResult(RESULT_OK);
+				this.finish();
+			}
+		}
+	}
+	
 	public class ListAdapter extends ArrayAdapter<Model> {
 		
 		ArrayList<Model> l_items;

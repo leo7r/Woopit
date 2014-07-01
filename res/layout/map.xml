@@ -49,6 +49,7 @@
         android:text="@string/enviar_woop"
         android:layout_alignParentBottom="true"
         android:visibility="gone"
+        android:onClick="sendWoop"
         />
     
 </RelativeLayout>

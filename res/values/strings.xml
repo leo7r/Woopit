@@ -100,8 +100,8 @@
 
     <!-- Pantalla de Preview -->
     <string name="enviar_a">Enviar a: %s</string>
-    <string name="enviar_actual">Ubicacion actual</string>
-    <string name="enviar_mapa">Ver mapa</string>
+    <string name="enviar_actual">Directamente</string>
+    <string name="enviar_mapa">En un lugar</string>
     <string name="vista_previa">Vista previa</string>
     <string name="comprar_modelo">Comprar modelo</string>
     <string name="title_activity_choose_friend">ChooseFriendActivity</string>
@@ -109,5 +109,6 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="descargando_modelo">Descargando modelo&#8230;</string>
     <string name="title_activity_search_models">SearchModelsActivity</string>
-	<string name ="mensaje_enviado">Mensaje Enviado</string>
+	<string name="mensaje_enviado">Mensaje enviado a %s</string>
+	<string name="hint_mensaje">Escribe tu mensaje&#8230;</string>
 </resources>
