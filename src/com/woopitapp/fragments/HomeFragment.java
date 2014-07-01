@@ -9,7 +9,6 @@ import java.util.TimeZone;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,43 +16,29 @@ import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.TextView.OnEditorActionListener;
 
-import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
-import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.woopitapp.R;
-import com.woopitapp.activities.MainActivity;
 import com.woopitapp.activities.MessageActivity;
-import com.woopitapp.activities.TestActivity;
 import com.woopitapp.entities.Message;
-import com.woopitapp.entities.Model;
 import com.woopitapp.entities.User;
-import com.woopitapp.fragments.FriendsFragment.AddOrRejectFriend;
-import com.woopitapp.services.Data;
-import com.woopitapp.services.FriendRequest;
 import com.woopitapp.services.ServerConnection;
-import com.woopitapp.services.Utils;
 
 public class HomeFragment extends Fragment {
 	
 	private static final int REQUEST_DOWNLOAD_MODEL = 0;
-	GridView message_list;
+	ListView message_list;
 	ListAdapter mAdapter;
 	TabHost tabHost;
 	ArrayList<Object> messages_list;
@@ -63,7 +48,7 @@ public class HomeFragment extends Fragment {
     	
         View view = (LinearLayout)inflater.inflate(R.layout.home_fragment, container, false);
 
-        message_list = (GridView) view.findViewById(R.id.messages_list);
+        message_list = (ListView) view.findViewById(R.id.messages_list);
         search_message = (EditText) view.findViewById(R.id.search_users);
         
         /*search_message.setOnEditorActionListener(new OnEditorActionListener(){
@@ -250,21 +235,11 @@ public class HomeFragment extends Fragment {
  			ImageView imagen = (ImageView) convertView.findViewById(R.id.image);
  			
  			if(item.receiver == user_id){
- 				imagen.setImageResource(R.drawable.mensaje_recibido);
+ 				imagen.setImageResource(R.drawable.message_received);
 				convertView.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
-						/*
-						Intent i = new Intent(getActivity(),TestActivity.class);
-						i.putExtra("model",item.model+"");
-						i.putExtra("latitud",item.latitud+"");
-						i.putExtra("longitud", item.longitud+"");
-						i.putExtra("message", item.id+"");
-						i.putExtra("status", item.status+"");
-						i.putExtra("caller", "HomeFragment");
-						startActivityForResult(i,REQUEST_DOWNLOAD_MODEL);
-						*/
 						verMensaje(item.model,item.latitud,item.longitud);
 					}
 				});
@@ -274,10 +249,10 @@ public class HomeFragment extends Fragment {
  				if(item.sender == user_id){ 
  				
  					if(item.status == 0){
- 						imagen.setImageResource(R.drawable.mensaje_enviado);
+ 						imagen.setImageResource(R.drawable.message_sent);
  		
  					}else{
- 						imagen.setImageResource(R.drawable.mensaje_leido);
+ 						imagen.setImageResource(R.drawable.message_viewed);
  					}
  					
  					convertView.setOnClickListener(null);

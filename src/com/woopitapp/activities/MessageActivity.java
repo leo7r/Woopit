@@ -123,7 +123,8 @@ public class MessageActivity extends Activity {
 		//crearCamara();
 	
     }
-public void onStop () {
+
+	public void onStop () {
 	
 		super.onStop();
  		sensorMan.unregisterListener(listener);
@@ -135,6 +136,7 @@ public void onStop () {
  		corazon.liberarMemoria();
  		
  	}
+	
 	SensorEventListener listener = new SensorEventListener(){
 		 
  	   public void onAccuracyChanged(Sensor arg0, int a){
@@ -213,7 +215,7 @@ public void onStop () {
 
 
     };
-
+    
  	LocationListener gpsListener = new LocationListener(){
  		
  		Location curLocation;
@@ -260,8 +262,7 @@ public void onStop () {
     	}
 
     	}; 
-    
- 
+     
     public class CustomCameraView extends SurfaceView{
     	
     	Camera camera;
@@ -367,6 +368,7 @@ public void onStop () {
             camera = null;
         }
     }
+    
     public int loadShader(int shaderType, String source){
     	int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
     	if(shader != 0){
@@ -383,6 +385,7 @@ public void onStop () {
     	}
     	return shader;
     }
+    
     /* Renderer */
     public class GLClearRenderer implements Renderer {
     	

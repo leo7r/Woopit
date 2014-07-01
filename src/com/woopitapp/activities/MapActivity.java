@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Address;
@@ -13,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -35,6 +37,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.woopitapp.R;
+import com.woopitapp.entities.User;
+import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
 public class MapActivity extends FragmentActivity implements 
@@ -58,18 +62,21 @@ public class MapActivity extends FragmentActivity implements
 	double selectedLatitude,selectedLongitude;
 	Circle area;
 	float default_zoom = 17.0f;
-	String userId;
-	String userName;
-	String modelId;
+	int userId,modelId;
+	String userName,message;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
-		Intent i = getIntent();
-		this.userId = i.getStringExtra("userId");
-		this.userName = i.getStringExtra("userName");
-		this.modelId = i.getStringExtra("modelId");
+		
+		Bundle extras = getIntent().getExtras();
+		
+		userId = extras.getInt("userId");
+		modelId = extras.getInt("modelId");
+		userName = extras.getString("userName");
+		message = extras.getString("message");
+		
 		search_address = (EditText) findViewById(R.id.search_address);
 		send_woop = (Button) findViewById(R.id.send_woop);
         
@@ -140,6 +147,44 @@ public class MapActivity extends FragmentActivity implements
 			mMap.setMyLocationEnabled(true);
 			mMap.setOnMapClickListener(this);
 	    }
+	}
+	
+	public void sendWoop( View v ){
+		
+		new Send_Message(getApplicationContext() , selectedLatitude , selectedLongitude ).execute();
+	}
+	
+	class Send_Message extends ServerConnection{
+    	
+		Context con;
+		
+		public Send_Message(Context context,double latitud, double longitud){
+			this.con = context;
+			
+			init(con,"send_message",new Object[]{User.get(con).id,userId,modelId,"",message,latitud,longitud});
+		}
+
+		@Override
+		public void onComplete(String result) {
+			
+			if( result != null && result.equals("OK") ){
+				
+				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
+				setResult(RESULT_OK);
+			    finish();
+			}
+			else{
+				
+				if ( result == null ){
+					Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), R.string.error_desconocido, Toast.LENGTH_SHORT).show();
+					Log.e("Error sending message","result: "+result);
+				}
+				
+			}
+		}
 	}
 	
 	/* Metodos de Google map */
