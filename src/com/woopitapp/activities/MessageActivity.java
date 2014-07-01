@@ -48,6 +48,7 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -117,12 +118,22 @@ public class MessageActivity extends Activity {
         latitud = extras.getString("latitud");
         longitud = extras.getString("longitud");
         modelo = extras.getInt("modelo");
-        
+        Log.e("latitud","lat " + latitud);
         new MDownloader(this,modelo).execute();
 		//crearCamara();
 	
     }
+public void onStop () {
 	
+		super.onStop();
+ 		sensorMan.unregisterListener(listener);
+ 		sensorMan.unregisterListener(listener2);
+ 		render = null;
+ 		glView.destroyDrawingCache();
+ 		glView = null;
+ 		sensorOk = false;
+ 		
+ 	}
 	SensorEventListener listener = new SensorEventListener(){
 		 
  	   public void onAccuracyChanged(Sensor arg0, int a){
@@ -134,8 +145,9 @@ public class MessageActivity extends Activity {
  		   float direction = vals[0];
 
  	   }
+
  	};
-	
+ 	
  	private SensorEventListener listener2 = new SensorEventListener(){
   	  
     	float[] mGravity;
@@ -188,12 +200,16 @@ public class MessageActivity extends Activity {
     		int offset =  (int) (azimut + angulo);
     	
     		// direccion.setText(" azimut: "+(azimut) + " angulo: " + angulo );
-    		render.rotarMundoX(offset);
-    		render.rotarMundoY(vertical);
-  		   sensorOk = true;
+    		if(render != null){
+	    		render.rotarMundoX(offset);
+	    		render.rotarMundoY(vertical);
+    		}
+	  		    sensorOk = true;
+    		
 
     		// Set the Icon for the Dialog
     	}
+
 
     };
 
@@ -241,7 +257,7 @@ public class MessageActivity extends Activity {
     		String num = String.valueOf(i);
     		return Double.parseDouble(num.substring(num.length()-5,num.length()-1)+"");
     	}
- 		
+
     	}; 
     
  
@@ -285,7 +301,7 @@ public class MessageActivity extends Activity {
     	   
           super(ctx);
           sensorMan = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-
+          
           sensorMan.registerListener(
         	       listener2, 
         	       sensorMan.getDefaultSensor(
@@ -530,19 +546,10 @@ public class MessageActivity extends Activity {
     }
     
     public void crearCamara(){
-        
-    	RadioGroup rdgGrupo = (RadioGroup)findViewById(R.id.rdgGrupo);   
-        
-        if(rdgGrupo.getCheckedRadioButtonId() == R.id.rdbOne){
-        	acelerometro = "Z";
-        }
-        else{
-        	acelerometro = "Y";
-        }
-        
-    	getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    	latitud = ((EditText)findViewById(R.id.latitud)).getText() +"";
-    	longitud = ((EditText)findViewById(R.id.longitud)).getText()+"";
+
+       acelerometro = "Z";
+       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
     	
     	if(isNumeric(latitud) && isNumeric(longitud)){
     		try{
@@ -555,32 +562,33 @@ public class MessageActivity extends Activity {
     			direccion.setTextColor(Color.RED);
     			
     			
+    			
+    			CustomCameraView cv = new CustomCameraView(this);
+    			//setContentView(rl);
+    			//rl.addView(cv);
+    			//cameraView = new CameraView( this );
+    			addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
     			glView = new GLSurfaceView( this );
     			glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
     			glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
-    			
+    			glView.setZOrderOnTop(true);
     			corazon =  new Objeto(modelo+".jet",getApplicationContext());
-    			CustomCameraView cv = new CustomCameraView(this);
-    			//setContentView(rl);
-    			//rl.addView(cv);
-    			//cameraView = new CameraView( this );
-    			
-    			setContentView(  cv);
-    			addContentView( glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
+    			addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
 
     			addContentView(direccion,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
     		}
     		catch(Exception e){
+    			Log.e("PASOOOOOOOOOOOOOO","error " +  e);
     			e.printStackTrace();
     		}
     	}
     }
     
     public void recopilar(int num) {
-    	TextView editText = (TextView) findViewById(R.id.texto);
-    	editText.setText(editText.getText() + "" + num);
+    	//TextView editText = (TextView) findViewById(R.id.texto);
+    	//editText.setText(editText.getText() + "" + num);
     }
     
     /* Descarga el modelo si no esta ya descargado */
