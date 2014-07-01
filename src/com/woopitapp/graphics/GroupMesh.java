@@ -1,6 +1,7 @@
 package com.woopitapp.graphics;
 
 
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -13,7 +14,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
 
-
+import sun.misc.Cleaner;
 
 public class GroupMesh{
 	
@@ -85,15 +86,13 @@ public class GroupMesh{
 			byteBuf.order(ByteOrder.nativeOrder());
 			mVertexBuffer = byteBuf;
 			in.read(mVertexBuffer);	
-			Log.e("SI....", "primer float.. " + mVertexBuffer.getFloat(mVertexBuffer.capacity()-4) + " cantcaras " + cantCaras);
-    		
+			
 			byteBuf = ByteBuffer.allocateDirect(4);
 			byteBuf.order(ByteOrder.nativeOrder());
 			ByteBuffer extraBuff = byteBuf;
 			in.read(extraBuff);
 			extraBuff.position(0);
 			
-			Log.e("SI....", "Si.. " + extraBuff.getInt(0));
 			if(extraBuff.getInt(0)>0){
 				byteBuf = ByteBuffer.allocateDirect(cantCaras*3*2*4);
 				byteBuf.order(ByteOrder.nativeOrder());
@@ -106,7 +105,6 @@ public class GroupMesh{
 			extraBuff = byteBuf;
 			in.read(extraBuff);
 			extraBuff.position(0);
-			Log.e("SI....", "Si.. " + extraBuff.getInt(0));
 			if(extraBuff.getInt(0)>0){
 				byteBuf = ByteBuffer.allocateDirect(cantCaras*3*3*4);
 				byteBuf.order(ByteOrder.nativeOrder());
@@ -122,5 +120,11 @@ public class GroupMesh{
     		Log.e("PASOO---","error: " +  e);
     	}
 		
+    }
+ 
+    public void liberarMemoria(){
+        mNormalBuffer = null;
+        mVertexBuffer = null;
+        mTextureBuffer = null;
     }
 }

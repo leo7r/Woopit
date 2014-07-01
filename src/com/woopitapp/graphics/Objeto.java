@@ -33,8 +33,14 @@ public class Objeto {
 
 
 	public Objeto(String nombre,Context context){
-		groups = new Vector<GroupMesh>();
-	 	this.crearBuffers(context,nombre);
+		try{
+			groups = new Vector<GroupMesh>();
+			this.crearBuffers(context,nombre);
+		}catch(Exception e){
+			System.gc();
+			groups = new Vector<GroupMesh>();
+			this.crearBuffers(context,nombre);
+		}
 	}
 
 
@@ -126,6 +132,8 @@ public class Objeto {
 				if(tamMat == -1){
 					break;
 				}
+				byteBuf.clear();
+				
 				byteBuf = ByteBuffer.allocateDirect(tamMat*2);
 				byteBuf.order(ByteOrder.nativeOrder());
 				matBuff = byteBuf;
@@ -137,6 +145,7 @@ public class Objeto {
 
 				}
 				m.setName(lineaNombre);
+				byteBuf.clear();
 				
 				//setear Ambient
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -151,6 +160,7 @@ public class Objeto {
 				float aA = extraBuff.getFloat();
 				float [] ambient = {aR,aG,aB,aA};
 				m.setAmbient(ambient);
+				byteBuf.clear();
 				
 				//setear Diffuse
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -165,6 +175,7 @@ public class Objeto {
 				float dA = extraBuff.getFloat();
 				float [] diffuse = {dR,dG,dB,dA};
 				m.setDiffusse(diffuse);
+				byteBuf.clear();
 				
 				//setear Specular
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -179,6 +190,7 @@ public class Objeto {
 				float sA = extraBuff.getFloat();
 				float [] specular = {sR,sG,sB,sA};
 				m.setSpecular(specular);
+				byteBuf.clear();
 				
 				//setear Ni, Si
 				byteBuf = ByteBuffer.allocateDirect(4*2);
@@ -192,6 +204,7 @@ public class Objeto {
 				
 				m.setNi(Ni);
 				m.setSIndex(Si);
+				byteBuf.clear();
 				
 				byteBuf = ByteBuffer.allocateDirect(4);
 				byteBuf.order(ByteOrder.nativeOrder());
@@ -207,6 +220,7 @@ public class Objeto {
 					in.read(extraBuff);	
 					extraBuff.position(0);
 					m.setTexture(BitmapFactory.decodeByteArray(extraBuff.array(), 0, tamTex));
+					byteBuf.clear();
 				}
 				byteBuf.clear();
 				extraBuff.clear();
@@ -284,5 +298,17 @@ public class Objeto {
 	public Vector<Material>  getMateriales(){
 		return materiales;
 		
+	}
+
+
+	public void liberarMemoria() {
+		for(Material m : materiales){
+			if(m.getTexture()!= null){
+				m.setTexture(null);
+			}
+		}
+		for(GroupMesh i : groups){
+			i.liberarMemoria();
+		}
 	}
 }

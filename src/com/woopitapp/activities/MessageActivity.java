@@ -132,6 +132,7 @@ public void onStop () {
  		glView.destroyDrawingCache();
  		glView = null;
  		sensorOk = false;
+ 		corazon.liberarMemoria();
  		
  	}
 	SensorEventListener listener = new SensorEventListener(){
