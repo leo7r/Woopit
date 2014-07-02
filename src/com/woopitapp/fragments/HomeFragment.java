@@ -133,7 +133,6 @@ public class HomeFragment extends Fragment {
 			}
 			
 		    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
-		    Log.e("erorsss", ""+(message_list == null ));
 		    message_list.setAdapter(mAdapter);
 			
 		}
@@ -142,24 +141,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	
-	     if ( requestCode == REQUEST_DOWNLOAD_MODEL ) {
-	          if (resultCode == Activity.RESULT_OK) {
-	        	  int model = Integer.parseInt(data.getStringExtra("model"));
-	        	  double latitud = Double.parseDouble(data.getStringExtra("latitud"));
-	        	  double longitud = Double.parseDouble(data.getStringExtra("longitud"));
-	        	  int messageId = Integer.parseInt(data.getStringExtra("message"));
-	        	  int status = Integer.parseInt(data.getStringExtra("status"));
-	        	  if(status == 0){
-	        		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), messageId).execute();
-	        	  }
-	        	  verMensaje(model,latitud,longitud);
-	        	  
-	          }
-	      }
+	   
 	 }
     
-    public void verMensaje(int modelo, double latitud, double longitud){
-    		
+    public void verMensaje(int messageId,int modelo, double latitud, double longitud, int status){
+	    if(status == 0){
+		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), messageId).execute();
+		}
 		Intent newMessagei =  new  Intent(getActivity(),MessageActivity.class);
 		newMessagei.putExtra("latitud", latitud+"");
 		newMessagei.putExtra("longitud",longitud+"");
@@ -224,23 +212,28 @@ public class HomeFragment extends Fragment {
  		
  		@Override
  		public View getView(final int position, View convertView, ViewGroup parent) {
+ 			
+
  			int user_id = User.get(this.context).id;
  			final Message item = (Message)getItem(position);
  			
  			if ( convertView == null ){
  				convertView = infalInflater.inflate(R.layout.message_item, null);
  			}
- 			
+
  			
  			ImageView imagen = (ImageView) convertView.findViewById(R.id.image);
  			
  			if(item.receiver == user_id){
+ 				if(item.status == 0){
+ 					//aqui el otro icono de mensaje nuevo; 					
+ 				}
  				imagen.setImageResource(R.drawable.message_received);
 				convertView.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
-						verMensaje(item.model,item.latitud,item.longitud);
+						verMensaje(item.id,item.model,item.latitud,item.longitud,item.status);
 					}
 				});
 
@@ -254,7 +247,6 @@ public class HomeFragment extends Fragment {
  					}else{
  						imagen.setImageResource(R.drawable.message_viewed);
  					}
- 					
  					convertView.setOnClickListener(null);
  				}
  			}
