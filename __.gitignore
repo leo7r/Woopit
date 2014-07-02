@@ -1,0 +1,8 @@
+bin/
+bin/*.*
+/bin
+/gen
+/project.properties
+/leo-key-pair-oregon.pem
+leo-key-pair-oregon.pem
+*.pem
