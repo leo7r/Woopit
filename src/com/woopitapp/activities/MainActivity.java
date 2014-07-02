@@ -20,6 +20,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.suredigit.inappfeedback.FeedbackDialog;
 import com.woopitapp.R;
 import com.woopitapp.WoopitFragmentActivity;
 import com.woopitapp.entities.User;
@@ -40,6 +41,9 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 	// Broadcast receivers
 	FriendsUpdateReceiver f_receiver;
     
+	// Feedback
+	private FeedbackDialog feedBack;
+	
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
@@ -52,7 +56,8 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         
         intialiseViewPager();
         setSlidingMenu();
-        initMessageButton();
+
+        feedBack = Utils.getFeedbackDialog(this);
         
         /* Recibe cambios en lista de amigos */
         f_receiver = new FriendsUpdateReceiver();
@@ -63,6 +68,11 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString("tab", mTabHost.getCurrentTabTag());
         super.onSaveInstanceState(outState);
+    }
+    
+    protected void onPause(){
+    	super.onPause();
+    	feedBack.dismiss();
     }
     
     protected void onDestroy(){
@@ -109,20 +119,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         }
  
     }
-    
-    private void initMessageButton(){
-    	ImageView bMessage = (ImageView) findViewById(R.id.new_message);
-    	bMessage.setOnClickListener(new  View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent newMessagei =  new  Intent(getApplicationContext(),MessageActivity.class);
-				startActivity(newMessagei);
-			}
-		});
-    	
-    }
-    
+        
     private void intialiseViewPager() {
  
         List<Fragment> fragments = new Vector<Fragment>();
@@ -267,6 +264,21 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	
     	i.putExtra("id_user", User.get(getApplicationContext()).id);    	
     	startActivity(i);
+    }
+    
+    public void shareWoopit( View v ){
+		
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.compartir_woopit_texto));
+		sendIntent.setType("text/plain");
+		
+		startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.compartir_woopit)));
+	}
+    
+    public void sendFeedback( View v ){
+    	feedBack.show();
+    	toggleSlidingMenu(v);
     }
     
     /* Broadcasts receivers */

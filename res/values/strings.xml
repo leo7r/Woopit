@@ -20,6 +20,8 @@
     <string name="app_id">280178418831040</string>
     <!-- Google Maps API KEY -->
     <string name="gmaps_key">AIzaSyB8nR-M0jXzZDpJCDTcsabTNmIEVXlzpDU</string>
+    <!-- Feedback API KEY -->
+	<string name="feedback_key">AF-A317CF4C46AC-9F</string>
 
     <!-- Terminos generales -->
     <string name="error_desconocido">Error desconocido</string>
@@ -29,6 +31,8 @@
     <string name="enviar_comentarios">Enviar Comentarios</string>
     <string name="continuar">Continuar</string>
     <string name="busqueda">Busqueda</string>
+    <string name="no">No</string>
+    <string name="enviar">Enviar</string>
 
     <!-- Pantalla de Bienvenida, login y registro -->
     <string name="iniciar_sesion">Iniciar Sesión</string>
@@ -111,4 +115,17 @@
     <string name="title_activity_search_models">SearchModelsActivity</string>
 	<string name="mensaje_enviado">Mensaje enviado a %s</string>
 	<string name="hint_mensaje">Escribe tu mensaje&#8230;</string>
+	
+	<!-- Feedback -->
+	<string name="feedback_texto">Hey, ¿quisieras enviar algún comentario para mejorar tu experiencia?</string>
+    <string name="feedback_hint_pregunta">Escribe tu pregunta o duda&#8230;</string>
+    <string name="feedback_titulo">Enviar comentarios</string>
+    <string name="feedback_gracias">Muchas gracias!</string>
+    <string name="feedback_error">Error</string>
+    <string name="feedback_idea">Idea</string>
+    <string name="feedback_pregunta">Pregunta</string>
+    <string name="feedback_respuesta">Mensaje de Woopit</string>
+    <string name="feedback_cerrar">Cerrar</string>
+    <string name="feedback_calificanos">Califícanos</string>
+	
 </resources>

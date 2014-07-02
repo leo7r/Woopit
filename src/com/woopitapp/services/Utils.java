@@ -18,6 +18,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -25,11 +26,14 @@ import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.suredigit.inappfeedback.FeedbackDialog;
+import com.suredigit.inappfeedback.FeedbackSettings;
 import com.woopitapp.R;
 
 
@@ -437,6 +441,48 @@ public class Utils {
 		imageLoader = getImageLoader(con);		
 		imageLoader.displayImage(getUserImageURI(id_user), iv, options );
 	}
+	
+	/* Send feedback */
+	public static FeedbackDialog getFeedbackDialog( Activity act ){
+		
+		FeedbackSettings feedbackSettings = new FeedbackSettings();
+		Resources res = act.getResources();		
+		
+		//SUBMIT-CANCEL BUTTONS
+		feedbackSettings.setCancelButtonText(res.getString(R.string.no));
+		feedbackSettings.setSendButtonText(res.getString(R.string.enviar));
+
+		//DIALOG TEXT
+		feedbackSettings.setText(res.getString(R.string.feedback_texto));
+		feedbackSettings.setYourComments(res.getString(R.string.feedback_hint_pregunta));
+		feedbackSettings.setTitle(res.getString(R.string.feedback_titulo));
+
+		//TOAST MESSAGE
+		feedbackSettings.setToast(res.getString(R.string.feedback_gracias));
+
+		//RADIO BUTTONS
+		feedbackSettings.setBugLabel(res.getString(R.string.feedback_error));
+		feedbackSettings.setIdeaLabel(res.getString(R.string.feedback_idea));
+		feedbackSettings.setQuestionLabel(res.getString(R.string.feedback_pregunta));
+
+		//RADIO BUTTONS ORIENTATION AND GRAVITY
+		feedbackSettings.setOrientation(LinearLayout.HORIZONTAL); // Default
+		//feedbackSettings.setOrientation(LinearLayout.VERTICAL);
+		//feedbackSettings.setGravity(Gravity.RIGHT); // Default
+		//feedbackSettings.setGravity(Gravity.LEFT);
+		feedbackSettings.setGravity(Gravity.CENTER);
+
+		//SET DIALOG MODAL
+		feedbackSettings.setModal(true); //Default is false
+
+		//DEVELOPER REPLIES
+		feedbackSettings.setReplyTitle(res.getString(R.string.feedback_respuesta));
+		feedbackSettings.setReplyCloseButtonText(res.getString(R.string.feedback_cerrar));
+		feedbackSettings.setReplyRateButtonText(res.getString(R.string.feedback_calificanos));
+		
+		return new FeedbackDialog(act, act.getResources().getString(R.string.feedback_key), feedbackSettings);
+	}
+
 	
 }
 

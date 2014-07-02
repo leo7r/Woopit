@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:clickable="true"
-        android:onClick="goMyProfile"
-        >
+        android:onClick="goMyProfile">
+        
         <ImageView 
 			android:id="@+id/image"
 			android:layout_width="80dp"
@@ -58,12 +58,14 @@
 		        android:padding="12dp"
 				android:textSize="@dimen/normal_text"
 		        android:text="@string/editar_perfil"
-		        android:drawableLeft="@drawable/sliding_feedback"
+		        android:drawableLeft="@drawable/sliding_edit_profile"
 		        android:drawablePadding="20dp"
 		        android:clickable="true"
 		        android:background="@drawable/menu_item_bg"
 		        android:layout_marginTop="2dp"
 		        android:layout_marginBottom="2dp"
+		        android:layout_marginLeft="4dp"
+		        android:layout_marginRight="4dp"
 		        android:onClick="goEditProfile"
 		        />
             
@@ -79,6 +81,8 @@
 		        android:background="@drawable/menu_item_bg"
 		        android:layout_marginTop="2dp"
 		        android:layout_marginBottom="2dp"
+		        android:layout_marginLeft="4dp"
+		        android:layout_marginRight="4dp"
 		        />
 		    
 		    <TextView 
@@ -93,6 +97,9 @@
 		        android:background="@drawable/menu_item_bg"
 		        android:layout_marginTop="2dp"
 		        android:layout_marginBottom="2dp"
+		        android:layout_marginLeft="4dp"
+		        android:layout_marginRight="4dp"
+		        android:onClick="shareWoopit"
 		        />
 		    
 		    <TextView 
@@ -107,6 +114,9 @@
 		        android:background="@drawable/menu_item_bg"
 		        android:layout_marginTop="2dp"
 		        android:layout_marginBottom="2dp"
+		        android:layout_marginLeft="4dp"
+		        android:layout_marginRight="4dp"
+		        android:onClick="sendFeedback"
 		        />
 		            
             

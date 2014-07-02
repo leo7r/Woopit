@@ -18,14 +18,6 @@
 	        style="@style/back_button"
 	        />
         
-        <ImageView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/find_friends_button"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            />
-        
     </RelativeLayout>
     
     <LinearLayout
