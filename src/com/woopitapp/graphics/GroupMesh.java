@@ -1,7 +1,6 @@
 package com.woopitapp.graphics;
 
 
-import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -11,10 +10,7 @@ import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
-
 import android.util.Log;
-
-import sun.misc.Cleaner;
 
 public class GroupMesh{
 	
