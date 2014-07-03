@@ -103,6 +103,7 @@ public class MessageActivity extends Activity {
 	Objeto corazon;
 	int modelo;
 	boolean sensorOk = false;
+	boolean sensorDistancia = false;
 	boolean notif = false;
 	String vertexShaderSource = "attribute vec4 vPosition; \n"
 			+	"void main () \n"
@@ -110,7 +111,7 @@ public class MessageActivity extends Activity {
 			+ 	" gl_Position = Matrix*vPosition; \n"
 			+	"} \n";
 	//int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
-	
+	CustomCameraView cv;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +136,7 @@ public class MessageActivity extends Activity {
  		glView.destroyDrawingCache();
  		glView = null;
  		sensorOk = false;
+ 		sensorDistancia =false;
  		corazon.liberarMemoria();
  		
  	}
@@ -168,6 +170,7 @@ public class MessageActivity extends Activity {
     		float vertical = 0.0f;
     		if (evt.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
     			mGravity =  lowPass(evt.values.clone(), mGravity);
+    			
     		}
     		    
     		if (evt.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
@@ -195,16 +198,17 @@ public class MessageActivity extends Activity {
 		        if (success) {
 		        	float orientation[] = new float[3];
 		        	SensorManager.getOrientation(R2, orientation);
-		        	azimut =(int) Math.round(Math.toDegrees(orientation[0]));
+		        	azimut =((int) Math.round(Math.toDegrees(orientation[0])));
 		        	vertical =(int) Math.round(Math.toDegrees(orientation[1]));
-
 		        }
     		
     		}
+    		if(azimut < 0){
+    			azimut = 360+azimut;
+    		}
     		
-    		int offset =  (int) (azimut + angulo);
-    	
-    		// direccion.setText(" azimut: "+(azimut) + " angulo: " + angulo );
+    		int offset =  (int) (azimut - angulo);
+    		 //direccion.setText(" azimut: "+(azimut) + " angulo: " + angulo );
     		if(render != null){
 	    		render.rotarMundoX(offset);
 	    		render.rotarMundoY(vertical);
@@ -237,10 +241,9 @@ public class MessageActivity extends Activity {
  				locationChanged = true;
  			}
  			
- 			angulo = getBearing(Double.parseDouble(latitud),Double.parseDouble(longitud),location.getLatitude(), location.getLongitude());
+ 			angulo = getBearing(location.getLatitude(), location.getLongitude(),Double.parseDouble(latitud),Double.parseDouble(longitud));
  			double distancia = getDistance(Double.parseDouble(latitud),Double.parseDouble(longitud),location.getLatitude(), location.getLongitude());
  			distancia = convertir(distancia);
- 			//direccion.setText(distancia+"");
  			
  			render.transladarMundo((float) distancia);
  			curLocation = location;
@@ -291,7 +294,6 @@ public class MessageActivity extends Activity {
 
         		camera.setParameters(params);
         		camera.setDisplayOrientation(90);
-        		// direccion.setText(camera.getParameters().get)
         		camera.startPreview();
         	}
 
@@ -427,10 +429,10 @@ public class MessageActivity extends Activity {
 	        gl.glTranslatef(0.0f, -1.5f, desplazamientoZ);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
 	   //     corazon.draw(gl);
-	        if(sensorOk){
+	       
 	        	//Log.e("PASO", "Modeloooo");
 	        	corazon.draw(gl);
-	        }
+	        
             mCubeRotation -= 0.70f;
             gl.glPopMatrix();   
            
@@ -510,8 +512,20 @@ public class MessageActivity extends Activity {
 		
 		return d;
     }
-    
-    private double getBearing(double lat1,double lon1, double lat2,double lon2){
+   public double getBearing(double startLat, double startLng, double endLat, double endLng){
+        double longitude1 = startLng;
+        double longitude2 = endLng;
+        double latitude1 = Math.toRadians(startLat);
+        double latitude2 = Math.toRadians(endLat);
+        double longDiff= Math.toRadians(longitude2-longitude1);
+        double y= Math.sin(longDiff)*Math.cos(latitude2);
+        double x=Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff);
+
+        return (Math.toDegrees(Math.atan2(y, x))+360)%360;
+
+
+    }
+   /* private double getBearing(double lat1,double lon1, double lat2,double lon2){
     	int R = 6371; // km
     	double dLat =  Math.toRadians(lat2-lat1);
     	double dLon = Math.toRadians(lon2-lon1);
@@ -527,7 +541,7 @@ public class MessageActivity extends Activity {
                 Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
         double brng = Math.toDegrees(Math.atan2(y, x));
     	return brng;
-    }
+    }*/
  
     protected float[] lowPass(float[] input, float[] output){
         
@@ -571,11 +585,11 @@ public class MessageActivity extends Activity {
     			
     			
     			
-    			CustomCameraView cv = new CustomCameraView(this);
+    			cv = new CustomCameraView(this);
     			//setContentView(rl);
     			//rl.addView(cv);
     			//cameraView = new CameraView( this );
-    			addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    			
     			glView = new GLSurfaceView( this );
     			glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
     			glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
@@ -583,12 +597,13 @@ public class MessageActivity extends Activity {
     			glView.setRenderer(render);
     			glView.setZOrderOnTop(true);
     			corazon =  new Objeto(modelo+".jet",getApplicationContext());
-    			addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
-
-    			addContentView(direccion,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    			 if(Double.parseDouble(latitud) == 500.0){
+    	    			addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    	    			addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
+    	    			addContentView(direccion,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    			 }
     		}
     		catch(Exception e){
-    			Log.e("PASOOOOOOOOOOOOOO","error " +  e);
     			e.printStackTrace();
     		}
     	}
@@ -724,14 +739,30 @@ public class MessageActivity extends Activity {
     	    }
 	
  			
- 			angulo = getBearing(Double.parseDouble(latitud),Double.parseDouble(longitud),location.getLatitude(), location.getLongitude());
+ 			angulo = getBearing(location.getLatitude(), location.getLongitude(),Double.parseDouble(latitud),Double.parseDouble(longitud));
  			double distancia = getDistance(Double.parseDouble(latitud),Double.parseDouble(longitud),location.getLatitude(), location.getLongitude());
  			//distancia = convertir(distancia);
- 			direccion.setText(distancia + "");
+    		Log.e("pos","lat lalon1: " +latitud + " " + longitud );
+
+ 			//direccion.setText(distancia + "  lalon1: " +latitud + " " + longitud + " lalon2: " +  location.getLatitude() + " " + location.getLongitude());
  			if(render != null && Double.parseDouble(latitud) < 500.0){
  				render.transladarMundo(((float) (distancia+0.190)*-100.0f));
  			}
-       
+ 			if(!sensorDistancia && render != null &&  Double.parseDouble(latitud) < 500.0){
+	 			 if(distancia*1000 <50){
+		    			addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+		    			addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
+		    			addContentView(direccion,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+				 }else{
+					 
+					 Intent iResult = new Intent();
+					 iResult.putExtra("latitud", Double.parseDouble(latitud));
+					 iResult.putExtra("longitud", Double.parseDouble(longitud));
+					 setResult(RESULT_OK,iResult);
+					 finish();
+				 }
+ 			}
+ 			 sensorDistancia = true;
     	}
 
     	public void onStatusChanged(String provider, int status, Bundle extras) {

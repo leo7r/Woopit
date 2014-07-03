@@ -75,11 +75,13 @@
     <!-- Pantalla del mapa -->
     <string name="cargando_mapa">Cargando mapa</string>
     <string name="buscar_lugar">Buscar lugar&#8230;</string>
-    <string name="podra_ver_woop">podrá ver tu Woop en esta área</string>
+    <string name="podra_ver_woop">Podrá ver su Woop en esta área</string>
     <string name="error_buscando_lugar">Error buscando lugar</string>
     <string name="lugar_no_encontrado">El lugar %s no fue encontrado</string>
     <string name="enviar_woop">Enviar Woop</string>
-
+	<string name="ubicacion_woop">Podrá ver su Woop cuando esté cerca de aquí</string>
+	<string name="mensaje_recibido_lejos">Alerta Woop!!</string>
+	 
     <!-- Pantalla de perfil -->
     <string name="perfil">Perfil</string>
     <string name="woops">Woops</string>

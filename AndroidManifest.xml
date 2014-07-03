@@ -113,6 +113,10 @@
             android:name="com.woopitapp.activities.SearchModelsActivity"
             android:label="@string/title_activity_search_models" >
         </activity>
+        <activity
+            android:name="com.woopitapp.activities.MapUnMessageActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
     </application>
 
 </manifest>

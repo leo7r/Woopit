@@ -30,6 +30,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.woopitapp.R;
+import com.woopitapp.activities.MapUnMessageActivity;
 import com.woopitapp.activities.MessageActivity;
 import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
@@ -38,6 +39,7 @@ import com.woopitapp.services.ServerConnection;
 public class HomeFragment extends Fragment {
 	
 	private static final int REQUEST_DOWNLOAD_MODEL = 0;
+	private static final int REQUEST_MESSAGE = 1;
 	ListView message_list;
 	ListAdapter mAdapter;
 	TabHost tabHost;
@@ -140,7 +142,17 @@ public class HomeFragment extends Fragment {
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	
+    	if(requestCode == REQUEST_MESSAGE){
+    		if(resultCode == this.getActivity().RESULT_OK){
+    			 Intent i = new Intent(getActivity().getApplicationContext(),MapUnMessageActivity.class);
+				 Bundle extras = data.getExtras();
+				 double latitud = extras.getDouble("latitud");
+				 double longitud  = extras.getDouble("longitud");
+    			 i.putExtra("latitud",latitud);
+				 i.putExtra("longitud",longitud);
+				 startActivity(i);
+    		}
+    	}
 	   
 	 }
     
@@ -152,7 +164,7 @@ public class HomeFragment extends Fragment {
 		newMessagei.putExtra("latitud", latitud+"");
 		newMessagei.putExtra("longitud",longitud+"");
 		newMessagei.putExtra("modelo",modelo);			
-		startActivity(newMessagei);
+		startActivityForResult(newMessagei,REQUEST_MESSAGE);
 	}
     
     class UpdateMessageStatus extends ServerConnection{

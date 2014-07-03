@@ -995,9 +995,9 @@ containing a value of this type.
         public static final int busqueda=0x7f050050;
         /**  Pantalla de busqueda de modelos 
          */
-        public static final int busqueda_modelos=0x7f05008a;
+        public static final int busqueda_modelos=0x7f05008c;
         public static final int button_send=0x7f050040;
-        public static final int cambiar_imagen=0x7f050085;
+        public static final int cambiar_imagen=0x7f050087;
         /**  Pantalla del mapa 
          */
         public static final int cargando_mapa=0x7f050075;
@@ -1118,7 +1118,7 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f05001e;
         public static final int compartir_woopit=0x7f05004d;
         public static final int compartir_woopit_texto=0x7f050073;
-        public static final int comprar_modelo=0x7f05008f;
+        public static final int comprar_modelo=0x7f050091;
         public static final int configuracion=0x7f05004c;
         public static final int constrasena=0x7f050056;
         public static final int continuar=0x7f05004f;
@@ -1126,24 +1126,24 @@ containing a value of this type.
         public static final int correo_electronico=0x7f050055;
         public static final int correo_ya_registrado=0x7f05005e;
         public static final int creando_cuenta=0x7f05005c;
-        public static final int descargando_modelo=0x7f050093;
+        public static final int descargando_modelo=0x7f050095;
         public static final int edit_message=0x7f05003e;
         public static final int edit_message2=0x7f05003f;
-        public static final int editar_perfil=0x7f050081;
+        public static final int editar_perfil=0x7f050083;
         public static final int elige_nombre_usuario=0x7f050062;
         public static final int encontrar_amigos=0x7f05006a;
         public static final int encontrar_amigos_info=0x7f05006b;
         /**  Pantalla de listado 
          */
-        public static final int encuentra_mas_modelos=0x7f050088;
+        public static final int encuentra_mas_modelos=0x7f05008a;
         public static final int entrando=0x7f05005d;
         public static final int enviar=0x7f050052;
         /**  Pantalla de Preview 
          */
-        public static final int enviar_a=0x7f05008b;
-        public static final int enviar_actual=0x7f05008c;
+        public static final int enviar_a=0x7f05008d;
+        public static final int enviar_actual=0x7f05008e;
         public static final int enviar_comentarios=0x7f05004e;
-        public static final int enviar_mapa=0x7f05008d;
+        public static final int enviar_mapa=0x7f05008f;
         public static final int enviar_woop=0x7f05007a;
         public static final int error_buscando_lugar=0x7f050078;
         public static final int error_de_conexion=0x7f05004b;
@@ -1151,79 +1151,81 @@ containing a value of this type.
          */
         public static final int error_desconocido=0x7f05004a;
         public static final int error_iniciar_sesion=0x7f05005f;
-        public static final int escoger_amigo=0x7f050091;
-        public static final int feedback_calificanos=0x7f0500a0;
-        public static final int feedback_cerrar=0x7f05009f;
-        public static final int feedback_error=0x7f05009b;
-        public static final int feedback_gracias=0x7f05009a;
-        public static final int feedback_hint_pregunta=0x7f050098;
-        public static final int feedback_idea=0x7f05009c;
+        public static final int escoger_amigo=0x7f050093;
+        public static final int feedback_calificanos=0x7f0500a2;
+        public static final int feedback_cerrar=0x7f0500a1;
+        public static final int feedback_error=0x7f05009d;
+        public static final int feedback_gracias=0x7f05009c;
+        public static final int feedback_hint_pregunta=0x7f05009a;
+        public static final int feedback_idea=0x7f05009e;
         /**  Feedback API KEY 
          */
         public static final int feedback_key=0x7f050049;
-        public static final int feedback_pregunta=0x7f05009d;
-        public static final int feedback_respuesta=0x7f05009e;
+        public static final int feedback_pregunta=0x7f05009f;
+        public static final int feedback_respuesta=0x7f0500a0;
         /**  Feedback 
          */
-        public static final int feedback_texto=0x7f050097;
-        public static final int feedback_titulo=0x7f050099;
+        public static final int feedback_texto=0x7f050099;
+        public static final int feedback_titulo=0x7f05009b;
         /**  Google Maps API KEY 
          */
         public static final int gmaps_key=0x7f050048;
-        public static final int guardando_informacion=0x7f050087;
-        public static final int guardar_cambios=0x7f050084;
+        public static final int guardando_informacion=0x7f050089;
+        public static final int guardar_cambios=0x7f050086;
         public static final int hello=0x7f05003a;
         public static final int hello_world=0x7f050042;
-        public static final int hint_mensaje=0x7f050096;
+        public static final int hint_mensaje=0x7f050098;
         public static final int info_nombre_usuario=0x7f050063;
-        public static final int informacion_actualizada=0x7f050086;
+        public static final int informacion_actualizada=0x7f050088;
         /**  Pantalla de Bienvenida, login y registro 
          */
         public static final int iniciar_sesion=0x7f050053;
         public static final int invitalos=0x7f050072;
-        public static final int lista_de_modelos=0x7f050089;
+        public static final int lista_de_modelos=0x7f05008b;
         public static final int lugar_no_encontrado=0x7f050079;
-        public static final int mensaje_enviado=0x7f050095;
-        public static final int mis_modelos=0x7f05007d;
-        public static final int modelos_a_comprar=0x7f050080;
-        public static final int modelos_disponibles=0x7f05007f;
+        public static final int mensaje_enviado=0x7f050097;
+        public static final int mensaje_recibido_lejos=0x7f05007c;
+        public static final int mis_modelos=0x7f05007f;
+        public static final int modelos_a_comprar=0x7f050082;
+        public static final int modelos_disponibles=0x7f050081;
         public static final int ningun_amigo=0x7f050071;
         public static final int no=0x7f050051;
-        public static final int no_creditos=0x7f05007e;
+        public static final int no_creditos=0x7f050080;
         public static final int nombre_usuario=0x7f050064;
         public static final int nombre_usuario_ya_tomado=0x7f050066;
         public static final int nueva_contrasena=0x7f050059;
         /**  Pantalla de perfil 
          */
-        public static final int perfil=0x7f05007b;
+        public static final int perfil=0x7f05007d;
         public static final int podra_ver_woop=0x7f050077;
         public static final int registrarse=0x7f050054;
         public static final int registro=0x7f050058;
         public static final int repetir_contrasena=0x7f05005a;
         public static final int security_token=0x7f05003c;
         public static final int solicitudes_de_amistad=0x7f05006f;
-        public static final int title_activity_choose_friend=0x7f050090;
+        public static final int title_activity_choose_friend=0x7f050092;
         public static final int title_activity_choose_username=0x7f050061;
         public static final int title_activity_display_message=0x7f050041;
-        public static final int title_activity_edit_profile=0x7f050083;
+        public static final int title_activity_edit_profile=0x7f050085;
         public static final int title_activity_find_friends=0x7f050068;
         public static final int title_activity_main=0x7f050060;
         public static final int title_activity_map=0x7f050074;
-        public static final int title_activity_profile=0x7f050082;
-        public static final int title_activity_search_models=0x7f050094;
+        public static final int title_activity_profile=0x7f050084;
+        public static final int title_activity_search_models=0x7f050096;
         /**  Pantalla de Amigos 
          */
         public static final int title_activity_search_users=0x7f050067;
-        public static final int title_activity_test=0x7f050092;
+        public static final int title_activity_test=0x7f050094;
         public static final int title_activity_welcome=0x7f050043;
         public static final int tu_nombre=0x7f05005b;
+        public static final int ubicacion_woop=0x7f05007b;
         public static final int verificando_usuario=0x7f050065;
-        public static final int vista_previa=0x7f05008e;
+        public static final int vista_previa=0x7f050090;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
         public static final int wallet_buy_button_place_holder=0x7f05001f;
-        public static final int woops=0x7f05007c;
+        public static final int woops=0x7f05007e;
     }
     public static final class style {
         /** 
