@@ -15,13 +15,14 @@
     <string name="broadcast_friends_list">com.woopitapp.friends_list</string>
     <string name="broadcast_profile_models_list">com.woopitapp.profile_models_list</string>
     <string name="broadcast_profile_update">com.woopitapp.profile_update</string>
+    <string name="broadcast_model_purchase">com.woopitapp.model_purchase</string>
 
     <!-- FACEBOOK ID -->
     <string name="app_id">280178418831040</string>
     <!-- Google Maps API KEY -->
     <string name="gmaps_key">AIzaSyB8nR-M0jXzZDpJCDTcsabTNmIEVXlzpDU</string>
     <!-- Feedback API KEY -->
-	<string name="feedback_key">AF-A317CF4C46AC-9F</string>
+    <string name="feedback_key">AF-A317CF4C46AC-9F</string>
 
     <!-- Terminos generales -->
     <string name="error_desconocido">Error desconocido</string>
@@ -79,9 +80,9 @@
     <string name="error_buscando_lugar">Error buscando lugar</string>
     <string name="lugar_no_encontrado">El lugar %s no fue encontrado</string>
     <string name="enviar_woop">Enviar Woop</string>
-	<string name="ubicacion_woop">Podrá ver su Woop cuando esté cerca de aquí</string>
-	<string name="mensaje_recibido_lejos">Alerta Woop!!</string>
-	 
+    <string name="ubicacion_woop">Podrá ver su Woop cuando esté cerca de aquí</string>
+    <string name="mensaje_recibido_lejos">Alerta Woop!!</string>
+
     <!-- Pantalla de perfil -->
     <string name="perfil">Perfil</string>
     <string name="woops">Woops</string>
@@ -100,7 +101,7 @@
     <!-- Pantalla de listado -->
     <string name="encuentra_mas_modelos">Encuentra mas Modelos</string>
     <string name="lista_de_modelos">Listado</string>
-    
+
     <!-- Pantalla de busqueda de modelos -->
     <string name="busqueda_modelos">Busqueda de modelos \"%s\"</string>
 
@@ -115,11 +116,11 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="descargando_modelo">Descargando modelo&#8230;</string>
     <string name="title_activity_search_models">SearchModelsActivity</string>
-	<string name="mensaje_enviado">Mensaje enviado a %s</string>
-	<string name="hint_mensaje">Escribe tu mensaje&#8230;</string>
-	
-	<!-- Feedback -->
-	<string name="feedback_texto">Hey, ¿quisieras enviar algún comentario para mejorar tu experiencia?</string>
+    <string name="mensaje_enviado">Mensaje enviado a %s</string>
+    <string name="hint_mensaje">Escribe tu mensaje&#8230;</string>
+
+    <!-- Feedback -->
+    <string name="feedback_texto">Hey, ¿quisieras enviar algún comentario para mejorar tu experiencia?</string>
     <string name="feedback_hint_pregunta">Escribe tu pregunta o duda&#8230;</string>
     <string name="feedback_titulo">Enviar comentarios</string>
     <string name="feedback_gracias">Muchas gracias!</string>
@@ -129,5 +130,12 @@
     <string name="feedback_respuesta">Mensaje de Woopit</string>
     <string name="feedback_cerrar">Cerrar</string>
     <string name="feedback_calificanos">Califícanos</string>
-	
+
+    <!-- Compras -->
+    <string name="guardando_compra">Guardando compra&#8230;</string>
+    <string name="error_compra">Error procesando compra, intentalo nuevamente</string>
+    <string name="compra_hecha">Gracias! su compra ha sido satisfactoria, ya puede enviar este modelo</string>
+    <string name="verificando_disponibilidad">Verificando disponibilidad</string>
+    <string name="title_activity_buy_model">BuyModelActivity</string>
+
 </resources>

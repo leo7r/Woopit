@@ -31,6 +31,7 @@ import com.woopitapp.services.ServerConnection;
 public class ModelPreviewActivity extends WoopitActivity {
 
 	private final int REQUEST_SEND_MESSAGE = 0;
+	private final int REQUEST_BUY_MODEL = 1;
 	GLSurfaceView glView;
 	GLClearRenderer render;
 	User user;
@@ -60,8 +61,19 @@ public class ModelPreviewActivity extends WoopitActivity {
 				finish();
 			}
 		}
+		else{
+			
+			if ( requestCode == REQUEST_BUY_MODEL && resultCode == RESULT_OK ){
+				Intent i = getIntent();
+				i.putExtra("enable", true);
+				
+				finish();
+				startActivity(i);
+			}
+			
+		}
 	}
-
+	
 	public void init( ){
 
 		Bundle extras = getIntent().getExtras();
@@ -134,7 +146,9 @@ public class ModelPreviewActivity extends WoopitActivity {
 
 					@Override
 					public void onClick(View arg0) {
-						Toast.makeText(getApplicationContext(), "NOT YET :D", Toast.LENGTH_SHORT).show();
+						Intent i = new Intent(getApplicationContext(),BuyModelActivity.class);
+						i.putExtra("modelId", modelId);
+						startActivityForResult( i , REQUEST_BUY_MODEL );
 					}
 				});
 			}

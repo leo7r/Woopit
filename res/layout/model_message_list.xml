@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#fff" >
 	
     <RelativeLayout 
         android:layout_width="match_parent"
@@ -42,16 +43,12 @@
         android:layout_marginTop="10dp"
         />
     
-    <GridView 
-		android:id="@+id/models_list"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:numColumns="2"
-		android:verticalSpacing="7dp"
-		android:horizontalSpacing="7dp"
-		android:padding="7dp"
-		android:stretchMode="columnWidth"
-		android:gravity="center"
-		/>
+    <ListView 
+        android:id="@+id/models_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+	    android:gravity="center"
+        />
     
 </LinearLayout>

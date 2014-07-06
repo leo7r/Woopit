@@ -40,6 +40,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 	
 	// Broadcast receivers
 	FriendsUpdateReceiver f_receiver;
+	ModelPurchaseReceiver m_receiver;
     
 	// Feedback
 	private FeedbackDialog feedBack;
@@ -62,12 +63,16 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         /* Recibe cambios en lista de amigos */
         f_receiver = new FriendsUpdateReceiver();
         registerReceiver(f_receiver,new IntentFilter(this.getString(R.string.broadcast_friends_list)));
+
+        /* Recibe si compraste un modelo */
+        m_receiver = new ModelPurchaseReceiver();
+        registerReceiver(m_receiver,new IntentFilter(this.getString(R.string.broadcast_model_purchase)));
         
     }
     
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString("tab", mTabHost.getCurrentTabTag());
         super.onSaveInstanceState(outState);
+        outState.putString("tab", mTabHost.getCurrentTabTag());
     }
     
     protected void onPause(){
@@ -81,6 +86,17 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	if ( f_receiver != null ){
     		unregisterReceiver(f_receiver);
     	}
+    	
+    	if ( m_receiver != null ){
+    		unregisterReceiver(m_receiver);
+    	}
+    	
+    }
+    
+    public void goTest( View v ){
+    	
+    	Intent i = new Intent(this,TestActivity.class);    	 	
+    	startActivity(i);
     }
     
     /* Tabs */
@@ -295,7 +311,20 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	}
       
     }
-        
     
+    public class ModelPurchaseReceiver extends BroadcastReceiver {
+        
+    	@Override
+    	public void onReceive(Context context, Intent intent) {
+    		
+    		ModelsFragment fragment = (ModelsFragment) mPagerAdapter.getItem(2);
+    		
+        	if ( fragment.isVisible() ){
+        		fragment.invalidateModels();
+        	}
+    	}
+      
+    }
+     
 }
 

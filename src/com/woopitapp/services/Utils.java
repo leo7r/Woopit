@@ -1,5 +1,7 @@
 package com.woopitapp.services;
 
+import java.util.Random;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -483,6 +485,21 @@ public class Utils {
 		return new FeedbackDialog(act, act.getResources().getString(R.string.feedback_key), feedbackSettings);
 	}
 
+	/* Random string for purchase security */
+	
+	public static String randomToken() {
+		
+		int len = 42;
+		Random rnd = new Random();
+		String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_+";
+		
+		StringBuilder sb = new StringBuilder( len );
+	   
+		for( int i = 0; i < len ; i++ )
+			sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+		
+		return sb.toString();
+	}
 	
 }
 

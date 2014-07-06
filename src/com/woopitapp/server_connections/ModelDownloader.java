@@ -29,18 +29,26 @@ abstract public class ModelDownloader extends AsyncTask<Void,Void,Boolean>{
     int totalSize = 0;
     ProgressDialog barProgressDialog;
     boolean canceled = false;
+    final long min_size = 2048L;
     
 	public ModelDownloader( Activity act , final int modelId ){
 		this.modelId = modelId;
 
 		File w_dir = Environment.getExternalStorageDirectory();
 		File w_modelFile = new File(w_dir, base_url+modelId+".jet");
-
 		
-		if ( w_modelFile.exists() ){
+		//Log.i("Model", w_modelFile.length()+"");
+		
+		if ( w_modelFile.exists() && w_modelFile.length() > min_size ){
+
 			canceled = true;
 		}
 		else{
+			
+			if ( w_modelFile.length() <= min_size ){
+				w_modelFile.delete();
+			}
+			
 			barProgressDialog = new ProgressDialog(act);
 		    barProgressDialog.setTitle(R.string.descargando_modelo);
 		    barProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

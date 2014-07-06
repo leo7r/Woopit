@@ -46,6 +46,7 @@ public class ModelsFragment extends Fragment {
 	boolean loadingMore;
 	LinearLayout list_loading;
 	EditText search;
+	JSONArray saved_models;
 	
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	
@@ -54,7 +55,8 @@ public class ModelsFragment extends Fragment {
         models_list = (ListView) view.findViewById(R.id.models_list);
         list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
         models_list.addFooterView(list_loading);
-                
+        saved_models = new JSONArray();
+        
         PauseOnScrollListener listener = new PauseOnScrollListener(Utils.getImageLoader(getActivity()), true, true, new OnScrollListener(){
 
 			@Override
@@ -104,59 +106,20 @@ public class ModelsFragment extends Fragment {
         return view;
     }
     
-    /*
-    public class ModelAdapter extends ArrayAdapter<Model>{
+    public void onStop(){
     	
-		ArrayList<Model> items;
-		Context context;
-		Filter filter;
-		LayoutInflater inflater;
-
-		public ModelAdapter(Context context, int textViewResourceId, ArrayList<Model> objects){
-			super(context, textViewResourceId, objects);
-			this.items = objects;
-			this.context = context;
-			inflater = (LayoutInflater)this.context.getSystemService("layout_inflater");
-		}
-		
-		public View getView(final int position, View convertView, ViewGroup parent){
-			
-			if ( convertView == null ){
-				convertView = inflater.inflate(R.layout.model_item, null);
-			}
-			
-			final Model model = getItem(position);
-
-			TextView name = (TextView) convertView.findViewById(R.id.name);
-			TextView price = (TextView) convertView.findViewById(R.id.price);
-			ImageView image = (ImageView) convertView.findViewById(R.id.image);
-			
-			name.setText(model.name);
-			price.setText(model.price);
-			image.setImageResource(R.drawable.model_image);
-			
-			convertView.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View arg0) {
-					
-					Intent i = new Intent(getActivity(),ModelPreviewActivity.class);
-					i.putExtra("modelId", model.id);
-					i.putExtra("enable", model.enable);
-					startActivity(i);
-					
-				}
-			});
-			
-			return convertView;
-		}
-		
-		public Model getItem( int position ){
-			return items.get(position);
-		}
-		
+    	super.onStop();
+    	
+    	mAdapter = null;
+    	page = 0;
     }
-    */
+    
+    public void invalidateModels(){
+
+    	mAdapter = null;
+    	page = 0;
+        new GetUserModels( getActivity() , page ).execute();
+    }
     
     public class ModelAdapter extends BucketListAdapter<Model> {
 
@@ -205,7 +168,7 @@ public class ModelsFragment extends Fragment {
         mAdapter = new ModelAdapter(getActivity(), list , 2 );
         models_list.setAdapter(mAdapter);
 	}
-
+    
     class GetUserModels extends ServerConnection{
     	
     	Context con;
@@ -243,6 +206,7 @@ public class ModelsFragment extends Fragment {
 						boolean is_enable = model.getInt("e") == 1;
 						
 						models_list.add(new Model(id,name,price,id+"",is_enable));
+						saved_models.put(model);
 					}
 					
 					if ( mAdapter != null ){
@@ -274,6 +238,5 @@ public class ModelsFragment extends Fragment {
 		}
     	
     }
-    
-    
+        
 }
