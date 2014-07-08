@@ -136,6 +136,7 @@
     <string name="error_compra">Error procesando compra, intentalo nuevamente</string>
     <string name="compra_hecha">Gracias! su compra ha sido satisfactoria, ya puede enviar este modelo</string>
     <string name="verificando_disponibilidad">Verificando disponibilidad</string>
+    <string name="error_disponibilidad_modelo">Error, este modelo no se encuentra en venta</string>
     <string name="title_activity_buy_model">BuyModelActivity</string>
 
 </resources>

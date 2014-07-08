@@ -99,21 +99,14 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 			
 			@Override
 			public void onClick(View view) {
-				
-				// Se tiene que mostrar esta barra de progreso si no se resuelve el fallo de conexi�n.
-				
+								
 			    if (!mPlusClient.isConnected()) {
 			        if (mConnectionResult == null) {
 			            //mConnectionProgressDialog.show();
 			            mPlusClient.connect();
 			        } else {
-			            try {
-			                mConnectionResult.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
-			            } catch (SendIntentException e) {
-			                // Intenta la conexi�n de nuevo.
-			                mConnectionResult = null;
-			                mPlusClient.connect();
-			            }
+		                mConnectionResult = null;
+		                mPlusClient.connect();
 			        }
 			    }
 			}
@@ -288,7 +281,7 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 	public void onDisconnected() {
 		Log.i(TAG, "Desconectado");
 	}
-
+	
 	/* Encontrar amigos en Woopit */
 	public class FindFriends extends ServerConnection{
 
@@ -315,7 +308,7 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 		public void onComplete(String result) {
 			
 			dialog.dismiss();
-						
+				
 			if ( result != null && result.length() > 0 ){
 				Log.d(TAG,result);
 				

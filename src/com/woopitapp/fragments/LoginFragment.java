@@ -83,20 +83,14 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 			@Override
 			public void onClick(View view) {
 				
-				// Se tiene que mostrar esta barra de progreso si no se resuelve el fallo de conexi�n.
-				
 			    if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 			        if (mConnectionResult == null) {
 			            //mConnectionProgressDialog.show();
 			            mPlusClient.connect();
 			        } else {
-			            try {
-			                mConnectionResult.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
-			            } catch (SendIntentException e) {
-			                // Intenta la conexi�n de nuevo.
-			                mConnectionResult = null;
-			                mPlusClient.connect();
-			            }
+			            mConnectionResult = null;
+						mPlusClient.connect();
+						//mConnectionResult.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
 			        }
 			    }
 			}

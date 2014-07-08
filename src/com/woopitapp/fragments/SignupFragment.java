@@ -91,13 +91,8 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 			            //mConnectionProgressDialog.show();
 			            mPlusClient.connect();
 			        } else {
-			            try {
-			                mConnectionResult.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
-			            } catch (SendIntentException e) {
-			                // Intenta la conexi�n de nuevo.
-			                mConnectionResult = null;
-			                mPlusClient.connect();
-			            }
+		                mConnectionResult = null;
+		                mPlusClient.connect();
 			        }
 			    }
 			}

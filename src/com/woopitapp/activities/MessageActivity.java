@@ -17,6 +17,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
 import org.lwjgl.opengl.GL11;
 
 import com.woopitapp.R;
@@ -65,6 +66,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -87,12 +89,13 @@ public class MessageActivity extends Activity {
 	GLSurfaceView glView;
 	CameraView cameraView;
 	float x = 0.0f;
-	TextView direccion;
+	TextView messageText;
 	float c = 0.1f;
 	double angulo = 0;
 	float distanciaZ = -10.0f;
 	String latitud = "";
 	String longitud = "";
+	String text;
 	String acelerometro = "X";
 	private FloatBuffer mTextureBuffer;
 	static final float ALPHA = 0.1f;
@@ -121,6 +124,17 @@ public class MessageActivity extends Activity {
         latitud = extras.getString("latitud");
         longitud = extras.getString("longitud");
         modelo = extras.getInt("modelo");
+        text = extras.getString("text");
+
+		messageText = new TextView(this);
+		messageText.setTextColor(Color.WHITE);
+		messageText.setShadowLayer(2, 0, 0, Color.BLACK);
+		messageText.setText(text);
+		messageText.setGravity(Gravity.CENTER);
+		messageText.setBackgroundColor(Color.RED);
+		LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		messageText.setLayoutParams(lp);
+        
         Log.e("latitud","lat " + latitud);
         new MDownloader(this,modelo).execute();
 		//crearCamara();
@@ -579,12 +593,7 @@ public class MessageActivity extends Activity {
     			//requestWindowFeature( Window.FEATURE_NO_TITLE );
     			//getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
     			//WindowManager.LayoutParams.FLAG_FULLSCREEN );
-    			
-    			direccion = new TextView(this);
-    			direccion.setTextColor(Color.RED);
-    			
-    			
-    			
+    			    			
     			cv = new CustomCameraView(this);
     			//setContentView(rl);
     			//rl.addView(cv);
@@ -597,11 +606,13 @@ public class MessageActivity extends Activity {
     			glView.setRenderer(render);
     			glView.setZOrderOnTop(true);
     			corazon =  new Objeto(modelo+".jet",getApplicationContext());
-    			 if(Double.parseDouble(latitud) == 500.0){
-    	    			addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
-    	    			addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
-    	    			addContentView(direccion,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
-    			 }
+    			
+    			if(Double.parseDouble(latitud) == 500.0){
+    				addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    				addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
+    				addContentView(messageText,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    			}
+    			
     		}
     		catch(Exception e){
     			e.printStackTrace();
@@ -752,7 +763,7 @@ public class MessageActivity extends Activity {
 	 			 if(distancia*1000 <50){
 		    			addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
 		    			addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
-		    			addContentView(direccion,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+		    			addContentView(messageText,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
 				 }else{
 					 
 					 Intent iResult = new Intent();
