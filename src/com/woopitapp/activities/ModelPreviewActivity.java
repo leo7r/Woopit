@@ -176,7 +176,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 			public void onDrawFrame( GL10 gl ) {
 				
 	            gl.glLoadIdentity();	                  
-				gl.glClearColor( 1.0f,1.0f,1.0f, 0.0f );
+				gl.glClearColor(0.039f,0.0f,0.16f, 0.0f );
 		        gl.glClearDepthf(1.0f);
 		        //gl.glDepthMask(true);
 		        gl.glEnable(GL10.GL_DEPTH_TEST);
