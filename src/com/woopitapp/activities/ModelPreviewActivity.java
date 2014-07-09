@@ -102,6 +102,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 				public void onClick(View v) {
 					Intent lookOnMapi =  new  Intent(getApplicationContext(),MapActivity.class);
 					lookOnMapi.putExtra("userId", userId);
+					lookOnMapi.putExtra("modelId", modelId);
 					lookOnMapi.putExtra("userName", userName);
 					lookOnMapi.putExtra("modelId", modelId);
 					lookOnMapi.putExtra("message", text.getText().toString());
