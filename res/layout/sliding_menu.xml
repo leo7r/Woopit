@@ -8,73 +8,49 @@
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:clickable="true"
         android:onClick="goMyProfile"
-        android:background="#212531"
-        android:padding="7dp"
+        android:background="#fafafa"
+		android:paddingTop="10dp"
+		android:paddingBottom="10dp"
+		android:gravity="center"
         >
         
         <ImageView 
 			android:id="@+id/image"
-			android:layout_width="50dp"
-			android:layout_height="50dp"
-			style="@style/profile_image_white"
-			android:layout_gravity="center"
+			android:layout_width="70dp"
+			android:layout_height="70dp"
+			style="@style/profile_image"
 			/>
         
-        <LinearLayout 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:gravity="center_vertical"
-            >
-            
-            <TextView 
-				android:id="@+id/name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="@dimen/normal_text"
-				android:textColor="#fff"
-				android:textStyle="bold"
-				android:singleLine="true"
-				android:ellipsize="end"
-				android:text="Hola hola hola hola hola hola hola hola"
-				/>
-			
-			<TextView 
-				android:id="@+id/username"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="@dimen/normal_text"
-				android:textColor="@color/woopit_green"
-				android:singleLine="true"
-				android:ellipsize="end"
-				android:text="Hola hola hola hola hola hola hola hola"
-				/>
-            
-        </LinearLayout>
+		<TextView 
+			android:id="@+id/name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/normal_text"
+			android:textStyle="bold"
+			android:singleLine="true"
+			android:ellipsize="end"
+			/>
+		
+		<TextView 
+			android:id="@+id/username"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/normal_text"
+			android:textColor="@color/woopit_green"
+			android:singleLine="true"
+			android:ellipsize="end"
+			/>
 	        
     </LinearLayout>
     
-    <EditText 
-        android:id="@+id/search_users"
+    <View 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/buscar_usuarios"
-        android:background="#f4f4f8"
-        android:padding="14dp"
-        android:drawableRight="@drawable/search"
-        android:imeOptions="actionSearch"
-		android:singleLine="true"
+        android:layout_height="1dp"
+        android:background="#f8f8f6"
         />
-    
-	<View 
-	    android:layout_width="match_parent"
-	    android:layout_height="1dp"
-	    android:background="#eaeaef"
-	    />
     
     <ScrollView 
         android:layout_width="match_parent"
@@ -85,7 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="5dp"
             >
             
             <TextView 

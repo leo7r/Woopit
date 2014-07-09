@@ -17,18 +17,49 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
         />
-
     
     <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView  
 		android:id="@+id/friend_list"
 		android:scrollbarThumbVertical="@drawable/scroll_bar"
 		android:scrollbarSize="2dp"
 		android:layout_height="wrap_content"
-		android:layout_width="fill_parent"
+		android:layout_width="match_parent"
 		android:fadingEdgeLength="0dip"
 		android:background="@null"
 		android:divider="@null" 
 	   	android:cacheColorHint="#00000000"
 		/>
+    
+    <LinearLayout 
+        android:id="@+id/welcome_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/dashed_border_bg"
+        android:padding="15dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        >
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bienvenida_amigos"
+            android:gravity="center"
+            />
+        
+        <Button 
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            style="@style/big_button"
+            android:textSize="@dimen/normal_text"
+            android:text="@string/encontrar_amigos"
+            android:layout_marginTop="15dp"
+            android:onClick="goFindFriends"
+            />
+        
+    </LinearLayout>
     
 </LinearLayout>

@@ -267,34 +267,12 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         TextView name = (TextView ) menu.findViewById(R.id.name);
         TextView username = (TextView ) menu.findViewById(R.id.username);
         ImageView image = (ImageView ) menu.findViewById(R.id.image);
-        final EditText search_users = (EditText) menu.findViewById(R.id.search_users);
-        
-        search_users.setOnEditorActionListener(new OnEditorActionListener(){
-
-			@Override
-			public boolean onEditorAction(TextView tv, int actionId, KeyEvent key) {
-				
-				if ( actionId == EditorInfo.IME_ACTION_SEARCH ){
-					searchUsers(search_users.getText().toString());
-					return true;
-				}
-				
-				return false;
-			}
-		});
         
         name.setText(u.name);
         username.setText("@"+u.username);
         Utils.setUserImage(getApplicationContext(), image, u.id);
     }
     
-    public void searchUsers( String query ){
-    	
-		Intent i = new Intent(this,SearchUsers.class);
-		i.putExtra("query", query);		
-		startActivity(i);
-    }
- 
     public void toggleSlidingMenu( View v ){
     	
     	if ( menu.isMenuShowing() ){

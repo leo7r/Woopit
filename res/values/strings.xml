@@ -34,6 +34,8 @@
     <string name="busqueda">Busqueda</string>
     <string name="no">No</string>
     <string name="enviar">Enviar</string>
+    <string name="peticion_nuevo_modelo">Petición para crear modelo</string>
+    <string name="enviar_email">Enviar email</string>
 
     <!-- Pantalla de Bienvenida, login y registro -->
     <string name="iniciar_sesion">Iniciar Sesión</string>
@@ -134,9 +136,30 @@
     <!-- Compras -->
     <string name="guardando_compra">Guardando compra&#8230;</string>
     <string name="error_compra">Error procesando compra, intentalo nuevamente</string>
+    <string name="error_compra_reintentando">Error procesando compra, intentando de nuevo&#8230;</string>
+    <string name="conectando_con_servidor">Contactando servidor&#8230;</string>
+    <string name="para_completar_compra">Para completar su compra</string>
     <string name="compra_hecha">Gracias! su compra ha sido satisfactoria, ya puede enviar este modelo</string>
     <string name="verificando_disponibilidad">Verificando disponibilidad</string>
     <string name="error_disponibilidad_modelo">Error, este modelo no se encuentra en venta</string>
     <string name="title_activity_buy_model">BuyModelActivity</string>
+    
+    <!-- Mensajes de bienvenida -->
+    <string name="bienvenida_mensajes"><b>Oh mira, un nuevo mensaje!</b>\n\nTócalo y descubre lo que hay dentro</string>
+    <string name="bienvenida_amigos"><b>Aquí van tus amigos!</b>\nBusca algunos para que empiece la diversión.</string>
+    <string name="bienvenida_modelos"><b>No has creado ningún modelo todavía</b>\n\nSi quieres poder crear tus modelos y venderlos</string>
+    <string name="contactanos">Contáctanos</string>
+    
+    <!-- Tiempo -->
+    <string name="just_now">Justo ahora</string>
+    <string name="time_ago">Hace %s</string>
+    <string name="yesterday">Ayer</string>
+    <string name="minute">Un minuto</string>
+    <string name="minutes">%d minutos</string>
+    <string name="hour">Una hora</string>
+    <string name="hours">%d horas</string>
+    <string name="day">Un día</string>
+    <string name="days">%d días</string>
+    <string name="weeks">Semanas</string>
 
 </resources>

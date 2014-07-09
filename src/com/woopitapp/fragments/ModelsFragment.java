@@ -115,7 +115,7 @@ public class ModelsFragment extends Fragment {
     }
     
     public void invalidateModels(){
-
+    	
     	mAdapter = null;
     	page = 0;
         new GetUserModels( getActivity() , page ).execute();

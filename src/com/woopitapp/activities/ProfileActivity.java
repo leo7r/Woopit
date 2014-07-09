@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,6 +134,17 @@ public class ProfileActivity extends WoopitActivity {
 		startActivity(i);
 	}
 	
+	public void goContactNewModel( View v ){
+				
+		Intent send = new Intent(Intent.ACTION_SENDTO);
+		String uriText = "mailto:" + Uri.encode("brattrinc@gmail.com") + 
+		          "?subject=" + Uri.encode(getResources().getString(R.string.peticion_nuevo_modelo));
+		Uri uri = Uri.parse(uriText);
+		
+		send.setData(uri);
+		startActivity(Intent.createChooser(send, getResources().getString(R.string.enviar_email)));
+	}
+	
     public class ModelAdapter extends ArrayAdapter<Model>{
     	
 		ArrayList<Model> items;
@@ -199,7 +212,7 @@ public class ProfileActivity extends WoopitActivity {
 
 		@Override
 		public void onComplete(String result) {
-			
+						
 			if ( result != null && result.length() > 0 ){
 				
 				Log.i("Models", result);
@@ -229,6 +242,10 @@ public class ProfileActivity extends WoopitActivity {
 					
 					if ( is_my_profile ){
 						models_list = data.getModels();
+						
+						if ( models_list.size() == 0 ){
+							((LinearLayout)findViewById(R.id.welcome_models)).setVisibility(View.VISIBLE);
+						}
 					}
 
 					setModelList(models_list);

@@ -1,9 +1,39 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="#000"
+    android:background="#fff"
     >
+    
+    
+    <LinearLayout 
+        android:id="@+id/camera_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        />
+    
+   	<LinearLayout 
+        android:id="@+id/model_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        />
+   	
+   	<TextView 
+   	    android:id="@+id/text"
+   	    android:layout_width="match_parent"
+   	    android:layout_height="wrap_content"
+   	    android:background="#4000"
+   	    android:textColor="#fff"
+   	    android:singleLine="true"
+   	    android:ellipsize="end"
+   	    android:layout_alignParentBottom="true"
+   	    android:layout_marginBottom="40dp"
+   	    android:textSize="@dimen/normal_text"
+   	    android:padding="5dp"
+   	    android:gravity="center"
+   	    />
                                                                                                   
-</LinearLayout>
+</RelativeLayout>

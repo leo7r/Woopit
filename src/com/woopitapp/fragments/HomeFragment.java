@@ -34,6 +34,7 @@ import com.woopitapp.activities.MessageActivity;
 import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class HomeFragment extends Fragment {
 	
@@ -79,13 +80,17 @@ public class HomeFragment extends Fragment {
 
 		@Override
 		public void onComplete(String result) {
-			
 
+			if ( loader != null ){
+				loader.setVisibility(View.GONE);
+			}
+
+			messages_list = new ArrayList<Object>();
+			
 			if ( result != null && result.length() > 0 ){
-				
+
 				try {
 					JSONArray messages = new JSONArray(result);
-					messages_list = new ArrayList<Object>();
 					
 					for ( int i = 0 ; i < messages.length() ; ++i ){
 						
@@ -99,30 +104,27 @@ public class HomeFragment extends Fragment {
 						double latitud = Double.parseDouble(message.getString("la"));
 						double longitud = Double.parseDouble(message.getString("lo"));
 						String name = message.getString("n");
-						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-						Date date = null;
-						try {
-							date = formatter.parse(message.getString("d"));
-
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
+						long timestamp = message.getLong("d");
+						Date date = new Date(timestamp);
 						
 						int status = message.getInt("e");
 						
 						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name);
 						
 						messages_list.add(m);
-						if ( loader != null ){
-							loader.setVisibility(View.GONE);
-						}
 						
 					}
 					
 				}catch(Exception e){
 					e.printStackTrace();
 				}
+			}
+			
+			if ( messages_list.size() == 0 ){
+				Date date = new Date();
+				Message m = new Message(0,1,User.get(con).id,1,"","Bienvenido a Woopit :D",date,500,500,0,"Woopit");
+				messages_list.add(m);
+				((TextView) getView().findViewById(R.id.welcome_message)).setVisibility(View.VISIBLE);
 			}
 			
 		    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
@@ -260,14 +262,9 @@ public class HomeFragment extends Fragment {
  			TextView fecha = (TextView) convertView.findViewById(R.id.date);
  			final ImageView confirm_friend = (ImageView) convertView.findViewById(R.id.status);
  			confirm_friend.setVisibility(View.VISIBLE);
-
- 			DateFormat pstFormat = new SimpleDateFormat("HH:mm  MM/dd/yyyy");
- 			pstFormat.setTimeZone(TimeZone.getDefault());
- 			String fechaVal = pstFormat.format(item.date);
- 			
- 			
+ 			 			
  			name.setText(item.name);
- 			fecha.setText(fechaVal);
+ 			fecha.setText(Utils.getTimeAgo(item.date.getTime()/1000, context));
  			confirm_friend.setVisibility(View.GONE);
 
  			return convertView;
