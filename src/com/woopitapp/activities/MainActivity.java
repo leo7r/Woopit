@@ -11,22 +11,28 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.suredigit.inappfeedback.FeedbackDialog;
 import com.woopitapp.R;
 import com.woopitapp.WoopitFragmentActivity;
+import com.woopitapp.activities.ProfileActivity.ProfileChangeReceiver;
 import com.woopitapp.entities.User;
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
 import com.woopitapp.fragments.ModelsFragment;
+import com.woopitapp.services.Data;
 import com.woopitapp.services.TabPager;
 import com.woopitapp.services.Utils;
 
@@ -41,6 +47,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 	// Broadcast receivers
 	FriendsUpdateReceiver f_receiver;
 	ModelPurchaseReceiver m_receiver;
+	ProfileChangeReceiver p_receiver;
     
 	// Feedback
 	private FeedbackDialog feedBack;
@@ -68,6 +75,10 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         m_receiver = new ModelPurchaseReceiver();
         registerReceiver(m_receiver,new IntentFilter(this.getString(R.string.broadcast_model_purchase)));
         
+        /* Recibe cambios en lista de amigos */
+		p_receiver = new ProfileChangeReceiver();
+        registerReceiver(p_receiver,new IntentFilter(this.getString(R.string.broadcast_profile_update)));
+        
     }
     
     protected void onSaveInstanceState(Bundle outState) {
@@ -89,6 +100,10 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	
     	if ( m_receiver != null ){
     		unregisterReceiver(m_receiver);
+    	}
+    	
+    	if ( p_receiver != null ){
+    		unregisterReceiver(p_receiver);
     	}
     	
     }
@@ -240,8 +255,8 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         menu = new SlidingMenu(this);
         menu.setMode(SlidingMenu.LEFT);
         menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-        //menu.setShadowWidth(Utils.dpToPx(30, getApplicationContext()));
-        //menu.setShadowDrawable(R.drawable.menu_shadow);
+        menu.setShadowWidth(Utils.dpToPx(10, getApplicationContext()));
+        menu.setShadowDrawable(R.drawable.menu_shadow);
         menu.setBehindWidth(Utils.dpToPx(250, getApplicationContext()));
         menu.setFadeDegree(0.35f);
         menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
@@ -252,10 +267,32 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         TextView name = (TextView ) menu.findViewById(R.id.name);
         TextView username = (TextView ) menu.findViewById(R.id.username);
         ImageView image = (ImageView ) menu.findViewById(R.id.image);
+        final EditText search_users = (EditText) menu.findViewById(R.id.search_users);
+        
+        search_users.setOnEditorActionListener(new OnEditorActionListener(){
+
+			@Override
+			public boolean onEditorAction(TextView tv, int actionId, KeyEvent key) {
+				
+				if ( actionId == EditorInfo.IME_ACTION_SEARCH ){
+					searchUsers(search_users.getText().toString());
+					return true;
+				}
+				
+				return false;
+			}
+		});
         
         name.setText(u.name);
         username.setText("@"+u.username);
         Utils.setUserImage(getApplicationContext(), image, u.id);
+    }
+    
+    public void searchUsers( String query ){
+    	
+		Intent i = new Intent(this,SearchUsers.class);
+		i.putExtra("query", query);		
+		startActivity(i);
     }
  
     public void toggleSlidingMenu( View v ){
@@ -325,6 +362,23 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	}
       
     }
-     
+    
+    public class ProfileChangeReceiver extends BroadcastReceiver {
+        
+    	@Override
+    	public void onReceive(Context context, Intent intent) {
+    		
+    		User u = User.get(context);
+            
+            TextView name = (TextView ) menu.findViewById(R.id.name);
+            TextView username = (TextView ) menu.findViewById(R.id.username);
+            ImageView image = (ImageView ) menu.findViewById(R.id.image);
+            
+            name.setText(u.name);
+            username.setText("@"+u.username);
+            Utils.setUserImage(getApplicationContext(), image, u.id);
+    	}
+      
+    }
 }
 

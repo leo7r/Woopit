@@ -59,6 +59,10 @@
         <item name="android:scaleType">centerCrop</item>
     </style>
     
+    <style name="profile_image_white" parent="profile_image">
+        <item name="android:background">@drawable/profile_image_bg_white</item>
+    </style>
+    
     <style name="user_image">
         <item name="android:background">@drawable/user_bg</item>
         <item name="android:padding">3dp</item>
@@ -84,6 +88,13 @@
         <item name="android:paddingRight">10dp</item>
         <item name="android:clickable">true</item>
         <item name="android:onClick">goFindFriends</item>
+    </style>
+    
+    <style name="progress_bar">
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateDrawable">@drawable/loader</item>
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:indeterminateDuration">1000</item>
     </style>
     
 </resources>

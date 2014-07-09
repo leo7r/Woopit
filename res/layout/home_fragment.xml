@@ -4,6 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <ProgressBar 
+        android:id="@+id/loader"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        style="@style/progress_bar"
+        android:layout_margin="15dp"
+        />
+    
        <ListView 
 		android:id="@+id/messages_list"
 		android:layout_width="match_parent"

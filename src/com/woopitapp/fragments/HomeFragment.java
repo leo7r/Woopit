@@ -9,13 +9,11 @@ import java.util.TimeZone;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +24,7 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -53,47 +52,35 @@ public class HomeFragment extends Fragment {
         message_list = (ListView) view.findViewById(R.id.messages_list);
         search_message = (EditText) view.findViewById(R.id.search_users);
         
-        /*search_message.setOnEditorActionListener(new OnEditorActionListener(){
-
-			@Override
-			public boolean onEditorAction(TextView tv, int actionId, KeyEvent key) {
-				
-				if ( actionId == EditorInfo.IME_ACTION_SEARCH ){
-					//searchMessages(friend_message.getText().toString());
-					return true;
-				}
-				
-				return false;
-			}
-		});
-        */
-      
-
-      /*  Button boton = (Button) view.findViewById(R.id.boton_prueba);
-        boton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				
-				Intent i = new Intent(getActivity(),TestActivity.class);
-				startActivity(i);				
-			}
-		});*/
-        new get_messages(this.getActivity().getApplicationContext(),User.get(this.getActivity().getApplicationContext()).id).execute();
         return view;
     }
     
+    public void onStart(){
+    	super.onStart();
+
+        new get_messages(this.getActivity().getApplicationContext(),User.get(this.getActivity().getApplicationContext()).id).execute();
+    }
+    
     public class get_messages extends ServerConnection{
+    	
     	Context con;
     	int user_id;
+    	ProgressBar loader;
+    	
     	public get_messages(Context con, int user_id){
     		this.con = con;
     		this.user_id = user_id;
+
+    		if ( getView() != null ){
+    			loader = (ProgressBar) getView().findViewById(R.id.loader);
+    		}
     		init(con,"get_messages",new Object[]{ ""+user_id });
     	}
 
 		@Override
 		public void onComplete(String result) {
+			
+
 			if ( result != null && result.length() > 0 ){
 				
 				try {
@@ -127,6 +114,10 @@ public class HomeFragment extends Fragment {
 						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name);
 						
 						messages_list.add(m);
+						if ( loader != null ){
+							loader.setVisibility(View.GONE);
+						}
+						
 					}
 					
 				}catch(Exception e){
@@ -156,14 +147,17 @@ public class HomeFragment extends Fragment {
 	   
 	 }
     
-    public void verMensaje(int messageId,int modelo, double latitud, double longitud, int status){
-	    if(status == 0){
-		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), messageId).execute();
+    public void verMensaje( Message message ){
+    	
+	    if( message.status == 0){
+		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), message.id).execute();
 		}
 		Intent newMessagei =  new  Intent(getActivity(),MessageActivity.class);
-		newMessagei.putExtra("latitud", latitud+"");
-		newMessagei.putExtra("longitud",longitud+"");
-		newMessagei.putExtra("modelo",modelo);			
+		newMessagei.putExtra("latitud", message.latitud+"");
+		newMessagei.putExtra("longitud",message.longitud+"");
+		newMessagei.putExtra("modelo",message.model);
+		newMessagei.putExtra("text", message.text);
+		
 		startActivityForResult(newMessagei,REQUEST_MESSAGE);
 	}
     
@@ -245,7 +239,7 @@ public class HomeFragment extends Fragment {
 
 					@Override
 					public void onClick(View v) {
-						verMensaje(item.id,item.model,item.latitud,item.longitud,item.status);
+						verMensaje(item);
 					}
 				});
 

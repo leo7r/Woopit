@@ -192,10 +192,10 @@ public class EditProfileActivity extends WoopitActivity {
 				if (imageFile.exists()) {
 				    imageFile.delete();
 				}
-
+				
 		        Utils.setUserImage(getApplicationContext(), image, user.id);
-				
-				
+				Utils.sendBroadcast(con, R.string.broadcast_profile_update);
+								
 				Log.i("Image", result);
 			}
 			else{

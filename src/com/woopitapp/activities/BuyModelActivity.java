@@ -121,7 +121,7 @@ public class BuyModelActivity extends Activity {
 			mService = IInAppBillingService.Stub.asInterface(service);
 			Log.i(TAG,"Connected");
 			
-			new VerifyItemNotOwned( act ).execute();
+			new VerifyItemDisponibility().execute();
 		}
 	};
 	
@@ -134,7 +134,7 @@ public class BuyModelActivity extends Activity {
 			
 			ArrayList<String> skuList = new ArrayList<String> ();
 			
-			skuList.add(getPackageName()+"."+id_model);
+			skuList.add("5_corazon");
 			
 			Bundle querySkus = new Bundle();
 			querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
@@ -162,10 +162,11 @@ public class BuyModelActivity extends Activity {
 				   ArrayList<String> responseList = skuDetails.getStringArrayList("DETAILS_LIST");
 				   
 				   if ( responseList.size() == 0 ){
-					   Log.i(TAG, "No items :(");
+					   Toast.makeText(getApplicationContext(), R.string.error_disponibilidad_modelo, Toast.LENGTH_SHORT).show();
+					   finish();
 				   }
 				   else{
-					   
+						new VerifyItemNotOwned( act ).execute();
 				   }
 				   
 				}
@@ -224,11 +225,11 @@ public class BuyModelActivity extends Activity {
 				
 				security_token = Utils.randomToken();
 				
-				Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), "android.test.purchased", "inapp", security_token);
+				Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), "5_corazon", "inapp", security_token);
 				int response_code = buyIntentBundle.getInt("RESPONSE_CODE");
 				
 				if ( response_code == 0  ){
-
+					
 					PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
 					
 					startIntentSenderForResult(pendingIntent.getIntentSender(), BUY_REQUEST_CODE , new Intent(), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0) );
