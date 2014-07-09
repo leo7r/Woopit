@@ -437,15 +437,16 @@ public class MessageActivity extends Activity {
             	gl.glRotatef(rotationX, 0,1, 0);
         	    gl.glRotatef(rotationY,1 ,0, 0);
             }
-	   //     gl.glRotatef(rotationX, 0,1, 0);
-	    //    gl.glRotatef(rotationY,1 ,0, 0);
             
-	        gl.glTranslatef(0.0f, -1.5f, desplazamientoZ);
+            //gl.glRotatef(rotationX, 0,1, 0);
+            //gl.glRotatef(rotationY,1 ,0, 0);
+            
+	        gl.glTranslatef(0.0f, -1.5f, -10.0f);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
-	   //     corazon.draw(gl);
-	       
-	        	//Log.e("PASO", "Modeloooo");
-	        	corazon.draw(gl);
+	        //corazon.draw(gl);
+	        
+        	//Log.e("PASO", "Modeloooo");
+        	corazon.draw(gl);
 	        
             mCubeRotation -= 0.70f;
             gl.glPopMatrix();   
