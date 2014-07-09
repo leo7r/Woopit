@@ -74,17 +74,13 @@ public class HomeFragment extends Fragment {
     		if ( getView() != null ){
     			loader = (ProgressBar) getView().findViewById(R.id.loader);
     		}
-    		
     		init(con,"get_messages",new Object[]{ ""+user_id });
     	}
 
 		@Override
 		public void onComplete(String result) {
 			
-			if ( loader != null ){
-				loader.setVisibility(View.GONE);
-			}
-			
+
 			if ( result != null && result.length() > 0 ){
 				
 				try {
@@ -118,6 +114,10 @@ public class HomeFragment extends Fragment {
 						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name);
 						
 						messages_list.add(m);
+						if ( loader != null ){
+							loader.setVisibility(View.GONE);
+						}
+						
 					}
 					
 				}catch(Exception e){

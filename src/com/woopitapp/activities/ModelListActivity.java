@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class ModelListActivity extends WoopitActivity {
 	ArrayList<Model> models_list;
 	EditText search_model;
 	Activity act;
+	
 	
 	// Broadcast receivers
 	ModelPurchaseReceiver m_receiver;
@@ -200,25 +202,24 @@ public class ModelListActivity extends WoopitActivity {
 		startActivityForResult(i, REQUEST_SEND_MESSAGE);
 	}
 	
-	class GetUserModels extends ServerConnection{
+	public class GetUserModels extends ServerConnection{
     	
     	Context con;
     	int user_id;
     	int page;
-    	
+    	ProgressBar loader;
     	public GetUserModels( Context con , int page ){
     		super();
-    		
     		this.con = con;
     		this.user_id = User.get(con).id;
     		this.page = page;
-    		
+    		loader = (ProgressBar) findViewById(R.id.loaderModel);		
     		init(con,"get_user_models",new Object[]{ User.get(con).id+"" , page });
     	}
     	
 		@Override
 		public void onComplete(String result) {
-			
+			loader.setVisibility(View.GONE);
 			if ( result != null && result.length() > 0 ){
 				
 				Log.i("Models", result);
@@ -255,6 +256,7 @@ public class ModelListActivity extends WoopitActivity {
 						loadingMore = true;
 						list_loading.setVisibility(View.GONE);
 					}
+					
 					
 				} catch (JSONException e) {	
 					e.printStackTrace();

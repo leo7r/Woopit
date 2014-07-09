@@ -760,7 +760,7 @@ public class MessageActivity extends Activity {
  			if(render != null && Double.parseDouble(latitud) < 500.0){
  				render.transladarMundo(((float) (distancia+0.190)*-100.0f));
  			}
- 			if(!sensorDistancia && render != null &&  Double.parseDouble(latitud) < 500.0){
+ 			if(!sensorDistancia && render != null &&  Double.parseDouble(latitud) <  500.0){
 	 			 if(distancia*1000 <50){
 		    			addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
 		    			addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );

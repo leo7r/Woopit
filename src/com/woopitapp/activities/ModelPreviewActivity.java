@@ -104,6 +104,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 					lookOnMapi.putExtra("userId", userId);
 					lookOnMapi.putExtra("modelId", modelId);
 					lookOnMapi.putExtra("userName", userName);
+					lookOnMapi.putExtra("modelId", modelId);
 					lookOnMapi.putExtra("message", text.getText().toString());
 					
 					startActivityForResult(lookOnMapi,REQUEST_SEND_MESSAGE);
@@ -175,7 +176,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 			public void onDrawFrame( GL10 gl ) {
 				
 	            gl.glLoadIdentity();	                  
-				gl.glClearColor( 0.1f,0.1f,0.1f, 0.1f );
+				gl.glClearColor( 1.0f,1.0f,1.0f, 0.0f );
 		        gl.glClearDepthf(1.0f);
 		        //gl.glDepthMask(true);
 		        gl.glEnable(GL10.GL_DEPTH_TEST);
@@ -249,8 +250,8 @@ public class ModelPreviewActivity extends WoopitActivity {
 	
 	public void iniciarPreview(){
 		glView = new GLSurfaceView( this );
-		glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
-		glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
+		//glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
+		glView.getHolder().setFormat( PixelFormat.OPAQUE );
 		render = new GLClearRenderer();
 		glView.setRenderer(render);
 	}
