@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
 
 		@Override
 		public void onComplete(String result) {
-
+			
 			if ( loader != null ){
 				loader.setVisibility(View.GONE);
 			}
