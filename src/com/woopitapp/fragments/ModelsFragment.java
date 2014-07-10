@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -80,7 +81,7 @@ public class ModelsFragment extends Fragment {
         
         models_list.setOnScrollListener(listener);
         
-        new GetUserModels( getActivity() , page ).execute();
+       
         
         search = (EditText) view.findViewById(R.id.search_models);
         search.setOnEditorActionListener(new OnEditorActionListener(){
@@ -104,6 +105,13 @@ public class ModelsFragment extends Fragment {
 		});
         
         return view;
+    }
+    
+    public void onStart(){
+    	
+    	super.onStart();
+    	new GetUserModels( getActivity() , page ).execute();
+    	 
     }
     
     public void onStop(){
@@ -174,6 +182,7 @@ public class ModelsFragment extends Fragment {
     	Context con;
     	int user_id;
     	int page;
+    	ProgressBar loader;
     	
     	public GetUserModels( Context con , int page ){
     		super();
@@ -181,12 +190,14 @@ public class ModelsFragment extends Fragment {
     		this.con = con;
     		this.user_id = User.get(con).id;
     		this.page = page;
-    		
+    		loader = (ProgressBar) getActivity().findViewById(R.id.loaderModel);	
     		init(con,"get_user_models",new Object[]{ user_id+"" , page });
     	}
     	
 		@Override
 		public void onComplete(String result) {
+		
+			loader.setVisibility(View.GONE);
 			
 			if ( result != null && result.length() > 0 ){
 				

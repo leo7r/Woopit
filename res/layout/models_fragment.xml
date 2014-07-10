@@ -18,7 +18,14 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
         />
-	
+	 <ProgressBar 
+        android:id="@+id/loaderModel"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        style="@style/progress_bar"
+        android:layout_margin="15dp"
+        />
 	<ListView 
         android:id="@+id/models_list"
         android:layout_width="match_parent"
