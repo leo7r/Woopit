@@ -6,17 +6,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,6 +40,7 @@ public class BuyModelActivity extends Activity {
 	private String security_token;
 	private int id_model;
 	Activity act;
+	private final int error_notification_id = 77;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +84,7 @@ public class BuyModelActivity extends Activity {
 						 String product_id = jsonData.getString("productId");
 						
 						//new ConsumeModel().execute();
-						new SavePurchase(this,id_model,purchase_token,order_id,purchase_time,product_id).execute();
+						new SavePurchase(this,id_model,purchase_token,order_id,purchase_time,product_id,true).execute();
 					}
 					else{
 						Log.e(TAG, "Error, fallaron los token");
@@ -225,7 +232,7 @@ public class BuyModelActivity extends Activity {
 				
 				security_token = Utils.randomToken();
 				
-				Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), "5_corazon", "inapp", security_token);
+				Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), "android.test.purchased", "inapp", security_token);
 				int response_code = buyIntentBundle.getInt("RESPONSE_CODE");
 				
 				if ( response_code == 0  ){
@@ -301,8 +308,10 @@ public class BuyModelActivity extends Activity {
 		String purchase_token, order_id, product_id;
 		long purchase_time;
 		ProgressDialog dialog;
+		int count = 10;
+		SavePurchase sp;
     	
-    	public SavePurchase( Activity act , int id_model , String purchase_token , String order_id , long purchase_time , String product_id ){
+    	public SavePurchase( Activity act , int id_model , String purchase_token , String order_id , long purchase_time , String product_id , final boolean show_dialog ){
     		super();
     		
     		this.act = act;
@@ -311,16 +320,85 @@ public class BuyModelActivity extends Activity {
     		this.order_id = order_id;
     		this.purchase_time = purchase_time;
     		this.product_id = product_id;
-			dialog = ProgressDialog.show(act, "",act.getResources().getString(R.string.guardando_compra), true);
-    		dialog.setCancelable(false);
+    		
+    		if ( show_dialog ){
+    			dialog = ProgressDialog.show(act, "",act.getResources().getString(R.string.guardando_compra), true);
+        		dialog.setCancelable(true);        		
+        		dialog.setOnCancelListener(new OnCancelListener(){
+        			
+    				@Override
+    				public void onCancel(DialogInterface arg0) {    					
+    					Toast.makeText(getApplicationContext(), R.string.error_compra_reintentando, Toast.LENGTH_LONG).show();
+    					onError();
+    				}
+    			});
+    		}
     		
     		init(act,"save_purchase",new Object[]{ User.get(act).id+"" , id_model+"" , purchase_token , order_id , purchase_time+"" , product_id });
     	}
+    	
+    	public void setNotification(){
+    		NotificationCompat.Builder mBuilder =
+    		        new NotificationCompat.Builder(act)
+    		        .setSmallIcon(R.drawable.launcher_logo)
+    		        .setContentTitle(getResources().getString(R.string.conectando_con_servidor))
+    		        .setContentText(getResources().getString(R.string.para_completar_compra));
+    		// Creates an explicit intent for an Activity in your app
+    		Intent resultIntent = new Intent(act, ModelPreviewActivity.class);
+    		resultIntent.putExtra("modelId", id_model);
+
+    		// The stack builder object will contain an artificial back stack for the
+    		// started Activity.
+    		// This ensures that navigating backward from the Activity leads out of
+    		// your application to the Home screen.
+    		TaskStackBuilder stackBuilder = TaskStackBuilder.create(act);
+    		// Adds the back stack for the Intent (but not the Intent itself)
+    		stackBuilder.addParentStack(ModelPreviewActivity.class);
+    		// Adds the Intent that starts the Activity to the top of the stack
+    		stackBuilder.addNextIntent(resultIntent);
+    		PendingIntent resultPendingIntent =
+    		        stackBuilder.getPendingIntent(
+    		            0,
+    		            PendingIntent.FLAG_UPDATE_CURRENT
+    		        );
+    		mBuilder.setContentIntent(resultPendingIntent);
+    		NotificationManager mNotificationManager =
+    		    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    		// mId allows you to update the notification later on.
+    		mNotificationManager.notify(error_notification_id, mBuilder.build());
+    	}
 		
+    	public void cancelNotification(){
+    		NotificationManager mNotificationManager =
+        		    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    		
+    		mNotificationManager.cancel(error_notification_id);
+    	}
+    	
+    	public void onError(){
+    		
+			sp = new SavePurchase( this.act , this.id_model , this.purchase_token , this.order_id , this.purchase_time , this.product_id , false  );
+			sp.count = count-1;
+			
+			if ( sp.count > 0 ){
+	    		setNotification();
+				new Handler().postDelayed(new Runnable(){
+
+					@Override
+					public void run() {
+						sp.execute();
+					}}, 1000*10);
+				
+				act.finish();
+			}
+    	}
+    	
 		@Override
 		public void onComplete(String result) {
-
-			dialog.dismiss();
+			
+			if ( dialog != null ){
+				dialog.dismiss();
+			}
 			
 			if ( result != null ){
 				
@@ -328,9 +406,10 @@ public class BuyModelActivity extends Activity {
 					
 					Toast.makeText(getApplicationContext(), R.string.compra_hecha, Toast.LENGTH_LONG).show();
 					Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_model_purchase);
+					cancelNotification();
 					
 					setResult(RESULT_OK);
-					finish();		
+					finish();
 				}
 				else{
 					Toast.makeText(getApplicationContext(), R.string.error_desconocido, Toast.LENGTH_SHORT).show();
@@ -338,8 +417,9 @@ public class BuyModelActivity extends Activity {
 			}
 			else{
 				Log.e(TAG, "Error result null");
-				Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
-								
+				//Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), R.string.error_compra_reintentando, Toast.LENGTH_SHORT).show();
+				onError();
 			}
 			
 		}

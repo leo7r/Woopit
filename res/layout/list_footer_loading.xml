@@ -10,6 +10,7 @@
         android:layout_gravity="center"
         android:indeterminate="true"
         android:layout_margin="10dp"
+        style="@style/progress_bar"
         />
 
 </LinearLayout>

@@ -18,6 +18,7 @@ import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -294,7 +295,6 @@ public class Utils {
 	    v.startAnimation(a);
 	}
 	
-	/*
 	public static String getTimeAgo(long time, Context context) {
 	    
 		time*=1000;
@@ -353,7 +353,6 @@ public class Utils {
 	    	}
 	    }
 	}
-	*/
 	
 	public static Object[] concat(Object[] A, Object[] B) {
 		int aLen = A.length;

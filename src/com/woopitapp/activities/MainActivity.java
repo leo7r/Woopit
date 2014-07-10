@@ -4,45 +4,47 @@ import java.util.List;
 import java.util.Vector;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.suredigit.inappfeedback.FeedbackDialog;
 import com.woopitapp.R;
 import com.woopitapp.WoopitFragmentActivity;
-import com.woopitapp.activities.ProfileActivity.ProfileChangeReceiver;
 import com.woopitapp.entities.User;
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
 import com.woopitapp.fragments.ModelsFragment;
-import com.woopitapp.services.Data;
 import com.woopitapp.services.TabPager;
 import com.woopitapp.services.Utils;
+import com.woopitapp.services.WoopitService;
+import com.woopitapp.services.WoopitService.LocalBinder;
 
 public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
  
     private TabHost mTabHost;
     private ViewPager mViewPager;
     private TabPager mPagerAdapter;
-    
 	SlidingMenu menu;
+    
+    // Service
+    WoopitService wService;
+    boolean mBound;    
 	
 	// Broadcast receivers
 	FriendsUpdateReceiver f_receiver;
@@ -81,6 +83,14 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         
     }
     
+    protected void onStart(){
+    	super.onStart();
+    	
+    	Intent intent = new Intent(this, WoopitService.class);
+        startService(intent);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+    
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("tab", mTabHost.getCurrentTabTag());
@@ -104,6 +114,10 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	
     	if ( p_receiver != null ){
     		unregisterReceiver(p_receiver);
+    	}
+    	
+    	if ( mBound ){
+    		unbindService(mConnection);
     	}
     	
     }
@@ -267,34 +281,12 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         TextView name = (TextView ) menu.findViewById(R.id.name);
         TextView username = (TextView ) menu.findViewById(R.id.username);
         ImageView image = (ImageView ) menu.findViewById(R.id.image);
-        final EditText search_users = (EditText) menu.findViewById(R.id.search_users);
-        
-        search_users.setOnEditorActionListener(new OnEditorActionListener(){
-
-			@Override
-			public boolean onEditorAction(TextView tv, int actionId, KeyEvent key) {
-				
-				if ( actionId == EditorInfo.IME_ACTION_SEARCH ){
-					searchUsers(search_users.getText().toString());
-					return true;
-				}
-				
-				return false;
-			}
-		});
         
         name.setText(u.name);
         username.setText("@"+u.username);
         Utils.setUserImage(getApplicationContext(), image, u.id);
     }
     
-    public void searchUsers( String query ){
-    	
-		Intent i = new Intent(this,SearchUsers.class);
-		i.putExtra("query", query);		
-		startActivity(i);
-    }
- 
     public void toggleSlidingMenu( View v ){
     	
     	if ( menu.isMenuShowing() ){
@@ -380,5 +372,24 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	}
       
     }
+
+    /* Service connection */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                IBinder service) {
+        	
+            LocalBinder binder = (LocalBinder) service;
+            wService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };    
+    
 }
 

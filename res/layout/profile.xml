@@ -38,6 +38,7 @@
             android:layout_height="25dp"
             android:indeterminate="true"
             android:layout_centerInParent="true"
+           	style="@style/progress_bar"
             />
         
     </RelativeLayout>
@@ -94,8 +95,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:singleLine="true"
-        android:textColor="@color/woopit_green"
         android:textSize="@dimen/normal_text"
+        android:textStyle="bold"
         />
     
     <TextView 
@@ -104,7 +105,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:singleLine="true"
-        android:textSize="@dimen/small_text"
+        android:textColor="@color/woopit_green"
+        android:textSize="@dimen/normal_text"
         />
     
     <View 
@@ -121,15 +123,57 @@
         android:text="@string/mis_modelos"
         />
     
+    <ProgressBar 
+        android:id="@+id/loading_models"
+		android:layout_width="25dp"
+		android:layout_height="25dp"
+		android:indeterminate="true"
+		android:layout_gravity="center"
+		android:visibility="gone"
+		style="@style/progress_bar"
+		/>
+    
     <GridView 
         android:id="@+id/models_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:numColumns="3"
 	    android:verticalSpacing="10dp"
 	    android:horizontalSpacing="10dp"
 	    android:stretchMode="columnWidth"
 	    android:gravity="center"
         />
+    
+    <LinearLayout 
+        android:id="@+id/welcome_models"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/dashed_border_bg"
+        android:padding="15dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        >
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bienvenida_modelos"
+            android:gravity="center"
+            />
+        
+        <Button 
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            style="@style/big_button"
+            android:textSize="@dimen/normal_text"
+            android:text="@string/contactanos"
+            android:layout_marginTop="15dp"
+            android:onClick="goContactNewModel"
+            />
+        
+    </LinearLayout>
     
 </LinearLayout>

@@ -90,6 +90,10 @@ public class FriendsFragment extends Fragment {
         fAdapter = new ListAdapter(getActivity(), R.id.friend_list, list_items );
         friend_list.setAdapter(fAdapter);
 
+        if ( list_items.size() == 0 ){
+        	((LinearLayout) view.findViewById(R.id.welcome_friends)).setVisibility(View.VISIBLE);
+        }
+        
         return view;
     }
     
@@ -138,8 +142,9 @@ public class FriendsFragment extends Fragment {
     	i.putExtra("id_user", id_user );
     	startActivity(i);
     }
+    
     @Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 	     if ( requestCode == REQUEST_SEND_MESSAGE ) {
 	          if (resultCode == Activity.RESULT_OK) {
@@ -147,7 +152,8 @@ public class FriendsFragment extends Fragment {
 	        	a.setActualTab(0);
 	          }
 	      }
-	 }
+	}
+    
     public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
 		
 		ArrayList<Object> l_items;

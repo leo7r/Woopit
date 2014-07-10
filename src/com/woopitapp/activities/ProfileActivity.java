@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,6 +135,17 @@ public class ProfileActivity extends WoopitActivity {
 		startActivity(i);
 	}
 	
+	public void goContactNewModel( View v ){
+				
+		Intent send = new Intent(Intent.ACTION_SENDTO);
+		String uriText = "mailto:" + Uri.encode("brattrinc@gmail.com") + 
+		          "?subject=" + Uri.encode(getResources().getString(R.string.peticion_nuevo_modelo));
+		Uri uri = Uri.parse(uriText);
+		
+		send.setData(uri);
+		startActivity(Intent.createChooser(send, getResources().getString(R.string.enviar_email)));
+	}
+	
     public class ModelAdapter extends ArrayAdapter<Model>{
     	
 		ArrayList<Model> items;
@@ -194,11 +208,18 @@ public class ProfileActivity extends WoopitActivity {
     		
     		this.con = con;
     		this.user_id = user_id;
+    		
+    		if ( !is_my_profile ){
+    			((ProgressBar)findViewById(R.id.loading_models)).setVisibility(View.VISIBLE);
+    		}
+    		
     		init(con,"get_created_models",new Object[]{ ""+user_id , User.get(con).id+"" });
     	}
 
 		@Override
 		public void onComplete(String result) {
+			
+			((ProgressBar)findViewById(R.id.loading_models)).setVisibility(View.GONE);
 			
 			if ( result != null && result.length() > 0 ){
 				
@@ -229,6 +250,10 @@ public class ProfileActivity extends WoopitActivity {
 					
 					if ( is_my_profile ){
 						models_list = data.getModels();
+						
+						if ( models_list.size() == 0 ){
+							((LinearLayout)findViewById(R.id.welcome_models)).setVisibility(View.VISIBLE);
+						}
 					}
 
 					setModelList(models_list);

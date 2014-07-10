@@ -1,47 +1,14 @@
 package com.woopitapp.activities;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.ShortBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import org.lwjgl.opengl.GL11;
-
-import com.woopitapp.R;
-import com.woopitapp.R.drawable;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
-import com.woopitapp.graphics.Objeto;
-import com.woopitapp.server_connections.ModelDownloader;
-import com.woopitapp.services.ServerConnection;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -49,37 +16,31 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.audiofx.BassBoost.Settings;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
-import android.opengl.GLUtils;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.RemoteViews;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.woopitapp.R;
+import com.woopitapp.graphics.Objeto;
+import com.woopitapp.server_connections.ModelDownloader;
 
 public class MessageActivity extends Activity {
 	
@@ -108,11 +69,14 @@ public class MessageActivity extends Activity {
 	boolean sensorOk = false;
 	boolean sensorDistancia = false;
 	boolean notif = false;
+	LocationChangeListener location_listener;
+	
 	String vertexShaderSource = "attribute vec4 vPosition; \n"
 			+	"void main () \n"
 			+	"{ \n"
 			+ 	" gl_Position = Matrix*vPosition; \n"
 			+	"} \n";
+	String nombre = "";
 	//int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
 	CustomCameraView cv;
 	@Override
@@ -125,22 +89,24 @@ public class MessageActivity extends Activity {
         longitud = extras.getString("longitud");
         modelo = extras.getInt("modelo");
         text = extras.getString("text");
-
-		messageText = new TextView(this);
-		messageText.setTextColor(Color.WHITE);
-		messageText.setShadowLayer(2, 0, 0, Color.BLACK);
-		messageText.setText(text);
-		messageText.setGravity(Gravity.CENTER);
-		messageText.setBackgroundColor(Color.RED);
-		LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-		messageText.setLayoutParams(lp);
+        nombre = extras.getString("nombre");
         
         Log.e("latitud","lat " + latitud);
         new MDownloader(this,modelo).execute();
 		//crearCamara();
 	
     }
-
+	
+	public void onDestroy(){
+		super.onDestroy();
+		
+        LocationManager locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        
+        if ( location_listener != null ){
+        	locMan.removeUpdates(location_listener);
+        }
+	}
+	
 	public void onStop () {
 	
 		super.onStop();
@@ -222,7 +188,13 @@ public class MessageActivity extends Activity {
     		}
     		
     		int offset =  (int) (azimut - angulo);
-    		 //direccion.setText(" azimut: "+(azimut) + " angulo: " + angulo );
+    		if(vertical > -35 && vertical < 40 && offset > -30 && offset< 30 && messageText != null){
+    			messageText.setVisibility(View.VISIBLE);
+    		}else{
+    			if(messageText != null){
+    				messageText.setVisibility(View.GONE);
+    			}
+    		}
     		if(render != null){
 	    		render.rotarMundoX(offset);
 	    		render.rotarMundoY(vertical);
@@ -336,9 +308,9 @@ public class MessageActivity extends Activity {
           
           LocationManager locMan;
           locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-          LocationChangeListener prueba = new LocationChangeListener(this.getContext());
-          locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 4000, 0, prueba);
-          locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 0, prueba);
+          location_listener = new LocationChangeListener(this.getContext());
+          locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 4000, 0, location_listener);
+          locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 0, location_listener);
           previewHolder = this.getHolder();
           previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
           previewHolder.addCallback(surfaceHolderListener);
@@ -433,10 +405,10 @@ public class MessageActivity extends Activity {
             gl.glPushMatrix();  
             gl.glLoadIdentity();
             double latitudVal = Double.parseDouble(latitud);
-            if(-180.0<latitudVal && latitudVal<180.0){
-            	gl.glRotatef(rotationX, 0,1, 0);
-        	    gl.glRotatef(rotationY,1 ,0, 0);
-            }
+            
+            gl.glRotatef(rotationX, 0,1, 0);
+        	gl.glRotatef(rotationY,1 ,0, 0);
+            
             
             //gl.glRotatef(rotationX, 0,1, 0);
             //gl.glRotatef(rotationY,1 ,0, 0);
@@ -569,7 +541,7 @@ public class MessageActivity extends Activity {
         
         return output;
     }
-      	
+    
     public boolean isNumeric(String str){  
     	  
     	try{
@@ -609,9 +581,19 @@ public class MessageActivity extends Activity {
     			corazon =  new Objeto(modelo+".jet",getApplicationContext());
     			
     			if(Double.parseDouble(latitud) == 500.0){
-    				addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
-    				addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
-    				addContentView(messageText,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    				LinearLayout camera_layout = (LinearLayout) findViewById(R.id.camera_layout);
+    				LinearLayout model_layout = (LinearLayout) findViewById(R.id.model_layout);
+    				messageText = (TextView) findViewById(R.id.text);
+    				
+    				camera_layout.addView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    				model_layout.addView(glView,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+    				
+    				messageText.setVisibility(View.GONE);
+    				if ( text.length() > 0 ){
+    					messageText.setText(text);
+    					
+    				}
+    				
     			}
     			
     		}
@@ -648,6 +630,7 @@ public class MessageActivity extends Activity {
 		}
     	
     }
+    
     public class LocationChangeListener  implements LocationListener{
 
 
@@ -762,14 +745,26 @@ public class MessageActivity extends Activity {
  			}
  			if(!sensorDistancia && render != null &&  Double.parseDouble(latitud) <  500.0){
 	 			 if(distancia*1000 <50){
-		    			addContentView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
-		    			addContentView(glView, new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ) );
-		    			addContentView(messageText,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+
+	    				LinearLayout camera_layout = (LinearLayout) findViewById(R.id.camera_layout);
+	    				LinearLayout model_layout = (LinearLayout) findViewById(R.id.model_layout);
+	    				messageText = (TextView) findViewById(R.id.text);
+	    				
+	    				camera_layout.addView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+	    				model_layout.addView(glView,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
+	    				
+	    				if ( text.length() > 0 ){
+	    					messageText.setText(text);
+	    				}
+	    				else{
+	    					messageText.setVisibility(View.GONE);
+	    				}
 				 }else{
 					 
 					 Intent iResult = new Intent();
 					 iResult.putExtra("latitud", Double.parseDouble(latitud));
 					 iResult.putExtra("longitud", Double.parseDouble(longitud));
+					 iResult.putExtra("nombre", nombre);
 					 setResult(RESULT_OK,iResult);
 					 finish();
 				 }

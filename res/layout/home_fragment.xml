@@ -14,14 +14,27 @@
         />
     
        <ListView 
-		android:id="@+id/messages_list"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:scrollbarThumbVertical="@drawable/scroll_bar"
-		android:scrollbarSize="2dp"
-		android:fadingEdgeLength="0dp"
-		android:background="@null"
-		android:divider="@null" 
-		/>
-
+			android:id="@+id/messages_list"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:scrollbarThumbVertical="@drawable/scroll_bar"
+			android:scrollbarSize="2dp"
+			android:fadingEdgeLength="0dp"
+			android:background="@null"
+			android:divider="@null" 
+			/>
+       
+       <TextView 
+           android:id="@+id/welcome_message"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:padding="15dp"
+           android:text="@string/bienvenida_mensajes"
+           android:background="@drawable/dashed_border_bg"
+           android:layout_gravity="center"
+           android:layout_margin="20dp"
+           android:visibility="gone"
+           android:gravity="center"
+           />
+       
 </LinearLayout>

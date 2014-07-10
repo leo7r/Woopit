@@ -24,10 +24,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/launcher_logo2"
+        android:icon="@drawable/launcher_logo"
         android:label="@string/app_name"
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme" >
+        
+        <service android:name="com.woopitapp.services.WoopitService" />
 		
         <!-- Login con Facebook -->
         <meta-data
@@ -51,7 +53,8 @@
         <activity
             android:name=".activities.WelcomeActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -92,7 +95,13 @@
         <activity
             android:name=".activities.ModelListActivity"
             android:label="@string/title_activity_map"
+            android:parentActivityName=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" >
+            
+            <meta-data
+		        android:name="android.support.PARENT_ACTIVITY"
+		        android:value=".activities.MainActivity"/>
+            
         </activity>
         <activity
             android:name=".activities.ProfileActivity"
@@ -116,6 +125,10 @@
         </activity>
         <activity
             android:name=".activities.MapUnMessageActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
+        <activity
+            android:name=".activities.MapSentMessageActivity"
             android:label="@string/title_activity_map" >
         </activity>
         <activity
