@@ -4,10 +4,10 @@ import java.util.Date;
 
 public class Message {
 	public int id,sender,model,receiver,status;
-	public String title, text, name;
+	public String title, text, name, modelName;
 	public Date date;
 	public double latitud,longitud;
-	public Message(int id , int sender, int receiver, int model, String title , String text, Date d,double latitud,double longitud, int status,String name){
+	public Message(int id , int sender, int receiver, int model, String title , String text, Date d,double latitud,double longitud, int status,String name,String modelName){
 		this.id = id;
 		this.sender = sender;
 		this.receiver = receiver;
@@ -19,6 +19,7 @@ public class Message {
 		this.name = name;
 		this.latitud = latitud;
 		this.longitud = longitud;
+		this.modelName = modelName;
 	}
 	
 

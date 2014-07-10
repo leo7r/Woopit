@@ -76,6 +76,7 @@ public class MessageActivity extends Activity {
 			+	"{ \n"
 			+ 	" gl_Position = Matrix*vPosition; \n"
 			+	"} \n";
+	String nombre = "";
 	//int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
 	CustomCameraView cv;
 	@Override
@@ -88,6 +89,7 @@ public class MessageActivity extends Activity {
         longitud = extras.getString("longitud");
         modelo = extras.getInt("modelo");
         text = extras.getString("text");
+        nombre = extras.getString("nombre");
         
         Log.e("latitud","lat " + latitud);
         new MDownloader(this,modelo).execute();
@@ -756,6 +758,7 @@ public class MessageActivity extends Activity {
 					 Intent iResult = new Intent();
 					 iResult.putExtra("latitud", Double.parseDouble(latitud));
 					 iResult.putExtra("longitud", Double.parseDouble(longitud));
+					 iResult.putExtra("nombre", nombre);
 					 setResult(RESULT_OK,iResult);
 					 finish();
 				 }

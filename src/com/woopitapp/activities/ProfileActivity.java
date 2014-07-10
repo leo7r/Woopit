@@ -22,6 +22,7 @@ import android.widget.Filter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -207,12 +208,19 @@ public class ProfileActivity extends WoopitActivity {
     		
     		this.con = con;
     		this.user_id = user_id;
+    		
+    		if ( !is_my_profile ){
+    			((ProgressBar)findViewById(R.id.loading_models)).setVisibility(View.VISIBLE);
+    		}
+    		
     		init(con,"get_created_models",new Object[]{ ""+user_id , User.get(con).id+"" });
     	}
 
 		@Override
 		public void onComplete(String result) {
-						
+			
+			((ProgressBar)findViewById(R.id.loading_models)).setVisibility(View.GONE);
+			
 			if ( result != null && result.length() > 0 ){
 				
 				Log.i("Models", result);

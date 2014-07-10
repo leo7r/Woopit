@@ -14,10 +14,12 @@ import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
@@ -27,10 +29,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.AbsListView.OnScrollListener;
 
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.woopitapp.R;
+import com.woopitapp.activities.MapSentMessageActivity;
 import com.woopitapp.activities.MapUnMessageActivity;
 import com.woopitapp.activities.MessageActivity;
+import com.woopitapp.activities.ModelListActivity.GetUserModels;
 import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
@@ -45,13 +51,39 @@ public class HomeFragment extends Fragment {
 	TabHost tabHost;
 	ArrayList<Object> messages_list;
 	EditText search_message;
+	int page = 0;
+	boolean loadingMore;
+	LinearLayout list_loading;
 	
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	
         View view = (LinearLayout)inflater.inflate(R.layout.home_fragment, container, false);
+		list_loading = (LinearLayout) getView().inflate(this.getActivity().getApplicationContext(), R.layout.list_footer_loading, null);
+		message_list = (ListView) view.findViewById(R.id.messages_list);
+		message_list.addFooterView(list_loading);
 
-        message_list = (ListView) view.findViewById(R.id.messages_list);
-        search_message = (EditText) view.findViewById(R.id.search_users);
+		PauseOnScrollListener listener = new PauseOnScrollListener(Utils.getImageLoader(getActivity().getApplicationContext()), true, true, new OnScrollListener(){
+
+			@Override
+			public void onScroll(AbsListView list, int firstVisible, int visibleItems, int totalItems) {
+				
+				int lastInScreen = firstVisible + visibleItems;
+				
+				
+				if( lastInScreen == totalItems && totalItems != 0 && !loadingMore && mAdapter != null ){
+					
+					page++;
+					Context c = getActivity().getApplicationContext();
+    	        	new get_messages( c,User.get(c).id, page ).execute();
+					loadingMore = true;
+				}
+			}
+
+			@Override
+			public void onScrollStateChanged(AbsListView arg0, int arg1) {}
+		});
+
+        message_list.setOnScrollListener(listener);
         
         return view;
     }
@@ -59,7 +91,15 @@ public class HomeFragment extends Fragment {
     public void onStart(){
     	super.onStart();
 
-        new get_messages(this.getActivity().getApplicationContext(),User.get(this.getActivity().getApplicationContext()).id).execute();
+        Context c = this.getActivity().getApplicationContext();
+        new get_messages(c,User.get(c).id,page).execute();
+    }
+    
+    public void onStop(){
+    	super.onStop();
+    	
+    	page = 0;
+    	mAdapter = null;
     }
     
     public class get_messages extends ServerConnection{
@@ -67,15 +107,16 @@ public class HomeFragment extends Fragment {
     	Context con;
     	int user_id;
     	ProgressBar loader;
+    	int page;
     	
-    	public get_messages(Context con, int user_id){
+    	public get_messages(Context con, int user_id, int page){
     		this.con = con;
     		this.user_id = user_id;
-
+    		this.page = page;
     		if ( getView() != null ){
     			loader = (ProgressBar) getView().findViewById(R.id.loader);
     		}
-    		init(con,"get_messages",new Object[]{ ""+user_id });
+    		init(con,"get_messages",new Object[]{ ""+user_id,""+ page });
     	}
 
 		@Override
@@ -106,29 +147,43 @@ public class HomeFragment extends Fragment {
 						String name = message.getString("n");
 						long timestamp = message.getLong("d");
 						Date date = new Date(timestamp);
-						
+						String modelName = message.getString("mn");
 						int status = message.getInt("e");
 						
-						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name);
+						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name,modelName);
 						
 						messages_list.add(m);
 						
 					}
-					
+
+					if ( messages_list.size() > 0 ){
+
+			            loadingMore = false;
+					}
+					else{
+						loadingMore = true;
+						list_loading.setVisibility(View.GONE);
+					}
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 			}
 			
-			if ( messages_list.size() == 0 ){
+			if ( messages_list.size() == 0 && page == 0){
 				Date date = new Date();
-				Message m = new Message(0,1,User.get(con).id,1,"","Bienvenido a Woopit :D",date,500,500,0,"Woopit");
+				Message m = new Message(0,1,User.get(con).id,1,"","Bienvenido a Woopit :D",date,500,500,0,"Woopit","Welcome Woop");
 				messages_list.add(m);
 				((TextView) getView().findViewById(R.id.welcome_message)).setVisibility(View.VISIBLE);
 			}
+			if(mAdapter == null){
+			    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
+			    message_list.setAdapter(mAdapter);
+			}else{
+				mAdapter.addAll(messages_list);
+				mAdapter.notifyDataSetChanged();
+			}
 			
-		    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
-		    message_list.setAdapter(mAdapter);
+		   
 			
 		}
     }
@@ -141,15 +196,17 @@ public class HomeFragment extends Fragment {
 				 Bundle extras = data.getExtras();
 				 double latitud = extras.getDouble("latitud");
 				 double longitud  = extras.getDouble("longitud");
+				 String nombre = extras.getString("nombre");
     			 i.putExtra("latitud",latitud);
 				 i.putExtra("longitud",longitud);
+				 i.putExtra("nombre", nombre);
 				 startActivity(i);
     		}
     	}
 	   
 	 }
     
-    public void verMensaje( Message message ){
+    public void verMensajeRecibido( Message message ){
     	
 	    if( message.status == 0){
 		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), message.id).execute();
@@ -159,21 +216,33 @@ public class HomeFragment extends Fragment {
 		newMessagei.putExtra("longitud",message.longitud+"");
 		newMessagei.putExtra("modelo",message.model);
 		newMessagei.putExtra("text", message.text);
-		
+		newMessagei.putExtra("nombre", message.name);
 		startActivityForResult(newMessagei,REQUEST_MESSAGE);
+	}
+  
+    public void verMensajeEnviado( Message message ){
+    	Log.e("MAPA", "MAPA");
+		Intent newMessagei =  new  Intent(getActivity(),MapSentMessageActivity.class);
+		newMessagei.putExtra("latitud", message.latitud);
+		newMessagei.putExtra("longitud",message.longitud);
+		newMessagei.putExtra("modelName",message.modelName+"");
+		newMessagei.putExtra("nombre", message.name);
+		startActivity(newMessagei);
 	}
     
     class UpdateMessageStatus extends ServerConnection{
 
     	Context con;
     	int user_id;
+    	int page;
     	
-    	public UpdateMessageStatus( Context con ,int message_id ){
+    	public UpdateMessageStatus( Context con ,int message_id){
     		super();
     		
     		this.con = con;
     		this.user_id = user_id;
-    		init(con,"update_message_status",new Object[]{ ""+ message_id });
+    		this.page = page;
+    		init(con,"update_message_status",new Object[]{ ""+ message_id});
     	}
     	
 		@Override
@@ -228,7 +297,7 @@ public class HomeFragment extends Fragment {
  			if ( convertView == null ){
  				convertView = infalInflater.inflate(R.layout.message_item, null);
  			}
-
+ 			convertView.setOnClickListener(null);
  			
  			ImageView imagen = (ImageView) convertView.findViewById(R.id.image);
  			
@@ -241,7 +310,7 @@ public class HomeFragment extends Fragment {
 
 					@Override
 					public void onClick(View v) {
-						verMensaje(item);
+						verMensajeRecibido(item);
 					}
 				});
 
@@ -251,11 +320,17 @@ public class HomeFragment extends Fragment {
  				
  					if(item.status == 0){
  						imagen.setImageResource(R.drawable.message_sent);
- 		
+ 	
  					}else{
  						imagen.setImageResource(R.drawable.message_viewed);
  					}
- 					convertView.setOnClickListener(null);
+					convertView.setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View v) {
+								verMensajeEnviado(item);
+							}
+						});
  				}
  			}
  			TextView name = (TextView) convertView.findViewById(R.id.name);

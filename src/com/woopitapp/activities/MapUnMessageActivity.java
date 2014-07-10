@@ -65,7 +65,7 @@ GoogleMap.OnMapClickListener {
 		float default_zoom = 17.0f;
 		double latitud;
 		double longitud;
-
+		String nombre;
 		
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ GoogleMap.OnMapClickListener {
 			longitud = extras.getDouble("longitud");
 			search_address = (EditText) findViewById(R.id.search_address);
 			send_woop = (Button) findViewById(R.id.send_woop);
-	        
+	        nombre = extras.getString("nombre");
 			search_address.setOnEditorActionListener(new OnEditorActionListener(){
 
 				@Override
@@ -153,7 +153,7 @@ GoogleMap.OnMapClickListener {
 		    LatLng latlng = new LatLng(latitud,longitud);
 		    marker = mMap.addMarker(new MarkerOptions()
 	        .position(latlng)
-	        .title(getResources().getString(R.string.mensaje_recibido_lejos))
+	        .title(nombre +" " + getResources().getString(R.string.mensaje_recibido_lejos))
 	        .snippet(getResources().getString(R.string.ubicacion_woop)));
 	        //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 			
@@ -162,43 +162,6 @@ GoogleMap.OnMapClickListener {
 			
 		}
 		
-		public void sendWoop( View v ){
-			
-			new Send_Message(getApplicationContext() , selectedLatitude , selectedLongitude ).execute();
-		}
-		
-		class Send_Message extends ServerConnection{
-	    	
-			Context con;
-			
-			public Send_Message(Context context,double latitud, double longitud){
-				this.con = context;
-				
-			//	init(con,"send_message",new Object[]{User.get(con).id,userId,modelId,"",message,latitud,longitud});
-			}
-
-			@Override
-			public void onComplete(String result) {
-				
-				if( result != null && result.equals("OK") ){
-					
-				//	Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
-					setResult(RESULT_OK);
-				    finish();
-				}
-				else{
-					
-					if ( result == null ){
-						Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
-					}
-					else{
-						Toast.makeText(getApplicationContext(), R.string.error_desconocido, Toast.LENGTH_SHORT).show();
-						Log.e("Error sending message","result: "+result);
-					}
-					
-				}
-			}
-		}
 		
 		/* Metodos de Google map */
 

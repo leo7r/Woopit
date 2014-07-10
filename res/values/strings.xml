@@ -83,8 +83,10 @@
     <string name="lugar_no_encontrado">El lugar %s no fue encontrado</string>
     <string name="enviar_woop">Enviar Woop</string>
     <string name="ubicacion_woop">Podrá ver su Woop cuando esté cerca de aquí</string>
-    <string name="mensaje_recibido_lejos">Alerta Woop!!</string>
+    <string name="mensaje_recibido_lejos"> te ha dejado un woop!</string>
 
+ 	<string name="mensaje_enviado_aqui">Ha enviado un Woop %s aqui!</string>
+    <string name="modelo_enviado">Modelo Enviado: </string>
     <!-- Pantalla de perfil -->
     <string name="perfil">Perfil</string>
     <string name="woops">Woops</string>
@@ -161,5 +163,12 @@
     <string name="day">Un día</string>
     <string name="days">%d días</string>
     <string name="weeks">Semanas</string>
+    
+    <!-- Notificaciones -->
+    <string name="notificacion_peticion_amigos">Quiere ser tu amigo en Woopit</string>
+    <string name="notificacion_nuevo_mensaje">Te ha enviado un Woop! Toca para verlo</string>
+    <string name="notificacion_peticion_aceptada">Te ha aceptado! Enviale un Woop</string>
+    <string name="notificacion_woopit_actualizado">Nueva versión disponible</string>
+    <string name="notificacion_woopit_actualizado2">Toca para actualizar!</string>
 
 </resources>

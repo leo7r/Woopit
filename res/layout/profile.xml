@@ -38,6 +38,7 @@
             android:layout_height="25dp"
             android:indeterminate="true"
             android:layout_centerInParent="true"
+           	style="@style/progress_bar"
             />
         
     </RelativeLayout>
@@ -121,6 +122,16 @@
         style="@style/normal_title"
         android:text="@string/mis_modelos"
         />
+    
+    <ProgressBar 
+        android:id="@+id/loading_models"
+		android:layout_width="25dp"
+		android:layout_height="25dp"
+		android:indeterminate="true"
+		android:layout_gravity="center"
+		android:visibility="gone"
+		style="@style/progress_bar"
+		/>
     
     <GridView 
         android:id="@+id/models_list"
