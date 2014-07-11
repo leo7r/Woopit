@@ -17,9 +17,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
+import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -157,10 +159,12 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         }
  
         public View createTabContent(String tag) {
+        	
             View v = new View(mContext);
             v.setMinimumWidth(0);
             v.setMinimumHeight(0);
             return v;
+            
         }
  
     }
@@ -195,10 +199,6 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         View modelView = createTabView(mTabHost.getContext(), 3 );
         final TabSpec tabModel = mTabHost.newTabSpec("Models").setIndicator(modelView);
         
-        // Profile tab
-        View profileView = createTabView(mTabHost.getContext(), 4 );
-        final TabSpec tabProfile = mTabHost.newTabSpec("Profile").setIndicator(profileView);
-        
         AddTab(this, mTabHost, tabHome, ( new TabInfo("Home", HomeFragment.class, args)));
         AddTab(this, mTabHost, tabFriends, ( new TabInfo("Friends", FriendsFragment.class, args)));
         AddTab(this, mTabHost, tabModel, ( new TabInfo("Models", ModelsFragment.class, args)));       
@@ -206,9 +206,11 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         mTabHost.setOnTabChangedListener(this);
     }
     
-    private static View createTabView(final Context context, final int tab ) {
+    private View createTabView(final Context context, final int tab ) {
     	
-    	View view = LayoutInflater.from(context).inflate(R.layout.home_tab, null);
+    	TabWidget tw = (TabWidget) findViewById(android.R.id.tabs);
+    	View view = LayoutInflater.from(this).inflate(R.layout.home_tab, tw,false);
+    	
     	ImageView iv = (ImageView) view.findViewById(R.id.tab_image);
     	
     	switch( tab ){

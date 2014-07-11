@@ -175,7 +175,11 @@ public class SearchModelsActivity extends WoopitActivity {
 					}
 					
 					if ( mAdapter != null ){
-						mAdapter.addAll(models_list);
+						
+						for (Model m : models_list){
+							mAdapter.add(m);
+						}
+						
 						mAdapter.notifyDataSetChanged();
 					}
 					else{
