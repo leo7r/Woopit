@@ -188,7 +188,13 @@ public class MessageActivity extends Activity {
     		}
     		
     		int offset =  (int) (azimut - angulo);
-    		 //direccion.setText(" azimut: "+(azimut) + " angulo: " + angulo );
+    		if(vertical > -35 && vertical < 40 && offset > -30 && offset< 30 && messageText != null){
+    			messageText.setVisibility(View.VISIBLE);
+    		}else{
+    			if(messageText != null){
+    				messageText.setVisibility(View.GONE);
+    			}
+    		}
     		if(render != null){
 	    		render.rotarMundoX(offset);
 	    		render.rotarMundoY(vertical);
@@ -399,10 +405,10 @@ public class MessageActivity extends Activity {
             gl.glPushMatrix();  
             gl.glLoadIdentity();
             double latitudVal = Double.parseDouble(latitud);
-            if(-180.0<latitudVal && latitudVal<180.0){
-            	gl.glRotatef(rotationX, 0,1, 0);
-        	    gl.glRotatef(rotationY,1 ,0, 0);
-            }
+            
+            gl.glRotatef(rotationX, 0,1, 0);
+        	gl.glRotatef(rotationY,1 ,0, 0);
+            
             
             //gl.glRotatef(rotationX, 0,1, 0);
             //gl.glRotatef(rotationY,1 ,0, 0);
@@ -582,12 +588,12 @@ public class MessageActivity extends Activity {
     				camera_layout.addView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
     				model_layout.addView(glView,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
     				
+    				messageText.setVisibility(View.GONE);
     				if ( text.length() > 0 ){
     					messageText.setText(text);
+    					
     				}
-    				else{
-    					messageText.setVisibility(View.GONE);
-    				}
+    				
     			}
     			
     		}
