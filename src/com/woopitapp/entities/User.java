@@ -158,6 +158,8 @@ public class User {
 				Data data = new Data(con);
 				data.open();
 				
+				data.deleteAllFriendRequests();
+				
 				try {
 					Log.i("FR", result);
 					JSONArray requests = new JSONArray(result);

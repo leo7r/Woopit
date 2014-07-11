@@ -340,7 +340,7 @@ public class BuyModelActivity extends Activity {
     	public void setNotification(){
     		NotificationCompat.Builder mBuilder =
     		        new NotificationCompat.Builder(act)
-    		        .setSmallIcon(R.drawable.launcher_logo)
+    		        .setSmallIcon(R.drawable.notif_icon)
     		        .setContentTitle(getResources().getString(R.string.conectando_con_servidor))
     		        .setContentText(getResources().getString(R.string.para_completar_compra));
     		// Creates an explicit intent for an Activity in your app

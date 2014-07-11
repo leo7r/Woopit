@@ -1,17 +1,13 @@
 package com.woopitapp.fragments;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
@@ -29,14 +26,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.woopitapp.R;
 import com.woopitapp.activities.MapSentMessageActivity;
 import com.woopitapp.activities.MapUnMessageActivity;
 import com.woopitapp.activities.MessageActivity;
-import com.woopitapp.activities.ModelListActivity.GetUserModels;
 import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
@@ -49,7 +44,7 @@ public class HomeFragment extends Fragment {
 	ListView message_list;
 	ListAdapter mAdapter;
 	TabHost tabHost;
-	ArrayList<Object> messages_list;
+	ArrayList<Message> messages_list;
 	EditText search_message;
 	int page = 0;
 	boolean loadingMore;
@@ -58,7 +53,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	
         View view = (LinearLayout)inflater.inflate(R.layout.home_fragment, container, false);
-		list_loading = (LinearLayout) getView().inflate(this.getActivity().getApplicationContext(), R.layout.list_footer_loading, null);
+		list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
 		message_list = (ListView) view.findViewById(R.id.messages_list);
 		message_list.addFooterView(list_loading);
 
@@ -126,7 +121,7 @@ public class HomeFragment extends Fragment {
 				loader.setVisibility(View.GONE);
 			}
 
-			messages_list = new ArrayList<Object>();
+			messages_list = new ArrayList<Message>();
 			
 			if ( result != null && result.length() > 0 ){
 
@@ -173,13 +168,20 @@ public class HomeFragment extends Fragment {
 				Date date = new Date();
 				Message m = new Message(0,1,User.get(con).id,1,"","Bienvenido a Woopit :D",date,500,500,0,"Woopit","Welcome Woop");
 				messages_list.add(m);
-				((TextView) getView().findViewById(R.id.welcome_message)).setVisibility(View.VISIBLE);
+				
+				if ( getView() != null ){
+					((TextView) getView().findViewById(R.id.welcome_message)).setVisibility(View.VISIBLE);
+				}
 			}
 			if(mAdapter == null){
 			    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
 			    message_list.setAdapter(mAdapter);
 			}else{
-				mAdapter.addAll(messages_list);
+				
+				for (Message m : messages_list){
+					mAdapter.add(m);
+				}
+				
 				mAdapter.notifyDataSetChanged();
 			}
 			
@@ -205,6 +207,15 @@ public class HomeFragment extends Fragment {
     	}
 	   
 	 }
+    
+    public void updateContent(){
+
+    	page = 0;
+    	mAdapter = null;
+    	
+        Context c = this.getActivity().getApplicationContext();
+        new get_messages(c,User.get(c).id,page).execute();
+    }
     
     public void verMensajeRecibido( Message message ){
     	
@@ -272,14 +283,14 @@ public class HomeFragment extends Fragment {
     	
     }
     
-    public class ListAdapter extends ArrayAdapter<Object>{
+    public class ListAdapter extends ArrayAdapter<Message>{
 		
- 		ArrayList<Object> l_items;
+ 		ArrayList<Message> l_items;
  		Context context;
  		Filter filter;
  		LayoutInflater infalInflater;
 
- 		public ListAdapter(Context context, int textViewResourceId, ArrayList<Object> objects) {
+ 		public ListAdapter(Context context, int textViewResourceId, ArrayList<Message> objects) {
  			
  			super(context, textViewResourceId, objects);
  			this.l_items = objects;
@@ -292,7 +303,7 @@ public class HomeFragment extends Fragment {
  			
 
  			int user_id = User.get(this.context).id;
- 			final Message item = (Message)getItem(position);
+ 			final Message item = getItem(position);
  			
  			if ( convertView == null ){
  				convertView = infalInflater.inflate(R.layout.message_item, null);
@@ -351,7 +362,7 @@ public class HomeFragment extends Fragment {
  			return l_items != null ? l_items.size() : 0;
  		}
  		
- 		public Object getItem( int pos ){
+ 		public Message getItem( int pos ){
  			return l_items.get(pos);
  		}
 

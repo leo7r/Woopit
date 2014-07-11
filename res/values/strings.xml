@@ -16,6 +16,8 @@
     <string name="broadcast_profile_models_list">com.woopitapp.profile_models_list</string>
     <string name="broadcast_profile_update">com.woopitapp.profile_update</string>
     <string name="broadcast_model_purchase">com.woopitapp.model_purchase</string>
+    <string name="broadcast_messages">com.woopitapp.messages</string>
+    <string name="broadcast_notifications">com.google.android.c2dm.intent.RECEIVE</string>
 
     <!-- FACEBOOK ID -->
     <string name="app_id">280178418831040</string>

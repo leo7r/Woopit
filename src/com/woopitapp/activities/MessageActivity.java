@@ -253,7 +253,7 @@ public class MessageActivity extends Activity {
     	}
 
     	}; 
-     
+    
     public class CustomCameraView extends SurfaceView{
     	
     	Camera camera;
@@ -277,7 +277,7 @@ public class MessageActivity extends Activity {
 				//params.setPictureFormat(PixelFormat.JPEG);
 	      
         		params.setRotation(90);
-
+        		
         		camera.setParameters(params);
         		camera.setDisplayOrientation(90);
         		camera.startPreview();
@@ -320,7 +320,7 @@ public class MessageActivity extends Activity {
     
     public class CameraView extends SurfaceView implements Callback {
         
-    	private Camera camera;
+    	Camera camera;
          
         public CameraView( Context context ) {
             super( context );
@@ -413,7 +413,7 @@ public class MessageActivity extends Activity {
             //gl.glRotatef(rotationX, 0,1, 0);
             //gl.glRotatef(rotationY,1 ,0, 0);
             
-	        gl.glTranslatef(0.0f, -1.5f, -10.0f);
+	        gl.glTranslatef(0.0f, -1.5f, -15.0f);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
 	        //corazon.draw(gl);
 	        
@@ -499,7 +499,8 @@ public class MessageActivity extends Activity {
 		
 		return d;
     }
-   public double getBearing(double startLat, double startLng, double endLat, double endLng){
+    
+    public double getBearing(double startLat, double startLng, double endLat, double endLng){
         double longitude1 = startLng;
         double longitude2 = endLng;
         double latitude1 = Math.toRadians(startLat);
@@ -760,6 +761,11 @@ public class MessageActivity extends Activity {
 	    					messageText.setVisibility(View.GONE);
 	    				}
 				 }else{
+					 
+					 if ( cameraView != null && cameraView.camera != null ){
+						 cameraView.camera.stopPreview();
+						 cameraView.camera.release();
+					 }
 					 
 					 Intent iResult = new Intent();
 					 iResult.putExtra("latitud", Double.parseDouble(latitud));
