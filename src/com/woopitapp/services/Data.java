@@ -297,6 +297,11 @@ public class Data{
 		return database.delete(DBHelper.FRIEND_REQUEST_TABLE, DBHelper.fr_id+" = ?", new String[]{ id+"" }) != -1;
 	}
 	
+	public boolean deleteAllFriendRequests( ){
+		
+		return database.delete(DBHelper.FRIEND_REQUEST_TABLE, null, null ) != -1;
+	}
+	
 	/* Modelos */
 	
 	public boolean insertModel( int id , String name , String price ){

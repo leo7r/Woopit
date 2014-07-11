@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
@@ -17,6 +18,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.woopitapp.R;
 import com.woopitapp.activities.MainActivity;
 import com.woopitapp.activities.ModelListActivity;
@@ -28,12 +31,20 @@ public class WoopitService extends Service{
 	private final static int INTERVAL = 1000 * 60 * 5;
 	Handler mHandler;
 	
+	/* Google cloud messaging */
+	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	private final String TAG = "GCM";
+	
 	private final IBinder mBinder = new LocalBinder();
 	
 	public void onCreate(){
 		
 		mHandler = new Handler();
-		startRepeatingTask();
+
+        /* Recibe notificaciones */
+		Log.i(TAG, "Registrando notificaciones");
+        registerReceiver( new GcmBroadcastReceiver() , new IntentFilter(getResources().getString(R.string.broadcast_notifications)) );
+                
 	}
 	
 	@Override

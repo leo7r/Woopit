@@ -1,17 +1,13 @@
 package com.woopitapp.fragments;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
@@ -29,14 +26,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.woopitapp.R;
 import com.woopitapp.activities.MapSentMessageActivity;
 import com.woopitapp.activities.MapUnMessageActivity;
 import com.woopitapp.activities.MessageActivity;
-import com.woopitapp.activities.ModelListActivity.GetUserModels;
 import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
@@ -212,6 +207,15 @@ public class HomeFragment extends Fragment {
     	}
 	   
 	 }
+    
+    public void updateContent(){
+
+    	page = 0;
+    	mAdapter = null;
+    	
+        Context c = this.getActivity().getApplicationContext();
+        new get_messages(c,User.get(c).id,page).execute();
+    }
     
     public void verMensajeRecibido( Message message ){
     	

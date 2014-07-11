@@ -1,7 +1,9 @@
 package com.woopitapp.activities;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -9,6 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
@@ -17,13 +23,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.suredigit.inappfeedback.FeedbackDialog;
 import com.woopitapp.R;
@@ -32,6 +41,8 @@ import com.woopitapp.entities.User;
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
 import com.woopitapp.fragments.ModelsFragment;
+import com.woopitapp.services.GcmBroadcastReceiver;
+import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.TabPager;
 import com.woopitapp.services.Utils;
 import com.woopitapp.services.WoopitService;
@@ -52,9 +63,22 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 	FriendsUpdateReceiver f_receiver;
 	ModelPurchaseReceiver m_receiver;
 	ProfileChangeReceiver p_receiver;
+	MessagesUpdateReceiver mu_receiver;
     
 	// Feedback
 	private FeedbackDialog feedBack;
+	
+	/* Google cloud messaging */
+	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	private final String GCM_TAG = "GCM";
+    public static final String EXTRA_MESSAGE = "message";
+    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_APP_VERSION = "appVersion";
+    String SENDER_ID = "719506420236";
+    GoogleCloudMessaging gcm;
+    AtomicInteger msgId = new AtomicInteger();
+    SharedPreferences prefs;
+    String regid;
 	
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +103,25 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         m_receiver = new ModelPurchaseReceiver();
         registerReceiver(m_receiver,new IntentFilter(this.getString(R.string.broadcast_model_purchase)));
         
-        /* Recibe cambios en lista de amigos */
+        /* Recibe cambios en perfil */
 		p_receiver = new ProfileChangeReceiver();
         registerReceiver(p_receiver,new IntentFilter(this.getString(R.string.broadcast_profile_update)));
+        
+        /* Recibe cambios en mensajes */
+        mu_receiver = new MessagesUpdateReceiver();
+        registerReceiver(mu_receiver,new IntentFilter(this.getString(R.string.broadcast_messages)));
+        
+        // Check device for Play Services APK.
+        if (checkPlayServices()) {
+            gcm = GoogleCloudMessaging.getInstance(this);
+            regid = getRegistrationId(getApplicationContext());
+
+            if (regid.equals("")) {
+                registerInBackground();
+            }
+        } else {
+            Log.i(GCM_TAG, "No valid Google Play Services APK found.");
+        }
         
     }
     
@@ -91,6 +131,11 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	Intent intent = new Intent(this, WoopitService.class);
         startService(intent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+    
+    protected void onResume(){
+    	super.onResume();
+        checkPlayServices();
     }
     
     protected void onSaveInstanceState(Bundle outState) {
@@ -118,6 +163,10 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     		unregisterReceiver(p_receiver);
     	}
     	
+    	if ( mu_receiver != null ){
+    		unregisterReceiver(mu_receiver);
+    	}
+    	
     	if ( mBound ){
     		unbindService(mConnection);
     	}
@@ -131,7 +180,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     }
     
     /* Tabs */
-
+    
     public void setActualTab(int id){
     	Log.e("ID", id+"");
     	mTabHost.setCurrentTab(id);
@@ -149,7 +198,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
          }
  
     }
-   
+    
     public class TabFactory implements TabContentFactory {
  
         private final Context mContext;
@@ -375,6 +424,21 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
       
     }
 
+    public class MessagesUpdateReceiver extends BroadcastReceiver {
+        
+    	@Override
+    	public void onReceive(Context context, Intent intent) {
+    		
+        	HomeFragment fragment = (HomeFragment) mPagerAdapter.getItem(0);
+    		
+        	if ( fragment.isVisible() ){
+        		fragment.updateContent();
+        	}
+    	}
+      
+    }
+    
+    
     /* Service connection */
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -392,6 +456,146 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
             mBound = false;
         }
     };    
+    
+    /* Google cloud messaging */
+    
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(GCM_TAG, "This device is not supported.");
+            }
+            return false;
+        }
+        return true;
+    }
+    
+    private String getRegistrationId(Context context) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+        if (registrationId.equals("")) {
+            Log.i(GCM_TAG, "Registration not found.");
+            return "";
+        }
+        // Check if app was updated; if so, it must clear the registration ID
+        // since the existing regID is not guaranteed to work with the new
+        // app version.
+        int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int currentVersion = getAppVersion(context);
+        if (registeredVersion != currentVersion) {
+            Log.i(GCM_TAG, "App version changed.");
+            return "";
+        }
+        return registrationId;
+    }
+    
+    private SharedPreferences getGCMPreferences(Context context) {
+        return getSharedPreferences(MainActivity.class.getSimpleName(),Context.MODE_PRIVATE);
+    }
+    
+    private static int getAppVersion(Context context) {
+        
+    	try {
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (NameNotFoundException e) {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
+    }
+    
+    private void registerInBackground() {
+    	
+    	new AsyncTask<Void,Void,String>(){
+    		
+			@Override
+			protected String doInBackground(Void... arg0) {
+				String msg = "";
+	            try {
+	                if (gcm == null) {
+	                    gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+	                }
+	                regid = gcm.register(SENDER_ID);
+	                msg = "Device registered, registration ID=" + regid;
+
+	                // You should send the registration ID to your server over HTTP,
+	                // so it can use GCM/HTTP or CCS to send messages to your app.
+	                // The request to your server should be authenticated if your app
+	                // is using accounts.
+	                sendRegistrationIdToBackend(regid);
+
+	                // For this demo: we don't need to send it because the device
+	                // will send upstream messages to a server that echo back the
+	                // message using the 'from' address in the message.
+
+	                // Persist the regID - no need to register again.
+	                storeRegistrationId(getApplicationContext(), regid);
+	            } catch (IOException ex) {
+	                msg = "Error :" + ex.getMessage();
+	                // If there is an error, don't just keep trying to register.
+	                // Require the user to click a button again, or perform
+	                // exponential back-off.
+	            }
+	            return msg;
+			}
+			
+			@Override
+	        protected void onPostExecute(String msg) {
+	            Log.i(GCM_TAG,msg + "\n");
+	        }
+    		
+    	}.execute();
+    	
+    }
+    
+    private void sendRegistrationIdToBackend( String regid ) {
+        new SetGcmId( regid  ).execute();
+    }
+    
+    private void storeRegistrationId(Context context, String regId) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        int appVersion = getAppVersion(context);
+        Log.i(GCM_TAG, "Saving regId on app version " + appVersion);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_REG_ID, regId);
+        editor.putInt(PROPERTY_APP_VERSION, appVersion);
+        editor.commit();
+    }
+    
+    class SetGcmId extends ServerConnection{
+    	
+    	String gcm_id;
+    	
+    	public SetGcmId( String gcm_id ){
+			super();
+			
+			this.gcm_id = gcm_id;
+			init(getApplicationContext(),"set_gcm_id", new Object[]{ User.get(getApplicationContext()).id , gcm_id });
+    	}
+    	
+		@Override
+		public void onComplete(String result) {
+			
+			if ( result != null ){
+				
+				if ( result.equals("ok")){
+					storeRegistrationId(getApplicationContext(),gcm_id);
+					Log.i(GCM_TAG, "Registration successful");
+				}
+				else{
+					Toast.makeText(getApplicationContext(), R.string.error_desconocido, Toast.LENGTH_SHORT).show();
+				}
+			}
+			else{
+				Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();				
+			}
+			
+		}
+    	
+    }
     
 }
 
