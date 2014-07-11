@@ -18,8 +18,8 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.os.Environment;
 import android.util.Log;
-
- 
+import sun.misc.Unsafe;
+import java.lang.reflect.Field;
 
 public class Objeto {
 
@@ -224,15 +224,22 @@ public class Objeto {
 				}
 				byteBuf.clear();
 				extraBuff.clear();
+				Log.e("FREE","ALLOC MATERIALES" );
 				this.materiales.add(m);
 			}
 		}catch(Exception e){
 			
 		}
 	}
-	
+	  private static Unsafe getUnsafe() throws Exception {
+			// Get the Unsafe object instance
+			Field field = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
+			field.setAccessible(true);
+			return (sun.misc.Unsafe) field.get(null);
+		  }
 	private  void crearBuffers(Context context,String nombre){
 			try{
+					
 				File dir = Environment.getExternalStorageDirectory();
 				File woopitDir = new File(dir,"/Woopit/models/"+nombre);
 				FileInputStream inStream = new FileInputStream(woopitDir);
@@ -241,7 +248,7 @@ public class Objeto {
 				crearMateriales(in);
 				
 				ByteBuffer byteBuf = ByteBuffer.allocateDirect(4);
-
+				
 				while(true){
 					
 					GroupMesh group = new GroupMesh();
@@ -261,6 +268,7 @@ public class Objeto {
 					group.setMaterial(materiales.get(material));
 					groups.add(group);
 					
+				
 				}
 				inStream.close();
 			}catch(Exception e){
