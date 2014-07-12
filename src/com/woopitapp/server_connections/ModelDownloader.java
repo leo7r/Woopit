@@ -22,7 +22,7 @@ import com.woopitapp.services.ServerConnection;
 abstract public class ModelDownloader extends AsyncTask<Void,Void,Boolean>{
 
 	int modelId;
-	String server_path = "http://"+ServerConnection.HOST+":7778/models/";
+	String server_path = "http://"+ServerConnection.HOST+"/models/";
 	String base_url = "Woopit/models/";
 	
 	int downloadedSize = 0;
@@ -135,11 +135,14 @@ abstract public class ModelDownloader extends AsyncTask<Void,Void,Boolean>{
          
         } catch (final MalformedURLException e) {
             e.printStackTrace();
+            return false;
         } catch (final IOException e) {   
             e.printStackTrace();
+            return false;
         }
         catch (final Exception e) {
         	e.printStackTrace();
+        	return false;
         }       
 		
 		

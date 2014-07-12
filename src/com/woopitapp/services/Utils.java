@@ -426,7 +426,7 @@ public class Utils {
 	}
 	
 	public static String getUserImageURI( int id ){
-		return "http://"+ServerConnection.HOST+":7778/users/images/"+id+".jpg";
+		return "http://"+ServerConnection.HOST+"/users/images/"+id+".jpg";
 	}
 	
 	public static void setUserImage( Context con , ImageView iv , int id_user ){

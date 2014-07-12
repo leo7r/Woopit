@@ -306,6 +306,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 			}
 			else{
 				Toast.makeText(getApplicationContext(), "ERROR EN MODEL DOWNLOADER", Toast.LENGTH_SHORT).show();
+				finish();
 			}
 			
 		}
