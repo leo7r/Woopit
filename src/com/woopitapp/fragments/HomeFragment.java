@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,8 +71,10 @@ public class HomeFragment extends Fragment {
 					
 					page++;
 					Context c = getActivity().getApplicationContext();
-    	        	new get_messages( c,User.get(c).id, page ).execute();
+					list_loading.setVisibility(View.VISIBLE);
+					new get_messages( c,User.get(c).id, page ).execute();
 					loadingMore = true;
+					
 				}
 			}
 
@@ -85,18 +89,27 @@ public class HomeFragment extends Fragment {
     
     public void onStart(){
     	super.onStart();
+    	if(mAdapter == null){
+    		Context c = this.getActivity().getApplicationContext();
+    		new get_messages(c,User.get(c).id,page).execute();
+    	}
 
-        Context c = this.getActivity().getApplicationContext();
-        new get_messages(c,User.get(c).id,page).execute();
+    	
+    
     }
     
     public void onStop(){
     	super.onStop();
-    	
-    	page = 0;
-    	mAdapter = null;
+
+
     }
-    
+    public void onDestroyView(){
+    	super.onDestroyView();
+    	page = 0;
+    	mAdapter.clear();
+    	mAdapter = null;
+
+    }
     public class get_messages extends ServerConnection{
     	
     	Context con;
@@ -108,9 +121,8 @@ public class HomeFragment extends Fragment {
     		this.con = con;
     		this.user_id = user_id;
     		this.page = page;
-    		if ( getView() != null ){
-    			loader = (ProgressBar) getView().findViewById(R.id.loader);
-    		}
+    		
+    		loader = (ProgressBar) getView().findViewById(R.id.loader);
     		init(con,"get_messages",new Object[]{ ""+user_id,""+ page });
     	}
 

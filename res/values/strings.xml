@@ -60,6 +60,7 @@
     <string name="nombre_usuario">Nombre de Usuario</string>
     <string name="verificando_usuario">Verificando Usuario&#8230;</string>
     <string name="nombre_usuario_ya_tomado">El nombre de usuario <b>%s</b> ya fue tomado.</string>
+    <string name="error_restablecer_contrasena">Error, debe ingresar su email</string>
 
     <!-- Pantalla de Amigos -->
     <string name="title_activity_search_users">SearchUsers</string>

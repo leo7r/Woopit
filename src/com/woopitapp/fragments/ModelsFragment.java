@@ -36,6 +36,7 @@ import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.SearchModelsActivity;
 import com.woopitapp.entities.Model;
 import com.woopitapp.entities.User;
+import com.woopitapp.fragments.HomeFragment.get_messages;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
@@ -49,9 +50,11 @@ public class ModelsFragment extends Fragment {
 	EditText search;
 	JSONArray saved_models;
 	
+	
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	
-        View view = (LinearLayout)inflater.inflate(R.layout.models_fragment, container, false);
+
+        
+    	View view = (LinearLayout)inflater.inflate(R.layout.models_fragment, container, false);
         
         models_list = (ListView) view.findViewById(R.id.models_list);
         list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
@@ -103,25 +106,30 @@ public class ModelsFragment extends Fragment {
 				return false;
 			}
 		});
-        
         return view;
     }
     
     public void onStart(){
     	
     	super.onStart();
-    	new GetUserModels( getActivity() , page ).execute();
-    	 
+    	if(mAdapter == null){
+    		new GetUserModels( getActivity() , page ).execute();
+    	}
     }
     
     public void onStop(){
-    	
-    	super.onStop();
-    	
-    	mAdapter = null;
-    	page = 0;
-    }
     
+    	super.onStop();
+    }
+    public void onDestroyView(){
+    	super.onDestroyView();
+    	page = 0;
+    	if(mAdapter != null){
+    		mAdapter.clear();
+    	}
+    	mAdapter = null;
+    	Log.e("chao", "chao");
+    }
     public void invalidateModels(){
     	
     	mAdapter = null;
@@ -193,7 +201,12 @@ public class ModelsFragment extends Fragment {
     		this.con = con;
     		this.user_id = User.get(con).id;
     		this.page = page;
-    		loader = (ProgressBar) getActivity().findViewById(R.id.loaderModel);	
+    		if(loader != null){
+    			loader.setVisibility(View.VISIBLE);
+    		}else{
+        		loader = (ProgressBar) getActivity().findViewById(R.id.loaderModel);	
+
+    		}
     		init(con,"get_user_models",new Object[]{ user_id+"" , page });
     	}
     	
@@ -255,6 +268,14 @@ public class ModelsFragment extends Fragment {
 			}
 			
 		}
+	    public void updateContent(){
+
+	    	page = 0;
+	    	mAdapter = null;
+	    	new GetUserModels( getActivity() , page ).execute();
+	       
+	    }
+	    
     	
     }
         

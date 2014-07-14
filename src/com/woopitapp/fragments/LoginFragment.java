@@ -3,6 +3,25 @@ package com.woopitapp.fragments;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -19,23 +38,6 @@ import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.woopitapp.R;
 import com.woopitapp.activities.WelcomeActivity;
-
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Patterns;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 
 public class LoginFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener {
 	
@@ -67,6 +69,21 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("email","public_profile","user_friends"));
         
+        TextView reset_password = (TextView) view.findViewById(R.id.reset_password);
+        reset_password.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				
+				if ( email.getText().toString().length() > 4 ){
+					new WelcomeActivity.ResetPassword(getActivity(), email.getText().toString()).execute();
+				}
+				else{
+					Toast.makeText(getActivity(), R.string.error_restablecer_contrasena, Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+		});
         
         /* Login con Google+ */
                 

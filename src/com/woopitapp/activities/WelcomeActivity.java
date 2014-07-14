@@ -224,5 +224,38 @@ public class WelcomeActivity extends FragmentActivity {
 		}
 		
 	}
+	
+	public static class ResetPassword extends ServerConnection{
+
+		Context c;
 		
+		public ResetPassword( Context c , String email ){
+			super();
+			this.c = c;
+			
+			init(c,"request_password_reset", new Object[]{ email });
+		}
+		
+		@Override
+		public void onComplete(String result) {
+			
+			if ( result != null ){
+				
+				if ( result.equals("ok")){
+					
+					Toast.makeText(c, "Email sended...", Toast.LENGTH_SHORT).show();
+				}
+				else{
+					Toast.makeText(c, R.string.error_desconocido, Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+			else{
+				Toast.makeText(c, R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+		
+	}
+	
 }
