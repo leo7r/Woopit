@@ -3,7 +3,6 @@ package com.woopitapp.graphics;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -13,13 +12,10 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.os.Environment;
 import android.util.Log;
-
- 
 
 public class Objeto {
 
@@ -224,6 +220,7 @@ public class Objeto {
 				}
 				byteBuf.clear();
 				extraBuff.clear();
+				Log.e("FREE","ALLOC MATERIALES" );
 				this.materiales.add(m);
 			}
 		}catch(Exception e){
@@ -233,6 +230,7 @@ public class Objeto {
 	
 	private  void crearBuffers(Context context,String nombre){
 			try{
+					
 				File dir = Environment.getExternalStorageDirectory();
 				File woopitDir = new File(dir,"/Woopit/models/"+nombre);
 				FileInputStream inStream = new FileInputStream(woopitDir);
@@ -241,7 +239,7 @@ public class Objeto {
 				crearMateriales(in);
 				
 				ByteBuffer byteBuf = ByteBuffer.allocateDirect(4);
-
+				
 				while(true){
 					
 					GroupMesh group = new GroupMesh();
@@ -261,6 +259,7 @@ public class Objeto {
 					group.setMaterial(materiales.get(material));
 					groups.add(group);
 					
+				
 				}
 				inStream.close();
 			}catch(Exception e){

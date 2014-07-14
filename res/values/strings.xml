@@ -89,6 +89,7 @@
     <string name="mensaje_recibido_lejos"> te ha dejado un woop!</string>
     <string name="mensaje_enviado_aqui">Ha enviado un Woop %s aqui!</string>
     <string name="modelo_enviado">Modelo Enviado: </string>
+    
     <!-- Pantalla de perfil -->
     <string name="perfil">Perfil</string>
     <string name="woops">Woops</string>
@@ -151,6 +152,8 @@
     <string name="saldo_actual">Saldo actual</string>
     <string name="compra_segura">Estás protegido, tu compra es segura</string>
     <string name="comprar_ahora"><u>COMPRAR AHORA</u></string>
+    <string name="comprar_precio_modelo">Precio del modelo: %s monedas</string>
+    <string name="comprar_monedas_usuario">Tus monedas: %s</string>
 
     <!-- Mensajes de bienvenida -->
     <string name="bienvenida_mensajes"><b>Oh mira, un nuevo mensaje!</b>\n\nTócalo y descubre lo que hay dentro</string>
