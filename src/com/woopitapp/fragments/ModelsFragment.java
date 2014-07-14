@@ -187,7 +187,13 @@ public class ModelsFragment extends Fragment {
 	        models_list.setAdapter(mAdapter);
     	}
 	}
-    
+    public void refresh(){
+    	((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);		
+		if(mAdapter == null){
+    		new GetUserModels( getActivity() , page ).execute();
+    	}
+    }
     class GetUserModels extends ServerConnection{
     	
     	Context con;
@@ -201,12 +207,16 @@ public class ModelsFragment extends Fragment {
     		this.con = con;
     		this.user_id = User.get(con).id;
     		this.page = page;
-    		if(loader != null){
-    			loader.setVisibility(View.VISIBLE);
-    		}else{
-        		loader = (ProgressBar) getActivity().findViewById(R.id.loaderModel);	
 
+    		loader = (ProgressBar) getActivity().findViewById(R.id.loaderModel);	
+
+    		if(mAdapter == null){
+    			loader.setVisibility(View.VISIBLE);
     		}
+        		
+    		((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+    		((TextView)  getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);	
+    		
     		init(con,"get_user_models",new Object[]{ user_id+"" , page });
     	}
     	
@@ -264,7 +274,27 @@ public class ModelsFragment extends Fragment {
 				
 			}
 			else{
-				Toast.makeText(con, R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				Log.e("Error de conexion","eror d conexion");
+				ImageView notSiganlIcon = ((ImageView) getView().findViewById(R.id.notSignalImage));
+				TextView reload = (TextView) getView().findViewById(R.id.reload_button);		
+				reload.setVisibility(View.VISIBLE);
+				notSiganlIcon.setVisibility(View.VISIBLE);
+				if(mAdapter != null){
+					mAdapter.clear();
+				}
+				if(list_loading != null){
+					list_loading.setVisibility(View.GONE);
+				}
+				notSiganlIcon.setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
+				reload.setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
 			}
 			
 		}

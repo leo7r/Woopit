@@ -51,9 +51,11 @@ public class HomeFragment extends Fragment {
 	int page = 0;
 	boolean loadingMore;
 	LinearLayout list_loading;
-	
+	LayoutInflater li;
+	ViewGroup viewGroup;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	
+    	li = inflater;
+    	viewGroup = container;
         View view = (LinearLayout)inflater.inflate(R.layout.home_fragment, container, false);
 		list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
 		message_list = (ListView) view.findViewById(R.id.messages_list);
@@ -106,9 +108,23 @@ public class HomeFragment extends Fragment {
     public void onDestroyView(){
     	super.onDestroyView();
     	page = 0;
-    	mAdapter.clear();
+    	if(mAdapter != null){
+    		mAdapter.clear();
+    	}
     	mAdapter = null;
+    	
 
+    }
+    
+    public void refresh(){
+    	((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);		
+		if(mAdapter == null){
+			
+    		Context c = this.getActivity().getApplicationContext();
+    		new get_messages(c,User.get(c).id,page).execute();
+    		
+    	}
     }
     public class get_messages extends ServerConnection{
     	
@@ -121,17 +137,22 @@ public class HomeFragment extends Fragment {
     		this.con = con;
     		this.user_id = user_id;
     		this.page = page;
-    		
+
     		loader = (ProgressBar) getView().findViewById(R.id.loader);
+    		if(mAdapter == null){
+    			loader.setVisibility(View.VISIBLE);
+    		}
+    		((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+    		((TextView)  getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);	
     		init(con,"get_messages",new Object[]{ ""+user_id,""+ page });
     	}
 
 		@Override
 		public void onComplete(String result) {
 			
-			if ( loader != null ){
-				loader.setVisibility(View.GONE);
-			}
+		
+			loader.setVisibility(View.GONE);
+			
 
 			messages_list = new ArrayList<Message>();
 			
@@ -174,28 +195,58 @@ public class HomeFragment extends Fragment {
 				}catch(Exception e){
 					e.printStackTrace();
 				}
-			}
+				
+				if(mAdapter == null){
+				    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
+				    message_list.setAdapter(mAdapter);
+				}else{
+					
+					for (Message m : messages_list){
+						mAdapter.add(m);
+					}
+					
+					mAdapter.notifyDataSetChanged();
+				}
+				
+				if ( messages_list.size() == 0 && page == 0){
+					Date date = new Date();
+					Message m = new Message(0,1,User.get(con).id,1,"","Bienvenido a Woopit :D",date,500,500,0,"Woopit","Welcome Woop");
+					messages_list.add(m);
+		
+					if ( getView() != null ){
+						((TextView) getView().findViewById(R.id.welcome_message)).setVisibility(View.VISIBLE);
+					}
+					if ( loader != null ){
+						loader.setVisibility(View.GONE);
+					}
+					if ( list_loading != null ){
+						list_loading.setVisibility(View.GONE);
+					}
+					mAdapter = null;
+					
+				}
 			
-			if ( messages_list.size() == 0 && page == 0){
-				Date date = new Date();
-				Message m = new Message(0,1,User.get(con).id,1,"","Bienvenido a Woopit :D",date,500,500,0,"Woopit","Welcome Woop");
-				messages_list.add(m);
-				
-				if ( getView() != null ){
-					((TextView) getView().findViewById(R.id.welcome_message)).setVisibility(View.VISIBLE);
-				}
-			}
-			if(mAdapter == null){
-			    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
-			    message_list.setAdapter(mAdapter);
+			
+			
+			
 			}else{
-				
-				for (Message m : messages_list){
-					mAdapter.add(m);
+				((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.VISIBLE);
+				TextView reload = (TextView) getView().findViewById(R.id.reload_button);		
+				reload.setVisibility(View.VISIBLE);
+				if(mAdapter != null){
+					mAdapter.clear();
 				}
-				
-				mAdapter.notifyDataSetChanged();
+				if(list_loading != null){
+					list_loading.setVisibility(View.GONE);
+				}
+				reload.setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
 			}
+				
+			
 			
 		   
 			

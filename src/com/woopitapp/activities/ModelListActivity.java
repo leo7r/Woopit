@@ -35,6 +35,7 @@ import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.Model;
 import com.woopitapp.entities.User;
+import com.woopitapp.fragments.HomeFragment.get_messages;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
@@ -201,7 +202,15 @@ public class ModelListActivity extends WoopitActivity {
 		i.putExtra("enable", m.enable);
 		startActivityForResult(i, REQUEST_SEND_MESSAGE);
 	}
-	
+    public void refresh(){
+	    ((ImageView)findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+		((TextView) findViewById(R.id.reload_button)).setVisibility(View.GONE);		
+		if(mAdapter == null){
+				
+			new GetUserModels(getApplicationContext(), page ).execute();
+	    		
+	    }
+	}
 	public class GetUserModels extends ServerConnection{
     	
     	Context con;
@@ -214,6 +223,11 @@ public class ModelListActivity extends WoopitActivity {
     		this.user_id = User.get(con).id;
     		this.page = page;
     		loader = (ProgressBar) findViewById(R.id.loaderModel);		
+     		if(mAdapter == null){
+    			loader.setVisibility(View.VISIBLE);
+    		}
+     		((ImageView)findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+    		((TextView) findViewById(R.id.reload_button)).setVisibility(View.GONE);	
     		init(con,"get_user_models",new Object[]{ User.get(con).id+"" , page });
     	}
     	
@@ -264,10 +278,23 @@ public class ModelListActivity extends WoopitActivity {
 				} catch (JSONException e) {	
 					e.printStackTrace();
 				}
-				
+			
 			}
 			else{
-				Toast.makeText(con, R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				((ImageView) findViewById(R.id.notSignalImage)).setVisibility(View.VISIBLE);
+				TextView reload = (TextView) findViewById(R.id.reload_button);		
+				reload.setVisibility(View.VISIBLE);
+				if(mAdapter != null){
+					mAdapter.clear();
+				}
+				if(list_loading != null){
+					list_loading.setVisibility(View.GONE);
+				}
+				reload.setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
 			}
 			
 		}

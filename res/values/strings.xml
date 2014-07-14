@@ -173,5 +173,6 @@
     <string name="notificacion_peticion_aceptada">Te ha aceptado! Enviale un Woop</string>
     <string name="notificacion_woopit_actualizado">Nueva versión disponible</string>
     <string name="notificacion_woopit_actualizado2">Toca para actualizar!</string>
-
+	<string name="notificacion_woopit_sin_senal">Sin conexion presione aqui para intentar de nuevo</string>
+	
 </resources>

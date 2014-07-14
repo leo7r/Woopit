@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,6 @@ public class ModelPreviewActivity extends WoopitActivity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.model_preview);
-		
 		Bundle extras = getIntent().getExtras();
 		user = User.get(getApplicationContext());
 		modelId = extras.getInt("modelId");
@@ -293,15 +293,18 @@ public class ModelPreviewActivity extends WoopitActivity {
     /* Descarga el modelo si no esta ya descargado */
     
     class MDownloader extends ModelDownloader{
-
+    	ProgressBar loader;
 		public MDownloader(Activity act, int modelId) {
 			super(act, modelId);
+			loader = (ProgressBar)findViewById(R.id.loaderModel);
+			loader.setVisibility(View.VISIBLE);
 		}
 
 		@Override
 		protected void onPostExecute(Boolean success) {
-			
+			loader.setVisibility(View.GONE);
 			if ( success ){
+				
 				init();
 			}
 			else{
