@@ -54,8 +54,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 
     EditText email, password;
     boolean fb_info_ready = false;
-    boolean gp_info_ready = false;
-	
+    boolean gp_info_ready = false;	
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

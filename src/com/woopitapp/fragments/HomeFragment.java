@@ -105,6 +105,7 @@ public class HomeFragment extends Fragment {
 
 
     }
+    
     public void onDestroyView(){
     	super.onDestroyView();
     	page = 0;
@@ -116,6 +117,7 @@ public class HomeFragment extends Fragment {
 
     }
     
+
     public void refresh(){
     	((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
 		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);		
@@ -126,6 +128,7 @@ public class HomeFragment extends Fragment {
     		
     	}
     }
+
     public class get_messages extends ServerConnection{
     	
     	Context con;

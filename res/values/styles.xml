@@ -8,6 +8,13 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:textColor">@color/woopit_text_color</item>
     </style>
+    
+     <!-- Dialog theme. -->
+    <style name="Dialog" parent="android:Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+       	<item name="android:windowBackground">@drawable/dialog_bg</item>
+        <item name="android:textColor">@color/woopit_text_color</item>
+    </style>
 
     <style name="big_button">
         <item name="android:background">@color/woopit_dark_blue</item>

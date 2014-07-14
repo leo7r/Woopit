@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
+import com.woopitapp.dialogs.BuyModelDialog;
 import com.woopitapp.entities.User;
 import com.woopitapp.graphics.Objeto;
 import com.woopitapp.server_connections.ModelDownloader;
@@ -145,10 +146,10 @@ public class ModelPreviewActivity extends WoopitActivity {
 			else{
 				button.setText(R.string.comprar_modelo);
 				button.setOnClickListener(new OnClickListener(){
-
+					
 					@Override
 					public void onClick(View arg0) {
-						Intent i = new Intent(getApplicationContext(),BuyModelActivity.class);
+						Intent i = new Intent(getApplicationContext(),BuyModelDialog.class);
 						i.putExtra("modelId", modelId);
 						startActivityForResult( i , REQUEST_BUY_MODEL );
 					}

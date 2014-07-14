@@ -3,7 +3,6 @@ package com.woopitapp.graphics;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
@@ -13,13 +12,10 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.os.Environment;
 import android.util.Log;
-import sun.misc.Unsafe;
-import java.lang.reflect.Field;
 
 public class Objeto {
 
@@ -231,12 +227,7 @@ public class Objeto {
 			
 		}
 	}
-	  private static Unsafe getUnsafe() throws Exception {
-			// Get the Unsafe object instance
-			Field field = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
-			field.setAccessible(true);
-			return (sun.misc.Unsafe) field.get(null);
-		  }
+	
 	private  void crearBuffers(Context context,String nombre){
 			try{
 					
