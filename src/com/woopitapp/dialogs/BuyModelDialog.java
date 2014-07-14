@@ -90,6 +90,7 @@ public class BuyModelDialog extends Activity {
 							@Override
 							public void onClick(View arg0) {
 								Intent i = new Intent(getApplicationContext(),BuyCoinActivity.class);
+								i.putExtra("modelId", modelId);
 								startActivity(i);
 								finish();
 							}

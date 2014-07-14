@@ -26,6 +26,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
@@ -60,16 +61,21 @@ public class BuyCoinActivity extends Activity {
 		setContentView(R.layout.buy_coins);
 		act = this;
 		
+		Bundle extras = getIntent().getExtras();
+		id_model = extras.getInt("modelId");
+		
 		package_list = (ListView) findViewById(R.id.package_list);
 		ArrayList<BuyPackage> pkgs = new ArrayList<BuyPackage>();
-		pkgs.add(new BuyPackage("id","20 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"0.99",20));
-		pkgs.add(new BuyPackage("id","50 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"1.99",50));
-		pkgs.add(new BuyPackage("id","130 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"4.99",130));
-
+		pkgs.add(new BuyPackage("android.test.purchased","20 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"0.99",20));
+		pkgs.add(new BuyPackage("android.test.purchased","50 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"1.99",50));
+		pkgs.add(new BuyPackage("android.test.purchased","130 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"4.99",130));
+		
 		mAdapter = new PackageAdapter(this,R.id.package_list,pkgs);
 		package_list.setAdapter(mAdapter);
 		
-		new GetUserCoins().execute();		
+		bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"), mServiceConn, Context.BIND_AUTO_CREATE);
+		
+		new GetUserCoins().execute();
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -94,8 +100,8 @@ public class BuyCoinActivity extends Activity {
 						 long purchase_time = jsonData.getLong("purchaseTime");
 						 String product_id = jsonData.getString("productId");
 						
-						//new ConsumeModel().execute();
-						new SavePurchase(this,id_model,purchase_token,order_id,purchase_time,product_id,true).execute();
+						new SavePurchase(this,purchase_token,order_id,purchase_time,product_id,true).execute();
+						new ConsumePurchase(product_id).execute();
 					}
 					else{
 						Log.e(TAG, "Error, fallaron los token");
@@ -139,7 +145,6 @@ public class BuyCoinActivity extends Activity {
 			mService = IInAppBillingService.Stub.asInterface(service);
 			Log.i(TAG,"Connected");
 			
-			new VerifyItemDisponibility().execute();
 		}
 	};
 	
@@ -182,7 +187,7 @@ public class BuyCoinActivity extends Activity {
 				convertView = inflater.inflate(R.layout.coin_package_item, null);
 			}
 			
-			BuyPackage item = getItem(position);
+			final BuyPackage item = getItem(position);
 			
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView description = (TextView) convertView.findViewById(R.id.description);
@@ -192,7 +197,16 @@ public class BuyCoinActivity extends Activity {
 			name.setText(item.name);
 			description.setText(item.description);
 			price.setText("$"+item.price);
-						
+			
+			convertView.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View arg0) {
+					
+					new VerifyItemDisponibility( item.id ).execute();
+				}
+			});
+			
 			return convertView;
 		}
 		
@@ -241,13 +255,20 @@ public class BuyCoinActivity extends Activity {
 	class VerifyItemDisponibility extends AsyncTask<Void,Void,Boolean>{
 		
 		Bundle skuDetails;
+		String id;
+		
+		public VerifyItemDisponibility( String id ){
+			super();
+			
+			this.id = id;
+		}
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			
 			ArrayList<String> skuList = new ArrayList<String> ();
 			
-			skuList.add("5_corazon");
+			skuList.add(id);
 			
 			Bundle querySkus = new Bundle();
 			querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
@@ -279,7 +300,8 @@ public class BuyCoinActivity extends Activity {
 					   finish();
 				   }
 				   else{
-						new VerifyItemNotOwned( act ).execute();
+						new BuyModel(id).execute();
+					   //new VerifyItemNotOwned( act ).execute();
 				   }
 				   
 				}
@@ -293,6 +315,7 @@ public class BuyCoinActivity extends Activity {
 		
 	}
 	
+	/*
 	class VerifyItemNotOwned extends ServerConnection{
 
 		ProgressDialog dialog;
@@ -328,9 +351,17 @@ public class BuyCoinActivity extends Activity {
 		}
 		
 	}
+	*/
 	
 	class BuyModel extends AsyncTask<Void,Void,Boolean>{
 
+		String id;
+		
+		public BuyModel( String id ){
+			super();
+			this.id = id;
+		}
+		
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
 			
@@ -338,7 +369,7 @@ public class BuyCoinActivity extends Activity {
 				
 				security_token = Utils.randomToken();
 				
-				Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), "android.test.purchased", "inapp", security_token);
+				Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), id, "inapp", security_token);
 				int response_code = buyIntentBundle.getInt("RESPONSE_CODE");
 				
 				if ( response_code == 0  ){
@@ -353,7 +384,8 @@ public class BuyCoinActivity extends Activity {
 					
 					// Item already owned
 					if ( response_code == 7 ){
-						new ConsumeModel().execute();
+						new ConsumePurchase(id).execute();
+						//"android.test.purchased"
 					}
 					
 					Log.e(TAG, "Error response code "+response_code);
@@ -374,12 +406,18 @@ public class BuyCoinActivity extends Activity {
 		
 	}
 	
-	class ConsumeModel extends AsyncTask<Void,Void,Boolean>{
+	class ConsumePurchase extends AsyncTask<Void,Void,Boolean>{
+		
+		String id;
+		
+		public ConsumePurchase( String id ){
+			this.id = id;
+		}
 		
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
 			
-			String purchaseToken = "inapp:"+getPackageName()+":android.test.purchased";
+			String purchaseToken = "inapp:"+getPackageName()+":"+id;
 			try {
 				int response = mService.consumePurchase(3, getPackageName(),purchaseToken);
 				
@@ -410,18 +448,18 @@ public class BuyCoinActivity extends Activity {
 	class SavePurchase extends ServerConnection{
 
 		Activity act;
-		int id_model;
+		//int id_model;
 		String purchase_token, order_id, product_id;
 		long purchase_time;
 		ProgressDialog dialog;
 		int count = 10;
 		SavePurchase sp;
     	
-    	public SavePurchase( Activity act , int id_model , String purchase_token , String order_id , long purchase_time , String product_id , final boolean show_dialog ){
+    	public SavePurchase( Activity act , String purchase_token , String order_id , long purchase_time , String product_id , final boolean show_dialog ){
     		super();
     		
     		this.act = act;
-    		this.id_model = id_model;
+    		//this.id_model = id_model;
     		this.purchase_token = purchase_token;
     		this.order_id = order_id;
     		this.purchase_time = purchase_time;
@@ -440,7 +478,7 @@ public class BuyCoinActivity extends Activity {
     			});
     		}
     		
-    		init(act,"save_purchase",new Object[]{ User.get(act).id+"" , id_model+"" , purchase_token , order_id , purchase_time+"" , product_id });
+    		init(act,"save_purchase",new Object[]{ User.get(act).id+"" , purchase_token , order_id , purchase_time+"" , product_id });
     	}
     	
     	public void setNotification(){
@@ -483,7 +521,7 @@ public class BuyCoinActivity extends Activity {
     	
     	public void onError(){
     		
-			sp = new SavePurchase( this.act , this.id_model , this.purchase_token , this.order_id , this.purchase_time , this.product_id , false  );
+			sp = new SavePurchase( this.act , this.purchase_token , this.order_id , this.purchase_time , this.product_id , false  );
 			sp.count = count-1;
 			
 			if ( sp.count > 0 ){
@@ -510,7 +548,7 @@ public class BuyCoinActivity extends Activity {
 				
 				if ( result.equals("ok")){
 					
-					Toast.makeText(getApplicationContext(), R.string.compra_hecha, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), R.string.compra_monedas_hecha, Toast.LENGTH_LONG).show();
 					Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_model_purchase);
 					cancelNotification();
 					

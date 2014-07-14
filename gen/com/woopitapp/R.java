@@ -2122,11 +2122,11 @@ containing a value of this type.
         public static final int auth_client_play_services_err_notification_msg=0x7f060006;
         public static final int auth_client_requested_by_msg=0x7f060007;
         public static final int auth_client_using_bad_version_title=0x7f060002;
-        public static final int bienvenida_amigos=0x7f0600c8;
+        public static final int bienvenida_amigos=0x7f0600c9;
         /**  Mensajes de bienvenida 
          */
-        public static final int bienvenida_mensajes=0x7f0600c7;
-        public static final int bienvenida_modelos=0x7f0600c9;
+        public static final int bienvenida_mensajes=0x7f0600c8;
+        public static final int bienvenida_modelos=0x7f0600ca;
         /**  Broadcasts 
          */
         public static final int broadcast_friends_list=0x7f060051;
@@ -2266,24 +2266,25 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f060020;
         public static final int compartir_woopit=0x7f06005d;
         public static final int compartir_woopit_texto=0x7f060086;
-        public static final int compra_hecha=0x7f0600be;
-        public static final int compra_segura=0x7f0600c3;
-        public static final int comprar_ahora=0x7f0600c4;
+        public static final int compra_hecha=0x7f0600bf;
+        public static final int compra_monedas_hecha=0x7f0600be;
+        public static final int compra_segura=0x7f0600c4;
+        public static final int comprar_ahora=0x7f0600c5;
         public static final int comprar_modelo=0x7f0600a6;
-        public static final int comprar_monedas=0x7f0600c1;
-        public static final int comprar_monedas_usuario=0x7f0600c6;
-        public static final int comprar_precio_modelo=0x7f0600c5;
+        public static final int comprar_monedas=0x7f0600c2;
+        public static final int comprar_monedas_usuario=0x7f0600c7;
+        public static final int comprar_precio_modelo=0x7f0600c6;
         public static final int conectando_con_servidor=0x7f0600bc;
         public static final int configuracion=0x7f06005c;
         public static final int constrasena=0x7f060068;
-        public static final int contactanos=0x7f0600ca;
+        public static final int contactanos=0x7f0600cb;
         public static final int continuar=0x7f06005f;
         public static final int contrasena_olvidada=0x7f060069;
         public static final int correo_electronico=0x7f060067;
         public static final int correo_ya_registrado=0x7f060070;
         public static final int creando_cuenta=0x7f06006e;
-        public static final int day=0x7f0600d2;
-        public static final int days=0x7f0600d3;
+        public static final int day=0x7f0600d3;
+        public static final int days=0x7f0600d4;
         public static final int descargando_modelo=0x7f0600aa;
         public static final int edit_message=0x7f06004b;
         public static final int edit_message2=0x7f06004c;
@@ -2311,7 +2312,7 @@ containing a value of this type.
         /**  Terminos generales 
          */
         public static final int error_desconocido=0x7f06005a;
-        public static final int error_disponibilidad_modelo=0x7f0600c0;
+        public static final int error_disponibilidad_modelo=0x7f0600c1;
         public static final int error_iniciar_sesion=0x7f060071;
         public static final int error_restablecer_contrasena=0x7f060079;
         public static final int escoger_amigo=0x7f0600a8;
@@ -2339,8 +2340,8 @@ containing a value of this type.
         public static final int hello=0x7f060000;
         public static final int hello_world=0x7f06004f;
         public static final int hint_mensaje=0x7f0600ad;
-        public static final int hour=0x7f0600d0;
-        public static final int hours=0x7f0600d1;
+        public static final int hour=0x7f0600d1;
+        public static final int hours=0x7f0600d2;
         public static final int info_nombre_usuario=0x7f060075;
         public static final int informacion_actualizada=0x7f06009d;
         /**  Pantalla de Bienvenida, login y registro 
@@ -2349,14 +2350,14 @@ containing a value of this type.
         public static final int invitalos=0x7f060085;
         /**  Tiempo 
          */
-        public static final int just_now=0x7f0600cb;
+        public static final int just_now=0x7f0600cc;
         public static final int lista_de_modelos=0x7f0600a0;
         public static final int lugar_no_encontrado=0x7f06008c;
         public static final int mensaje_enviado=0x7f0600ac;
         public static final int mensaje_enviado_aqui=0x7f060090;
         public static final int mensaje_recibido_lejos=0x7f06008f;
-        public static final int minute=0x7f0600ce;
-        public static final int minutes=0x7f0600cf;
+        public static final int minute=0x7f0600cf;
+        public static final int minutes=0x7f0600d0;
         public static final int mis_modelos=0x7f060094;
         public static final int modelo_enviado=0x7f060091;
         public static final int modelos_a_comprar=0x7f060097;
@@ -2366,13 +2367,13 @@ containing a value of this type.
         public static final int no_creditos=0x7f060095;
         public static final int nombre_usuario=0x7f060076;
         public static final int nombre_usuario_ya_tomado=0x7f060078;
-        public static final int notificacion_nuevo_mensaje=0x7f0600d6;
-        public static final int notificacion_peticion_aceptada=0x7f0600d7;
+        public static final int notificacion_nuevo_mensaje=0x7f0600d7;
+        public static final int notificacion_peticion_aceptada=0x7f0600d8;
         /**  Notificaciones 
          */
-        public static final int notificacion_peticion_amigos=0x7f0600d5;
-        public static final int notificacion_woopit_actualizado=0x7f0600d8;
-        public static final int notificacion_woopit_actualizado2=0x7f0600d9;
+        public static final int notificacion_peticion_amigos=0x7f0600d6;
+        public static final int notificacion_woopit_actualizado=0x7f0600d9;
+        public static final int notificacion_woopit_actualizado2=0x7f0600da;
         public static final int nueva_contrasena=0x7f06006b;
         public static final int para_completar_compra=0x7f0600bd;
         /**  Pantalla de perfil 
@@ -2383,14 +2384,14 @@ containing a value of this type.
         public static final int registrarse=0x7f060066;
         public static final int registro=0x7f06006a;
         public static final int repetir_contrasena=0x7f06006c;
-        public static final int saldo_actual=0x7f0600c2;
+        public static final int saldo_actual=0x7f0600c3;
         public static final int security_token=0x7f060049;
         public static final int solicitudes_de_amistad=0x7f060082;
-        public static final int time_ago=0x7f0600cc;
+        public static final int time_ago=0x7f0600cd;
         /**  Compras 
          */
         public static final int title_activity_buy_model=0x7f0600b8;
-        public static final int title_activity_buy_model_dialog=0x7f0600da;
+        public static final int title_activity_buy_model_dialog=0x7f0600db;
         public static final int title_activity_choose_friend=0x7f0600a7;
         public static final int title_activity_choose_username=0x7f060073;
         public static final int title_activity_display_message=0x7f06004e;
@@ -2407,16 +2408,16 @@ containing a value of this type.
         public static final int title_activity_welcome=0x7f060050;
         public static final int tu_nombre=0x7f06006d;
         public static final int ubicacion_woop=0x7f06008e;
-        public static final int verificando_disponibilidad=0x7f0600bf;
+        public static final int verificando_disponibilidad=0x7f0600c0;
         public static final int verificando_usuario=0x7f060077;
         public static final int vista_previa=0x7f0600a5;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
         public static final int wallet_buy_button_place_holder=0x7f060021;
-        public static final int weeks=0x7f0600d4;
+        public static final int weeks=0x7f0600d5;
         public static final int woops=0x7f060093;
-        public static final int yesterday=0x7f0600cd;
+        public static final int yesterday=0x7f0600ce;
     }
     public static final class style {
         /** 
