@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff" >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        style="@style/top_bar">
+        
+        <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="@string/comprar_monedas"
+	        android:layout_alignParentLeft="true"
+	        style="@style/back_button"
+	        />
+   	
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        
+        <ProgressBar 
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerInParent="true"
+            style="@style/progress_bar"
+            />
+        
+    </RelativeLayout>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#464952"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        >
+        
+        <TextView 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="@string/saldo_actual"
+	        style="@style/normal_title"
+	        android:textColor="#fff"
+	        />
+        
+        <TextView 
+            android:id="@+id/user_coins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/normal_title"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/coin"
+            android:drawablePadding="5dp"
+            />
+        
+    </LinearLayout>
+    
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:background="@drawable/dashed_border_bg_green"
+        android:drawableLeft="@drawable/secure_buy"
+        android:drawablePadding="5dp"
+        android:text="@string/compra_segura"
+        android:textColor="@color/woopit_dark_green"
+        android:textSize="@dimen/small_text"
+        android:gravity="center"
+        />
+    
+    <ListView 
+		android:id="@+id/package_list"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:scrollbarThumbVertical="@drawable/scroll_bar"
+		android:scrollbarSize="2dp"
+		android:fadingEdgeLength="0dp"
+		android:background="@null"
+		android:divider="@android:color/transparent"
+		android:dividerHeight="15dp"
+		android:paddingLeft="20dp"
+		android:paddingRight="20dp"
+		/>
+    
+</LinearLayout>

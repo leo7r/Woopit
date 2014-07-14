@@ -87,8 +87,7 @@
     <string name="enviar_woop">Enviar Woop</string>
     <string name="ubicacion_woop">Podrá ver su Woop cuando esté cerca de aquí</string>
     <string name="mensaje_recibido_lejos"> te ha dejado un woop!</string>
-
- 	<string name="mensaje_enviado_aqui">Ha enviado un Woop %s aqui!</string>
+    <string name="mensaje_enviado_aqui">Ha enviado un Woop %s aqui!</string>
     <string name="modelo_enviado">Modelo Enviado: </string>
     <!-- Pantalla de perfil -->
     <string name="perfil">Perfil</string>
@@ -139,6 +138,7 @@
     <string name="feedback_calificanos">Califícanos</string>
 
     <!-- Compras -->
+    <string name="title_activity_buy_model">BuyModelActivity</string>
     <string name="guardando_compra">Guardando compra&#8230;</string>
     <string name="error_compra">Error procesando compra, intentalo nuevamente</string>
     <string name="error_compra_reintentando">Error procesando compra, intentando de nuevo&#8230;</string>
@@ -147,14 +147,17 @@
     <string name="compra_hecha">Gracias! su compra ha sido satisfactoria, ya puede enviar este modelo</string>
     <string name="verificando_disponibilidad">Verificando disponibilidad</string>
     <string name="error_disponibilidad_modelo">Error, este modelo no se encuentra en venta</string>
-    <string name="title_activity_buy_model">BuyModelActivity</string>
-    
+    <string name="comprar_monedas">Comprar monedas</string>
+    <string name="saldo_actual">Saldo actual</string>
+    <string name="compra_segura">Estás protegido, tu compra es segura</string>
+    <string name="comprar_ahora"><u>COMPRAR AHORA</u></string>
+
     <!-- Mensajes de bienvenida -->
     <string name="bienvenida_mensajes"><b>Oh mira, un nuevo mensaje!</b>\n\nTócalo y descubre lo que hay dentro</string>
     <string name="bienvenida_amigos"><b>Aquí van tus amigos!</b>\nBusca algunos para que empiece la diversión.</string>
     <string name="bienvenida_modelos"><b>No has creado ningún modelo todavía</b>\n\nSi quieres poder crear tus modelos y venderlos</string>
     <string name="contactanos">Contáctanos</string>
-    
+
     <!-- Tiempo -->
     <string name="just_now">Justo ahora</string>
     <string name="time_ago">Hace %s</string>
@@ -166,12 +169,13 @@
     <string name="day">Un día</string>
     <string name="days">%d días</string>
     <string name="weeks">Semanas</string>
-    
+
     <!-- Notificaciones -->
     <string name="notificacion_peticion_amigos">Quiere ser tu amigo en Woopit</string>
     <string name="notificacion_nuevo_mensaje">Te ha enviado un Woop! Toca para verlo</string>
     <string name="notificacion_peticion_aceptada">Te ha aceptado! Enviale un Woop</string>
     <string name="notificacion_woopit_actualizado">Nueva versión disponible</string>
     <string name="notificacion_woopit_actualizado2">Toca para actualizar!</string>
+    <string name="title_activity_buy_model_dialog">BuyModelDialog</string>
 
 </resources>
