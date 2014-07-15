@@ -294,10 +294,10 @@ public class ModelPreviewActivity extends WoopitActivity {
     /* Descarga el modelo si no esta ya descargado */
     
     class MDownloader extends ModelDownloader{
-    	ProgressBar loader;
+    	RelativeLayout loader;
 		public MDownloader(Activity act, int modelId) {
 			super(act, modelId);
-			loader = (ProgressBar)findViewById(R.id.loaderModel);
+			loader = (RelativeLayout)findViewById(R.id.loaderModel);
 			loader.setVisibility(View.VISIBLE);
 		}
 
