@@ -117,7 +117,6 @@ public class HomeFragment extends Fragment {
 
     }
     
-
     public void refresh(){
     	((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
 		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);		
@@ -295,6 +294,8 @@ public class HomeFragment extends Fragment {
 		newMessagei.putExtra("text", message.text);
 		newMessagei.putExtra("nombre", message.name);
 		startActivityForResult(newMessagei,REQUEST_MESSAGE);
+		
+		Utils.onMessageView(getActivity(), message, "HomeFragment");
 	}
   
     public void verMensajeEnviado( Message message ){
@@ -305,6 +306,8 @@ public class HomeFragment extends Fragment {
 		newMessagei.putExtra("modelName",message.modelName+"");
 		newMessagei.putExtra("nombre", message.name);
 		startActivity(newMessagei);
+		
+		Utils.onMessageView(getActivity(), message, "HomeFragment");
 	}
     
     class UpdateMessageStatus extends ServerConnection{

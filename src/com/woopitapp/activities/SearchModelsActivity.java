@@ -41,7 +41,7 @@ public class SearchModelsActivity extends WoopitActivity {
 	LinearLayout list_loading;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search_models);
 		

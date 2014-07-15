@@ -27,7 +27,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.scythe.bucket.BucketListAdapter;
@@ -36,7 +35,6 @@ import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.SearchModelsActivity;
 import com.woopitapp.entities.Model;
 import com.woopitapp.entities.User;
-import com.woopitapp.fragments.HomeFragment.get_messages;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
@@ -100,6 +98,8 @@ public class ModelsFragment extends Fragment {
 					i.putExtra("query", query );
 					startActivity(i);
 					
+					Utils.onModelSearch(getActivity(), "ModelsFragment", query);
+					
 					return true;
 				}
 				
@@ -121,6 +121,7 @@ public class ModelsFragment extends Fragment {
     
     	super.onStop();
     }
+    
     public void onDestroyView(){
     	super.onDestroyView();
     	page = 0;
@@ -130,6 +131,7 @@ public class ModelsFragment extends Fragment {
     	mAdapter = null;
     	Log.e("chao", "chao");
     }
+    
     public void invalidateModels(){
     	
     	mAdapter = null;
@@ -172,6 +174,7 @@ public class ModelsFragment extends Fragment {
 					i.putExtra("enable", model.enable);
 					startActivity(i);
 					
+					Utils.onModelOpen(getActivity(), "ModelsFragment", model.id);		
 				}
 			});
 			
@@ -187,13 +190,17 @@ public class ModelsFragment extends Fragment {
 	        models_list.setAdapter(mAdapter);
     	}
 	}
+    
     public void refresh(){
+    	
     	((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
-		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);		
+		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);	
+		
 		if(mAdapter == null){
     		new GetUserModels( getActivity() , page ).execute();
     	}
     }
+    
     class GetUserModels extends ServerConnection{
     	
     	Context con;

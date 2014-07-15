@@ -118,10 +118,10 @@ public class FriendsFragment extends Fragment {
     public void searchUsers( String query ){
     	
 		Intent i = new Intent(getActivity(),SearchUsers.class);
-		
-		i.putExtra("query", query);
-		
+		i.putExtra("query", query);		
 		startActivity(i);
+		
+		Utils.onUserSearch(getActivity(), "FriendsFragment", query);
     }
     
     public void updateContent(){
@@ -144,14 +144,17 @@ public class FriendsFragment extends Fragment {
 		i.putExtra("userId", u.id);
 		i.putExtra("userName", u.name);
 		startActivityForResult(i, REQUEST_SEND_MESSAGE);
+		
+		Utils.onMessageNew(getActivity(), "FriendsFragment", u.id);
     }
 	
     public void goToUserProfile( int id_user ){
         	
     	Intent i = new Intent(getActivity(),ProfileActivity.class);
-    	
     	i.putExtra("id_user", id_user );
     	startActivity(i);
+    	
+    	Utils.onUserProfileEnter(getActivity(), "FriendsFragment", id_user);
     }
         
     public class ListAdapter extends ArrayAdapter<Object> implements StickyListHeadersAdapter {
@@ -305,7 +308,8 @@ public class FriendsFragment extends Fragment {
 				if ( result != null && result.length() > 0 ){
 					
 					int new_status = Integer.parseInt(result);
-										
+					Utils.onUserAddOrReject(getActivity(), "FriendsFragment", new_status == 1 ? "Agregar" : "Borrar" , to_user);
+					
 					if ( new_status == -1 || new_status == 1 ){
 				        // Refresco lista de amigos
 						

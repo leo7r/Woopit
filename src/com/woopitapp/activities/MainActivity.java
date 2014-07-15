@@ -24,11 +24,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
-import android.widget.Toast;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -41,7 +41,6 @@ import com.woopitapp.entities.User;
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
 import com.woopitapp.fragments.ModelsFragment;
-import com.woopitapp.services.GcmBroadcastReceiver;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.TabPager;
 import com.woopitapp.services.Utils;
@@ -54,6 +53,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     private ViewPager mViewPager;
     private TabPager mPagerAdapter;
 	SlidingMenu menu;
+	private int SHARE_REQUEST_CODE = 1;
     
     // Service
     WoopitService wService;
@@ -80,7 +80,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     SharedPreferences prefs;
     String regid;
 	
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
@@ -125,7 +125,16 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         
     }
     
-    protected void onStart(){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if ( requestCode == SHARE_REQUEST_CODE && resultCode == RESULT_OK ){
+			
+			Utils.onShareWoopit(getApplicationContext(), "SlidingMenu", "Compartido");
+		}
+		
+	}
+    
+    public void onStart(){
     	super.onStart();
     	
     	Intent intent = new Intent(this, WoopitService.class);
@@ -352,6 +361,8 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     public void goEditProfile( View v ){
     	Intent i = new Intent(this,EditProfileActivity.class);    	
     	startActivity(i);
+    	
+    	Utils.onEditProfileEnter(getApplicationContext(), "SlidingMenu");
     }
     
     public void goMyProfile( View v ){
@@ -369,10 +380,16 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 		sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.compartir_woopit_texto));
 		sendIntent.setType("text/plain");
 		
-		startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.compartir_woopit)));
+		startActivityForResult(Intent.createChooser(sendIntent, getResources().getString(R.string.compartir_woopit)),SHARE_REQUEST_CODE);
+		
+		Utils.onShareWoopit(getApplicationContext(), "SlidingMenu", "Entrar");
+		
 	}
     
     public void sendFeedback( View v ){
+    	
+    	Utils.onSendFeedback(getApplicationContext(), "SlidingMenu", "Entrar");
+    	
     	feedBack.show();
     	toggleSlidingMenu(v);
     }

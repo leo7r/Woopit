@@ -25,6 +25,7 @@ import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class SearchUsers extends WoopitActivity {
 
@@ -33,7 +34,7 @@ public class SearchUsers extends WoopitActivity {
 	UserAdapter uAdapter;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 						
 		Bundle extras = getIntent().getExtras();
@@ -182,6 +183,7 @@ public class SearchUsers extends WoopitActivity {
 			
 			this.to_user = to_user;
 			init(getApplicationContext(),"add_or_reject_friend",new Object[]{ User.get(getApplicationContext()).id , to_user });
+			
 		}
 
 		@Override
@@ -190,6 +192,8 @@ public class SearchUsers extends WoopitActivity {
 			if ( result != null && result.length() > 0 ){
 				
 				int new_status = Integer.parseInt(result);
+				
+				Utils.onUserAddOrReject(getApplicationContext(), "SearchUsers", new_status == 1 ? "Agregar" : "Borrar" , to_user);
 				
 				// Busco el usuario y cambio su request_status
 				for ( User u : uAdapter.items ){

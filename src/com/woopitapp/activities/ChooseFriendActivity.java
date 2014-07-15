@@ -29,7 +29,7 @@ public class ChooseFriendActivity extends WoopitActivity {
 	ListAdapter uAdapter;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.choose_friend);
 		
@@ -55,16 +55,6 @@ public class ChooseFriendActivity extends WoopitActivity {
 			}			
 		}
 		
-	}
-
-	public void inviteFriends( View v ){
-		
-		Intent sendIntent = new Intent();
-		sendIntent.setAction(Intent.ACTION_SEND);
-		sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.compartir_woopit_texto));
-		sendIntent.setType("text/plain");
-		
-		startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.compartir_woopit)));
 	}
 	
     public class ListAdapter extends ArrayAdapter<User>{
@@ -111,6 +101,7 @@ public class ChooseFriendActivity extends WoopitActivity {
 					i.putExtra("modelId", modelId);
 					i.putExtra("enable", true);
 					startActivity(i);
+					
 				}
 			});
 			

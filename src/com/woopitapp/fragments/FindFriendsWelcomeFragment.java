@@ -3,6 +3,9 @@ package com.woopitapp.fragments;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -39,6 +42,7 @@ import com.woopitapp.R;
 import com.woopitapp.activities.FindFriendsActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener  {
 	
@@ -312,6 +316,14 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 			if ( result != null && result.length() > 0 ){
 				Log.d(TAG,result);
 				
+				int num_users;
+				try {
+					num_users = new JSONArray(result).length();
+				} catch (JSONException e) {
+					num_users = 0;
+				}
+				
+				Utils.onFriendsSearch(getActivity(), facebook_ids == null ? "Google+" : "Facebook", num_users);
 				((FindFriendsActivity) getActivity()).setFriendsList(result);
 				new SetSocialIds(getActivity()).execute();
 			}

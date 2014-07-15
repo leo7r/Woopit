@@ -157,9 +157,12 @@ public class MapActivity extends FragmentActivity implements
 	class Send_Message extends ServerConnection{
     	
 		Context con;
+		double lat,lon;
 		
 		public Send_Message(Context context,double latitud, double longitud){
 			this.con = context;
+			this.lat = latitud;
+			this.lon = longitud;
 			
 			init(con,"send_message",new Object[]{User.get(con).id,userId,modelId,"",message,latitud,longitud});
 		}
@@ -169,6 +172,7 @@ public class MapActivity extends FragmentActivity implements
 			
 			if( result != null && result.equals("OK") ){
 				
+				Utils.onMessageSent(getApplicationContext(), "MapActivity", modelId, message, lat, lon);
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 				setResult(RESULT_OK);
 			    finish();

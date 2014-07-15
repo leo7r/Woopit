@@ -39,7 +39,7 @@ public class EditProfileActivity extends WoopitActivity {
 	private static final String TEMP_PHOTO_FILE = "woopit_user_image.jpg";
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_profile);
 		
@@ -147,6 +147,7 @@ public class EditProfileActivity extends WoopitActivity {
 				
 				if ( result.toLowerCase().equals("ok") ){
 					Toast.makeText(getApplicationContext(), R.string.informacion_actualizada, Toast.LENGTH_SHORT).show();
+					Utils.onEditProfileEdit(getApplicationContext(), "Informacion");
 					
 					Data data = new Data(con);
 					data.open();
@@ -184,7 +185,8 @@ public class EditProfileActivity extends WoopitActivity {
 		public void onComplete(String result) {
 			
 			if ( result != null && result.length() > 0 ){
-				
+
+				Utils.onEditProfileEdit(getApplicationContext(), "Imagen");
 				ImageLoader imageLoader = Utils.getImageLoader(con);
 				
 				File imageFile = imageLoader.getDiscCache().get(Utils.getUserImageURI(user.id));

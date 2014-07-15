@@ -58,7 +58,7 @@ public class ModelListActivity extends WoopitActivity {
 	ModelPurchaseReceiver m_receiver;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.model_message_list);
 		
@@ -201,8 +201,11 @@ public class ModelListActivity extends WoopitActivity {
 		i.putExtra("modelId", m.id);
 		i.putExtra("enable", m.enable);
 		startActivityForResult(i, REQUEST_SEND_MESSAGE);
+		
+		Utils.onMessageNew(getApplicationContext(), "ModelListActivity", userId);
 	}
-    public void refresh(){
+    
+	public void refresh(){
 	    ((ImageView)findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
 		((TextView) findViewById(R.id.reload_button)).setVisibility(View.GONE);		
 		if(mAdapter == null){
@@ -211,6 +214,7 @@ public class ModelListActivity extends WoopitActivity {
 	    		
 	    }
 	}
+	
 	public class GetUserModels extends ServerConnection{
     	
     	Context con;

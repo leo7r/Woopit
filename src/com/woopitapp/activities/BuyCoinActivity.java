@@ -37,11 +37,12 @@ import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
-public class BuyCoinActivity extends Activity {
+public class BuyCoinActivity extends WoopitActivity {
 	
 	IInAppBillingService mService;
 	String TAG = "In-app billing";
@@ -50,12 +51,13 @@ public class BuyCoinActivity extends Activity {
 	private int id_model;
 	Activity act;
 	private final int error_notification_id = 77;
+	int user_coins;
 	
 	ListView package_list;
 	PackageAdapter mAdapter;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.buy_coins);
@@ -95,13 +97,15 @@ public class BuyCoinActivity extends Activity {
 						Log.i(TAG,dataSignature);
 						Log.i(TAG,responseCode+"");
 						
-						 String purchase_token = jsonData.getString("purchaseToken");
-						 String order_id = jsonData.getString("orderId");
-						 long purchase_time = jsonData.getLong("purchaseTime");
-						 String product_id = jsonData.getString("productId");
+						String purchase_token = jsonData.getString("purchaseToken");
+						String order_id = jsonData.getString("orderId");
+						long purchase_time = jsonData.getLong("purchaseTime");
+						String product_id = jsonData.getString("productId");
 						
 						new SavePurchase(this,purchase_token,order_id,purchase_time,product_id,true).execute();
 						new ConsumePurchase(product_id).execute();
+						
+						Utils.onCoinsBuy(getApplicationContext(), "BuyCoinActivity", "Comprado", product_id, user_coins);
 					}
 					else{
 						Log.e(TAG, "Error, fallaron los token");
@@ -234,7 +238,7 @@ public class BuyCoinActivity extends Activity {
 				try {
 					JSONObject coins = new JSONObject(result);
 					
-					int user_coins = coins.getInt("c");
+					user_coins = coins.getInt("c");
 					((TextView)findViewById(R.id.user_coins)).setText(user_coins+"");
 					
 				} catch (JSONException e) {
@@ -377,6 +381,8 @@ public class BuyCoinActivity extends Activity {
 					PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
 					
 					startIntentSenderForResult(pendingIntent.getIntentSender(), BUY_REQUEST_CODE , new Intent(), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0) );
+
+					Utils.onCoinsBuy(getApplicationContext(), "BuyCoinActivity", "Comprar", id, user_coins);
 					
 					return true;
 				}
@@ -564,6 +570,7 @@ public class BuyCoinActivity extends Activity {
 				//Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
 				Toast.makeText(getApplicationContext(), R.string.error_compra_reintentando, Toast.LENGTH_SHORT).show();
 				onError();
+				Utils.onCoinsBuyError(getApplicationContext(), "BuyCoinActivity", product_id);
 			}
 			
 		}

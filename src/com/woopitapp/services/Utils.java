@@ -31,6 +31,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -38,6 +41,8 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.suredigit.inappfeedback.FeedbackDialog;
 import com.suredigit.inappfeedback.FeedbackSettings;
 import com.woopitapp.R;
+import com.woopitapp.entities.Message;
+import com.woopitapp.entities.User;
 
 
 public class Utils {
@@ -480,7 +485,7 @@ public class Utils {
 		feedbackSettings.setReplyTitle(res.getString(R.string.feedback_respuesta));
 		feedbackSettings.setReplyCloseButtonText(res.getString(R.string.feedback_cerrar));
 		feedbackSettings.setReplyRateButtonText(res.getString(R.string.feedback_calificanos));
-		
+				
 		return new FeedbackDialog(act, act.getResources().getString(R.string.feedback_key), feedbackSettings);
 	}
 
@@ -499,6 +504,229 @@ public class Utils {
 		
 		return sb.toString();
 	}
+	
+    
+	/* Google analytics methods */    
+	static Tracker getTracker( Context c ){
+		
+		Tracker t = GoogleAnalytics.getInstance(c).getTracker(c.getString(R.string.ga_trackingId));
+		
+		return t;
+	}
+	
+    // Mensajes
+    
+    public static void onMessageNew( Context c , String from , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes", "Crear", from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("usuario", user_id+"")
+		    .build()
+		); 
+    }
+    
+    public static void onMessageNew( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes", "Crear", from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("usuario", null)
+		    .build()
+		); 
+    }
+    
+    public static void onMessageSent( Context c , String from , int modelId , String text , Double lat , Double lon ){
+    	
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes", "Envio", from, (long) modelId)
+		    .set("&uid", User.get(c).id+"")
+		    .set("con_texto", text.length() > 0 ? "Si" : "No" )
+		    .set("con_ubicacion", lat == 500 && lon == 500 ? "No" : "Si" )
+		    .build()
+		);    	
+    }
+    
+    public static void onMessageView( Context c , Message m , String from ){
+    	
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes", "Visto", from, (long) m.model)
+		    .set("&uid", User.get(c).id+"")
+		    .set("con_texto", m.text.length() > 0 ? "Si" : "No" )
+		    .set("con_ubicacion", m.latitud == 500 && m.longitud == 500 ? "No" : "Si" )
+		    .set("es_enviado", m.sender == User.get(c).id ? "Si" : "No" )
+		    .build()
+		);    	
+    }
+    
+    // Perfil
+    public static void onEditProfileEnter( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Editar perfil", "Entrar", from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .build()
+		); 
+    }
+    
+    public static void onEditProfileEdit( Context c , String type ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Editar perfil", "Editar", type, null)
+		    .set("&uid", User.get(c).id+"")
+		    .build()
+		); 
+    }
+    
+    public static void onProfileCreateModel( Context c ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Perfil", "Crear modelo", null, null)
+		    .set("&uid", User.get(c).id+"")
+		    .build()
+		); 
+    }
+    
+    // Compartir
+    public static void onShareWoopit( Context c , String from , String action ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Compartir Woopit", action , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .build()
+		); 
+    }
+    
+    // Enviar feedback
+    public static void onSendFeedback( Context c , String from , String action ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Enviar feedback", action , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .build()
+		);
+    }
+    
+    // Usuarios
+    public static void onUserSearch( Context c , String from , String query ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Usuarios", "Buscar" , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("texto", query)
+		    .build()
+		);
+    }
+    
+    public static void onUserAddOrReject( Context c , String from , String action , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Usuarios", action , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("usuario", user_id+"")
+		    .build()
+		);
+    }
+    
+    public static void onUserProfileEnter( Context c , String from , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Usuarios", "Perfil" , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("usuario", user_id+"")
+		    .build()
+		);
+    }
+    
+    // Encontrar amigos
+    public static void onFriendsSearchEnter( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Encontrar amigos", "Entrar" , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .build()
+		);
+    }
+    
+    public static void onFriendsSearch( Context c , String from , int number_of_friends ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Encontrar amigos", "Buscar" , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("numero_de_amigos", number_of_friends+"")
+		    .build()
+		);
+    }
+    
+    public static void onFriendsAddOrReject( Context c , String from , String action , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Encontrar amigos", action , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("amigo", user_id+"")
+		    .build()
+		);
+    }
+    
+    // Modelos
+    public static void onModelOpen( Context c , String from , int model_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Modelos", "Abrir" , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("modelo", model_id+"")
+		    .build()
+		);
+    }
+    
+    public static void onModelSearch( Context c , String from , String query ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Modelos", "Buscar" , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("texto", query)
+		    .build()
+		);
+    }
+    
+    public static void onModelBuy( Context c , String from , String action , int model_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Modelos", action , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("modelo", model_id+"")
+		    .build()
+		);
+    }
+    
+    // Monedas
+    public static void onCoinsEnter( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Monedas", "Entrar" , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .build()
+		);
+    }
+    
+    public static void onCoinsBuy( Context c , String from , String action , String coins_id , int user_coins ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Monedas", action , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("monedas", coins_id)
+		    .set("monedas_usuario", user_coins+"")
+		    .build()
+		);
+    }
+    
+    public static void onCoinsBuyError( Context c , String from , String coins_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Monedas", "Error" , from, null)
+		    .set("&uid", User.get(c).id+"")
+		    .set("monedas", coins_id)
+		    .build()
+		);
+    }
+    
+    // Login y registro
+    public static void onLogin( Context c , String from , String social_network ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Bienvenida", "Entrar" , from, null)
+		    .set("red_social", social_network)
+		    .build()
+		);
+    }
+    
+    public static void onRegister( Context c , String from , String social_network ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Bienvenida", "Registrarse" , from, null)
+		    .set("red_social", social_network)
+		    .build()
+		);
+    }
 	
 }
 

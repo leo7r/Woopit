@@ -118,6 +118,8 @@ public class BuyModelDialog extends Activity {
 			
 			((RelativeLayout)findViewById(R.id.loading)).setVisibility(View.VISIBLE);
 			((LinearLayout)findViewById(R.id.content)).setVisibility(View.GONE);
+
+			Utils.onModelBuy(getApplicationContext(), "BuyModelDialog", "Comprar", modelId);
 			
 			init(getApplicationContext(),"buy_model",new Object[]{ User.get(getApplicationContext()).id , modelId });
 		}
