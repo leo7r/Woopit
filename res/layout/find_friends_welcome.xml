@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/facebook_button"
-        android:text="@string/encontrar_amigos"
+        android:text="@string/encontrar_amigos_facebook"
         android:layout_margin="20dp"
         android:drawableLeft="@drawable/facebook_badge"
         />
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/gplus_button"
-        android:text="@string/encontrar_amigos"
+        android:text="@string/encontrar_amigos_gPlus"
         android:layout_margin="20dp"
         android:drawableLeft="@drawable/gplus_badge"
         />

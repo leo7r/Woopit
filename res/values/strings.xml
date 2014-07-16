@@ -66,16 +66,18 @@
     <string name="title_activity_search_users">SearchUsers</string>
     <string name="title_activity_find_friends">FindFriendsActivity</string>
     <string name="amigos">Amigos</string>
-    <string name="encontrar_amigos">Encontrar Amigos</string>
+    <string name="encontrar_amigos">Buscar Amigos</string>
+    <string name="encontrar_amigos_facebook">Buscar Amigos en Facebook</string>
+    <string name="encontrar_amigos_gPlus">Buscar Amigos en Google Plus</string>
     <string name="encontrar_amigos_info">Woopit utiliza las redes sociales para ayudarte a encontrar a tus amigos. No enviaremos ningún mensaje sin tu aprobación.</string>
     <string name="buscar_usuarios">Buscar Usuarios&#8230;</string>
     <string name="buscar_modelos">Buscar Modelos &#8230;</string>
     <string name="buscar_amigos">Buscar Amigos \"%s\"</string>
     <string name="solicitudes_de_amistad">Solicitudes de amistad</string>
     <string name="buscando_amigos">Buscando amigos&#8230;</string>
-    <string name="ningun_amigo">No encontramos ningún amigo que use Woopit :(</string>
+    <string name="ningun_amigo">No se encontró ningún amigo que use Woopit :(</string>
     <string name="invitalos">¡Invítalos!</string>
-    <string name="compartir_woopit_texto">Ey acabo de probar Woopit. Es un chat con realidad aumentada que esta genial! www.goo.gl/689Brd</string>
+    <string name="compartir_woopit_texto">Heeyy! acabo de probar Woopit. Es un chat con realidad aumentada que esta genial! www.goo.gl/689Brd</string>
     <string name="title_activity_map">MapActivity</string>
 
     <!-- Pantalla del mapa -->
@@ -114,8 +116,8 @@
 
     <!-- Pantalla de Preview -->
     <string name="enviar_a">Enviar a: %s</string>
-    <string name="enviar_actual">Directamente</string>
-    <string name="enviar_mapa">En un lugar</string>
+    <string name="enviar_actual">Ubicación Actual</string>
+    <string name="enviar_mapa">Buscar en mapa</string>
     <string name="vista_previa">Vista previa</string>
     <string name="comprar_modelo">Comprar modelo</string>
     <string name="title_activity_choose_friend">ChooseFriendActivity</string>

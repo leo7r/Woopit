@@ -27,6 +27,7 @@ import com.woopitapp.WoopitActivity;
 import com.woopitapp.dialogs.BuyModelDialog;
 import com.woopitapp.entities.User;
 import com.woopitapp.graphics.Objeto;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.server_connections.ModelDownloader;
 import com.woopitapp.services.ServerConnection;
 
@@ -256,10 +257,22 @@ public class ModelPreviewActivity extends WoopitActivity {
 		render = new GLClearRenderer();
 		glView.setRenderer(render);
 	}
-	
+	class Insert_Coins extends InsertCoins{
+		public Insert_Coins(Context con,int user_id, int cantCoins){
+			
+			super( con, user_id, cantCoins);
+			
+		}
+
+		@Override
+		public void onComplete(String result) {
+			//exitosamente se insertaron los coins
+		}
+	}
 	class Send_Message extends ServerConnection{
     	
 		Context con;
+		int cantCoins = 1;
 		
 		public Send_Message(Context context,String title,String text,double latitud, double longitud){
 			this.con = context;
@@ -271,7 +284,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
-				
+				new Insert_Coins(con, user.id,cantCoins).execute();
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 				setResult(RESULT_OK);
 			    finish();

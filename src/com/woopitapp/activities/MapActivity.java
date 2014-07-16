@@ -37,7 +37,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.woopitapp.R;
+import com.woopitapp.activities.ModelPreviewActivity.Insert_Coins;
 import com.woopitapp.entities.User;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
@@ -153,11 +155,22 @@ public class MapActivity extends FragmentActivity implements
 		
 		new Send_Message(getApplicationContext() , selectedLatitude , selectedLongitude ).execute();
 	}
-	
+	class Insert_Coins extends InsertCoins{
+		public Insert_Coins(Context con,int user_id, int cantCoins){
+			
+			super( con, user_id, cantCoins);
+			
+		}
+
+		@Override
+		public void onComplete(String result) {
+			//exitosamente se insertaron los coins
+		}
+	}
 	class Send_Message extends ServerConnection{
     	
 		Context con;
-		
+		int cantCoins = 1;
 		public Send_Message(Context context,double latitud, double longitud){
 			this.con = context;
 			
@@ -168,7 +181,7 @@ public class MapActivity extends FragmentActivity implements
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
-				
+				new Insert_Coins(con, userId,cantCoins).execute();
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 				setResult(RESULT_OK);
 			    finish();
