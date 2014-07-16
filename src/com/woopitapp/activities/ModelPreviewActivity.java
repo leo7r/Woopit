@@ -263,6 +263,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 		render = new GLClearRenderer();
 		glView.setRenderer(render);
 	}
+	
 	class Insert_Coins extends InsertCoins{
 		public Insert_Coins(Context con,int user_id, int cantCoins){
 			
@@ -275,15 +276,13 @@ public class ModelPreviewActivity extends WoopitActivity {
 			//exitosamente se insertaron los coins
 		}
 	}
+	
 	class Send_Message extends ServerConnection{
     	
 		Context con;
-<<<<<<< HEAD
 		int cantCoins = 1;
-=======
 		String text;
 		double latitude, longitude;
->>>>>>> 17ca7c6c0d7c107079887808c855236096c1d29e
 		
 		public Send_Message(Context context,String title,String text,double latitud, double longitud){
 			this.con = context;
@@ -298,13 +297,10 @@ public class ModelPreviewActivity extends WoopitActivity {
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
-<<<<<<< HEAD
-				new Insert_Coins(con, user.id,cantCoins).execute();
-=======
 				
+				new Insert_Coins(con, user.id,cantCoins).execute();		
 				Utils.onMessageSent(getApplicationContext(), "ModelPreviewActivity", modelId, text, latitude, longitude);
 				
->>>>>>> 17ca7c6c0d7c107079887808c855236096c1d29e
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 				setResult(RESULT_OK);
 			    finish();

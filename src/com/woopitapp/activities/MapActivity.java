@@ -170,12 +170,8 @@ public class MapActivity extends FragmentActivity implements
 	class Send_Message extends ServerConnection{
     	
 		Context con;
-<<<<<<< HEAD
 		int cantCoins = 1;
-=======
 		double lat,lon;
-		
->>>>>>> 17ca7c6c0d7c107079887808c855236096c1d29e
 		public Send_Message(Context context,double latitud, double longitud){
 			this.con = context;
 			this.lat = latitud;
@@ -188,12 +184,9 @@ public class MapActivity extends FragmentActivity implements
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
-<<<<<<< HEAD
 				new Insert_Coins(con, userId,cantCoins).execute();
-=======
 				
 				Utils.onMessageSent(getApplicationContext(), "MapActivity", modelId, message, lat, lon);
->>>>>>> 17ca7c6c0d7c107079887808c855236096c1d29e
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 				setResult(RESULT_OK);
 			    finish();

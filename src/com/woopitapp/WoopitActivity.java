@@ -22,10 +22,6 @@ public class WoopitActivity extends Activity {
 	public void onStart(){
 		super.onStart();
 		
-		if ( User.get(getApplicationContext()) != null ){
-			EasyTracker.getInstance(this).set("&uid", User.get(getApplicationContext()).id+"");
-		}
-		
 		EasyTracker.getInstance(this).activityStart(this);
 	}
 	
