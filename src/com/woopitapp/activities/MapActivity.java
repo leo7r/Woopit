@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Address;
@@ -37,7 +36,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.woopitapp.R;
-import com.woopitapp.activities.ModelPreviewActivity.Insert_Coins;
 import com.woopitapp.entities.User;
 import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.ServerConnection;
@@ -153,38 +151,27 @@ public class MapActivity extends FragmentActivity implements
 	
 	public void sendWoop( View v ){
 		
-		new Send_Message(getApplicationContext() , selectedLatitude , selectedLongitude ).execute();
+		new Send_Message(this, selectedLatitude , selectedLongitude ).execute();
 	}
-	class Insert_Coins extends InsertCoins{
-		public Insert_Coins(Context con,int user_id, int cantCoins){
-			
-			super( con, user_id, cantCoins);
-			
-		}
-
-		@Override
-		public void onComplete(String result) {
-			//exitosamente se insertaron los coins
-		}
-	}
+	
 	class Send_Message extends ServerConnection{
     	
-		Context con;
+		Activity act;
 		int cantCoins = 1;
 		double lat,lon;
-		public Send_Message(Context context,double latitud, double longitud){
-			this.con = context;
+		public Send_Message(Activity act ,double latitud, double longitud){
+			this.act = act;
 			this.lat = latitud;
 			this.lon = longitud;
 			
-			init(con,"send_message",new Object[]{User.get(con).id,userId,modelId,"",message,latitud,longitud});
+			init(act,"send_message",new Object[]{User.get(act).id,userId,modelId,"",message,latitud,longitud});
 		}
 
 		@Override
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
-				new Insert_Coins(con, userId,cantCoins).execute();
+				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
 				
 				Utils.onMessageSent(getApplicationContext(), "MapActivity", modelId, message, lat, lon);
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();

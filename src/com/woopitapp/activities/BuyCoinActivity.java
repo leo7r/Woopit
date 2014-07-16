@@ -71,7 +71,7 @@ public class BuyCoinActivity extends WoopitActivity {
 		pkgs.add(new BuyPackage("android.test.purchased","20 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"0.99",20));
 		pkgs.add(new BuyPackage("android.test.purchased","50 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"1.99",50));
 		pkgs.add(new BuyPackage("android.test.purchased","130 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"4.99",130));
-		
+				
 		mAdapter = new PackageAdapter(this,R.id.package_list,pkgs);
 		package_list.setAdapter(mAdapter);
 		
@@ -494,8 +494,15 @@ public class BuyCoinActivity extends WoopitActivity {
     		        .setContentTitle(getResources().getString(R.string.conectando_con_servidor))
     		        .setContentText(getResources().getString(R.string.para_completar_compra));
     		// Creates an explicit intent for an Activity in your app
-    		Intent resultIntent = new Intent(act, ModelPreviewActivity.class);
-    		resultIntent.putExtra("modelId", id_model);
+    		Intent resultIntent;
+    		
+    		if ( id_model != -1 ){
+        		resultIntent = new Intent(act, ModelPreviewActivity.class);
+        		resultIntent.putExtra("modelId", id_model);
+    		}
+    		else{
+        		resultIntent = new Intent(act, MainActivity.class);
+    		}
 
     		// The stack builder object will contain an artificial back stack for the
     		// started Activity.

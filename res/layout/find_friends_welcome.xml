@@ -9,11 +9,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textSize="@dimen/normal_text"
         android:text="@string/encontrar_amigos_info"
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/dashed_border_bg"
+        android:padding="15dp"
         />
     
     <com.facebook.widget.LoginButton

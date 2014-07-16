@@ -89,13 +89,14 @@
 		        android:layout_height="wrap_content"
 		        android:padding="16dp"
 				android:textSize="@dimen/normal_text"
-		        android:text="@string/configuracion"
-		        android:drawableLeft="@drawable/sliding_settings"
+		        android:text="@string/comprar_monedas"
+		        android:drawableLeft="@drawable/sliding_buy_coins"
 		        android:drawablePadding="20dp"
 		        android:clickable="true"
 		        android:background="@drawable/menu_item_bg"
 		        android:layout_marginLeft="4dp"
 		        android:layout_marginRight="4dp"
+		        android:onClick="goBuyCoins"
 		        />
 		    
             <View 
@@ -145,6 +146,17 @@
                 android:layout_height="1dp"
                 android:background="#f6f6f8"
                 />
+            
+            <TextView 
+                android:id="@+id/tips"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="20dp"
+		        android:padding="10dp"
+		        android:background="@drawable/dashed_border_bg_blue"
+		        android:textSize="@dimen/small_text"
+		        android:gravity="center"
+		        />
             
         </LinearLayout>
         

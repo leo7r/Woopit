@@ -10,11 +10,13 @@ import com.woopitapp.R;
 import com.woopitapp.WoopitFragmentActivity;
 import com.woopitapp.fragments.FindFriendsList;
 import com.woopitapp.fragments.FindFriendsWelcomeFragment;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.Utils;
 
 public class FindFriendsActivity extends WoopitFragmentActivity {
 	
 	private int SHARE_REQUEST_CODE = 1;
+    boolean share_launched = false , share_clicked = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,13 +31,25 @@ public class FindFriendsActivity extends WoopitFragmentActivity {
 		
 	}
 	
+	public void onStop(){
+    	super.onStop();
+    	
+    	if ( share_launched ){
+    		share_clicked = true;
+    	}
+    	
+    }
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if ( requestCode == SHARE_REQUEST_CODE && resultCode == RESULT_OK ){
+		if ( requestCode == SHARE_REQUEST_CODE && share_launched && share_clicked ){
 			
 			Utils.onShareWoopit(getApplicationContext(), "FindFriendsActivity", "Compartido");
+			new InsertCoins(this , 1 , R.string.por_compartir ).execute();			
 		}
 		
+		share_launched = false;
+		share_clicked = false;
 	}
 	
 	public void setFriendsList( String result ){
@@ -57,6 +71,7 @@ public class FindFriendsActivity extends WoopitFragmentActivity {
 		
 
 		Utils.onShareWoopit(getApplicationContext(), "FindFriendsActivity", "Entrar");
+		share_launched = true;
 		
 		Intent sendIntent = new Intent();
 		sendIntent.setAction(Intent.ACTION_SEND);

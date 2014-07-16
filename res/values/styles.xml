@@ -96,7 +96,7 @@
         <item name="android:clickable">true</item>
         <item name="android:onClick">goFindFriends</item>
     </style>
-    
+        
     <style name="progress_bar">
         <item name="android:indeterminate">true</item>
         <item name="android:indeterminateDrawable">@drawable/loader</item>

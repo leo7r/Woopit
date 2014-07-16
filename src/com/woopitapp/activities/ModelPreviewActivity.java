@@ -170,7 +170,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 		
 		String message = ((EditText)findViewById(R.id.message_text)).getText().toString();
 		
-		Send_Message sm = new Send_Message(getApplicationContext(), "",message,500,500);
+		Send_Message sm = new Send_Message(this, "",message,500,500);
 		sm.execute();		
 	}
 	
@@ -264,41 +264,28 @@ public class ModelPreviewActivity extends WoopitActivity {
 		glView.setRenderer(render);
 	}
 	
-	class Insert_Coins extends InsertCoins{
-		public Insert_Coins(Context con,int user_id, int cantCoins){
-			
-			super( con, user_id, cantCoins);
-			
-		}
-
-		@Override
-		public void onComplete(String result) {
-			//exitosamente se insertaron los coins
-		}
-	}
-	
 	class Send_Message extends ServerConnection{
     	
-		Context con;
+		Activity act;
 		int cantCoins = 1;
 		String text;
 		double latitude, longitude;
 		
-		public Send_Message(Context context,String title,String text,double latitud, double longitud){
-			this.con = context;
+		public Send_Message(Activity act,String title,String text,double latitud, double longitud){
+			this.act = act;
 			this.text = text;
 			this.latitude = latitud;
 			this.longitude = longitud;
 			
-			init(con,"send_message",new Object[]{user.id,userId,modelId,title,text,latitud,longitud});
+			init(act,"send_message",new Object[]{user.id,userId,modelId,title,text,latitud,longitud});
 		}
 
 		@Override
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
-				
-				new Insert_Coins(con, user.id,cantCoins).execute();		
+
+				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();		
 				Utils.onMessageSent(getApplicationContext(), "ModelPreviewActivity", modelId, text, latitude, longitude);
 				
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();

@@ -48,15 +48,15 @@
 			/>
        
 	    <TextView
-	    android:id="@+id/reload_button"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:text="@string/notificacion_woopit_sin_senal"
-	    android:visibility="gone" 
-	    android:layout_gravity="center"
-	    android:layout_margin="20dp"
-	    android:textColor="#d3d3d3"
-	    android:gravity="center_horizontal"
-	    />
+		    android:id="@+id/reload_button"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/notificacion_woopit_sin_senal"
+		    android:visibility="gone" 
+		    android:layout_gravity="center"
+		    android:layout_margin="20dp"
+		    android:textColor="#d3d3d3"
+		    android:gravity="center_horizontal"
+		    />
     
 </LinearLayout>

@@ -2,9 +2,11 @@ package com.woopitapp.activities;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -41,6 +43,7 @@ import com.woopitapp.entities.User;
 import com.woopitapp.fragments.FriendsFragment;
 import com.woopitapp.fragments.HomeFragment;
 import com.woopitapp.fragments.ModelsFragment;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.TabPager;
 import com.woopitapp.services.Utils;
@@ -64,6 +67,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 	ModelPurchaseReceiver m_receiver;
 	ProfileChangeReceiver p_receiver;
 	MessagesUpdateReceiver mu_receiver;
+	
     
 	// Feedback
 	private FeedbackDialog feedBack;
@@ -79,12 +83,15 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
     String regid;
+    Activity act;
+    boolean share_launched = false , share_clicked = false;
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
         initialiseTabHost(savedInstanceState);
+        act = this;
         
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); //set the tab as per the saved state
@@ -110,7 +117,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         /* Recibe cambios en mensajes */
         mu_receiver = new MessagesUpdateReceiver();
         registerReceiver(mu_receiver,new IntentFilter(this.getString(R.string.broadcast_messages)));
-        
+
         // Check device for Play Services APK.
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
@@ -122,16 +129,19 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         } else {
             Log.i(GCM_TAG, "No valid Google Play Services APK found.");
         }
-        
+                        
     }
     
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if ( requestCode == SHARE_REQUEST_CODE && resultCode == RESULT_OK ){
+		if ( requestCode == SHARE_REQUEST_CODE && share_launched && share_clicked ){
 			
 			Utils.onShareWoopit(getApplicationContext(), "SlidingMenu", "Compartido");
+			new InsertCoins(act , 1 , R.string.por_compartir ).execute();
 		}
 		
+		share_launched = false;
+		share_clicked = false;
 	}
     
     public void onStart(){
@@ -155,6 +165,15 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     protected void onPause(){
     	super.onPause();
     	feedBack.dismiss();
+    }
+    
+    public void onStop(){
+    	super.onStop();
+    	
+    	if ( share_launched ){
+    		share_clicked = true;
+    	}
+    	
     }
     
     protected void onDestroy(){
@@ -341,10 +360,60 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         TextView name = (TextView ) menu.findViewById(R.id.name);
         TextView username = (TextView ) menu.findViewById(R.id.username);
         ImageView image = (ImageView ) menu.findViewById(R.id.image);
+        TextView tip = (TextView ) menu.findViewById(R.id.tips);
         
         name.setText(u.name);
         username.setText("@"+u.username);
         Utils.setUserImage(getApplicationContext(), image, u.id);
+        
+        int tip_number = new Random().nextInt(14-1) + 1;
+        
+        switch( tip_number ){
+        
+        case 1:
+        	tip.setText(R.string.tip1);
+        	break;
+        case 2:
+        	tip.setText(R.string.tip2);
+        	break;
+        case 3:
+        	tip.setText(R.string.tip3);
+        	break;
+        case 4:
+        	tip.setText(R.string.tip4);
+        	break;
+        case 5:
+        	tip.setText(R.string.tip5);
+        	break;
+        case 6:
+        	tip.setText(R.string.tip6);
+        	break;
+        case 7:
+        	tip.setText(R.string.tip7);
+        	break;
+        case 8:
+        	tip.setText(R.string.tip8);
+        	break;
+        case 9:
+        	tip.setText(R.string.tip9);
+        	break;
+        case 10:
+        	tip.setText(R.string.tip10);
+        	break;
+        case 11:
+        	tip.setText(R.string.tip11);
+        	break;
+        case 12:
+        	tip.setText(R.string.tip12);
+        	break;
+        case 13:
+        	tip.setText(R.string.tip13);
+        	break;
+        default:
+        	tip.setText(R.string.tip1);
+        	break;
+        }
+        
     }
     
     public void toggleSlidingMenu( View v ){
@@ -383,6 +452,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 		startActivityForResult(Intent.createChooser(sendIntent, getResources().getString(R.string.compartir_woopit)),SHARE_REQUEST_CODE);
 		
 		Utils.onShareWoopit(getApplicationContext(), "SlidingMenu", "Entrar");
+		share_launched = true;
 		
 	}
     
@@ -392,6 +462,16 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	
     	feedBack.show();
     	toggleSlidingMenu(v);
+    }
+
+    public void goBuyCoins( View v ){
+    	
+    	Intent i = new Intent(this,BuyCoinActivity.class);
+    	
+    	i.putExtra("modelId", -1);    	
+    	startActivity(i);
+    	
+    	Utils.onCoinsEnter(getApplicationContext(), "SlidingMenu");
     }
     
     /* Broadcasts receivers */
@@ -454,7 +534,6 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	}
       
     }
-    
     
     /* Service connection */
     private ServiceConnection mConnection = new ServiceConnection() {

@@ -17,6 +17,7 @@
     <string name="broadcast_profile_update">com.woopitapp.profile_update</string>
     <string name="broadcast_model_purchase">com.woopitapp.model_purchase</string>
     <string name="broadcast_messages">com.woopitapp.messages</string>
+    <string name="broadcast_coins">com.woopitapp.coins</string>
     <string name="broadcast_notifications">com.google.android.c2dm.intent.RECEIVE</string>
 
     <!-- FACEBOOK ID -->
@@ -163,6 +164,26 @@
     <string name="bienvenida_amigos"><b>Aquí van tus amigos!</b>\nBusca algunos para que empiece la diversión.</string>
     <string name="bienvenida_modelos"><b>No has creado ningún modelo todavía</b>\n\nSi quieres poder crear tus modelos y venderlos</string>
     <string name="contactanos">Contáctanos</string>
+    
+    <!-- Ganar monedas -->
+	<string name="ganaste_moneda">Ganaste <b>%1$s</b> moneda%2$s por %3$s</string>
+    <string name="por_enviar_mensaje">enviar mensaje</string>
+    <string name="por_compartir">compartir Woopit</string>
+    
+    <!-- Tips -->
+    <string name="tip1">Puedes ganar monedas al enviar Woops</string>
+    <string name="tip2">Puedes ganar monedas al invitar a tus amigos</string>
+    <string name="tip3">Puedes hacer tus modelos 3D y venderlos!</string>
+    <string name="tip4">Puedes colocar tu mensaje al enviar un Woop</string>
+    <string name="tip5">Puedes encontrar a tus amigos por Facebook</string>
+    <string name="tip6">Puedes encontrar a tus amigos por Google+</string>
+    <string name="tip7">En los mensajes, el círculo significa <i>recibido</i></string>
+    <string name="tip8">En los mensajes, la flecha simple significa <i>enviado</i></string>
+    <string name="tip9">En los mensajes, la flecha doble significa <i>recibido</i></string>
+    <string name="tip10">Coloca una imagen de perfil para que tus amigos te encuentren</string>
+    <string name="tip11">Si encuentras un error, contáctanos por favor</string>
+    <string name="tip12">Si te gusta Woopit, compartelo con tus amigos!</string>
+    <string name="tip13">Si tienes alguna idea sobre un modelo 3D nuevo, contáctanos</string>
 
     <!-- Tiempo -->
     <string name="just_now">Justo ahora</string>
