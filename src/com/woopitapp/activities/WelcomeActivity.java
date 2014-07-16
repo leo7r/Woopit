@@ -32,7 +32,9 @@ import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
 public class WelcomeActivity extends WoopitFragmentActivity {
-
+	
+	Fragment currentFragment;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,9 +55,24 @@ public class WelcomeActivity extends WoopitFragmentActivity {
 		transaction.commit();
 	}
 	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if (requestCode == LoginFragment.REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
+			LoginFragment f = (LoginFragment) currentFragment;
+			f.reconectGoogle();
+	    }
+		else{
+			if (requestCode == SignupFragment.REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK){
+				SignupFragment f = (SignupFragment) currentFragment;
+				f.reconectGoogle();
+			}
+		}
+	}
+	
 	public void goLogin( View v ){
 
 		Fragment fragment = new LoginFragment();
+		currentFragment = fragment;
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		
 		transaction.replace(R.id.fragment_container, fragment);
@@ -66,6 +83,7 @@ public class WelcomeActivity extends WoopitFragmentActivity {
 	public void goSignup( View v ){
 
 		Fragment fragment = new SignupFragment();
+		currentFragment = fragment;
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		
 		transaction.replace(R.id.fragment_container, fragment);
@@ -243,10 +261,14 @@ public class WelcomeActivity extends WoopitFragmentActivity {
 	public static class ResetPassword extends ServerConnection{
 
 		Context c;
+		String email;
+		ProgressDialog dialog;
 		
 		public ResetPassword( Context c , String email ){
 			super();
 			this.c = c;
+			this.email = email;
+			dialog = ProgressDialog.show(c, "",c.getResources().getString(R.string.enviando_correo_restauracion), true);
 			
 			init(c,"request_password_reset", new Object[]{ email });
 		}
@@ -254,11 +276,13 @@ public class WelcomeActivity extends WoopitFragmentActivity {
 		@Override
 		public void onComplete(String result) {
 			
+			dialog.dismiss();
+			
 			if ( result != null ){
 				
 				if ( result.equals("ok")){
 					
-					Toast.makeText(c, "Email sended...", Toast.LENGTH_SHORT).show();
+					Toast.makeText(c, c.getResources().getString(R.string.enviado_correo_restauracion,email), Toast.LENGTH_SHORT).show();
 				}
 				else{
 					Toast.makeText(c, R.string.error_desconocido, Toast.LENGTH_SHORT).show();

@@ -1,5 +1,6 @@
 package com.woopitapp.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import com.woopitapp.R;
 import com.woopitapp.WoopitFragmentActivity;
 import com.woopitapp.fragments.FindFriendsList;
 import com.woopitapp.fragments.FindFriendsWelcomeFragment;
+import com.woopitapp.fragments.LoginFragment;
+import com.woopitapp.fragments.SignupFragment;
 import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.Utils;
 
@@ -17,16 +20,17 @@ public class FindFriendsActivity extends WoopitFragmentActivity {
 	
 	private int SHARE_REQUEST_CODE = 1;
     boolean share_launched = false , share_clicked = false;
+    Fragment currentFragment;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.find_friends);
 		
-		Fragment fragment = new FindFriendsWelcomeFragment();
+		currentFragment = new FindFriendsWelcomeFragment();
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		
-		transaction.add(R.id.fragment_container, fragment);
+		transaction.add(R.id.fragment_container, currentFragment);
 		transaction.commit();
 		
 	}
@@ -41,6 +45,11 @@ public class FindFriendsActivity extends WoopitFragmentActivity {
     }
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if (requestCode == FindFriendsWelcomeFragment.REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
+			FindFriendsWelcomeFragment f = (FindFriendsWelcomeFragment) currentFragment;
+			f.reconectGoogle();
+	    }
 		
 		if ( requestCode == SHARE_REQUEST_CODE && share_launched && share_clicked ){
 			

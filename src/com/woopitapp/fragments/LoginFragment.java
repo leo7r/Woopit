@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	private UiLifecycleHelper uiHelper;
 	
 	/* Google+ */
-	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
+	public static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 	
     private ProgressDialog mConnectionProgressDialog;
     private PlusClient mPlusClient;
@@ -172,16 +172,15 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
-	        mConnectionResult = null;
-	        mPlusClient.connect();
-	    }
 		
-	    super.onActivityResult(requestCode, resultCode, data);
-	    
+		super.onActivityResult(requestCode, resultCode, data);
 		
 	    uiHelper.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	public void reconectGoogle(){
+		mConnectionResult = null;
+        mPlusClient.connect();
 	}
 	
 	@Override
@@ -271,6 +270,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
             
 			try {
                 result.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
+                //mPlusClient.connect();
             } catch (SendIntentException e) {
                 mPlusClient.connect();
             }

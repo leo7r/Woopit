@@ -51,7 +51,7 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 	private UiLifecycleHelper uiHelper;
 	
 	/* Google+ */
-	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
+	public static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 	
     private ProgressDialog mConnectionProgressDialog;
     private PlusClient mPlusClient;
@@ -137,12 +137,7 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		/*if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
-	        mConnectionResult = null;
-	        mPlusClient.connect();
-	    }*/
-		
+	
 	    super.onActivityResult(requestCode, resultCode, data);
 	    
 		
@@ -167,6 +162,11 @@ public class FindFriendsWelcomeFragment extends Fragment implements ConnectionCa
 	    uiHelper.onSaveInstanceState(outState);
 	}
     
+	public void reconectGoogle(){
+		mConnectionResult = null;
+        mPlusClient.connect();
+	}
+	
 	/* Metodos para amigos de Facebook */
 	
 	private void onSessionStateChange( final Session session, SessionState state, Exception exception) {
