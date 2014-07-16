@@ -26,6 +26,7 @@ import com.woopitapp.R;
 import com.woopitapp.activities.SearchUsers.UserAdapter;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class FindFriendsList extends Fragment {
 
@@ -160,7 +161,9 @@ public class FindFriendsList extends Fragment {
  			if ( result != null && result.length() > 0 ){
  				
  				int new_status = Integer.parseInt(result);
- 				
+
+				Utils.onFriendsAddOrReject(getActivity(), "FindFriendsList", new_status == 1 ? "Agregar" : "Borrar" , to_user);
+				
  				// Busco el usuario y cambio su request_status
  				for ( User u : uAdapter.items ){
  					if ( u.id == to_user ){

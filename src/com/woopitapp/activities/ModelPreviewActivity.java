@@ -25,11 +25,13 @@ import android.widget.Toast;
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.dialogs.BuyModelDialog;
+import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
 import com.woopitapp.graphics.Objeto;
 import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.server_connections.ModelDownloader;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class ModelPreviewActivity extends WoopitActivity {
 
@@ -44,7 +46,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 	Objeto o;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.model_preview);
@@ -110,6 +112,8 @@ public class ModelPreviewActivity extends WoopitActivity {
 					lookOnMapi.putExtra("message", text.getText().toString());
 					
 					startActivityForResult(lookOnMapi,REQUEST_SEND_MESSAGE);
+
+					Utils.onMessageNew(getApplicationContext(), "ModelPreviewActivity", userId);
 				}
 			});
 		 
@@ -141,6 +145,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 						Intent i = new Intent(getApplicationContext(),ChooseFriendActivity.class);
 						i.putExtra("modelId", modelId);
 						startActivity(i);
+						Utils.onMessageNew(getApplicationContext(), "ModelPreviewActivity");
 					}
 				});
 			}
@@ -153,6 +158,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 						Intent i = new Intent(getApplicationContext(),BuyModelDialog.class);
 						i.putExtra("modelId", modelId);
 						startActivityForResult( i , REQUEST_BUY_MODEL );
+						Utils.onModelBuy(getApplicationContext(), "ModelPreviewActivity", "Entrar", modelId);
 					}
 				});
 			}
@@ -272,10 +278,18 @@ public class ModelPreviewActivity extends WoopitActivity {
 	class Send_Message extends ServerConnection{
     	
 		Context con;
+<<<<<<< HEAD
 		int cantCoins = 1;
+=======
+		String text;
+		double latitude, longitude;
+>>>>>>> 17ca7c6c0d7c107079887808c855236096c1d29e
 		
 		public Send_Message(Context context,String title,String text,double latitud, double longitud){
 			this.con = context;
+			this.text = text;
+			this.latitude = latitud;
+			this.longitude = longitud;
 			
 			init(con,"send_message",new Object[]{user.id,userId,modelId,title,text,latitud,longitud});
 		}
@@ -284,7 +298,13 @@ public class ModelPreviewActivity extends WoopitActivity {
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
+<<<<<<< HEAD
 				new Insert_Coins(con, user.id,cantCoins).execute();
+=======
+				
+				Utils.onMessageSent(getApplicationContext(), "ModelPreviewActivity", modelId, text, latitude, longitude);
+				
+>>>>>>> 17ca7c6c0d7c107079887808c855236096c1d29e
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 				setResult(RESULT_OK);
 			    finish();

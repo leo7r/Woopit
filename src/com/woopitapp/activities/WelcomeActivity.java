@@ -5,15 +5,6 @@ import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
-import com.woopitapp.R;
-import com.woopitapp.entities.User;
-import com.woopitapp.fragments.LoginFragment;
-import com.woopitapp.fragments.SignupFragment;
-import com.woopitapp.fragments.WelcomeFragment;
-import com.woopitapp.services.Data;
-import com.woopitapp.services.Preferences;
-import com.woopitapp.services.ServerConnection;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -22,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.Patterns;
@@ -30,10 +20,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class WelcomeActivity extends FragmentActivity {
+import com.woopitapp.R;
+import com.woopitapp.WoopitFragmentActivity;
+import com.woopitapp.entities.User;
+import com.woopitapp.fragments.LoginFragment;
+import com.woopitapp.fragments.SignupFragment;
+import com.woopitapp.fragments.WelcomeFragment;
+import com.woopitapp.services.Data;
+import com.woopitapp.services.Preferences;
+import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
+
+public class WelcomeActivity extends WoopitFragmentActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		if ( !Preferences.isFirstTime(this) && User.get(this) != null && User.get(this).username != null ){
@@ -103,6 +104,13 @@ public class WelcomeActivity extends FragmentActivity {
 		public NewUser( Activity act , String email , String name , String password , String facebook_hash , String gplus_hash , boolean automaticLogin ){
 			super();
 			
+			if ( facebook_hash != null || gplus_hash != null ){
+				Utils.onRegister(act, "WelcomeActivity", facebook_hash == null ? "Google+" : "Facebook" );
+			}
+			else{
+				Utils.onRegister(act, "WelcomeActivity", "Ninguna" );
+			}
+			
 			this.act = act;
 			this.email = email;
 			this.name = name;
@@ -164,6 +172,13 @@ public class WelcomeActivity extends FragmentActivity {
 		
 		public LoginTask( Activity act , String email , String password , String facebook_hash , String gplus_hash ){
 			super();
+			
+			if ( facebook_hash != null || gplus_hash != null ){
+				Utils.onLogin(act, "WelcomeActivity", facebook_hash == null ? "Google+" : "Facebook" ); 
+			}
+			else{
+				Utils.onLogin(act, "WelcomeActivity", "Ninguna" );
+			}
 			
 			this.act = act;
 			this.email = email;
