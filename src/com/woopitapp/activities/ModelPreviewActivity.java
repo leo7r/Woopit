@@ -186,7 +186,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 	            gl.glLoadIdentity();	                  
 				gl.glClearColor(0.039f,0.0f,0.16f, 0.0f );
 		        gl.glClearDepthf(1.0f);
-		        //gl.glDepthMask(true);
+		        gl.glDepthMask(true);
 		        gl.glEnable(GL10.GL_DEPTH_TEST);
 		        gl.glDepthFunc(GL10.GL_LESS);
 	            gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
@@ -234,7 +234,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 	    		     
 	                float[] lightAmbient = {1.0f, 1.0f, 1.0f, 0.5f};
 	    		    float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 0.5f};
-	    		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
+	    		    float[] lightPos = {0.1f, 5.1f, 0.1f, 1.0f};
 	    		    gl.glEnable(GL10.GL_LIGHTING);
 	    		    gl.glEnable(GL10.GL_LIGHT0);
 	    		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, lightAmbient, 0);

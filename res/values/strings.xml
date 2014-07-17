@@ -211,8 +211,12 @@
     <string name="notificacion_woopit_actualizado">Nueva versión disponible</string>
     <string name="notificacion_woopit_actualizado2">Toca para actualizar!</string>
 	<string name="notificacion_woopit_sin_senal">Sin conexion presione aqui para intentar de nuevo</string>
-	
-
+	<string name="woop_enviado_para">Para:</string>
+	<string name="woop_enviado_status">Estado del mensaje:</string>
+	<string name="woop_enviado">Nombre del Woop:</string>
+	<string name="woop_enviado_leido">Leído</string>
+	<string name="woop_enviado_noLeido">Sin Leer</string>
+	<string name="woop_enviado_fecha">Fecha:</string>
     <string name="title_activity_buy_model_dialog">BuyModelDialog</string>
 
 

@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.woopitapp.R;
+import com.woopitapp.activities.MapSentDirectMessageActivity;
 import com.woopitapp.activities.MapSentMessageActivity;
 import com.woopitapp.activities.MapUnMessageActivity;
 import com.woopitapp.activities.MessageActivity;
@@ -305,15 +306,22 @@ public class HomeFragment extends Fragment {
 	}
   
     public void verMensajeEnviado( Message message ){
-    	Log.e("MAPA", "MAPA");
-		Intent newMessagei =  new  Intent(getActivity(),MapSentMessageActivity.class);
-		newMessagei.putExtra("latitud", message.latitud);
-		newMessagei.putExtra("longitud",message.longitud);
-		newMessagei.putExtra("modelName",message.modelName+"");
-		newMessagei.putExtra("nombre", message.name);
-		startActivity(newMessagei);
-		
-		Utils.onMessageView(getActivity(), message, "HomeFragment");
+    	if(message.latitud == 500){
+    		Intent newMessagei =  new  Intent(getActivity(),MapSentDirectMessageActivity.class);
+    		newMessagei.putExtra("leido", message.status);
+    		newMessagei.putExtra("modelName",message.modelName+"");
+    		newMessagei.putExtra("nombre", message.name);
+    		newMessagei.putExtra("fecha",message.date.toString());
+    		startActivity(newMessagei);
+    	}else{
+    		Intent newMessagei =  new  Intent(getActivity(),MapSentMessageActivity.class);
+    		newMessagei.putExtra("latitud", message.latitud);
+    		newMessagei.putExtra("longitud",message.longitud);
+    		newMessagei.putExtra("modelName",message.modelName+"");
+    		newMessagei.putExtra("nombre", message.name);
+    		startActivity(newMessagei);
+    	}
+    	Utils.onMessageView(getActivity(), message, "HomeFragment");
 	}
     
     class UpdateMessageStatus extends ServerConnection{
