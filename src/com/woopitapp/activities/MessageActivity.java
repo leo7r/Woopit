@@ -94,7 +94,7 @@ public class MessageActivity extends Activity {
         Log.e("latitud","lat " + latitud);
         new MDownloader(this,modelo).execute();
 		//crearCamara();
-	
+        
     }
 	
 	public void onDestroy(){
@@ -301,7 +301,7 @@ public class MessageActivity extends Activity {
         	       SensorManager.SENSOR_DELAY_GAME);
           
           sensorMan.registerListener(
-       	       listener2, 
+       	       listener2,
        	       sensorMan.getDefaultSensor(
        	          Sensor.TYPE_MAGNETIC_FIELD), 
        	       SensorManager.SENSOR_DELAY_GAME);

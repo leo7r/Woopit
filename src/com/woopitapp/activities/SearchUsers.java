@@ -81,7 +81,7 @@ public class SearchUsers extends WoopitActivity {
 			TextView username = (TextView) convertView.findViewById(R.id.username);
 			ImageView add_friend = (ImageView) convertView.findViewById(R.id.add_friend);			
 			
-			image.setImageBitmap(user.getImage(getApplicationContext()));
+			Utils.setUserImage(getApplicationContext(), image, user.id);
 			name.setText(user.name);
 			username.setText("@"+user.username);
 			add_friend.setVisibility(View.VISIBLE);
@@ -125,7 +125,7 @@ public class SearchUsers extends WoopitActivity {
 		public SearchUserTask( String query ){
 			super();
 			
-			this.query = query;
+			this.query = query.trim();
 		
 			init(getApplicationContext(),"search_users",new Object[]{ User.get(getApplicationContext()).id , query });
 		}

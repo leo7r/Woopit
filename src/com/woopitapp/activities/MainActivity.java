@@ -36,6 +36,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.suredigit.inappfeedback.FeedbackDialog;
 import com.woopitapp.R;
 import com.woopitapp.WoopitFragmentActivity;
@@ -366,65 +367,71 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         menu.setFadeDegree(0.35f);
         menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
         menu.setMenu(R.layout.sliding_menu);
+        menu.setOnOpenListener(new OnOpenListener(){
+
+			@Override
+			public void onOpen() {
+				
+		        TextView tip = (TextView ) menu.findViewById(R.id.tips);
+				int tip_number = new Random().nextInt(14-1) + 1;
+		        
+		        switch( tip_number ){
+		        
+		        case 1:
+		        	tip.setText(R.string.tip1);
+		        	break;
+		        case 2:
+		        	tip.setText(R.string.tip2);
+		        	break;
+		        case 3:
+		        	tip.setText(R.string.tip3);
+		        	break;
+		        case 4:
+		        	tip.setText(R.string.tip4);
+		        	break;
+		        case 5:
+		        	tip.setText(R.string.tip5);
+		        	break;
+		        case 6:
+		        	tip.setText(R.string.tip6);
+		        	break;
+		        case 7:
+		        	tip.setText(R.string.tip7);
+		        	break;
+		        case 8:
+		        	tip.setText(R.string.tip8);
+		        	break;
+		        case 9:
+		        	tip.setText(R.string.tip9);
+		        	break;
+		        case 10:
+		        	tip.setText(R.string.tip10);
+		        	break;
+		        case 11:
+		        	tip.setText(R.string.tip11);
+		        	break;
+		        case 12:
+		        	tip.setText(R.string.tip12);
+		        	break;
+		        case 13:
+		        	tip.setText(R.string.tip13);
+		        	break;
+		        default:
+		        	tip.setText(R.string.tip1);
+		        	break;
+		        }
+			}
+		});
         
         User u = User.get(this);
         
         TextView name = (TextView ) menu.findViewById(R.id.name);
         TextView username = (TextView ) menu.findViewById(R.id.username);
         ImageView image = (ImageView ) menu.findViewById(R.id.image);
-        TextView tip = (TextView ) menu.findViewById(R.id.tips);
         
         name.setText(u.name);
         username.setText("@"+u.username);
         Utils.setUserImage(getApplicationContext(), image, u.id);
-        
-        int tip_number = new Random().nextInt(14-1) + 1;
-        
-        switch( tip_number ){
-        
-        case 1:
-        	tip.setText(R.string.tip1);
-        	break;
-        case 2:
-        	tip.setText(R.string.tip2);
-        	break;
-        case 3:
-        	tip.setText(R.string.tip3);
-        	break;
-        case 4:
-        	tip.setText(R.string.tip4);
-        	break;
-        case 5:
-        	tip.setText(R.string.tip5);
-        	break;
-        case 6:
-        	tip.setText(R.string.tip6);
-        	break;
-        case 7:
-        	tip.setText(R.string.tip7);
-        	break;
-        case 8:
-        	tip.setText(R.string.tip8);
-        	break;
-        case 9:
-        	tip.setText(R.string.tip9);
-        	break;
-        case 10:
-        	tip.setText(R.string.tip10);
-        	break;
-        case 11:
-        	tip.setText(R.string.tip11);
-        	break;
-        case 12:
-        	tip.setText(R.string.tip12);
-        	break;
-        case 13:
-        	tip.setText(R.string.tip13);
-        	break;
-        default:
-        	tip.setText(R.string.tip1);
-        	break;
-        }
         
     }
     
