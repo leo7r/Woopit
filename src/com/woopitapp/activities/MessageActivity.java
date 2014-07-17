@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -594,6 +595,7 @@ public class MessageActivity extends WoopitActivity {
     					
     				}
     				
+    				((RelativeLayout)findViewById(R.id.loading_layout)).setVisibility(View.GONE);
     			}
     			
     		}
@@ -727,6 +729,7 @@ public class MessageActivity extends WoopitActivity {
     	}
     	public void onLocationChanged(Location location) {
 
+			((RelativeLayout)findViewById(R.id.loading_layout)).setVisibility(View.GONE);
     	    makeUseOfNewLocation(location);
 
     	    if(currentBestLocation == null){

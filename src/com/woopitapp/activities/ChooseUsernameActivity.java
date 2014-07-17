@@ -73,7 +73,7 @@ public class ChooseUsernameActivity extends Activity {
 			super();
 			
 			this.act = act;
-			this.username = username;
+			this.username = username.toLowerCase();
 			this.user = User.get(getApplicationContext());
 						
 			dialog = ProgressDialog.show(act, "",act.getResources().getString(R.string.verificando_usuario), true);

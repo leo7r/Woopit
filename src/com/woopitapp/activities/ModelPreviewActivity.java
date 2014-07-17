@@ -186,7 +186,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 	            gl.glLoadIdentity();	                  
 				gl.glClearColor(0.039f,0.0f,0.16f, 0.0f );
 		        gl.glClearDepthf(1.0f);
-		        //gl.glDepthMask(true);
+		        gl.glDepthMask(true);
 		        gl.glEnable(GL10.GL_DEPTH_TEST);
 		        gl.glDepthFunc(GL10.GL_LESS);
 	            gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
@@ -285,8 +285,9 @@ public class ModelPreviewActivity extends WoopitActivity {
 			
 			if( result != null && result.equals("OK") ){
 
-				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();		
+				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
 				Utils.onMessageSent(getApplicationContext(), "ModelPreviewActivity", modelId, text, latitude, longitude);
+				Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 				
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 				setResult(RESULT_OK);
