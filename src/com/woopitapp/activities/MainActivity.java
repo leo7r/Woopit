@@ -23,8 +23,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
@@ -79,6 +85,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
+    private static final String FIRST_TIME_PREFERENCE = "com.woopitapp.first_time";
     String SENDER_ID = "719506420236";
     GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
@@ -93,6 +100,35 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         setContentView(R.layout.activity_main);
         initialiseTabHost(savedInstanceState);
         act = this;
+        /*
+        RelativeLayout main_layout = (RelativeLayout) findViewById(R.id.main_layout);
+        main_layout.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				
+				if ( ((LinearLayout)findViewById(R.id.welcome_tip_home)).getVisibility() == View.VISIBLE ){
+		    		((LinearLayout)findViewById(R.id.welcome_tip_home)).setVisibility(View.GONE);
+		    		return true;
+		    	}
+		    	
+		    	return false;
+			}
+		});*/
+        
+        SharedPreferences sp = this.getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+    	editor.putBoolean(FIRST_TIME_PREFERENCE, true);
+    	editor.commit();
+        
+        boolean first_time = sp.getBoolean(FIRST_TIME_PREFERENCE, true);
+        
+        if ( first_time ){
+        	((LinearLayout)findViewById(R.id.welcome_tip_home)).setVisibility(View.VISIBLE);
+        	//SharedPreferences.Editor editor = sp.edit();
+        	//editor.putBoolean(FIRST_TIME_PREFERENCE, false);
+        	//editor.commit();
+        }        
         
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); //set the tab as per the saved state
@@ -100,7 +136,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         
         intialiseViewPager();
         setSlidingMenu();
-
+        
         feedBack = Utils.getFeedbackDialog(this);
         
         /* Recibe cambios en lista de amigos */
@@ -212,6 +248,39 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     		unbindService(mConnection);
     	}
     	
+    }
+        
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+    	
+    	boolean ret = super.dispatchTouchEvent(event);
+    	
+    	if ( ((LinearLayout)findViewById(R.id.welcome_tip_home)).getVisibility() == View.VISIBLE ){
+    		
+    		Animation fadeOut = new AlphaAnimation(1, 0);
+    		fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+    		fadeOut.setDuration(400);
+    		fadeOut.setAnimationListener(new AnimationListener(){
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					((LinearLayout)findViewById(R.id.welcome_tip_home)).setVisibility(View.GONE);
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {}
+
+				@Override
+				public void onAnimationStart(Animation animation) {}
+			});
+    		
+    		((LinearLayout)findViewById(R.id.welcome_tip_home)).startAnimation(fadeOut);
+    		
+    		//((LinearLayout)findViewById(R.id.welcome_tip_home)).setVisibility(View.GONE);
+    		//return true;
+    	}
+    	
+    	return ret;
     }
     
     public void goTest( View v ){
