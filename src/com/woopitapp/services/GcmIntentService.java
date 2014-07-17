@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -106,12 +107,15 @@ public class GcmIntentService extends IntentService {
     
     public void setUserNotification( int type , String title , String description , Intent goIntent , Class<?> intentClass ){
 		
+    	Uri notifSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    	
 		NotificationCompat.Builder mBuilder =
 		        new NotificationCompat.Builder(this)
 		        .setSmallIcon(R.drawable.notif_icon)
 		        .setAutoCancel(true)
 		        .setContentTitle(title)
-		        .setContentText(description);
+		        .setContentText(description)
+		        .setSound(notifSound);
 		
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 		

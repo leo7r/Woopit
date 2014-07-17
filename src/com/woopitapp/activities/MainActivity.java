@@ -159,7 +159,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(getApplicationContext());
-
+            
             if (regid.equals("")) {
                 registerInBackground();
             }
