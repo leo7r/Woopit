@@ -26,7 +26,7 @@ public class Objeto {
 	private Vector<GroupMesh> groups;
 	private int renderCount = 0;
 	private int primitive = GL10.GL_TRIANGLES;
-
+	private int[] textureIds;
 
 	public Objeto(String nombre,Context context){
 		try{
@@ -46,17 +46,28 @@ public class Objeto {
 
 
 		if(renderCount == 0){
-			
+
+			textureIds = new int[groups.size()];
+			gl.glGenTextures(groups.size(), textureIds, 0 );
+
 			for(int i = 0 ; i < groups.size();i++){
 				
 				GroupMesh g  = groups.get(i);
-				gl.glBindTexture(GL10.GL_TEXTURE_2D, i);
-			    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-			    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-			    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-			    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
+
 			    if( g.getMaterial().getTexture() != null){
-			    	GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture(), 0);
+			       
+			       
+				    	gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
+					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
+				    	GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture(), 0);
+			       	
+			    	Log.e("textura ","textura " +  g.getMaterial().getName() + " tam " + g.getMaterial().getTexture() );
+			    }else{
+				
+
 			    }
 			}
 			renderCount++;
@@ -67,13 +78,13 @@ public class Objeto {
 			GroupMesh g  = groups.get(i);
 			if(g.getMaterial() != null && g.getMaterial().getTexture() != null){
 				gl.glEnable(GL10.GL_TEXTURE_2D);
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
 			}
 			gl.glEnable(GL10.GL_DEPTH_TEST);
 			gl.glEnable(GL10.GL_BLEND);
 	        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 	        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-	        gl.glBindTexture(GL10.GL_TEXTURE_2D, i);
 	        gl.glShadeModel(GL10.GL_SMOOTH);
 	        gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 	    
@@ -98,7 +109,7 @@ public class Objeto {
 	        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	        gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	        gl.glDisable(GL10.GL_TEXTURE_2D);
-	        	
+			
 	        		
 	        	
 		}
@@ -124,11 +135,10 @@ public class Objeto {
 				in.read(matBuff);	
 				matBuff.position(0);
 				int tamMat = matBuff.getInt();
-				matBuff.clear();
 				if(tamMat == -1){
 					break;
 				}
-				byteBuf.clear();
+		
 				
 				byteBuf = ByteBuffer.allocateDirect(tamMat*2);
 				byteBuf.order(ByteOrder.nativeOrder());
@@ -141,7 +151,7 @@ public class Objeto {
 
 				}
 				m.setName(lineaNombre);
-				byteBuf.clear();
+	
 				
 				//setear Ambient
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -156,7 +166,6 @@ public class Objeto {
 				float aA = extraBuff.getFloat();
 				float [] ambient = {aR,aG,aB,aA};
 				m.setAmbient(ambient);
-				byteBuf.clear();
 				
 				//setear Diffuse
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -171,7 +180,7 @@ public class Objeto {
 				float dA = extraBuff.getFloat();
 				float [] diffuse = {dR,dG,dB,dA};
 				m.setDiffusse(diffuse);
-				byteBuf.clear();
+		
 				
 				//setear Specular
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -186,7 +195,7 @@ public class Objeto {
 				float sA = extraBuff.getFloat();
 				float [] specular = {sR,sG,sB,sA};
 				m.setSpecular(specular);
-				byteBuf.clear();
+			
 				
 				//setear Ni, Si
 				byteBuf = ByteBuffer.allocateDirect(4*2);
@@ -200,7 +209,7 @@ public class Objeto {
 				
 				m.setNi(Ni);
 				m.setSIndex(Si);
-				byteBuf.clear();
+	
 				
 				byteBuf = ByteBuffer.allocateDirect(4);
 				byteBuf.order(ByteOrder.nativeOrder());
@@ -216,11 +225,11 @@ public class Objeto {
 					in.read(extraBuff);	
 					extraBuff.position(0);
 					m.setTexture(BitmapFactory.decodeByteArray(extraBuff.array(), 0, tamTex));
-					byteBuf.clear();
+					if(tamTex >0){
+						Log.e("hay textura", "hay texturaaa " + m.getName() + " tam: " + tamTex);
+					}
 				}
-				byteBuf.clear();
-				extraBuff.clear();
-				Log.e("FREE","ALLOC MATERIALES" );
+		
 				this.materiales.add(m);
 			}
 		}catch(Exception e){
