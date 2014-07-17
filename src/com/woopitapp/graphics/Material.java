@@ -118,6 +118,7 @@ public class Material {
 							StringTokenizer nombre = new StringTokenizer(tok.nextToken(),".");
 							int resID = context.getResources().getIdentifier(nombre.nextToken(), "drawable", context.getPackageName());
 							texture = BitmapFactory.decodeResource(context.getResources(), resID);
+
 						}catch(Exception e){
 							Log.e("Error", "Error abriendo textura " + e);
 						}
