@@ -119,7 +119,8 @@ public class HomeFragment extends Fragment {
     
     public void refresh(){
     	((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
-		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);		
+		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);	
+		list_loading.setVisibility(View.VISIBLE);
 		if(mAdapter == null){
 			
     		Context c = this.getActivity().getApplicationContext();
@@ -241,6 +242,11 @@ public class HomeFragment extends Fragment {
 				if(list_loading != null){
 					list_loading.setVisibility(View.GONE);
 				}
+				((ImageView) getView().findViewById(R.id.notSignalImage)).setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
 				reload.setOnClickListener(new View.OnClickListener() {
 				    public void onClick(View v) {
 				    	refresh();
@@ -383,9 +389,10 @@ public class HomeFragment extends Fragment {
  			
  			if(item.receiver == user_id){
  				if(item.status == 0){
- 					//aqui el otro icono de mensaje nuevo; 					
+ 					imagen.setImageResource(R.drawable.message_not_viewed);					
+ 				}else{
+ 	 				imagen.setImageResource(R.drawable.message_received);
  				}
- 				imagen.setImageResource(R.drawable.message_received);
 				convertView.setOnClickListener(new OnClickListener(){
 
 					@Override
