@@ -17,7 +17,7 @@
     </style>
 
     <style name="big_button">
-        <item name="android:background">@color/woopit_dark_blue</item>
+        <item name="android:background">@drawable/send_message_back</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#fff</item>
         <item name="android:padding">10dp</item>
@@ -92,6 +92,7 @@
     <style name="find_friends_button">
         <item name="android:src">@drawable/find_friends</item>
         <item name="android:paddingLeft">10dp</item>
+        <item name="android:background" >@drawable/add_contact_button</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:clickable">true</item>
         <item name="android:onClick">goFindFriends</item>
