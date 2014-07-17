@@ -160,6 +160,10 @@
     <string name="comprar_ahora"><u>COMPRAR AHORA</u></string>
     <string name="comprar_precio_modelo">Precio del Woop: %s monedas</string>
     <string name="comprar_monedas_usuario">Tus monedas: %s</string>
+    <string name="info_monedas">Con estas monedas podrás comprar Woops para enviarlos a tus amigos</string>
+    <string name="monedas_20">20 Monedas</string>
+    <string name="monedas_50">50 Monedas</string>
+    <string name="monedas_130">130 Monedas</string>
 
     <!-- Mensajes de bienvenida -->
     <string name="bienvenida_mensajes"><b>Oh mira, un nuevo mensaje!</b>\n\nTócalo y descubre lo que hay dentro</string>

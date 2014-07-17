@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -68,9 +69,9 @@ public class BuyCoinActivity extends WoopitActivity {
 		
 		package_list = (ListView) findViewById(R.id.package_list);
 		ArrayList<BuyPackage> pkgs = new ArrayList<BuyPackage>();
-		pkgs.add(new BuyPackage("android.test.purchased","20 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"0.99",20));
-		pkgs.add(new BuyPackage("android.test.purchased","50 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"1.99",50));
-		pkgs.add(new BuyPackage("android.test.purchased","130 monedas","Podras comprar modelos con estas monedas",R.drawable.coin_package1,"4.99",130));
+		pkgs.add(new BuyPackage("com.woopitapp.20_coins",getResources().getString(R.string.monedas_20),getResources().getString(R.string.info_monedas),R.drawable.coins_20,"0.99",20));
+		pkgs.add(new BuyPackage("com.woopitapp.50_coins",getResources().getString(R.string.monedas_50),getResources().getString(R.string.info_monedas),R.drawable.coins_50,"1.99",50));
+		pkgs.add(new BuyPackage("com.woopitapp.130_coins",getResources().getString(R.string.monedas_130),getResources().getString(R.string.info_monedas),R.drawable.coins_130,"4.99",130));
 				
 		mAdapter = new PackageAdapter(this,R.id.package_list,pkgs);
 		package_list.setAdapter(mAdapter);
@@ -196,8 +197,9 @@ public class BuyCoinActivity extends WoopitActivity {
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView description = (TextView) convertView.findViewById(R.id.description);
 			TextView price = (TextView) convertView.findViewById(R.id.price);
-			//ImageView image = (ImageView) convertView.findViewById(R.id.image);
+			ImageView image = (ImageView) convertView.findViewById(R.id.image);
 			
+			image.setImageResource(item.image_resource);
 			name.setText(item.name);
 			description.setText(item.description);
 			price.setText("$"+item.price);
@@ -391,6 +393,7 @@ public class BuyCoinActivity extends WoopitActivity {
 					// Item already owned
 					if ( response_code == 7 ){
 						new ConsumePurchase(id).execute();
+						Toast.makeText(getApplicationContext(), R.string.error_compra, Toast.LENGTH_SHORT).show();
 						//"android.test.purchased"
 					}
 					
@@ -441,10 +444,12 @@ public class BuyCoinActivity extends WoopitActivity {
 		public void onPostExecute( Boolean b ){
 			
 			if ( b ){
-				Toast.makeText(getApplicationContext(), "Listo, consumido", Toast.LENGTH_SHORT).show();
+				Log.i("Item","Consumido");
+				//Toast.makeText(getApplicationContext(), "Listo, consumido", Toast.LENGTH_SHORT).show();
 			}
 			else{
-				Toast.makeText(getApplicationContext(), "NO FUE consumido", Toast.LENGTH_SHORT).show();
+				Log.e("Item","NO Consumido");
+				//Toast.makeText(getApplicationContext(), "NO FUE consumido", Toast.LENGTH_SHORT).show();
 			}
 			
 		}
