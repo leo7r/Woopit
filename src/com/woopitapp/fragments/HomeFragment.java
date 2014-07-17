@@ -42,7 +42,7 @@ import com.woopitapp.services.Utils;
 public class HomeFragment extends Fragment {
 	
 	private static final int REQUEST_DOWNLOAD_MODEL = 0;
-	private static final int REQUEST_MESSAGE = 1;
+	public static final int REQUEST_MESSAGE = 1;
 	ListView message_list;
 	ListAdapter mAdapter;
 	TabHost tabHost;
@@ -293,7 +293,7 @@ public class HomeFragment extends Fragment {
 		newMessagei.putExtra("modelo",message.model);
 		newMessagei.putExtra("text", message.text);
 		newMessagei.putExtra("nombre", message.name);
-		startActivityForResult(newMessagei,REQUEST_MESSAGE);
+		getActivity().startActivityForResult(newMessagei,REQUEST_MESSAGE);
 		
 		Utils.onMessageView(getActivity(), message, "HomeFragment");
 	}

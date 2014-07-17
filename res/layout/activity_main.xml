@@ -13,6 +13,7 @@
         >
         
         <ImageView 
+            android:id="@+id/logo"
 	        android:layout_width="100dp"
 	        android:layout_height="28dp"
 	        android:src="@drawable/logo"
@@ -21,6 +22,22 @@
 	        android:clickable="true"
 	        android:onClick="toggleSlidingMenu"
 	        />
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_tip_home"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textSize="@dimen/small_text"
+            android:textColor="#fff"
+            android:background="#f00"
+            android:layout_alignLeft="@id/logo"
+            android:layout_below="@id/logo"
+            android:layout_marginLeft="5dp"
+            />
         
         
         <ImageView 
