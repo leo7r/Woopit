@@ -139,7 +139,19 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 			Utils.onShareWoopit(getApplicationContext(), "SlidingMenu", "Compartido");
 			new InsertCoins(act , 1 , R.string.por_compartir ).execute();
 		}
-		
+		if(requestCode == HomeFragment.REQUEST_MESSAGE){
+    		if(resultCode == this.RESULT_OK){
+    			 Intent i = new Intent(getApplicationContext(),MapUnMessageActivity.class);
+				 Bundle extras = data.getExtras();
+				 double latitud = extras.getDouble("latitud");
+				 double longitud  = extras.getDouble("longitud");
+				 String nombre = extras.getString("nombre");
+    			 i.putExtra("latitud",latitud);
+				 i.putExtra("longitud",longitud);
+				 i.putExtra("nombre", nombre);
+				 startActivity(i);
+    		}
+    	}
 		share_launched = false;
 		share_clicked = false;
 	}

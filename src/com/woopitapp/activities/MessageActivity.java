@@ -745,15 +745,23 @@ public class MessageActivity extends Activity {
  				render.transladarMundo(((float) (distancia+0.190)*-100.0f));
  			}
  			if(!sensorDistancia && render != null &&  Double.parseDouble(latitud) <  500.0){
-	 			 if(distancia*1000 <50){
+    			
+ 				Log.e("paso", "mapactivity");
 
+	 			 if(distancia*1000 <50){
+	 				
 	    				LinearLayout camera_layout = (LinearLayout) findViewById(R.id.camera_layout);
+		 			
+
 	    				LinearLayout model_layout = (LinearLayout) findViewById(R.id.model_layout);
+		 			
+
 	    				messageText = (TextView) findViewById(R.id.text);
-	    				
+		 				Log.e("paso", "mapactivity3");
+
 	    				camera_layout.addView(cv,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
 	    				model_layout.addView(glView,new LayoutParams( LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT ));
-	    				
+
 	    				if ( text.length() > 0 ){
 	    					messageText.setText(text);
 	    				}
