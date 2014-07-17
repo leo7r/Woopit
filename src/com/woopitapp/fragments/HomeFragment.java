@@ -335,25 +335,8 @@ public class HomeFragment extends Fragment {
 		public void onComplete(String result) {
 			
 			if ( result != null ){
-				
-				/*try{
-					JSONObject user = new JSONObject(result);
-				
-					int id = user.getInt("i");
-					String name = user.getString("n");
-					String username = user.getString("u");
-					String image = user.getString("m");
-					
-					User u = new User(id,username,name,image);
-					current_user = u;
-					setProfile();
-				}
-				catch( Exception e ){
-					e.printStackTrace()	;
-				}	*/
-			}else{
-				//Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
-			}				
+				Utils.sendBroadcast(getActivity(), R.string.broadcast_messages);
+			}		
 		}
     	
     }

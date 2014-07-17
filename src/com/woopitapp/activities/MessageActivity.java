@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -27,11 +26,10 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.SurfaceHolder;
-import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -39,10 +37,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.graphics.Objeto;
 import com.woopitapp.server_connections.ModelDownloader;
 
-public class MessageActivity extends Activity {
+public class MessageActivity extends WoopitActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.woopitapp.MESSAGE";
 	
@@ -80,7 +79,7 @@ public class MessageActivity extends Activity {
 	//int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
 	CustomCameraView cv;
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         Bundle extras = getIntent().getExtras();

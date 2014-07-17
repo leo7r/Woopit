@@ -1,95 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-       android:orientation="vertical"
-       android:layout_width="fill_parent"
-       android:layout_height="fill_parent"
-       android:background="#fff">
-    
-    <RelativeLayout 
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        style="@style/top_bar"
-        android:paddingLeft="10dp"
-        >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
         
-        <ImageView 
-            android:id="@+id/logo"
-	        android:layout_width="100dp"
-	        android:layout_height="28dp"
-	        android:src="@drawable/logo"
-	        android:layout_centerVertical="true"
-	        android:layout_alignParentLeft="true"
-	        android:clickable="true"
-	        android:onClick="toggleSlidingMenu"
-	        />
-        
-        <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome_tip_home"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:paddingTop="1dp"
-            android:paddingBottom="1dp"
-            android:textSize="@dimen/small_text"
-            android:textColor="#fff"
-            android:background="#f00"
-            android:layout_alignLeft="@id/logo"
-            android:layout_below="@id/logo"
-            android:layout_marginLeft="5dp"
-            />
-        
-        
-        <ImageView 
-            android:id="@+id/find_friends"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/find_friends_button"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            />
-                
-    </RelativeLayout>
-    
-	<TabHost
-	    android:id="@android:id/tabhost"
-	    android:layout_width="fill_parent"
-	    android:layout_height="0dp"
-	    android:layout_weight="1"
-	    >
-	    <LinearLayout
-	        android:orientation="vertical"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
+    <LinearLayout
+	    android:orientation="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="#fff">
+	    
+	    <RelativeLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        style="@style/top_bar"
+	        android:paddingLeft="10dp"
 	        >
 	        
-	        <TabWidget
-	            android:id="@android:id/tabs"
-	            android:layout_width="match_parent"
+	        <ImageView 
+	            android:id="@+id/logo"
+		        android:layout_width="100dp"
+		        android:layout_height="28dp"
+		        android:src="@drawable/logo"
+		        android:layout_centerVertical="true"
+		        android:layout_alignParentLeft="true"
+		        android:clickable="true"
+		        android:onClick="toggleSlidingMenu"
+		        />
+	        	        
+	        <ImageView 
+	            android:id="@+id/find_friends"
+	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:orientation="horizontal"
-	            android:divider="@null"
+	            style="@style/find_friends_button"
+	            android:layout_centerVertical="true"
+	            android:layout_alignParentRight="true"
 	            />
-	        
-	        <View 
-	            android:layout_width="match_parent"
-	            android:layout_height="1dp"
-	    		android:background="#66e4e4e6"
-	            />
-	        
-	        <FrameLayout
-	            android:id="@android:id/tabcontent"
-	            android:layout_width="0dp"
-	            android:layout_height="0dp"
-	            android:layout_weight="0"/>
+	                
+	    </RelativeLayout>
+	    
+		<TabHost
+		    android:id="@android:id/tabhost"
+		    android:layout_width="fill_parent"
+		    android:layout_height="0dp"
+		    android:layout_weight="1"
+		    >
+		    <LinearLayout
+		        android:orientation="vertical"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        >
+		        
+		        <TabWidget
+		            android:id="@android:id/tabs"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:orientation="horizontal"
+		            android:divider="@null"
+		            />
+		        
+		        <View 
+		            android:layout_width="match_parent"
+		            android:layout_height="1dp"
+		    		android:background="#66e4e4e6"
+		            />
+		        
+		        <FrameLayout
+		            android:id="@android:id/tabcontent"
+		            android:layout_width="0dp"
+		            android:layout_height="0dp"
+		            android:layout_weight="0"/>
+		
+		        <android.support.v4.view.ViewPager
+		            android:id="@+id/viewpager"
+		            android:layout_width="fill_parent"
+		            android:layout_height="0dp"
+		            android:layout_weight="1"
+		            />
+		    </LinearLayout>
+		</TabHost>
+	    
+	</LinearLayout>
 	
-	        <android.support.v4.view.ViewPager
-	            android:id="@+id/viewpager"
-	            android:layout_width="fill_parent"
-	            android:layout_height="0dp"
-	            android:layout_weight="1"
-	            />
-	    </LinearLayout>
-	</TabHost>
     
-</LinearLayout>
+    <LinearLayout 
+        android:id="@+id/welcome_tip_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/info_bubble"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone"
+        >
+        
+        <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/welcome_tip_home"
+	        android:textSize="@dimen/small_text"
+	        android:padding="5dp"
+            />
+        
+    </LinearLayout>
+    
+    
+</RelativeLayout>

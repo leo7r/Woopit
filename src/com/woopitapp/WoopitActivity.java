@@ -1,6 +1,8 @@
 package com.woopitapp;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -17,11 +19,13 @@ public class WoopitActivity extends Activity {
 	
 	public void onCreate( Bundle savedInstanceState ){
 		super.onCreate(savedInstanceState);
+		
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancelAll();
 	}
 	
 	public void onStart(){
 		super.onStart();
-		
 		EasyTracker.getInstance(this).activityStart(this);
 	}
 	
