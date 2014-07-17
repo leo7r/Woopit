@@ -433,6 +433,10 @@ public class Utils {
 	public static String getUserImageURI( int id ){
 		return "http://"+ServerConnection.HOST+"/users/images/"+id+".jpg";
 	}
+
+	public static String getModelImageURI( int id ){
+		return "http://"+ServerConnection.HOST+"/models/previews/"+id+".jpg";
+	}
 	
 	public static void setUserImage( Context con , ImageView iv , int id_user ){
 		
@@ -446,6 +450,20 @@ public class Utils {
 		
 		imageLoader = getImageLoader(con);		
 		imageLoader.displayImage(getUserImageURI(id_user), iv, options );
+	}
+
+	public static void setModelImage( Context con , ImageView iv , int model_id ){
+		
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showStubImage(R.drawable.model_image)
+        .showImageForEmptyUri(R.drawable.model_image)
+        .showImageOnFail(R.drawable.model_image)
+        .cacheOnDisc()
+        //.displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, con)))
+        .build();
+		
+		imageLoader = getImageLoader(con);		
+		imageLoader.displayImage(getModelImageURI(model_id), iv, options );
 	}
 	
 	/* Send feedback */
