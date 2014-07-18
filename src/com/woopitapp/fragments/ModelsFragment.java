@@ -50,8 +50,7 @@ public class ModelsFragment extends Fragment {
 	
 	
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        
+    	    	
     	View view = (LinearLayout)inflater.inflate(R.layout.models_fragment, container, false);
         
         models_list = (ListView) view.findViewById(R.id.models_list);
@@ -60,7 +59,7 @@ public class ModelsFragment extends Fragment {
         saved_models = new JSONArray();
         
         PauseOnScrollListener listener = new PauseOnScrollListener(Utils.getImageLoader(getActivity()), true, true, new OnScrollListener(){
-
+        	
 			@Override
 			public void onScroll(AbsListView list, int firstVisible, int visibleItems, int totalItems) {
 				
@@ -162,7 +161,7 @@ public class ModelsFragment extends Fragment {
 			
 			name.setText(model.name);
 			price.setText(model.price);
-			image.setImageResource(R.drawable.model_image);
+			Utils.setModelImage(getActivity(), image, model.id);
 			
 			convertView.setOnClickListener(new OnClickListener(){
 
@@ -281,7 +280,6 @@ public class ModelsFragment extends Fragment {
 				
 			}
 			else{
-				Log.e("Error de conexion","eror d conexion");
 				ImageView notSiganlIcon = ((ImageView) getView().findViewById(R.id.notSignalImage));
 				TextView reload = (TextView) getView().findViewById(R.id.reload_button);		
 				reload.setVisibility(View.VISIBLE);

@@ -110,7 +110,7 @@ public class SearchModelsActivity extends WoopitActivity {
 			
 			name.setText(model.name);
 			price.setText(model.price);
-			image.setImageResource(R.drawable.model_image);
+			Utils.setModelImage(getApplicationContext(), image, model.id);
 			
 			convertView.setOnClickListener(new OnClickListener(){
 
