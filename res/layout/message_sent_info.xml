@@ -1,0 +1,55 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+
+<ImageView 
+			android:id="@+id/welcome_models"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:src="@drawable/logo"
+			android:layout_marginTop="50dp"
+			/>
+<TextView
+		    android:id="@+id/woop_para"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/woop_enviado_para"
+		    android:layout_gravity="center"
+		    android:layout_margin="5dp"
+		    android:textColor="#00913D"
+		    android:gravity="center_horizontal"
+		    />
+<TextView
+		    android:id="@+id/woop_status"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/woop_enviado_status"
+		    android:layout_gravity="center"
+		    android:layout_margin="5dp"
+		    android:textColor="#00913D"
+		    android:gravity="center_horizontal"
+		    />
+<TextView
+		    android:id="@+id/woop_enviado"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/woop_enviado"
+		    android:layout_gravity="center"
+		    android:layout_margin="5dp"
+		    android:textColor="#00913D"
+		    android:gravity="center_horizontal"
+		    />
+<TextView
+		    android:id="@+id/woop_enviado_fecha"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/woop_enviado_fecha"
+		    android:layout_gravity="center"
+		    android:layout_margin="5dp"
+		    android:textColor="#00913D"
+		    android:gravity="center_horizontal"
+		    />
+</LinearLayout>

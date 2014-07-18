@@ -150,6 +150,10 @@
             android:label="@string/title_activity_map" >
         </activity>
         <activity
+            android:name=".activities.MapSentDirectMessageActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
+        <activity
             android:name=".activities.BuyCoinActivity"
             android:label="@string/title_activity_buy_model" >
         </activity>

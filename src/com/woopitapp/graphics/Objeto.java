@@ -87,7 +87,7 @@ public class Objeto {
 	        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 	        gl.glShadeModel(GL10.GL_SMOOTH);
 	        gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-	    
+	        gl.glEnableClientState(GL10.GL_COLOR_MATERIAL);
 		    gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT,g.getMaterial().getAmbient(), 0);			   			        
 		    gl.glMaterialfv(GL10.GL_FRONT_AND_BACK ,GL10.GL_DIFFUSE, g.getMaterial().getDiffusse(), 0);
 		    gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, g.getMaterial().getSpecular(), 0);
