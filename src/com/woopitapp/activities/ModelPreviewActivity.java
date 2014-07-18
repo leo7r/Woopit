@@ -285,8 +285,9 @@ public class ModelPreviewActivity extends WoopitActivity {
 			
 			if( result != null && result.equals("OK") ){
 
-				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();		
+				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
 				Utils.onMessageSent(getApplicationContext(), "ModelPreviewActivity", modelId, text, latitude, longitude);
+				Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 				
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 				setResult(RESULT_OK);

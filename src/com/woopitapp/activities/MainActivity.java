@@ -117,17 +117,13 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 		});*/
         
         SharedPreferences sp = this.getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-    	editor.putBoolean(FIRST_TIME_PREFERENCE, true);
-    	editor.commit();
-        
         boolean first_time = sp.getBoolean(FIRST_TIME_PREFERENCE, true);
         
         if ( first_time ){
         	((LinearLayout)findViewById(R.id.welcome_tip_home)).setVisibility(View.VISIBLE);
-        	//SharedPreferences.Editor editor = sp.edit();
-        	//editor.putBoolean(FIRST_TIME_PREFERENCE, false);
-        	//editor.commit();
+        	SharedPreferences.Editor editor = sp.edit();
+        	editor.putBoolean(FIRST_TIME_PREFERENCE, false);
+        	editor.commit();
         }        
         
         if (savedInstanceState != null) {

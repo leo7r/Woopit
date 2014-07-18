@@ -5,8 +5,7 @@
     android:orientation="vertical" 
     android:background="#fff"
     >
-    
-    
+        
     <LinearLayout 
         android:id="@+id/camera_layout"
         android:layout_width="match_parent"
@@ -35,5 +34,22 @@
    	    android:padding="5dp"
    	    android:gravity="center"
    	    />
+   	
+   	
+    <RelativeLayout 
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        
+        <ProgressBar 
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"
+           	style="@style/progress_bar"
+            />
+        
+    </RelativeLayout>
                                                                                                   
 </RelativeLayout>

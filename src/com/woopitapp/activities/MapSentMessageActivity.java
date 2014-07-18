@@ -168,8 +168,9 @@ GoogleMap.OnMapClickListener {
 			public void onComplete(String result) {
 				
 				if( result != null && result.equals("OK") ){
-					
-				//	Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
+
+					Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , nombre ) , Toast.LENGTH_LONG).show();
+					Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 					setResult(RESULT_OK);
 				    finish();
 				}
