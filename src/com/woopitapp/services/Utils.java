@@ -459,7 +459,7 @@ public class Utils {
         .showImageForEmptyUri(R.drawable.model_image)
         .showImageOnFail(R.drawable.model_image)
         .cacheOnDisc()
-        //.displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, con)))
+        .displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, con)))
         .build();
 		
 		imageLoader = getImageLoader(con);		

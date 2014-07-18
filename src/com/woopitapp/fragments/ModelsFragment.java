@@ -280,7 +280,6 @@ public class ModelsFragment extends Fragment {
 				
 			}
 			else{
-				Log.e("Error de conexion","eror d conexion");
 				ImageView notSiganlIcon = ((ImageView) getView().findViewById(R.id.notSignalImage));
 				TextView reload = (TextView) getView().findViewById(R.id.reload_button);		
 				reload.setVisibility(View.VISIBLE);

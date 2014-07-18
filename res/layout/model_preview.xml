@@ -59,10 +59,12 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:textColor="#fff"
+            android:background="@drawable/message_edit_bg"
             android:textColorHint="#44ffffff"
             android:singleLine="true"
             android:gravity="center"
             android:maxLength="140"
+            android:padding="10dp"
             />
         
     </RelativeLayout>
