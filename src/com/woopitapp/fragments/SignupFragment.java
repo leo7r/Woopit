@@ -164,10 +164,14 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 		
 	    super.onActivityResult(requestCode, resultCode, data);
 	    
-		
 	    uiHelper.onActivityResult(requestCode, resultCode, data);
 	}
 	
+	public void reconectFacebook( int requestCode, int resultCode, Intent data ){
+
+	    uiHelper.onActivityResult(requestCode, resultCode, data);
+	}
+		
 	public void reconectGoogle(){
 		 mConnectionResult = null;
 		 mPlusClient.connect();

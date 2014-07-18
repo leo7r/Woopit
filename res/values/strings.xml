@@ -65,7 +65,7 @@
     <string name="enviando_correo_restauracion">Enviando correo de restauración&#8230;</string>
     <string name="enviado_correo_restauracion">Restauración de contraseña enviada a %s</string>
     <string name="welcome_tip_home">Toca para ver tu perfil</string>
-
+	
     <!-- Pantalla de Amigos -->
     <string name="title_activity_search_users">SearchUsers</string>
     <string name="title_activity_find_friends">FindFriendsActivity</string>

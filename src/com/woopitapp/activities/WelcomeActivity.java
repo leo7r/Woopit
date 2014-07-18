@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.Patterns;
@@ -21,7 +22,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.woopitapp.R;
-import com.woopitapp.WoopitFragmentActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.fragments.LoginFragment;
 import com.woopitapp.fragments.SignupFragment;
@@ -31,7 +31,7 @@ import com.woopitapp.services.Preferences;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
-public class WelcomeActivity extends WoopitFragmentActivity {
+public class WelcomeActivity extends FragmentActivity {
 	
 	Fragment currentFragment;
 	
@@ -67,6 +67,16 @@ public class WelcomeActivity extends WoopitFragmentActivity {
 				f.reconectGoogle();
 			}
 		}
+		
+		if ( currentFragment != null && currentFragment instanceof SignupFragment ){
+			((SignupFragment)currentFragment).reconectFacebook(requestCode, resultCode, data);
+		}
+		else{
+			if ( currentFragment != null && currentFragment instanceof LoginFragment ){
+				((LoginFragment)currentFragment).reconectFacebook(requestCode, resultCode, data);
+			}
+		}
+		
 	}
 	
 	public void goLogin( View v ){

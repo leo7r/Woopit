@@ -182,7 +182,12 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		mConnectionResult = null;
         mPlusClient.connect();
 	}
-	
+
+	public void reconectFacebook( int requestCode, int resultCode, Intent data ){
+
+	    uiHelper.onActivityResult(requestCode, resultCode, data);
+	}
+		
 	@Override
 	public void onPause() {
 	    super.onPause();

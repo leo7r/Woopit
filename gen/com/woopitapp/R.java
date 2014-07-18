@@ -2145,6 +2145,9 @@ containing a value of this type.
         public static final int auth_client_using_bad_version_title=0x7f060002;
         public static final int bienvenida_amigos=0x7f0600d4;
         /**  Mensajes de bienvenida 
+ Mensajes de bienvenida 
+ Mensajes de bienvenida 
+ Mensajes de bienvenida 
          */
         public static final int bienvenida_mensajes=0x7f0600d3;
         public static final int bienvenida_modelos=0x7f0600d5;
@@ -2164,11 +2167,17 @@ containing a value of this type.
         public static final int buscar_usuarios=0x7f060086;
         public static final int busqueda=0x7f060062;
         /**  Pantalla de busqueda de modelos 
+ Pantalla de busqueda de modelos 
+ Pantalla de busqueda de modelos 
+ Pantalla de busqueda de modelos 
          */
         public static final int busqueda_modelos=0x7f0600a8;
         public static final int button_send=0x7f06004e;
         public static final int cambiar_imagen=0x7f0600a3;
         /**  Pantalla del mapa 
+ Pantalla del mapa 
+ Pantalla del mapa 
+ Pantalla del mapa 
          */
         public static final int cargando_mapa=0x7f06008f;
         public static final int com_facebook_choose_friends=0x7f060031;
@@ -2317,6 +2326,9 @@ containing a value of this type.
         public static final int encontrar_amigos_gPlus=0x7f060084;
         public static final int encontrar_amigos_info=0x7f060085;
         /**  Pantalla de listado 
+ Pantalla de listado 
+ Pantalla de listado 
+ Pantalla de listado 
          */
         public static final int encuentra_mas_modelos=0x7f0600a6;
         public static final int entrando=0x7f060071;
@@ -2324,6 +2336,9 @@ containing a value of this type.
         public static final int enviando_correo_restauracion=0x7f06007c;
         public static final int enviar=0x7f060064;
         /**  Pantalla de Preview 
+ Pantalla de Preview 
+ Pantalla de Preview 
+ Pantalla de Preview 
          */
         public static final int enviar_a=0x7f0600a9;
         public static final int enviar_actual=0x7f0600aa;
@@ -2336,6 +2351,9 @@ containing a value of this type.
         public static final int error_compra_reintentando=0x7f0600c2;
         public static final int error_de_conexion=0x7f06005d;
         /**  Terminos generales 
+ Terminos generales 
+ Terminos generales 
+ Terminos generales 
          */
         public static final int error_desconocido=0x7f06005c;
         public static final int error_disponibilidad_modelo=0x7f0600c8;
@@ -2354,11 +2372,17 @@ containing a value of this type.
         public static final int feedback_pregunta=0x7f0600bb;
         public static final int feedback_respuesta=0x7f0600bc;
         /**  Feedback 
+ Feedback 
+ Feedback 
+ Feedback 
          */
         public static final int feedback_texto=0x7f0600b5;
         public static final int feedback_titulo=0x7f0600b7;
         public static final int ga_trackingId=0x7f060049;
         /**  Ganar monedas 
+ Ganar monedas 
+ Ganar monedas 
+ Ganar monedas 
          */
         public static final int ganaste_moneda=0x7f0600d7;
         /**  Google Maps API KEY 
@@ -2376,10 +2400,16 @@ containing a value of this type.
         public static final int info_nombre_usuario=0x7f060077;
         public static final int informacion_actualizada=0x7f0600a4;
         /**  Pantalla de Bienvenida, login y registro 
+ Pantalla de Bienvenida, login y registro 
+ Pantalla de Bienvenida, login y registro 
+ Pantalla de Bienvenida, login y registro 
          */
         public static final int iniciar_sesion=0x7f060067;
         public static final int invitalos=0x7f06008c;
         /**  Tiempo 
+ Tiempo 
+ Tiempo 
+ Tiempo 
          */
         public static final int just_now=0x7f0600e7;
         public static final int lista_de_modelos=0x7f0600a7;
@@ -2404,6 +2434,9 @@ containing a value of this type.
         public static final int notificacion_nuevo_mensaje=0x7f0600f2;
         public static final int notificacion_peticion_aceptada=0x7f0600f3;
         /**  Notificaciones 
+ Notificaciones 
+ Notificaciones 
+ Notificaciones 
          */
         public static final int notificacion_peticion_amigos=0x7f0600f1;
         public static final int notificacion_woopit_actualizado=0x7f0600f4;
@@ -2412,6 +2445,9 @@ containing a value of this type.
         public static final int nueva_contrasena=0x7f06006d;
         public static final int para_completar_compra=0x7f0600c4;
         /**  Pantalla de perfil 
+ Pantalla de perfil 
+ Pantalla de perfil 
+ Pantalla de perfil 
          */
         public static final int perfil=0x7f060099;
         public static final int peticion_nuevo_modelo=0x7f060065;
@@ -2426,6 +2462,9 @@ containing a value of this type.
         public static final int solicitudes_de_amistad=0x7f060089;
         public static final int time_ago=0x7f0600e8;
         /**  Tips 
+ Tips 
+ Tips 
+ Tips 
          */
         public static final int tip1=0x7f0600da;
         public static final int tip10=0x7f0600e3;
@@ -2441,6 +2480,9 @@ containing a value of this type.
         public static final int tip8=0x7f0600e1;
         public static final int tip9=0x7f0600e2;
         /**  Compras 
+ Compras 
+ Compras 
+ Compras 
          */
         public static final int title_activity_buy_model=0x7f0600bf;
         public static final int title_activity_buy_model_dialog=0x7f0600f7;
@@ -2454,6 +2496,9 @@ containing a value of this type.
         public static final int title_activity_profile=0x7f0600a0;
         public static final int title_activity_search_models=0x7f0600b2;
         /**  Pantalla de Amigos 
+ Pantalla de Amigos 
+ Pantalla de Amigos 
+ Pantalla de Amigos 
          */
         public static final int title_activity_search_users=0x7f06007f;
         public static final int title_activity_test=0x7f0600b0;

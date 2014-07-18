@@ -20,7 +20,7 @@
         
         <ImageView 
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+			android:layout_height="match_parent"
             style="@style/find_friends_button"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -137,7 +137,7 @@
         android:id="@+id/models_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="3"
+        android:numColumns="2"
 	    android:verticalSpacing="10dp"
 	    android:horizontalSpacing="10dp"
 	    android:stretchMode="columnWidth"
