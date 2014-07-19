@@ -23,8 +23,6 @@ import android.widget.Toast;
 
 import com.woopitapp.R;
 import com.woopitapp.entities.User;
-import com.woopitapp.fragments.LoginFragment;
-import com.woopitapp.fragments.SignupFragment;
 import com.woopitapp.fragments.WelcomeFragment;
 import com.woopitapp.services.Data;
 import com.woopitapp.services.Preferences;
@@ -34,6 +32,7 @@ import com.woopitapp.services.Utils;
 public class WelcomeActivity extends FragmentActivity {
 	
 	Fragment currentFragment;
+	private int SIGNUP_LOGIN_REQUEST = 1;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,50 +54,25 @@ public class WelcomeActivity extends FragmentActivity {
 		transaction.commit();
 	}
 	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if (requestCode == LoginFragment.REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
-			LoginFragment f = (LoginFragment) currentFragment;
-			f.reconectGoogle();
-	    }
-		else{
-			if (requestCode == SignupFragment.REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK){
-				SignupFragment f = (SignupFragment) currentFragment;
-				f.reconectGoogle();
-			}
-		}
-		
-		if ( currentFragment != null && currentFragment instanceof SignupFragment ){
-			((SignupFragment)currentFragment).reconectFacebook(requestCode, resultCode, data);
-		}
-		else{
-			if ( currentFragment != null && currentFragment instanceof LoginFragment ){
-				((LoginFragment)currentFragment).reconectFacebook(requestCode, resultCode, data);
-			}
+		if ( requestCode == SIGNUP_LOGIN_REQUEST && resultCode == RESULT_OK ){
+			finish();
 		}
 		
 	}
 	
 	public void goLogin( View v ){
 
-		Fragment fragment = new LoginFragment();
-		currentFragment = fragment;
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		
-		transaction.replace(R.id.fragment_container, fragment);
-		transaction.addToBackStack(null);
-		transaction.commit();
+		Intent i = new Intent( this , LoginActivity.class );
+		startActivityForResult(i , SIGNUP_LOGIN_REQUEST  );
 	}
 	
 	public void goSignup( View v ){
-
-		Fragment fragment = new SignupFragment();
-		currentFragment = fragment;
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		
-		transaction.replace(R.id.fragment_container, fragment);
-		transaction.addToBackStack(null);
-		transaction.commit();
+		Intent i = new Intent( this , SignupActivity.class );
+		startActivityForResult(i , SIGNUP_LOGIN_REQUEST  );
+		
 	}
 	
 	/* Coloca un email del usuario de una vez */
@@ -244,6 +218,8 @@ public class WelcomeActivity extends FragmentActivity {
 					data.open();
 					data.insertUser(id, email, username , name, image, facebook_user, gplus_user);
 					data.close();
+
+					act.setResult(RESULT_OK);
 					
 					if ( username == null ){
 						Intent i = new Intent(act,ChooseUsernameActivity.class);
@@ -254,7 +230,7 @@ public class WelcomeActivity extends FragmentActivity {
 					
 					Preferences.setFirstTime(act, false);
 					Intent i = new Intent(act,MainActivity.class);
-					act.startActivity(i);	
+					act.startActivity(i);
 					act.finish();
 				}
 				catch ( Exception e ){

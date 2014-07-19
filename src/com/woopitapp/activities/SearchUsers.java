@@ -79,13 +79,15 @@ public class SearchUsers extends WoopitActivity {
 			ImageView image = (ImageView) convertView.findViewById(R.id.image);	
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView username = (TextView) convertView.findViewById(R.id.username);
-			ImageView add_friend = (ImageView) convertView.findViewById(R.id.add_friend);			
+			final ImageView add_friend = (ImageView) convertView.findViewById(R.id.add_friend);			
+			final ProgressBar loading = (ProgressBar) convertView.findViewById(R.id.loading);
 			
 			Utils.setUserImage(getApplicationContext(), image, user.id);
 			name.setText(user.name);
 			username.setText("@"+user.username);
 			add_friend.setVisibility(View.VISIBLE);
-						
+			loading.setVisibility(View.GONE);
+			
 			switch( user.request_status ){
 			
 			// No hay pedido de ser amigos o fue rechazada
@@ -105,6 +107,10 @@ public class SearchUsers extends WoopitActivity {
 
 				@Override
 				public void onClick(View arg0) {
+					
+					add_friend.setVisibility(View.GONE);
+					loading.setVisibility(View.VISIBLE);
+					
 					new AddOrRejectFriend(user.id).execute();
 				}
 			});
