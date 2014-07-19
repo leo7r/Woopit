@@ -105,5 +105,7 @@
         <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:indeterminateDuration">1000</item>
     </style>
-    
+    <style name="bold_text">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

@@ -5,51 +5,71 @@
     android:orientation="vertical" >
 
 
+
+<LinearLayout 
+    android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:layout_gravity="center_horizontal">
 <ImageView 
+    
 			android:id="@+id/welcome_models"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:layout_alignParentLeft="true"
+         	android:layout_toLeftOf="@+id/anchor" 
+			android:layout_height="fill_parent"
+	
 			android:src="@drawable/logo"
-			android:layout_marginTop="50dp"
+		
+		
 			/>
+</LinearLayout>
+
+
 <TextView
 		    android:id="@+id/woop_para"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="@string/woop_enviado_para"
 		    android:layout_gravity="center"
 		    android:layout_margin="5dp"
-		    android:textColor="#00913D"
+		    android:textColor="#0B3311"
 		    android:gravity="center_horizontal"
+		    android:textStyle="normal"
+		  
 		    />
 <TextView
 		    android:id="@+id/woop_status"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="@string/woop_enviado_status"
 		    android:layout_gravity="center"
 		    android:layout_margin="5dp"
-		    android:textColor="#00913D"
+		    android:textColor="#0B3311"
 		    android:gravity="center_horizontal"
 		    />
 <TextView
 		    android:id="@+id/woop_enviado"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="@string/woop_enviado"
 		    android:layout_gravity="center"
 		    android:layout_margin="5dp"
-		    android:textColor="#00913D"
+		    android:textColor="#0B3311"
+		    android:gravity="center_horizontal"
+		    />
+<TextView
+		    android:id="@+id/woop_texto"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:layout_margin="5dp"
+		    android:textColor="#0B3311"
 		    android:gravity="center_horizontal"
 		    />
 <TextView
 		    android:id="@+id/woop_enviado_fecha"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="@string/woop_enviado_fecha"
 		    android:layout_gravity="center"
 		    android:layout_margin="5dp"
-		    android:textColor="#00913D"
+		    android:textColor="#0B3311"
 		    android:gravity="center_horizontal"
 		    />
 </LinearLayout>
