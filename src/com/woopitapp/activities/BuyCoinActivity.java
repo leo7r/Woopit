@@ -37,6 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
@@ -57,6 +59,10 @@ public class BuyCoinActivity extends WoopitActivity {
 	ListView package_list;
 	PackageAdapter mAdapter;
 	
+	private final String coins_20 = "com.woopitapp.coins.20";
+	private final String coins_50 = "com.woopitapp.coins.50";
+	private final String coins_130 = "com.woopitapp.coins.130";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -69,9 +75,9 @@ public class BuyCoinActivity extends WoopitActivity {
 		
 		package_list = (ListView) findViewById(R.id.package_list);
 		ArrayList<BuyPackage> pkgs = new ArrayList<BuyPackage>();
-		pkgs.add(new BuyPackage("com.woopitapp.20_coins",getResources().getString(R.string.monedas_20),getResources().getString(R.string.info_monedas),R.drawable.coins_20,"0.99",20));
-		pkgs.add(new BuyPackage("com.woopitapp.50_coins",getResources().getString(R.string.monedas_50),getResources().getString(R.string.info_monedas),R.drawable.coins_50,"1.99",50));
-		pkgs.add(new BuyPackage("com.woopitapp.130_coins",getResources().getString(R.string.monedas_130),getResources().getString(R.string.info_monedas),R.drawable.coins_130,"4.99",130));
+		pkgs.add(new BuyPackage(coins_20,getResources().getString(R.string.monedas_20),getResources().getString(R.string.info_monedas),R.drawable.coins_20,"0.99",20));
+		pkgs.add(new BuyPackage(coins_50,getResources().getString(R.string.monedas_50),getResources().getString(R.string.info_monedas),R.drawable.coins_50,"1.99",50));
+		pkgs.add(new BuyPackage(coins_130,getResources().getString(R.string.monedas_130),getResources().getString(R.string.info_monedas),R.drawable.coins_130,"4.99",130));
 				
 		mAdapter = new PackageAdapter(this,R.id.package_list,pkgs);
 		package_list.setAdapter(mAdapter);
@@ -107,6 +113,27 @@ public class BuyCoinActivity extends WoopitActivity {
 						new ConsumePurchase(product_id).execute();
 						
 						Utils.onCoinsBuy(getApplicationContext(), "BuyCoinActivity", "Comprado", product_id, user_coins);
+						
+						EasyTracker easyTracker = EasyTracker.getInstance(this);
+						
+						double revenue = 0.0;
+						
+						if ( product_id.equals(coins_20) ){
+							revenue = 0.99;
+						}
+						else{
+							if ( product_id.equals(coins_50) ){
+								revenue = 1.99;
+							}
+							else{
+								if ( product_id.equals(coins_130) ){
+									revenue = 4.99;
+								}
+							}
+						}
+						
+						easyTracker.send( MapBuilder.createTransaction(order_id, "In-app store", revenue, 0.0, 0.0, "USD").build() );
+						
 					}
 					else{
 						Log.e(TAG, "Error, fallaron los token");
@@ -393,7 +420,7 @@ public class BuyCoinActivity extends WoopitActivity {
 					// Item already owned
 					if ( response_code == 7 ){
 						new ConsumePurchase(id).execute();
-						Toast.makeText(getApplicationContext(), R.string.error_compra, Toast.LENGTH_SHORT).show();
+						//Toast.makeText(getApplicationContext(), R.string.error_compra, Toast.LENGTH_SHORT).show();
 						//"android.test.purchased"
 					}
 					

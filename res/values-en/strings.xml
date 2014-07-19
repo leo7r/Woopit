@@ -28,7 +28,7 @@
     <string name="registrarse">Sign up</string>
     <string name="correo_electronico">Email address</string>
     <string name="constrasena">Password</string>
-    <string name="contrasena_olvidada">Forgo password?</string>
+    <string name="contrasena_olvidada">Forgot password?</string>
     <string name="registro">Sign up</string>
     <string name="nueva_contrasena">New password</string>
     <string name="repetir_contrasena">Repeat password</string>
@@ -39,7 +39,7 @@
     <string name="error_iniciar_sesion">Email and password doesn\'t match</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_choose_username">ChooseUsernameActivity</string>
-    <string name="elige_nombre_usuario">Elije un Nombre de Usuario</string>
+    <string name="elige_nombre_usuario">Choose your username</string>
     <string name="info_nombre_usuario">Your username is your unique identifier in Woopit!</string>
     <string name="nombre_usuario">Username</string>
     <string name="verificando_usuario">Checking user&#8230;</string>

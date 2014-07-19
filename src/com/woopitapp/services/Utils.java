@@ -694,7 +694,7 @@ public class Utils {
     
     public static void onModelBuy( Context c , String from , String action , int model_id ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Modelos", action , from, null)
+		    .createEvent("Comprar modelo", action , from, null)
 		    .set("&uid", User.get(c).id+"")
 		    .set("modelo", model_id+"")
 		    .build()
@@ -740,8 +740,7 @@ public class Utils {
     
     public static void onRegister( Context c , String from , String social_network ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Bienvenida", "Registrarse" , from, null)
-		    .set("red_social", social_network)
+		    .createEvent("Bienvenida", "Registrarse" , social_network, null)
 		    .build()
 		);
     }

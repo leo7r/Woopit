@@ -56,7 +56,7 @@
     <string name="error_iniciar_sesion">La dirección de correo y la contraseña no coinciden</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_choose_username">ChooseUsernameActivity</string>
-    <string name="elige_nombre_usuario">Elije un Nombre de Usuario</string>
+    <string name="elige_nombre_usuario">Elige un Nombre de Usuario</string>
     <string name="info_nombre_usuario">Tu nombre de usuario es tu identificador exclusivo en Woopit!</string>
     <string name="nombre_usuario">Nombre de Usuario</string>
     <string name="verificando_usuario">Verificando Usuario&#8230;</string>
@@ -65,7 +65,7 @@
     <string name="enviando_correo_restauracion">Enviando correo de restauración&#8230;</string>
     <string name="enviado_correo_restauracion">Restauración de contraseña enviada a %s</string>
     <string name="welcome_tip_home">Toca para ver tu perfil</string>
-	
+
     <!-- Pantalla de Amigos -->
     <string name="title_activity_search_users">SearchUsers</string>
     <string name="title_activity_find_friends">FindFriendsActivity</string>
@@ -95,7 +95,7 @@
     <string name="mensaje_recibido_lejos"> te ha dejado un woop!</string>
     <string name="mensaje_enviado_aqui">Ha enviado un Woop %s aqui!</string>
     <string name="modelo_enviado">Woop Enviado: </string>
-    
+
     <!-- Pantalla de perfil -->
     <string name="perfil">Perfil</string>
     <string name="woops">Woops</string>
@@ -171,12 +171,12 @@
     <string name="bienvenida_amigos"><b>Aquí van tus amigos!</b>\nBusca algunos para que empiece la diversión.</string>
     <string name="bienvenida_modelos"><b>No has creado ningún Woop todavía</b>\n\nSi quieres poder crear tus Woops y venderlos</string>
     <string name="contactanos">Contáctanos</string>
-    
+
     <!-- Ganar monedas -->
-	<string name="ganaste_moneda">Ganaste <b>%1$s</b> moneda%2$s por %3$s</string>
+    <string name="ganaste_moneda">Ganaste <b>%1$s</b> moneda%2$s por %3$s</string>
     <string name="por_enviar_mensaje">enviar mensaje</string>
     <string name="por_compartir">compartir Woopit</string>
-    
+
     <!-- Tips -->
     <string name="tip1">Puedes ganar monedas al enviar Woops</string>
     <string name="tip2">Puedes ganar monedas al invitar a tus amigos</string>
@@ -210,14 +210,19 @@
     <string name="notificacion_peticion_aceptada">Te ha aceptado! Enviale un Woop</string>
     <string name="notificacion_woopit_actualizado">Nueva versión disponible</string>
     <string name="notificacion_woopit_actualizado2">Toca para actualizar!</string>
+
 	<string name="notificacion_woopit_sin_senal">Sin conexion presione aqui para intentar de nuevo</string>
-	<string name="woop_enviado_para"><b>Para:</b></string>
-	<string name="woop_enviado_status"><b>Estado del Mensaje:</b></string>
-	<string name="woop_enviado"><b>Nombre del Woop:</b></string>
+	<string name="woop_enviado_para"><Data><![CDATA[<b> Para: </b>]]> </Data></string>
+	<string name="woop_enviado_status"><Data><![CDATA[<b>Estado del Mensaje:</b>]]> </Data></string>
+	<string name="woop_enviado"><Data><![CDATA[<b>Nombre del Woop:</b>]]> </Data></string>
 	<string name="woop_enviado_leido">Leído</string>
 	<string name="woop_enviado_noLeido">Sin Leer</string>
-	<string name="woop_enviado_fecha"><b>Fecha:</b></string>
+	<string name="woop_enviado_fecha"><Data><![CDATA[<b>Fecha:</b>]]> </Data></string>
+	<string name = "woop_enviado_texto"><Data><![CDATA[ <b>Texto:</b>]]> </Data></string>
+	
     <string name="title_activity_buy_model_dialog">BuyModelDialog</string>
-
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_find_friends_list">FindFriendsList</string>
 
 </resources>
