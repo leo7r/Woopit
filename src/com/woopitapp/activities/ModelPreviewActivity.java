@@ -171,7 +171,10 @@ public class ModelPreviewActivity extends WoopitActivity {
 		String message = ((EditText)findViewById(R.id.message_text)).getText().toString();
 		
 		Send_Message sm = new Send_Message(this, "",message,500,500);
-		sm.execute();		
+		sm.execute();
+
+		setResult(RESULT_OK);
+	    finish();
 	}
 	
 	public class GLClearRenderer implements Renderer {
@@ -289,10 +292,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 				Utils.onMessageSent(getApplicationContext(), "ModelPreviewActivity", modelId, text, latitude, longitude);
 				Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 				
-				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
-				setResult(RESULT_OK);
-			    finish();
-				
+				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();				
 			}
 			else{
 				

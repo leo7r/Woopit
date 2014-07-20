@@ -211,7 +211,7 @@ public class HomeFragment extends Fragment {
 				
 				if ( messages_list.size() == 0 && page == 0){
 					Date date = new Date();
-					Message m = new Message(0,1,User.get(con).id,1,"","Bienvenido a Woopit :D",date,500,500,0,"Woopit","Welcome Woop");
+					Message m = new Message(0,1,User.get(con).id,8,"",getResources().getString(R.string.bienvenido_a_woopit),date,500,500,0,"Woopit","Welcome Woop");
 					messages_list.add(m);
 		
 					if ( getView() != null ){
@@ -297,6 +297,7 @@ public class HomeFragment extends Fragment {
 		newMessagei.putExtra("modelo",message.model);
 		newMessagei.putExtra("text", message.text);
 		newMessagei.putExtra("nombre", message.name);
+		newMessagei.putExtra("messageId", message.id);
 		getActivity().startActivityForResult(newMessagei,REQUEST_MESSAGE);
 		
 		Utils.onMessageView(getActivity(), message, "HomeFragment");

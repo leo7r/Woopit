@@ -22,6 +22,8 @@
     <string name="enviar">Enviar</string>
     <string name="peticion_nuevo_modelo">Petición para crear modelo</string>
     <string name="enviar_email">Enviar email</string>
+    <string name="bienvenido_a_woopit">Bienvenido a Woopit! :)</string>
+    <string name="welcome_message_info">Busca a tu alrededor y encuentra el Woop en 3D</string>
 
     <!-- Pantalla de Bienvenida, login y registro -->
     <string name="iniciar_sesion">Iniciar Sesión</string>

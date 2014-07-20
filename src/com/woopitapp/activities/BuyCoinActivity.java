@@ -109,31 +109,8 @@ public class BuyCoinActivity extends WoopitActivity {
 						long purchase_time = jsonData.getLong("purchaseTime");
 						String product_id = jsonData.getString("productId");
 						
-						new SavePurchase(this,purchase_token,order_id,purchase_time,product_id,true).execute();
-						new ConsumePurchase(product_id).execute();
-						
-						Utils.onCoinsBuy(getApplicationContext(), "BuyCoinActivity", "Comprado", product_id, user_coins);
-						
-						EasyTracker easyTracker = EasyTracker.getInstance(this);
-						
-						double revenue = 0.0;
-						
-						if ( product_id.equals(coins_20) ){
-							revenue = 0.99;
-						}
-						else{
-							if ( product_id.equals(coins_50) ){
-								revenue = 1.99;
-							}
-							else{
-								if ( product_id.equals(coins_130) ){
-									revenue = 4.99;
-								}
-							}
-						}
-						
-						easyTracker.send( MapBuilder.createTransaction(order_id, "In-app store", revenue, 0.0, 0.0, "USD").build() );
-						
+						new ConsumePurchase(act,purchase_token,order_id,purchase_time,product_id).execute();
+												
 					}
 					else{
 						Log.e(TAG, "Error, fallaron los token");
@@ -410,7 +387,7 @@ public class BuyCoinActivity extends WoopitActivity {
 					PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
 					
 					startIntentSenderForResult(pendingIntent.getIntentSender(), BUY_REQUEST_CODE , new Intent(), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0) );
-
+					
 					Utils.onCoinsBuy(getApplicationContext(), "BuyCoinActivity", "Comprar", id, user_coins);
 					
 					return true;
@@ -419,9 +396,7 @@ public class BuyCoinActivity extends WoopitActivity {
 					
 					// Item already owned
 					if ( response_code == 7 ){
-						new ConsumePurchase(id).execute();
-						//Toast.makeText(getApplicationContext(), R.string.error_compra, Toast.LENGTH_SHORT).show();
-						//"android.test.purchased"
+						Log.e("Item","Item ya adquirido");
 					}
 					
 					Log.e(TAG, "Error response code "+response_code);
@@ -440,22 +415,35 @@ public class BuyCoinActivity extends WoopitActivity {
 			return false;
 		}
 		
+		protected void onPostExecute( Boolean b ){
+			
+			if ( !b ){
+				Toast.makeText(getApplicationContext(), R.string.error_compra, Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+		
 	}
 	
 	class ConsumePurchase extends AsyncTask<Void,Void,Boolean>{
 		
-		String id;
+		String purchase_token,order_id,product_id;
+		long purchase_time;
+		Activity act;
 		
-		public ConsumePurchase( String id ){
-			this.id = id;
+		public ConsumePurchase( Activity act , String purchase_token , String order_id , long purchase_time , String product_id ){
+			this.act = act;
+			this.purchase_token = purchase_token;
+    		this.order_id = order_id;
+    		this.purchase_time = purchase_time;
+    		this.product_id = product_id;
 		}
 		
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
 			
-			String purchaseToken = "inapp:"+getPackageName()+":"+id;
 			try {
-				int response = mService.consumePurchase(3, getPackageName(),purchaseToken);
+				int response = mService.consumePurchase(3, getPackageName(),purchase_token);
 				
 				if ( response == 0 ){
 					return true;
@@ -472,10 +460,26 @@ public class BuyCoinActivity extends WoopitActivity {
 			
 			if ( b ){
 				Log.i("Item","Consumido");
+				new SavePurchase(act,purchase_token,order_id,purchase_time,product_id,true).execute();
 				//Toast.makeText(getApplicationContext(), "Listo, consumido", Toast.LENGTH_SHORT).show();
 			}
 			else{
 				Log.e("Item","NO Consumido");
+				/*
+				if ( retry_count > 0 ){
+
+					Log.e("Item","Intentando de nuevo");
+					new Handler().postDelayed(new Runnable(){
+						
+						@Override
+						public void run() {
+							new ConsumePurchase(id,retry_count-1).execute();
+						}
+					}, 60*1000/retry_count);
+					
+					
+				}
+				*/
 				//Toast.makeText(getApplicationContext(), "NO FUE consumido", Toast.LENGTH_SHORT).show();
 			}
 			
@@ -596,6 +600,28 @@ public class BuyCoinActivity extends WoopitActivity {
 					Toast.makeText(getApplicationContext(), R.string.compra_monedas_hecha, Toast.LENGTH_LONG).show();
 					Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_model_purchase);
 					cancelNotification();
+					
+					Utils.onCoinsBuy(getApplicationContext(), "BuyCoinActivity", "Comprado", product_id, user_coins);
+					
+					EasyTracker easyTracker = EasyTracker.getInstance(act);
+					
+					double revenue = 0.0;
+					
+					if ( product_id.equals(coins_20) ){
+						revenue = 0.99;
+					}
+					else{
+						if ( product_id.equals(coins_50) ){
+							revenue = 1.99;
+						}
+						else{
+							if ( product_id.equals(coins_130) ){
+								revenue = 4.99;
+							}
+						}
+					}
+					
+					easyTracker.send( MapBuilder.createTransaction(order_id, "In-app store", revenue, 0.0, 0.0, "USD").build() );
 					
 					setResult(RESULT_OK);
 					finish();

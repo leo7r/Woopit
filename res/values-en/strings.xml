@@ -22,6 +22,8 @@
     <string name="enviar">Send</string>
     <string name="peticion_nuevo_modelo">Request to create model</string>
     <string name="enviar_email">Send email</string>
+    <string name="bienvenido_a_woopit">Welcome to Woopit! :)</string>
+    <string name="welcome_message_info">Look around you and find the Woop in 3D</string>
 
     <!-- Pantalla de Bienvenida, login y registro -->
     <string name="iniciar_sesion">Log in</string>
@@ -62,7 +64,7 @@
     <string name="buscar_amigos">Search friends \"%s\"</string>
     <string name="solicitudes_de_amistad">Friend requests</string>
     <string name="buscando_amigos">Searching friends&#8230;</string>
-    <string name="ningun_amigo">You have no friends in Woopt :(</string>
+    <string name="ningun_amigo">You have no friends in Woopit :(</string>
     <string name="invitalos">¡Invite them!</string>
     <string name="compartir_woopit_texto">Heeyy! I just try Woopit. It\'s a pretty awesome chat with augmented reality! www.goo.gl/689Brd</string>
     <string name="title_activity_map">MapActivity</string>

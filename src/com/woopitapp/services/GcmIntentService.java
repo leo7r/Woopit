@@ -1,5 +1,7 @@
 package com.woopitapp.services;
 
+import java.util.Random;
+
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -118,17 +120,28 @@ public class GcmIntentService extends IntentService {
 		        .setSound(notifSound);
 		
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+
+		int requestID = (int) System.currentTimeMillis();
+		int notifID = (int) System.currentTimeMillis()+ new Random().nextInt(10000);
+		
+		goIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		
 		if ( intentClass != null ){
 			stackBuilder.addParentStack(intentClass);
 		}
+		else{
+			stackBuilder.addParentStack(MainActivity.class);
+		}
 		
 		stackBuilder.addNextIntent(goIntent);
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent( 0, PendingIntent.FLAG_UPDATE_CURRENT );
+		//stackBuilder.addNextIntentWithParentStack(goIntent);
+ 
+		
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent( requestID, PendingIntent.FLAG_UPDATE_CURRENT );
 		mBuilder.setContentIntent(resultPendingIntent);
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		
-		mNotificationManager.notify(100+type, mBuilder.build());
+		mNotificationManager.notify(notifID, mBuilder.build());
 	}
     
 }

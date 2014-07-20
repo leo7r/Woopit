@@ -152,6 +152,8 @@ public class MapActivity extends FragmentActivity implements
 	public void sendWoop( View v ){
 		
 		new Send_Message(this, selectedLatitude , selectedLongitude ).execute();
+		setResult(RESULT_OK);
+	    finish();
 	}
 	
 	class Send_Message extends ServerConnection{
@@ -175,8 +177,6 @@ public class MapActivity extends FragmentActivity implements
 				
 				Utils.onMessageSent(getApplicationContext(), "MapActivity", modelId, message, lat, lon);
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
-				setResult(RESULT_OK);
-			    finish();
 			}
 			else{
 				

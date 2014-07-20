@@ -13,6 +13,26 @@
         android:orientation="vertical"
         />
     
+    <LinearLayout 
+   	    android:id="@+id/welcome_info"
+   	    android:layout_width="wrap_content"
+   	    android:layout_height="wrap_content"
+   	    android:orientation="vertical"
+   	    android:background="@drawable/info_bubble"
+   	    android:layout_centerHorizontal="true"
+   	    android:layout_marginTop="5dp"
+   	    android:visibility="gone"
+   	    >
+   	    
+   	    <TextView 
+	   	    android:layout_width="200dp"
+	   	    android:layout_height="wrap_content"
+	   	    android:padding="3dp"
+	   	    android:text="@string/welcome_message_info"
+	   	    />
+   	    
+   	</LinearLayout>
+    
    	<LinearLayout 
         android:id="@+id/model_layout"
         android:layout_width="match_parent"
@@ -34,8 +54,7 @@
    	    android:padding="5dp"
    	    android:gravity="center"
    	    />
-   	
-   	
+   	   	
     <RelativeLayout 
         android:id="@+id/loading_layout"
         android:layout_width="match_parent"

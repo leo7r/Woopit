@@ -70,6 +70,7 @@ public class MessageActivity extends WoopitActivity {
 	boolean sensorDistancia = false;
 	boolean notif = false;
 	LocationChangeListener location_listener;
+	int msgId;
 	
 	String vertexShaderSource = "attribute vec4 vPosition; \n"
 			+	"void main () \n"
@@ -91,6 +92,8 @@ public class MessageActivity extends WoopitActivity {
         text = extras.getString("text");
         nombre = extras.getString("nombre");
         
+        msgId = extras.getInt("messageId");
+                
         Log.e("latitud","lat " + latitud);
         new MDownloader(this,modelo).execute();
 		//crearCamara();
@@ -110,14 +113,25 @@ public class MessageActivity extends WoopitActivity {
 	public void onStop () {
 	
 		super.onStop();
- 		sensorMan.unregisterListener(listener);
- 		sensorMan.unregisterListener(listener2);
+		
+		if ( sensorMan != null ){
+	 		sensorMan.unregisterListener(listener);
+	 		sensorMan.unregisterListener(listener2);
+		}
+		
  		render = null;
- 		glView.destroyDrawingCache();
- 		glView = null;
+ 		
+ 		if ( glView != null ){
+ 	 		glView.destroyDrawingCache();
+ 	 		glView = null;
+ 		}
+ 		
  		sensorOk = false;
  		sensorDistancia =false;
- 		corazon.liberarMemoria();
+ 		
+ 		if ( corazon != null ){
+ 			corazon.liberarMemoria();
+ 		}
  		
  	}
 	
@@ -208,7 +222,8 @@ public class MessageActivity extends WoopitActivity {
 
     };
     
- 	LocationListener gpsListener = new LocationListener(){
+ 	
+    LocationListener gpsListener = new LocationListener(){
  		
  		Location curLocation;
  		boolean locationChanged = false; 
@@ -261,12 +276,19 @@ public class MessageActivity extends WoopitActivity {
         SurfaceHolder.Callback surfaceHolderListener = new SurfaceHolder.Callback() {
         	
         	public void surfaceCreated(SurfaceHolder holder) {
-        		camera = Camera.open();
         		
         		try {
+            		camera = Camera.open();
         			camera.setPreviewDisplay(previewHolder);
         		}
    	            catch (Exception e ){
+   	            	
+   	            	if ( camera != null ){
+   	            		camera.release();
+   	            		Toast.makeText(getApplicationContext(), "Camera error", Toast.LENGTH_SHORT).show();
+   	            		finish();
+   	            	}
+   	            	
    	            	e.printStackTrace();
    	            }
         	}
@@ -582,6 +604,11 @@ public class MessageActivity extends WoopitActivity {
     			corazon =  new Objeto(modelo+".jet",getApplicationContext());
     			
     			if(Double.parseDouble(latitud) == 500.0){
+
+    		        if ( msgId == 0 ){
+    		        	((LinearLayout)findViewById(R.id.welcome_info)).setVisibility(View.VISIBLE);
+    		        }
+    				
     				LinearLayout camera_layout = (LinearLayout) findViewById(R.id.camera_layout);
     				LinearLayout model_layout = (LinearLayout) findViewById(R.id.model_layout);
     				messageText = (TextView) findViewById(R.id.text);
