@@ -152,7 +152,8 @@
         </activity>
         <activity
             android:name=".activities.MapSentDirectMessageActivity"
-            android:label="@string/title_activity_map" >
+            android:label="@string/title_activity_map"
+            android:theme="@style/Dialog" >
         </activity>
         <activity
             android:name=".activities.BuyCoinActivity"

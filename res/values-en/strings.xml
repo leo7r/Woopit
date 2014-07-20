@@ -197,7 +197,13 @@
     <string name="notificacion_woopit_actualizado2">Tap to update!</string>
 	<string name="notificacion_woopit_sin_senal">No connection detected, tap to reload</string>
 	
-
+	<string name="woop_enviado_para"><Data><![CDATA[<b>To:</b>]]> </Data></string>
+	<string name="woop_enviado_status"><Data><![CDATA[<b>Message Status:</b>]]> </Data></string>
+	<string name="woop_enviado"><Data><![CDATA[<b>Woop Name:</b>]]> </Data></string>
+	<string name="woop_enviado_leido">Read</string>
+	<string name="woop_enviado_noLeido">Unread</string>
+	<string name="woop_enviado_fecha"><Data><![CDATA[<b>Date:</b>]]> </Data></string>
+	<string name="woop_enviado_texto"><Data><![CDATA[<b>Text:</b>]]> </Data></string>
     <string name="title_activity_buy_model_dialog">BuyModelDialog</string>
 
 

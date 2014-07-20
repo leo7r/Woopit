@@ -309,13 +309,15 @@ public class HomeFragment extends Fragment {
     		newMessagei.putExtra("leido", message.status);
     		newMessagei.putExtra("modelName",message.modelName+"");
     		newMessagei.putExtra("nombre", message.name);
-    		newMessagei.putExtra("fecha",message.date.toString());
+    		newMessagei.putExtra("texto", message.text);
+    		newMessagei.putExtra("fecha",message.date.getTime());
     		startActivity(newMessagei);
     	}else{
     		Intent newMessagei =  new  Intent(getActivity(),MapSentMessageActivity.class);
     		newMessagei.putExtra("latitud", message.latitud);
     		newMessagei.putExtra("longitud",message.longitud);
     		newMessagei.putExtra("modelName",message.modelName+"");
+    		newMessagei.putExtra("texto", message.text);
     		newMessagei.putExtra("nombre", message.name);
     		startActivity(newMessagei);
     	}

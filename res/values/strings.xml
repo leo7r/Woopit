@@ -212,13 +212,16 @@
     <string name="notificacion_peticion_aceptada">Te ha aceptado! Enviale un Woop</string>
     <string name="notificacion_woopit_actualizado">Nueva versión disponible</string>
     <string name="notificacion_woopit_actualizado2">Toca para actualizar!</string>
-    <string name="notificacion_woopit_sin_senal">Sin conexion presione aqui para intentar de nuevo</string>
-    <string name="woop_enviado_para">Para:</string>
-    <string name="woop_enviado_status">Estado del mensaje:</string>
-    <string name="woop_enviado">Nombre del Woop:</string>
-    <string name="woop_enviado_leido">Leído</string>
-    <string name="woop_enviado_noLeido">Sin Leer</string>
-    <string name="woop_enviado_fecha">Fecha:</string>
+
+	<string name="notificacion_woopit_sin_senal">Sin conexion presione aqui para intentar de nuevo</string>
+	<string name="woop_enviado_para"><Data><![CDATA[<b> Para: </b>]]> </Data></string>
+	<string name="woop_enviado_status"><Data><![CDATA[<b>Estado del Mensaje:</b>]]> </Data></string>
+	<string name="woop_enviado"><Data><![CDATA[<b>Nombre del Woop:</b>]]> </Data></string>
+	<string name="woop_enviado_leido">Leído</string>
+	<string name="woop_enviado_noLeido">Sin Leer</string>
+	<string name="woop_enviado_fecha"><Data><![CDATA[<b>Fecha:</b>]]> </Data></string>
+	<string name = "woop_enviado_texto"><Data><![CDATA[ <b>Texto:</b>]]> </Data></string>
+	
     <string name="title_activity_buy_model_dialog">BuyModelDialog</string>
     <string name="title_activity_signup">SignupActivity</string>
     <string name="title_activity_login">LoginActivity</string>
