@@ -202,7 +202,7 @@ public class MessageActivity extends WoopitActivity {
     		}
     		
     		int offset =  (int) (azimut - angulo);
-    		if(vertical > -60 && vertical < 60 && offset > -40 && offset< 40 && messageText != null){
+    		if(vertical > -60 && vertical < 60 && (offset > 330 || offset< 30) && messageText != null){
     			messageText.setVisibility(View.VISIBLE);
     		}else{
     			if(messageText != null){

@@ -36,6 +36,16 @@
 	            android:layout_centerVertical="true"
 	            android:layout_alignParentRight="true"
 	            />
+	        
+	        <ImageView 
+	            android:id="@+id/gotest"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:layout_centerVertical="true"
+	            android:layout_toLeftOf="@id/find_friends"
+	            android:src="@drawable/new_message"
+	            android:onClick="goTest"
+	            />
 	                
 	    </RelativeLayout>
 	    
