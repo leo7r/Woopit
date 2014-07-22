@@ -32,6 +32,7 @@ import com.woopitapp.activities.MapSentDirectMessageActivity;
 import com.woopitapp.activities.MapSentMessageActivity;
 import com.woopitapp.activities.MapUnMessageActivity;
 import com.woopitapp.activities.MessageActivity;
+import com.woopitapp.activities.SelfieActivity;
 import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
@@ -177,9 +178,10 @@ public class HomeFragment extends Fragment {
 						long timestamp = message.getLong("d");
 						Date date = new Date(timestamp);
 						String modelName = message.getString("mn");
+						String imagen = message.getString("im");
 						int status = message.getInt("e");
 						
-						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name,modelName);
+						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name,modelName,imagen);
 						
 						messages_list.add(m);
 						
@@ -211,7 +213,7 @@ public class HomeFragment extends Fragment {
 				
 				if ( messages_list.size() == 0 && page == 0){
 					Date date = new Date();
-					Message m = new Message(0,1,User.get(con).id,8,"",getResources().getString(R.string.bienvenido_a_woopit),date,500,500,0,"Woopit","Welcome Woop");
+					Message m = new Message(0,1,User.get(con).id,8,"",getResources().getString(R.string.bienvenido_a_woopit),date,500,500,0,"Woopit","Welcome Woop",null);
 					messages_list.add(m);
 		
 					if ( getView() != null ){
@@ -291,10 +293,17 @@ public class HomeFragment extends Fragment {
 	    if( message.status == 0){
 		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), message.id).execute();
 		}
-		Intent newMessagei =  new  Intent(getActivity(),MessageActivity.class);
+	    Intent newMessagei;
+	    if(message.imagen != null){
+	    	newMessagei =  new  Intent(getActivity(),SelfieActivity.class);
+	    	newMessagei.putExtra("nombreImagen",message.imagen);
+	    }else{
+	    	newMessagei =  new  Intent(getActivity(),MessageActivity.class);
+	    	newMessagei.putExtra("modelo",message.model);
+	    }
 		newMessagei.putExtra("latitud", message.latitud+"");
 		newMessagei.putExtra("longitud",message.longitud+"");
-		newMessagei.putExtra("modelo",message.model);
+		
 		newMessagei.putExtra("text", message.text);
 		newMessagei.putExtra("nombre", message.name);
 		newMessagei.putExtra("messageId", message.id);

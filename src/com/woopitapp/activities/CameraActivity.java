@@ -58,14 +58,14 @@ public class CameraActivity extends Activity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 		else{
-			View decorView = getWindow().getDecorView();
+		/*	View decorView = getWindow().getDecorView();
 			// Hide the status bar.
 			int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
 			decorView.setSystemUiVisibility(uiOptions);
 			// Remember that you should never show the action bar if the
 			// status bar is hidden, so hide that too if necessary.
 			ActionBar actionBar = getActionBar();
-			actionBar.hide();
+			actionBar.hide();*/
 		}
 				
 		setContentView(R.layout.activity_camera);

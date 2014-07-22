@@ -48,7 +48,7 @@ import com.woopitapp.graphics.Objeto;
 import com.woopitapp.server_connections.ModelDownloader;
 import com.woopitapp.services.ServerConnection;
 
-public class TestActivity extends WoopitActivity {
+public class SelfieActivity extends WoopitActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.woopitapp.MESSAGE";
 	
@@ -71,7 +71,7 @@ public class TestActivity extends WoopitActivity {
 	int indice = 0;
 	GLClearRenderer render;
 	Objeto corazon;
-	int modelo;
+	String nombreImagen;
 	boolean sensorOk = false;
 	boolean sensorDistancia = false;
 	boolean notif = false;
@@ -91,16 +91,20 @@ public class TestActivity extends WoopitActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
                 
-        latitud = 500+"";
-        longitud = 500+"";
-        modelo = 1;
-        text = "hola amor";
+
 
         
-        msgId = 1;
+        Bundle extras = getIntent().getExtras();
+        latitud = extras.getString("latitud");
+        longitud = extras.getString("longitud");
+        nombreImagen = extras.getString("nombreImagen");
+        text = extras.getString("text");
+        nombre = extras.getString("nombre");
+        msgId = extras.getInt("messageId");
+        
                 
-        Log.e("latitud","lat " + latitud);
-        new getImageMessage("26_bYXIqWD6_1406003486").execute();
+        Log.e("nombreimgaen",nombreImagen);
+        new getImageMessage(nombreImagen).execute();
 		
         
     }
@@ -606,7 +610,7 @@ public class TestActivity extends WoopitActivity {
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
     			glView.setZOrderOnTop(true);
-    			corazon =  new Objeto(modelo+".jet",getApplicationContext(),bm);
+    			corazon =  new Objeto("selfie.jet",getApplicationContext(),bm);
     			
     			if(Double.parseDouble(latitud) == 500.0){
 
