@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +32,6 @@ import android.widget.TextView.OnEditorActionListener;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.scythe.bucket.BucketListAdapter;
 import com.woopitapp.R;
-import com.woopitapp.activities.CameraActivity;
 import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.SearchModelsActivity;
 import com.woopitapp.entities.Model;
@@ -232,6 +232,10 @@ public class ModelsFragment extends Fragment {
 		
 			loader.setVisibility(View.GONE);
 			
+			if ( getView() != null ){
+				((Button) getView().findViewById(R.id.send_image)).setVisibility(View.VISIBLE);
+			}
+			
 			if ( result != null && result.length() > 0 ){
 				
 				Log.i("Models", result);
@@ -304,7 +308,8 @@ public class ModelsFragment extends Fragment {
 			}
 			
 		}
-	    public void updateContent(){
+	    
+		public void updateContent(){
 
 	    	page = 0;
 	    	mAdapter = null;

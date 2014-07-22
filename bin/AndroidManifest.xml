@@ -181,9 +181,13 @@
             android:label="@string/title_activity_find_friends_list" >
         </activity>
         <activity
-            android:name="com.woopitapp.activities.CameraActivity"
+            android:name=".activities.CameraActivity"
             android:label="@string/title_activity_camera"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.woopitapp.activities.ImagePreviewActivity"
+            android:label="@string/title_activity_image_preview" >
         </activity>
     </application>
 

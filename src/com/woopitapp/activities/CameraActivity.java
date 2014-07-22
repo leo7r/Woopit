@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,7 +35,6 @@ import android.widget.Toast;
 
 import com.woopitapp.R;
 import com.woopitapp.entities.User;
-import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
@@ -47,7 +47,8 @@ public class CameraActivity extends Activity {
 	
 	int border_height;
 	boolean back_camera = false;
-
+	int IMAGE_REQUEST = 1;
+	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +89,24 @@ public class CameraActivity extends Activity {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
         
-        new getImageMessage("26_bYXIqWD6_1406003486").execute();
+        //new getImageMessage("26_bYXIqWD6_1406003486").execute();
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if ( requestCode == IMAGE_REQUEST && resultCode == RESULT_OK ){
+			finish();
+		}
+		
+	}
+
+	public void onStop(){
+		super.onStop();
 		
 	}
 	
-	public void onStop(){
-		super.onStop();
+	public void onDestroy(){
+		super.onDestroy();
 		
 		if (camera != null) {
 			camera.release();
@@ -368,53 +381,16 @@ public class CameraActivity extends Activity {
 		    bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
             String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            new sendImageMessage( 26 , "leo" , "" , "fru" , 500 , 500 , encodedImage ).execute();
+            
+            Intent i = new Intent(getApplicationContext(),ImagePreviewActivity.class);
+            i.putExtra("image", encodedImage);
+            startActivityForResult(i,IMAGE_REQUEST);
+            
+            //new sendImageMessage( 26 , "leo" , "" , "fru" , 500 , 500 , encodedImage ).execute();
             //bitmap2.recycle();
 		}
 		
 	} 
-
-	class sendImageMessage extends ServerConnection{
-    	
-		int cantCoins = 1;
-		int receiver;
-		String text, userName;
-		double latitude, longitude;
-		
-		public sendImageMessage(int receiver , String userName , String title,String text,double latitud, double longitud , String encoded_image ){
-			this.text = text;
-			this.receiver = receiver;
-			this.userName = userName;
-			this.latitude = latitud;
-			this.longitude = longitud;
-			
-			init(getApplicationContext(),"send_image_message",new Object[]{User.get(getApplicationContext()).id,receiver,title,text,latitud,longitud,encoded_image});
-		}
-
-		@Override
-		public void onComplete(String result) {
-			
-			if( result != null && result.equals("ok") ){
-
-				//new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
-				//Utils.onMessageSent(getApplicationContext(), "CameraActivity", 0, text, latitude, longitude);
-				//Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
-				
-				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
-			}
-			else{
-				
-				if ( result == null ){
-					Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
-				}
-				else{
-					Toast.makeText(getApplicationContext(), R.string.error_desconocido, Toast.LENGTH_SHORT).show();
-					Log.e("Error sending message","result: "+result);
-				}
-				
-			}
-		}
-	}
 	
 	class getImageMessage extends ServerConnection{
 

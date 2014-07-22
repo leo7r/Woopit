@@ -27,6 +27,7 @@ public class ChooseFriendActivity extends WoopitActivity {
 	int modelId;
 	ListView user_list;
 	ListAdapter uAdapter;
+	String encoded_image;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,21 +39,30 @@ public class ChooseFriendActivity extends WoopitActivity {
 		if ( extras.containsKey("modelId") ){
 			
 			modelId = extras.getInt("modelId");
-			user_list = (ListView) findViewById(R.id.user_list);
+			encoded_image = null;
+		}
+		else{
 			
-			Data data = new Data(this);
-			data.open();
-			ArrayList<User> friends = data.getFriends();
-			data.close();
-			
-			if ( friends.size() == 0 ){
-				LinearLayout no_friends = (LinearLayout) findViewById(R.id.no_friends);
-				no_friends.setVisibility(View.VISIBLE);
+			if ( extras.containsKey("image") ){
+				encoded_image = extras.getString("image");
+				modelId = -1;
 			}
-			else{
-				uAdapter = new ListAdapter(this, R.id.user_list, friends );
-		        user_list.setAdapter(uAdapter);
-			}			
+		}
+		
+		user_list = (ListView) findViewById(R.id.user_list);
+		
+		Data data = new Data(this);
+		data.open();
+		ArrayList<User> friends = data.getFriends();
+		data.close();
+		
+		if ( friends.size() == 0 ){
+			LinearLayout no_friends = (LinearLayout) findViewById(R.id.no_friends);
+			no_friends.setVisibility(View.VISIBLE);
+		}
+		else{
+			uAdapter = new ListAdapter(this, R.id.user_list, friends );
+	        user_list.setAdapter(uAdapter);
 		}
 		
 	}
@@ -95,13 +105,24 @@ public class ChooseFriendActivity extends WoopitActivity {
 
 				@Override
 				public void onClick(View v) {
-					Intent i = new Intent(getApplicationContext(),ModelPreviewActivity.class);
-					i.putExtra("userId", user.id);
-					i.putExtra("userName",user.username);
-					i.putExtra("modelId", modelId);
-					i.putExtra("enable", true);
-					startActivity(i);
 					
+					if ( encoded_image == null ){
+						Intent i = new Intent(getApplicationContext(),ModelPreviewActivity.class);
+						i.putExtra("userId", user.id);
+						i.putExtra("userName",user.username);
+						i.putExtra("modelId", modelId);
+						i.putExtra("enable", true);
+						startActivity(i);
+					}
+					else{
+						Intent i = new Intent(getApplicationContext(),ImagePreviewActivity.class);
+						i.putExtra("userId", user.id);
+						i.putExtra("userName",user.username);
+						i.putExtra("image", encoded_image);
+						startActivity(i);
+					}
+					
+					finish();
 				}
 			});
 			

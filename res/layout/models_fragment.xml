@@ -6,15 +6,6 @@
     android:orientation="vertical"
     android:background="#fff" >
     
-    <Button 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="40dp"
-        style="@style/big_button"
-        android:onClick="goToCamera"
-        android:text="@string/enviar_foto"
-        />
-    
 	<EditText 
         android:id="@+id/search_models"
         android:layout_width="match_parent"
@@ -28,6 +19,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
         />
+	
 	 <ProgressBar 
         android:id="@+id/loaderModel"
         android:layout_width="25dp"
@@ -36,6 +28,7 @@
         style="@style/progress_bar"
         android:layout_margin="15dp"
         />
+	 
 	<ImageView 
 		android:id="@+id/notSignalImage"
 		android:layout_width="match_parent"
@@ -56,6 +49,20 @@
 	    android:textColor="#d3d3d3"
 	    android:gravity="center_horizontal"
     	/>
+    
+    <Button 
+        android:id="@+id/send_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        style="@style/big_button"
+        android:onClick="goToCamera"
+        android:text="@string/enviar_foto"
+        />
+    
 	<ListView 
         android:id="@+id/models_list"
         android:layout_width="match_parent"

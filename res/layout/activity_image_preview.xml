@@ -1,0 +1,116 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#636364" >
+	
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        style="@style/top_bar">
+        
+        <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="@string/tomar_foto"
+	        android:layout_alignParentLeft="true"
+	        style="@style/back_button"
+	        />
+   	
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        
+        <ImageView 
+	        android:id="@+id/image"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="20dp"
+	        android:layout_centerInParent="true"
+	        />
+        
+    </RelativeLayout>
+        
+    <EditText 
+	    android:id="@+id/message_text"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:hint="@string/hint_mensaje"
+	    android:layout_marginBottom="10dp"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="10dp"
+	    android:textColor="#fff"
+	    android:background="@drawable/message_edit_bg"
+	    android:textColorHint="#44ffffff"
+	    android:singleLine="true"
+	    android:gravity="center"
+	    android:maxLength="140"
+	    android:padding="10dp"
+	    android:visibility="gone"
+	    />
+    
+    <LinearLayout  
+        android:id="@+id/send_buttons"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/woopit_dark_blue">
+        
+        <Button 
+            android:id="@+id/enviarMapa"
+            android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+		    android:text="@string/enviar_mapa"
+		    style="@style/big_button"
+		    android:layout_margin="5dp"
+		    android:padding="2dp"
+		    android:onClick="sendMap"
+	    />
+		
+        <View 
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#44ffffff"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            />
+        
+		<Button 
+		    android:id="@+id/enviarActual"
+            android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+		    android:text="@string/enviar_actual"
+		    style="@style/big_button"
+		    android:layout_margin="5dp"
+		    android:padding="2dp"
+		    android:onClick="sendDirect"
+		  />
+    
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/send_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+        
+        <Button 
+            android:id="@+id/send_image_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/big_button"
+            android:text="@string/enviar"
+            android:onClick="chooseFriend"
+            />
+        
+    </LinearLayout>
+
+</LinearLayout>
