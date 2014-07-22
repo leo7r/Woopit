@@ -12,6 +12,7 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.os.Environment;
@@ -27,9 +28,28 @@ public class Objeto {
 	private int renderCount = 0;
 	private int primitive = GL10.GL_TRIANGLES;
 	private int[] textureIds;
+	private int modo = 0;
+	private Context context;
+
+	public Objeto(String nombre,Context context,int modo){
+		try{
+			this.modo = modo;
+			this.context = context;
+			groups = new Vector<GroupMesh>();
+			this.crearBuffers(context,nombre);
+		}catch(Exception e){
+			System.gc();
+			this.modo = modo;
+			this.context = context;
+			groups = new Vector<GroupMesh>();
+			this.crearBuffers(context,nombre);
+		}
+	}
 
 	public Objeto(String nombre,Context context){
 		try{
+			this.context = context;
+
 			groups = new Vector<GroupMesh>();
 			this.crearBuffers(context,nombre);
 		}catch(Exception e){
@@ -38,8 +58,6 @@ public class Objeto {
 			this.crearBuffers(context,nombre);
 		}
 	}
-
-
 	public void draw(GL10 gl){
          
 
@@ -54,7 +72,7 @@ public class Objeto {
 				
 				GroupMesh g  = groups.get(i);
 
-			    if( g.getMaterial().getTexture() != null){
+			    if( g.getMaterial().getTexture() != null || modo == 1){
 			       
 			       
 				    	gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
@@ -62,7 +80,16 @@ public class Objeto {
 					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
 					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-				    	GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture(), 0);
+					    if(modo == 1){
+							String nombre = "selfie";
+							int resID = context.getResources().getIdentifier(nombre, "drawable", context.getPackageName());
+							Bitmap texture = BitmapFactory.decodeResource(context.getResources(), resID);
+					    	Log.e("textura ",textureIds.length + "  textura modo 1 " +  g.getMaterial().getName() + " tam " + texture.getWidth());
+
+							GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, texture, 0);
+					    }else{
+					    	GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture(), 0);
+					    }
 			       	
 			    	Log.e("textura ","textura " +  g.getMaterial().getName() + " tam " + g.getMaterial().getTexture() );
 			    }else{
@@ -76,10 +103,11 @@ public class Objeto {
 			
 		
 			GroupMesh g  = groups.get(i);
-			if(g.getMaterial() != null && g.getMaterial().getTexture() != null){
+			if((g.getMaterial() != null && g.getMaterial().getTexture() != null) || modo == 1){
 				gl.glEnable(GL10.GL_TEXTURE_2D);
 				gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
 			}
+		
 			gl.glEnable(GL10.GL_DEPTH_TEST);
 			gl.glEnable(GL10.GL_BLEND);
 	        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
