@@ -444,7 +444,7 @@ public class SelfieActivity extends WoopitActivity {
             //gl.glRotatef(rotationX, 0,1, 0);
             //gl.glRotatef(rotationY,1 ,0, 0);
             
-	        gl.glTranslatef(0.0f, -1.5f, -15.0f);
+	        gl.glTranslatef(0.0f, -1.5f, -12.0f);
 	        gl.glRotatef(180, 0, 1, 0);
 	        //corazon.draw(gl);
 	        
