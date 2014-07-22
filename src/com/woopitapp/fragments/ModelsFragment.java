@@ -31,6 +31,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.scythe.bucket.BucketListAdapter;
 import com.woopitapp.R;
+import com.woopitapp.activities.CameraActivity;
 import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.SearchModelsActivity;
 import com.woopitapp.entities.Model;

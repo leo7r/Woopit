@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -25,6 +26,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -32,6 +34,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,8 +42,11 @@ import android.widget.Toast;
 
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
+import com.woopitapp.activities.CameraActivity.getImageMessage;
+import com.woopitapp.entities.User;
 import com.woopitapp.graphics.Objeto;
 import com.woopitapp.server_connections.ModelDownloader;
+import com.woopitapp.services.ServerConnection;
 
 public class TestActivity extends WoopitActivity {
 	
@@ -94,8 +100,8 @@ public class TestActivity extends WoopitActivity {
         msgId = 1;
                 
         Log.e("latitud","lat " + latitud);
-       // new MDownloader(this,modelo).execute();
-		crearCamara();
+        new getImageMessage("26_bYXIqWD6_1406003486").execute();
+		
         
     }
 	
@@ -576,7 +582,7 @@ public class TestActivity extends WoopitActivity {
     	  return true;  
     }
     
-    public void crearCamara(){
+    public void crearCamara(Bitmap bm){
 
        acelerometro = "Z";
        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -600,7 +606,7 @@ public class TestActivity extends WoopitActivity {
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
     			glView.setZOrderOnTop(true);
-    			corazon =  new Objeto(modelo+".jet",getApplicationContext(),1);
+    			corazon =  new Objeto(modelo+".jet",getApplicationContext(),bm);
     			
     			if(Double.parseDouble(latitud) == 500.0){
 
@@ -638,26 +644,10 @@ public class TestActivity extends WoopitActivity {
     
     /* Descarga el modelo si no esta ya descargado */
     
-    class MDownloader extends ModelDownloader{
 
-		public MDownloader(Activity act, int modelId) {
-			super(act, modelId);
-		}
 
-		@Override
-		protected void onPostExecute(Boolean success) {
-			
-			if ( success ){
-
-				crearCamara();
-			}
-			else{
-				Toast.makeText(getApplicationContext(), "ERROR EN MODEL DOWNLOADER", Toast.LENGTH_SHORT).show();
-			}
-			
-		}
-    	
-    }
+		
+    
     
     public class LocationChangeListener  implements LocationListener{
 
@@ -893,4 +883,30 @@ public class TestActivity extends WoopitActivity {
     	    }       
     	}
     	}
+    class getImageMessage extends ServerConnection{
+
+		public getImageMessage( String image_name ){
+			super();
+			
+			init(getApplicationContext(),"get_image_message", new Object[]{User.get(getApplicationContext()).id,image_name});
+		}
+		
+		@Override
+		public void onComplete(String result) {
+			
+			if ( result != null && !result.equals("error") ){
+				
+				byte[] decodedString = Base64.decode(result, Base64.DEFAULT);
+				Bitmap bm = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+				crearCamara(bm);
+			}
+			else{
+				Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				Log.e("image", ""+result);
+			}
+			
+		}
+		
+	}
+	
 }

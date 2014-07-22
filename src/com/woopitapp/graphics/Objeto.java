@@ -3,8 +3,10 @@ package com.woopitapp.graphics;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -12,6 +14,7 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
@@ -28,18 +31,18 @@ public class Objeto {
 	private int renderCount = 0;
 	private int primitive = GL10.GL_TRIANGLES;
 	private int[] textureIds;
-	private int modo = 0;
+	private Bitmap bmSelfie = null;
 	private Context context;
 
-	public Objeto(String nombre,Context context,int modo){
+	public Objeto(String nombre,Context context,Bitmap bmSelfie){
 		try{
-			this.modo = modo;
+			this.bmSelfie = bmSelfie;
 			this.context = context;
 			groups = new Vector<GroupMesh>();
 			this.crearBuffers(context,nombre);
 		}catch(Exception e){
 			System.gc();
-			this.modo = modo;
+			this.bmSelfie = bmSelfie;
 			this.context = context;
 			groups = new Vector<GroupMesh>();
 			this.crearBuffers(context,nombre);
@@ -72,7 +75,7 @@ public class Objeto {
 				
 				GroupMesh g  = groups.get(i);
 
-			    if( g.getMaterial().getTexture() != null || modo == 1){
+			    if( g.getMaterial().getTexture() != null || bmSelfie != null){
 			       
 			       
 				    	gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
@@ -80,13 +83,10 @@ public class Objeto {
 					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
 					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-					    if(modo == 1){
+					    if(bmSelfie != null){
 							String nombre = "selfie";
-							int resID = context.getResources().getIdentifier(nombre, "drawable", context.getPackageName());
-							Bitmap texture = BitmapFactory.decodeResource(context.getResources(), resID);
-					    	Log.e("textura ",textureIds.length + "  textura modo 1 " +  g.getMaterial().getName() + " tam " + texture.getWidth());
-
-							GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, texture, 0);
+			
+							GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, bmSelfie, 0);
 					    }else{
 					    	GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture(), 0);
 					    }
@@ -103,7 +103,7 @@ public class Objeto {
 			
 		
 			GroupMesh g  = groups.get(i);
-			if((g.getMaterial() != null && g.getMaterial().getTexture() != null) || modo == 1){
+			if((g.getMaterial() != null && g.getMaterial().getTexture() != null) || bmSelfie != null){
 				gl.glEnable(GL10.GL_TEXTURE_2D);
 				gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
 			}
@@ -269,12 +269,21 @@ public class Objeto {
 			try{
 					
 				File dir = Environment.getExternalStorageDirectory();
-				File woopitDir = new File(dir,"/Woopit/models/"+nombre);
-				FileInputStream inStream = new FileInputStream(woopitDir);
-				FileChannel in =  inStream.getChannel();
+				File woopitDir;
+				FileInputStream inStream = null;
+				FileChannel in ;
+				if(bmSelfie != null){
+					AssetFileDescriptor afd = context.getAssets().openFd(nombre);  
+				 	FileInputStream fis = afd.createInputStream();
+				 	in = fis.getChannel();
+				}else{
+					 woopitDir = new File(dir,"/Woopit/models/"+nombre);
+					 inStream = new FileInputStream(woopitDir);
+					 in = inStream.getChannel();
+
+				}
 				
 				crearMateriales(in);
-				
 				ByteBuffer byteBuf = ByteBuffer.allocateDirect(4);
 				
 				while(true){
@@ -298,7 +307,9 @@ public class Objeto {
 					
 				
 				}
-				inStream.close();
+				if(inStream != null){
+					inStream.close();
+				}
 			}catch(Exception e){
 				Log.e("PASO","Error " + e);
 			}
