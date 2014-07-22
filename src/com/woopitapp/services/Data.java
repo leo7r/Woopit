@@ -38,7 +38,9 @@ public class Data{
 	}
 
 	public void close() {
-		this.dbHelper.close();
+		if ( dbHelper != null ){
+			this.dbHelper.close();
+		}
 	}
 	
 	

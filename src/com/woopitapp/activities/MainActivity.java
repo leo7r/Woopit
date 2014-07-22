@@ -284,6 +284,11 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	Intent i = new Intent(this,TestActivity.class);    	 	
     	startActivity(i);
     }
+
+    public void goToCamera( View v ){
+    	Intent i = new Intent( this , CameraActivity.class );
+    	startActivity(i);
+    }
     
     /* Tabs */
     
