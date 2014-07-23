@@ -50,19 +50,6 @@
 	    android:gravity="center_horizontal"
     	/>
     
-    <Button 
-        android:id="@+id/send_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        style="@style/big_button"
-        android:onClick="goToCamera"
-        android:text="@string/enviar_foto"
-        />
-    
 	<ListView 
         android:id="@+id/models_list"
         android:layout_width="match_parent"
