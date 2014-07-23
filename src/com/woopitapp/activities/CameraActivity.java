@@ -1,6 +1,7 @@
 package com.woopitapp.activities;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,8 +18,11 @@ import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
@@ -48,25 +52,33 @@ public class CameraActivity extends Activity {
 	int border_height;
 	boolean back_camera = false;
 	int IMAGE_REQUEST = 1;
+	int userId;
+	String userName;
+
+	String encoded_image;
+	final int SELECT_IMAGE = 100;
+	private static final String TEMP_PHOTO_FILE = "woopit_user_image.jpg";
+	private final int image_size = 400;
 	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		/*
 		if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 		else{
-		/*	View decorView = getWindow().getDecorView();
+			View decorView = getWindow().getDecorView();
 			// Hide the status bar.
 			int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
 			decorView.setSystemUiVisibility(uiOptions);
 			// Remember that you should never show the action bar if the
 			// status bar is hidden, so hide that too if necessary.
 			ActionBar actionBar = getActionBar();
-			actionBar.hide();*/
-		}
+			actionBar.hide();
+		}*/
 				
 		setContentView(R.layout.activity_camera);
 		setBorders();
@@ -89,7 +101,13 @@ public class CameraActivity extends Activity {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
         
-        //new getImageMessage("26_bYXIqWD6_1406003486").execute();
+        Bundle extras = getIntent().getExtras();
+        
+        if ( extras != null && extras.containsKey("userId") && extras.containsKey("userName") ){
+        	userId = extras.getInt("userId"); 
+        	userName = extras.getString("userName");
+        }
+        
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -97,6 +115,29 @@ public class CameraActivity extends Activity {
 		if ( requestCode == IMAGE_REQUEST && resultCode == RESULT_OK ){
 			finish();
 		}
+		if ( requestCode == SELECT_IMAGE && resultCode == RESULT_OK ){
+        	
+        	if ( data != null ) {
+
+                String filePath= Environment.getExternalStorageDirectory()+"/"+TEMP_PHOTO_FILE;
+                Bitmap selectedImage =  BitmapFactory.decodeFile(filePath);
+                
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageBytes = baos.toByteArray();
+                String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                
+                Intent i = new Intent(getApplicationContext(),ImagePreviewActivity.class);
+                
+                if ( userId != -1 && userName != null ){
+                	i.putExtra("userId", userId);
+                	i.putExtra("userName", userName);
+                }
+                
+                i.putExtra("image", encodedImage);
+                startActivityForResult(i,IMAGE_REQUEST);
+            }
+        }
 		
 	}
 
@@ -377,12 +418,21 @@ public class CameraActivity extends Activity {
 		    Bitmap bitmap2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
 		    bitmap.recycle();
 			
+		    Bitmap bitmap3 = Bitmap.createScaledBitmap(bitmap2, image_size, image_size, false);
+		    bitmap2.recycle();
+		    
 		    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		    bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		    bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
             String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
             
             Intent i = new Intent(getApplicationContext(),ImagePreviewActivity.class);
+            
+            if ( userId != -1 && userName != null ){
+            	i.putExtra("userId", userId);
+            	i.putExtra("userName", userName);
+            }
+            
             i.putExtra("image", encodedImage);
             startActivityForResult(i,IMAGE_REQUEST);
             
@@ -419,5 +469,45 @@ public class CameraActivity extends Activity {
 		}
 		
 	}
+	
+	private Uri getTempUri() {
+	    return Uri.fromFile(getTempFile());
+	}
+
+	private File getTempFile() {
+
+	    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+
+	        File file = new File(Environment.getExternalStorageDirectory(),TEMP_PHOTO_FILE);
+	        try {
+	            file.createNewFile();
+	        } catch (IOException e) {}
+
+	        return file;
+	    } else {
+
+	        return null;
+	    }
+	}
+
+	public void selectImage( View v ){
+		
+		Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
+		        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		photoPickerIntent.setType("image/*");
+		photoPickerIntent.putExtra("crop", "true");   
+		photoPickerIntent.putExtra("outputX", image_size);
+		photoPickerIntent.putExtra("outputY", image_size); 
+		photoPickerIntent.putExtra("aspectX", 1);
+		photoPickerIntent.putExtra("aspectY", 1);
+		photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
+		photoPickerIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+		startActivityForResult(photoPickerIntent, SELECT_IMAGE);
+		
+		/*Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+		photoPickerIntent.setType("image/*");
+		
+		startActivityForResult(photoPickerIntent, SELECT_IMAGE);*/
+	}	
 	
 }

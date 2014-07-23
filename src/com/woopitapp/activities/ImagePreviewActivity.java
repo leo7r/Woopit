@@ -1,17 +1,10 @@
 package com.woopitapp.activities;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -21,27 +14,25 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.woopitapp.R;
-import com.woopitapp.R.id;
-import com.woopitapp.R.layout;
-import com.woopitapp.R.string;
-import com.woopitapp.activities.EditProfileActivity.SaveImage;
 import com.woopitapp.entities.User;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class ImagePreviewActivity extends Activity {
 
 	int to_user = -1;
 	String encoded_image;
 	String user_name;
+	Activity act;
 	
 	int TO_MAP_REQUEST = 1;
-	final int SELECT_IMAGE = 100;
-	private static final String TEMP_PHOTO_FILE = "woopit_user_image.jpg";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_image_preview);
+		act = this;
 		
 		ImageView image = (ImageView) findViewById(R.id.image);
 		Bundle extras = getIntent().getExtras();
@@ -77,41 +68,8 @@ public class ImagePreviewActivity extends Activity {
 			Toast.makeText(getApplicationContext(), R.string.enviando_mensaje, Toast.LENGTH_SHORT).show();
 			finish();
 		}
-		if ( requestCode == SELECT_IMAGE && resultCode == RESULT_OK ){
-	        	
-	        	if ( data != null ) {
-
-                    String filePath= Environment.getExternalStorageDirectory()+"/"+TEMP_PHOTO_FILE;
-                    Bitmap selectedImage =  BitmapFactory.decodeFile(filePath);
-                    
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] imageBytes = baos.toByteArray();
-                    String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-                    
-                }
-	        }
 		
-	}
-	
-	private Uri getTempUri() {
-	    return Uri.fromFile(getTempFile());
-	}
-
-	private File getTempFile() {
-
-	    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-
-	        File file = new File(Environment.getExternalStorageDirectory(),TEMP_PHOTO_FILE);
-	        try {
-	            file.createNewFile();
-	        } catch (IOException e) {}
-
-	        return file;
-	    } else {
-
-	        return null;
-	    }
+		
 	}
 	
 	public void chooseFriend( View v ){
@@ -150,26 +108,6 @@ public class ImagePreviewActivity extends Activity {
 		
 	}
 	
-	public void selectImage( View v ){
-		
-		Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,
-		        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		photoPickerIntent.setType("image/*");
-		photoPickerIntent.putExtra("crop", "true");   
-		photoPickerIntent.putExtra("outputX", 150);
-		photoPickerIntent.putExtra("outputY", 150); 
-		photoPickerIntent.putExtra("aspectX", 1);  
-		photoPickerIntent.putExtra("aspectY", 1);
-		photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
-		photoPickerIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-		startActivityForResult(photoPickerIntent, SELECT_IMAGE);
-		
-		/*Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-		photoPickerIntent.setType("image/*");
-		
-		startActivityForResult(photoPickerIntent, SELECT_IMAGE);*/
-	}
-	
 	class sendImageMessage extends ServerConnection{
     	
 		int cantCoins = 1;
@@ -192,9 +130,9 @@ public class ImagePreviewActivity extends Activity {
 			
 			if( result != null && result.equals("ok") ){
 
-				//new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
-				//Utils.onMessageSent(getApplicationContext(), "CameraActivity", 0, text, latitude, longitude);
-				//Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
+				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
+				Utils.onMessageSent(getApplicationContext(), "CameraActivity", 0, text, latitude, longitude);
+				Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 				
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
 			}

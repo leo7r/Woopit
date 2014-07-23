@@ -205,6 +205,14 @@
 	<string name="woop_enviado_fecha"><Data><![CDATA[<b>Fecha:</b>]]> </Data></string>
 	<string name = "woop_enviado_texto"><Data><![CDATA[ <b>Texto:</b>]]> </Data></string>
     <string name="title_activity_buy_model_dialog">BuyModelDialog</string>
+	
+    
+    <!-- Version 1.0.2 -->
 
+    <string name="enviar_foto">Enviar foto!</string>
+    <string name="tomar_foto">Tomar foto</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_image_preview">ImagePreviewActivity</string>
+    <string name="enviando_mensaje">Enviando mensaje&#8230;</string>
 
 </resources>

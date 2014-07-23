@@ -207,5 +207,12 @@
 
     <string name="title_activity_buy_model_dialog">BuyModelDialog</string>
 
+    <!-- Version 1.0.2 -->
+
+    <string name="enviar_foto">Enviar foto!</string>
+    <string name="tomar_foto">Tomar foto</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_image_preview">ImagePreviewActivity</string>
+    <string name="enviando_mensaje">Enviando mensaje&#8230;</string>
 
 </resources>

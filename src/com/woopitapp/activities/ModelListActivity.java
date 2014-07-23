@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.scythe.bucket.BucketListAdapter;
 import com.woopitapp.R;
@@ -163,18 +165,44 @@ public class ModelListActivity extends WoopitActivity {
 			TextView price = (TextView) convertView.findViewById(R.id.price);
 			ImageView image = (ImageView) convertView.findViewById(R.id.image);
 			
-			name.setText(model.name);
-			price.setText(model.price);
-			Utils.setModelImage(getApplicationContext(), image, model.id);
-			
-			convertView.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View arg0) {
-					goToMessage(userId,model);
+			if ( model.id == 0 ){
+				name.setText(R.string.tomar_foto);
+				price.setText("free");
+				image.setImageResource(R.drawable.camera_circle);
+				
+				DisplayImageOptions options = new DisplayImageOptions.Builder()
+		        .showStubImage(R.drawable.model_image)
+		        .showImageForEmptyUri(R.drawable.model_image)
+		        .showImageOnFail(R.drawable.model_image)
+		        .cacheOnDisc()
+		        .displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, getApplicationContext())))
+		        .build();
+				
+				 Utils.getImageLoader(getApplicationContext()).displayImage("drawable://" + R.drawable.camera_circle,image);//.displayImage(R.drawable.camera_circle, image, options );
+				
+				convertView.setOnClickListener(new OnClickListener(){
 					
-				}
-			});
+					@Override
+					public void onClick(View arg0) {
+						
+						goToCamera(userId);
+					}
+				});
+			}
+			else{
+				name.setText(model.name);
+				price.setText(model.price);
+				Utils.setModelImage(getApplicationContext(), image, model.id);
+				
+				convertView.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						goToMessage(userId,model);
+						
+					}
+				});
+			}			
 			
 			return convertView;
 		}
@@ -204,6 +232,13 @@ public class ModelListActivity extends WoopitActivity {
 		
 		Utils.onMessageNew(getApplicationContext(), "ModelListActivity", userId);
 	}
+
+    public void goToCamera( int userId ){
+    	Intent i = new Intent( this , CameraActivity.class );
+    	i.putExtra("userId", userId);
+    	i.putExtra("userName", userName);
+    	startActivity(i);
+    }
     
 	public void refresh(){
 	    ((ImageView)findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
@@ -266,6 +301,7 @@ public class ModelListActivity extends WoopitActivity {
 						mAdapter.notifyDataSetChanged();
 					}
 					else{
+						models_list.add(0, new Model(0,"","","",true));
 						setModelList(models_list);
 					}
 					
