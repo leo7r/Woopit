@@ -29,9 +29,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.scythe.bucket.BucketListAdapter;
 import com.woopitapp.R;
+import com.woopitapp.activities.MainActivity;
 import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.SearchModelsActivity;
 import com.woopitapp.entities.Model;
@@ -56,9 +59,9 @@ public class ModelsFragment extends Fragment {
         
         models_list = (ListView) view.findViewById(R.id.models_list);
         list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
-        LinearLayout camera = (LinearLayout) View.inflate(getActivity(), R.layout.camera_on_list, null);
+        //LinearLayout camera = (LinearLayout) View.inflate(getActivity(), R.layout.camera_on_list, null);
         models_list.addFooterView(list_loading);
-        models_list.addHeaderView(camera);
+        //models_list.addHeaderView(camera);
         saved_models = new JSONArray();
         
         PauseOnScrollListener listener = new PauseOnScrollListener(Utils.getImageLoader(getActivity()), true, true, new OnScrollListener(){
@@ -161,25 +164,51 @@ public class ModelsFragment extends Fragment {
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView price = (TextView) convertView.findViewById(R.id.price);
 			ImageView image = (ImageView) convertView.findViewById(R.id.image);
-			
-			name.setText(model.name);
-			price.setText(model.price);
-			Utils.setModelImage(getActivity(), image, model.id);
-			
-			convertView.setOnClickListener(new OnClickListener(){
+						
+			if ( model.id == 0 ){
+				name.setText(R.string.tomar_foto);
+				price.setText("free");
+				image.setImageResource(R.drawable.camera_circle);
+				
+				DisplayImageOptions options = new DisplayImageOptions.Builder()
+		        .showStubImage(R.drawable.model_image)
+		        .showImageForEmptyUri(R.drawable.model_image)
+		        .showImageOnFail(R.drawable.model_image)
+		        .cacheOnDisc()
+		        .displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, getActivity())))
+		        .build();
+				
+				 Utils.getImageLoader(getActivity()).displayImage("drawable://" + R.drawable.camera_circle,image);//.displayImage(R.drawable.camera_circle, image, options );
+				
+				convertView.setOnClickListener(new OnClickListener(){
+					
+					@Override
+					public void onClick(View arg0) {
+						
+						((MainActivity)getActivity()).goToCamera(arg0);
+					}
+				});
+			}
+			else{
+				name.setText(model.name);
+				price.setText(model.price);
+				Utils.setModelImage(getActivity(), image, model.id);
+				
+				convertView.setOnClickListener(new OnClickListener(){
 
-				@Override
-				public void onClick(View arg0) {
-					
-					Intent i = new Intent(getActivity(),ModelPreviewActivity.class);
-					i.putExtra("modelId", model.id);
-					i.putExtra("enable", model.enable);
-					startActivity(i);
-					
-					Utils.onModelOpen(getActivity(), "ModelsFragment", model.id);		
-				}
-			});
-			
+					@Override
+					public void onClick(View arg0) {
+						
+						Intent i = new Intent(getActivity(),ModelPreviewActivity.class);
+						i.putExtra("modelId", model.id);
+						i.putExtra("enable", model.enable);
+						startActivity(i);
+						
+						Utils.onModelOpen(getActivity(), "ModelsFragment", model.id);		
+					}
+				});
+			}
+						
 			return convertView;
 		}
 
@@ -234,10 +263,6 @@ public class ModelsFragment extends Fragment {
 		
 			loader.setVisibility(View.GONE);
 			
-			if ( getView() != null ){
-				((ImageButton) getView().findViewById(R.id.send_image)).setVisibility(View.VISIBLE);
-			}
-			
 			if ( result != null && result.length() > 0 ){
 				
 				Log.i("Models", result);
@@ -269,6 +294,8 @@ public class ModelsFragment extends Fragment {
 						mAdapter.notifyDataSetChanged();
 					}
 					else{
+						
+						models_list.add(0, new Model(0,"","","",true));
 						setModelList(models_list);
 					}
 					
