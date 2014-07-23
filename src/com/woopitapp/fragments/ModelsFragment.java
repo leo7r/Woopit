@@ -20,8 +20,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -56,7 +56,9 @@ public class ModelsFragment extends Fragment {
         
         models_list = (ListView) view.findViewById(R.id.models_list);
         list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
+        LinearLayout camera = (LinearLayout) View.inflate(getActivity(), R.layout.camera_on_list, null);
         models_list.addFooterView(list_loading);
+        models_list.addHeaderView(camera);
         saved_models = new JSONArray();
         
         PauseOnScrollListener listener = new PauseOnScrollListener(Utils.getImageLoader(getActivity()), true, true, new OnScrollListener(){
@@ -233,7 +235,7 @@ public class ModelsFragment extends Fragment {
 			loader.setVisibility(View.GONE);
 			
 			if ( getView() != null ){
-				((Button) getView().findViewById(R.id.send_image)).setVisibility(View.VISIBLE);
+				((ImageButton) getView().findViewById(R.id.send_image)).setVisibility(View.VISIBLE);
 			}
 			
 			if ( result != null && result.length() > 0 ){

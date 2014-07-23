@@ -27,7 +27,7 @@
         android:required="true" />
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="8"
         android:targetSdkVersion="18" />
 
     <application
