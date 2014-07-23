@@ -108,4 +108,9 @@
     <style name="bold_text">
         <item name="android:textStyle">bold</item>
     </style>
+    
+    <style name="image_button_bg">
+        <item name="android:background">@drawable/add_contact_button</item>        
+    </style>
+    
 </resources>

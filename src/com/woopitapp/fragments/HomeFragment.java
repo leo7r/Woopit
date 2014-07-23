@@ -26,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.Log;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.woopitapp.R;
 import com.woopitapp.activities.MapSentDirectMessageActivity;
@@ -294,7 +295,7 @@ public class HomeFragment extends Fragment {
 		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), message.id).execute();
 		}
 	    Intent newMessagei;
-	    if(message.imagen != null){
+	    if(!message.imagen.equals("-1")){
 	    	newMessagei =  new  Intent(getActivity(),SelfieActivity.class);
 	    	newMessagei.putExtra("nombreImagen",message.imagen);
 	    }else{

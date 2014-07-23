@@ -108,7 +108,7 @@ public class FindFriendsActivity extends WoopitActivity implements ConnectionCal
 								
 			    if (!mPlusClient.isConnected()) {
 			        if (mConnectionResult == null) {
-			            //mConnectionProgressDialog.show();
+			            mConnectionProgressDialog.show();
 			            mPlusClient.connect();
 			        } else {
 		                mConnectionResult = null;
@@ -249,10 +249,11 @@ public class FindFriendsActivity extends WoopitActivity implements ConnectionCal
         // Guarda el resultado y resuelve el fallo de conexi�n con el clic de un usuario.
         mConnectionResult = result;
 	}
-
+	
 	@Override
 	public void onConnected(Bundle arg0) {
-		
+
+        mConnectionProgressDialog.dismiss();
 		Log.i(TAG, "Conectado");
 		mPlusClient.loadVisiblePeople(this, null);
 	}

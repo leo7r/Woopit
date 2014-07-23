@@ -45,9 +45,21 @@
             android:layout_height="wrap_content"
             android:background="@drawable/take_photo_bg"
             android:layout_centerInParent="true"
-           	android:src="@drawable/camera_trans"
+           	android:src="@drawable/camera"
            	android:padding="17dp"
            	android:onClick="takeShot"
+            />
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+           	android:src="@drawable/gallery"
+           	android:padding="10dp"
+           	android:onClick="selectImage"
+           	style="@style/image_button_bg"
             />
         
     </RelativeLayout>

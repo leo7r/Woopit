@@ -57,6 +57,7 @@
 	            android:onClick="goToCamera"
 	            android:paddingLeft="10dp"
 	            android:paddingRight="10dp"
+	            style="@style/image_button_bg"
 	            />
 	                
 	    </RelativeLayout>
