@@ -51,7 +51,7 @@ public class ModelsFragment extends Fragment {
 	
 	
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	    	
+    	
     	View view = (LinearLayout)inflater.inflate(R.layout.models_fragment, container, false);
         
         models_list = (ListView) view.findViewById(R.id.models_list);
