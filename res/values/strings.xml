@@ -232,5 +232,8 @@
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_image_preview">ImagePreviewActivity</string>
     <string name="enviando_mensaje">Enviando mensaje&#8230;</string>
+    
+    <!-- Version 1.0.3 -->
+    <string name="error_camara">Error abriendo camara, puede que tengas que reiniciar tu dispositivo</string>
 
 </resources>

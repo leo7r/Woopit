@@ -294,10 +294,11 @@ public class SelfieActivity extends WoopitActivity {
    	            	
    	            	if ( camera != null ){
    	            		camera.release();
-   	            		Toast.makeText(getApplicationContext(), "Camera error", Toast.LENGTH_SHORT).show();
-   	            		finish();
    	            	}
-   	            	
+
+            		Toast.makeText(getApplicationContext(), R.string.error_camara, Toast.LENGTH_SHORT).show();
+            		finish();
+            		
    	            	e.printStackTrace();
    	            }
         	}

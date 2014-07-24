@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import android.widget.Toast;
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
+import com.woopitapp.fragments.HomeFragment;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
@@ -32,6 +35,8 @@ public class FindFriendsList extends WoopitActivity {
 
 	ListView user_list;
 	UserAdapter uAdapter;
+    boolean share_launched = false , share_clicked = false;
+	private int SHARE_REQUEST_CODE = 1;
 	
 	public void onCreate( Bundle savedInstanceState ){
 		super.onCreate(savedInstanceState);
@@ -77,6 +82,18 @@ public class FindFriendsList extends WoopitActivity {
         }
 	}
 	
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if ( requestCode == SHARE_REQUEST_CODE && share_launched && share_clicked ){
+			
+			Utils.onShareWoopit(getApplicationContext(), "SlidingMenu", "Compartido");
+			new InsertCoins(this , 1 , R.string.por_compartir ).execute();
+		}
+		
+		share_launched = false;
+		share_clicked = false;
+	}
+    	
     public class UserAdapter extends ArrayAdapter<User>{
     	
 		ArrayList<User> items;
@@ -146,6 +163,20 @@ public class FindFriendsList extends WoopitActivity {
 		}
 		
     }
+
+    public void inviteFriends( View v ){
+		
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.compartir_woopit_texto));
+		sendIntent.setType("text/plain");
+		
+		startActivityForResult(Intent.createChooser(sendIntent, getResources().getString(R.string.compartir_woopit)),SHARE_REQUEST_CODE);
+		
+		Utils.onShareWoopit(getApplicationContext(), "FindFriendsList", "Entrar");
+		share_launched = true;
+		
+	}
     
  // Si ya esta la amistad la rompe, si no esta crea un request, si ya habia un request lo acepta.
  	class AddOrRejectFriend extends ServerConnection{

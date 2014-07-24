@@ -2378,6 +2378,12 @@ containing a value of this type.
         public static final int enviar_mapa=0x7f0600ad;
         public static final int enviar_woop=0x7f060096;
         public static final int error_buscando_lugar=0x7f060094;
+        /**  Version 1.0.3 
+ Version 1.0.3 
+ Version 1.0.3 
+ Version 1.0.3 
+         */
+        public static final int error_camara=0x7f060109;
         public static final int error_compra=0x7f0600c3;
         public static final int error_compra_reintentando=0x7f0600c4;
         public static final int error_de_conexion=0x7f06005d;

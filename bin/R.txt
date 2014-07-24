@@ -953,6 +953,7 @@ int string enviar_foto 0x7f060104
 int string enviar_mapa 0x7f0600ad
 int string enviar_woop 0x7f060096
 int string error_buscando_lugar 0x7f060094
+int string error_camara 0x7f060109
 int string error_compra 0x7f0600c3
 int string error_compra_reintentando 0x7f0600c4
 int string error_de_conexion 0x7f06005d
