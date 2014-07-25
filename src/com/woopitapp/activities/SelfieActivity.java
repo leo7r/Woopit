@@ -497,7 +497,7 @@ public class SelfieActivity extends WoopitActivity {
                 float[] lightAmbient = {1.0f, 1.0f, 1.0f, 0.5f};
     		    float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 0.5f};
     		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
-    		    //gl.glEnable(GL10.GL_LIGHTING);
+    		    gl.glEnable(GL10.GL_LIGHTING);
     		    gl.glEnable(GL10.GL_LIGHT0);
     		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, lightAmbient, 0);
     		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, lightDiffuse, 0);
@@ -562,7 +562,7 @@ public class SelfieActivity extends WoopitActivity {
         double brng = Math.toDegrees(Math.atan2(y, x));
     	return brng;
     }*/
- 
+    
     protected float[] lowPass(float[] input, float[] output){
         
     	if (output == null)
