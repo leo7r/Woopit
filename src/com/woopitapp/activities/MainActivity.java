@@ -164,7 +164,16 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         } else {
             Log.i(GCM_TAG, "No valid Google Play Services APK found.");
         }
-                        
+        
+        Intent i = new Intent(this,TestActivity.class);
+    	i.putExtra("nombreImagen","52_jAkXbuVy_1406339508");
+    	i.putExtra("latitud", "500");
+		i.putExtra("longitud","500");
+		
+		i.putExtra("text", "Probando");
+		i.putExtra("nombre", "Fru");
+		i.putExtra("messageId", 232);
+        startActivity(i);
     }
     
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

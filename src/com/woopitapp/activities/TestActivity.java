@@ -5,7 +5,6 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +25,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -34,7 +34,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,10 +41,8 @@ import android.widget.Toast;
 
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
-import com.woopitapp.activities.CameraActivity.getImageMessage;
 import com.woopitapp.entities.User;
 import com.woopitapp.graphics.Objeto;
-import com.woopitapp.server_connections.ModelDownloader;
 import com.woopitapp.services.ServerConnection;
 
 public class TestActivity extends WoopitActivity {
@@ -71,12 +68,40 @@ public class TestActivity extends WoopitActivity {
 	int indice = 0;
 	GLClearRenderer render;
 	Objeto corazon;
-	int modelo;
+	String nombreImagen;
 	boolean sensorOk = false;
 	boolean sensorDistancia = false;
 	boolean notif = false;
 	LocationChangeListener location_listener;
 	int msgId;
+	
+	int current_frame = 0;
+	int frames[] = new int[]{
+			R.drawable.corazon_anim1,
+			R.drawable.corazon_anim2,
+			R.drawable.corazon_anim3,
+			R.drawable.corazon_anim4,
+			R.drawable.corazon_anim5,
+			R.drawable.corazon_anim6,
+			R.drawable.corazon_anim7,
+			R.drawable.corazon_anim8,
+			R.drawable.corazon_anim9,
+			R.drawable.corazon_anim10,
+			R.drawable.corazon_anim11,
+			R.drawable.corazon_anim12,
+			R.drawable.corazon_anim13,
+			R.drawable.corazon_anim14,
+			R.drawable.corazon_anim15,
+			R.drawable.corazon_anim16,
+			R.drawable.corazon_anim17,
+			R.drawable.corazon_anim18,
+			R.drawable.corazon_anim19,
+			R.drawable.corazon_anim20,
+			R.drawable.corazon_anim21,
+			R.drawable.corazon_anim22,
+			R.drawable.corazon_anim23,
+			R.drawable.corazon_anim24
+	};
 	
 	String vertexShaderSource = "attribute vec4 vPosition; \n"
 			+	"void main () \n"
@@ -91,16 +116,20 @@ public class TestActivity extends WoopitActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
                 
-        latitud = 500+"";
-        longitud = 500+"";
-        modelo = 1;
-        text = "hola amor";
+
 
         
-        msgId = 1;
+        Bundle extras = getIntent().getExtras();
+        latitud = extras.getString("latitud");
+        longitud = extras.getString("longitud");
+        nombreImagen = extras.getString("nombreImagen");
+        text = extras.getString("text");
+        nombre = extras.getString("nombre");
+        msgId = extras.getInt("messageId");
+        
                 
-        Log.e("latitud","lat " + latitud);
-        new getImageMessage("26_bYXIqWD6_1406003486").execute();
+        Log.e("nombreimgaen",nombreImagen);
+        new getImageMessage(nombreImagen).execute();
 		
         
     }
@@ -226,9 +255,53 @@ public class TestActivity extends WoopitActivity {
 
 
     };
-    
- 	
+     	
+    LocationListener gpsListener = new LocationListener(){
+ 		
+ 		Location curLocation;
+ 		boolean locationChanged = false; 
+ 
+ 		public void onLocationChanged(Location location){
+ 			
+ 			if(curLocation == null){
+ 				curLocation = location;
+ 				locationChanged = true;
+ 			}
+ 			
+ 			if( curLocation.getLatitude() == location.getLatitude() && curLocation.getLongitude() == location.getLongitude() ){
+ 				locationChanged = false;
+ 			}
+ 			else{
+ 				locationChanged = true;
+ 			}
+ 			
+ 			angulo = getBearing(location.getLatitude(), location.getLongitude(),Double.parseDouble(latitud),Double.parseDouble(longitud));
+ 			double distancia = getDistance(Double.parseDouble(latitud),Double.parseDouble(longitud),location.getLatitude(), location.getLongitude());
+ 			distancia = convertir(distancia);
+ 			
+ 			render.transladarMundo((float) distancia);
+ 			curLocation = location;
+    	         
+ 		}
+ 		
+ 		public void onProviderDisabled(String provider){}
+ 		
+ 		public void onProviderEnabled(String provider){}
+ 		
+ 		public void onStatusChanged(String provider, int status, Bundle extras){}
+ 		
+ 		private double convertir(double i){
+    		return i*(-10.0)/0.02;
+    	}
+    	
+ 		private double getLast(double i){
+    		
+    		String num = String.valueOf(i);
+    		return Double.parseDouble(num.substring(num.length()-5,num.length()-1)+"");
+    	}
 
+    	}; 
+    
     public class CustomCameraView extends SurfaceView{
     	
     	Camera camera;
@@ -245,17 +318,22 @@ public class TestActivity extends WoopitActivity {
    	            	
    	            	if ( camera != null ){
    	            		camera.release();
-   	            		Toast.makeText(getApplicationContext(), "Camera error", Toast.LENGTH_SHORT).show();
-   	            		finish();
    	            	}
-   	            	
+
+            		Toast.makeText(getApplicationContext(), R.string.error_camara, Toast.LENGTH_SHORT).show();
+            		finish();
+            		
    	            	e.printStackTrace();
    	            }
         	}
    	   
         	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
         		Parameters params = camera.getParameters();
+        		//params.setPreviewSize(width, height);
+				//params.setPictureFormat(PixelFormat.JPEG);
+	      
         		params.setRotation(90);
+        		
         		camera.setParameters(params);
         		camera.setDisplayOrientation(90);
         		camera.startPreview();
@@ -339,6 +417,23 @@ public class TestActivity extends WoopitActivity {
         }
     }
     
+    public int loadShader(int shaderType, String source){
+    	int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
+    	if(shader != 0){
+		    GLES20.glShaderSource(shader,source);
+		    GLES20.glCompileShader(shader);
+		    int[] compiled = new int[1];
+		    GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
+		    if(compiled[0] == 0){
+		    	Log.e("ShaderLoader","Could not compile shader " + shaderType+": ");
+		    	Log.e("ShaderLoader", GLES20.glGetShaderInfoLog(shader));
+		    	GLES20.glDeleteShader(shader);
+		    	shader = 0;
+		    }
+    	}
+    	return shader;
+    }
+    
     /* Renderer */
     public class GLClearRenderer implements Renderer {
     	
@@ -360,28 +455,27 @@ public class TestActivity extends WoopitActivity {
 	        gl.glDepthFunc(GL10.GL_LESS);
             gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
             gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
-            
+	        gl.glFrontFace(GL10.GL_CW);
+
 
 	  
             gl.glPushMatrix();  
+            
             gl.glLoadIdentity();
-            double latitudVal = Double.parseDouble(latitud);
             
             gl.glRotatef(rotationX, 0,1, 0);
         	gl.glRotatef(rotationY,1 ,0, 0);
-            
-            
-            //gl.glRotatef(rotationX, 0,1, 0);
-            //gl.glRotatef(rotationY,1 ,0, 0);
-            
-	        gl.glTranslatef(0.0f, -1.5f, -15.0f);
-	        gl.glRotatef(180, 0, 1, 0);
-	        //corazon.draw(gl);
+        	
+	        gl.glTranslatef(0.0f, -1.5f, -13.5f);
+	       // gl.glRotatef(mCubeRotation, 0, 1, 0);
 	        
-        	//Log.e("PASO", "Modeloooo");
+	        Bitmap bm = BitmapFactory.decodeResource(getResources(), frames[current_frame%24]);
+			corazon =  new Objeto("selfie.jet",getApplicationContext(),bm);
+			current_frame++;
+	        
         	corazon.draw(gl);
-	        
             mCubeRotation -= 0.70f;
+            
             gl.glPopMatrix();   
            
             
@@ -426,7 +520,7 @@ public class TestActivity extends WoopitActivity {
                 float[] lightAmbient = {1.0f, 1.0f, 1.0f, 0.5f};
     		    float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 0.5f};
     		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
-    		   // gl.glEnable(GL10.GL_LIGHTING);
+    		    //gl.glEnable(GL10.GL_LIGHTING);
     		    gl.glEnable(GL10.GL_LIGHT0);
     		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, lightAmbient, 0);
     		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, lightDiffuse, 0);
@@ -491,7 +585,7 @@ public class TestActivity extends WoopitActivity {
         double brng = Math.toDegrees(Math.atan2(y, x));
     	return brng;
     }*/
- 
+    
     protected float[] lowPass(float[] input, float[] output){
         
     	if (output == null)
@@ -540,7 +634,18 @@ public class TestActivity extends WoopitActivity {
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
     			glView.setZOrderOnTop(true);
-    			corazon =  new Objeto(modelo+".jet",getApplicationContext(),bm);
+    			corazon =  new Objeto("selfie.jet",getApplicationContext(),bm);
+    			
+    			/*new Handler().postDelayed(new Runnable(){
+
+					@Override
+					public void run() {
+						
+						corazon.liberarMemoria();
+						
+		    			//bm.recycle();
+		    			current_frame+=1;
+					}}, 300);*/
     			
     			if(Double.parseDouble(latitud) == 500.0){
 
@@ -577,11 +682,6 @@ public class TestActivity extends WoopitActivity {
     }
     
     /* Descarga el modelo si no esta ya descargado */
-    
-
-
-		
-    
     
     public class LocationChangeListener  implements LocationListener{
 
@@ -817,6 +917,7 @@ public class TestActivity extends WoopitActivity {
     	    }       
     	}
     	}
+    
     class getImageMessage extends ServerConnection{
 
 		public getImageMessage( String image_name ){

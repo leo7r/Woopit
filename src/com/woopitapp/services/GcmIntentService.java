@@ -135,9 +135,10 @@ public class GcmIntentService extends IntentService {
 		
 		stackBuilder.addNextIntent(goIntent);
 		//stackBuilder.addNextIntentWithParentStack(goIntent);
- 
 		
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent( requestID, PendingIntent.FLAG_UPDATE_CURRENT );
+		PendingIntent resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,goIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		//PendingIntent resultPendingIntent = stackBuilder.getPendingIntent( requestID, PendingIntent.FLAG_UPDATE_CURRENT );
 		mBuilder.setContentIntent(resultPendingIntent);
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		
