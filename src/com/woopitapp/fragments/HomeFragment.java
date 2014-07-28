@@ -298,9 +298,11 @@ public class HomeFragment extends Fragment {
 	    if( message.imagen.length() > 0 && message.model == -1 ){
 	    	newMessagei =  new  Intent(getActivity(),SelfieActivity.class);
 	    	newMessagei.putExtra("nombreImagen",message.imagen);
+			Utils.onMessageImageView(getActivity());
 	    }else{
 	    	newMessagei =  new  Intent(getActivity(),MessageActivity.class);
 	    	newMessagei.putExtra("modelo",message.model);
+			Utils.onMessageView(getActivity(), message, "HomeFragment");
 	    }
 		newMessagei.putExtra("latitud", message.latitud+"");
 		newMessagei.putExtra("longitud",message.longitud+"");
@@ -310,7 +312,6 @@ public class HomeFragment extends Fragment {
 		newMessagei.putExtra("messageId", message.id);
 		getActivity().startActivityForResult(newMessagei,REQUEST_MESSAGE);
 		
-		Utils.onMessageView(getActivity(), message, "HomeFragment");
 	}
   
     public void verMensajeEnviado( Message message ){

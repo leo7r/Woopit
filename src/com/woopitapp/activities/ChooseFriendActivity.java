@@ -120,6 +120,7 @@ public class ChooseFriendActivity extends WoopitActivity {
 						i.putExtra("userName",user.username);
 						i.putExtra("image", encoded_image);
 						startActivity(i);
+						Utils.onMessageImageNew(getApplicationContext());
 					}
 					
 					finish();

@@ -216,5 +216,7 @@
 
     <!-- Version 1.0.3 -->
     <string name="error_camara">Error opening camera, maybe you have to restart your device</string>
+    <string name="nueva_version_disponible">There is an update for Woopit available. You must update because older versions will not work.</string>
+    <string name="actualizar_ahora">Update now</string>
     
 </resources>

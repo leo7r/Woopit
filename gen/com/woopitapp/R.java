@@ -2088,18 +2088,19 @@ containing a value of this type.
         public static final int model_message_list=0x7f03004c;
         public static final int model_preview=0x7f03004d;
         public static final int models_fragment=0x7f03004e;
-        public static final int notification=0x7f03004f;
-        public static final int profile=0x7f030050;
-        public static final int search_models=0x7f030051;
-        public static final int search_users=0x7f030052;
-        public static final int sent_message_toast=0x7f030053;
-        public static final int signup_fragment=0x7f030054;
-        public static final int sliding_menu=0x7f030055;
-        public static final int slidingmenumain=0x7f030056;
-        public static final int support_simple_spinner_dropdown_item=0x7f030057;
-        public static final int test=0x7f030058;
-        public static final int welcome=0x7f030059;
-        public static final int welcome_fragment=0x7f03005a;
+        public static final int new_version_dialog=0x7f03004f;
+        public static final int notification=0x7f030050;
+        public static final int profile=0x7f030051;
+        public static final int search_models=0x7f030052;
+        public static final int search_users=0x7f030053;
+        public static final int sent_message_toast=0x7f030054;
+        public static final int signup_fragment=0x7f030055;
+        public static final int sliding_menu=0x7f030056;
+        public static final int slidingmenumain=0x7f030057;
+        public static final int support_simple_spinner_dropdown_item=0x7f030058;
+        public static final int test=0x7f030059;
+        public static final int welcome=0x7f03005a;
+        public static final int welcome_fragment=0x7f03005b;
     }
     public static final class menu {
         public static final int choose_friend=0x7f0c0000;
@@ -2155,6 +2156,7 @@ containing a value of this type.
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f060047;
         public static final int action_settings=0x7f06004b;
+        public static final int actualizar_ahora=0x7f06010c;
         public static final int amigos=0x7f060083;
         /**  FACEBOOK ID 
          */
@@ -2480,6 +2482,7 @@ containing a value of this type.
         public static final int notificacion_woopit_actualizado2=0x7f0600f7;
         public static final int notificacion_woopit_sin_senal=0x7f0600f8;
         public static final int nueva_contrasena=0x7f06006f;
+        public static final int nueva_version_disponible=0x7f06010b;
         public static final int para_completar_compra=0x7f0600c6;
         /**  Pantalla de perfil 
  Pantalla de perfil 
@@ -2534,6 +2537,7 @@ containing a value of this type.
         public static final int title_activity_login=0x7f060102;
         public static final int title_activity_main=0x7f060076;
         public static final int title_activity_map=0x7f060090;
+        public static final int title_activity_new_version_dialog=0x7f06010a;
         public static final int title_activity_profile=0x7f0600a2;
         public static final int title_activity_search_models=0x7f0600b4;
         /**  Pantalla de Amigos 

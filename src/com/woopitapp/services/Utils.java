@@ -563,22 +563,15 @@ public class Utils {
 		    .build()
 		);    	
     }
-    
-    public static void onMessageImageNew( Context c , String from , int user_id ){
+        
+    public static void onMessageImageNew( Context c ){
     	getTracker(c).send(MapBuilder
 		    .createEvent("Mensajes con imagen", "Crear", User.get(c).id+"", null)
 		    .build()
 		); 
     }
     
-    public static void onMessageImageNew( Context c , String from ){
-    	getTracker(c).send(MapBuilder
-		    .createEvent("Mensajes con imagen", "Crear", User.get(c).id+"", null)
-		    .build()
-		); 
-    }
-    
-    public static void onMessageImageSent( Context c , String from , int modelId , String text , Double lat , Double lon ){
+    public static void onMessageImageSent( Context c ){
     	
     	getTracker(c).send(MapBuilder
 		    .createEvent("Mensajes con imagen", "Envio", User.get(c).id+"" , null)
@@ -586,7 +579,7 @@ public class Utils {
 		);    	
     }
     
-    public static void onMessageImageView( Context c , Message m , String from ){
+    public static void onMessageImageView( Context c ){
     	
     	getTracker(c).send(MapBuilder
 		    .createEvent("Mensajes con imagen", "Visto", User.get(c).id+"" , null)

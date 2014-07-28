@@ -38,7 +38,7 @@ public class ImagePreviewActivity extends Activity {
 		Bundle extras = getIntent().getExtras();
 		
 		if ( extras.containsKey("image") ){
-
+			
 			encoded_image = extras.getString("image");
 			byte[] decodedString = Base64.decode(encoded_image, Base64.DEFAULT);
 			
@@ -131,7 +131,7 @@ public class ImagePreviewActivity extends Activity {
 			if( result != null && result.equals("ok") ){
 
 				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
-				Utils.onMessageSent(getApplicationContext(), "CameraActivity", 0, text, latitude, longitude);
+				Utils.onMessageImageSent(getApplicationContext());
 				Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 				
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();

@@ -44,6 +44,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.suredigit.inappfeedback.FeedbackDialog;
+import com.woopitapp.NewVersionDialog;
 import com.woopitapp.R;
 import com.woopitapp.WoopitFragmentActivity;
 import com.woopitapp.entities.User;
@@ -75,12 +76,12 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 	ProfileChangeReceiver p_receiver;
 	MessagesUpdateReceiver mu_receiver;
 	
-    
 	// Feedback
 	private FeedbackDialog feedBack;
 	
 	/* Google cloud messaging */
 	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	private final int NEW_VERSION_REQUEST = 777;
 	private final String GCM_TAG = "GCM";
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
@@ -100,6 +101,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         setContentView(R.layout.activity_main);
         initialiseTabHost(savedInstanceState);
         act = this;
+        new GetLastVersion().execute();
         /*
         RelativeLayout main_layout = (RelativeLayout) findViewById(R.id.main_layout);
         main_layout.setOnTouchListener(new OnTouchListener(){
@@ -173,7 +175,7 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 			new InsertCoins(act , 1 , R.string.por_compartir ).execute();
 		}
 		if(requestCode == HomeFragment.REQUEST_MESSAGE){
-    		if(resultCode == this.RESULT_OK){
+    		if(resultCode == RESULT_OK){
     			 Intent i = new Intent(getApplicationContext(),MapUnMessageActivity.class);
 				 Bundle extras = data.getExtras();
 				 double latitud = extras.getDouble("latitud");
@@ -185,6 +187,11 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
 				 startActivity(i);
     		}
     	}
+		
+		if ( requestCode == NEW_VERSION_REQUEST ){
+			finish();
+		}
+		
 		share_launched = false;
 		share_clicked = false;
 	}
@@ -563,6 +570,37 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
     	Utils.onCoinsEnter(getApplicationContext(), "SlidingMenu");
     }
     
+    /* Get last version*/
+    class GetLastVersion extends ServerConnection{
+
+    	public GetLastVersion(){
+    		super();
+    		
+    		init(getApplicationContext(),"get_version", new Object[]{ User.get(getApplicationContext()).id });
+    	}
+    	
+		@Override
+		public void onComplete(String result) {
+			
+			try{
+				int last_version = Integer.parseInt(result);
+				
+				PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+				int version = pInfo.versionCode;
+				
+				if ( last_version > version ){
+					Intent i = new Intent(getApplicationContext(),NewVersionDialog.class);
+					startActivityForResult(i,NEW_VERSION_REQUEST);
+				}				
+			}
+			catch(Exception e ){
+				e.printStackTrace();
+			}
+			
+		}
+    	
+    }
+        
     /* Broadcasts receivers */
     public class FriendsUpdateReceiver extends BroadcastReceiver {
         

@@ -191,8 +191,13 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.woopitapp.activities.ImagePreviewActivity"
+            android:name=".activities.ImagePreviewActivity"
             android:label="@string/title_activity_image_preview" >
+        </activity>
+        <activity
+            android:name=".NewVersionDialog"
+            android:label="@string/title_activity_new_version_dialog"
+            android:theme="@style/Dialog" >
         </activity>
     </application>
 

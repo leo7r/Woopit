@@ -78,7 +78,7 @@
     <string name="enviar_woop">Enviar Woop</string>
     <string name="ubicacion_woop">Podrá ver su Woop cuando esté cerca de aquí</string>
     <string name="mensaje_recibido_lejos"> te ha dejado un woop!</string>
-    <string name="mensaje_enviado_aqui">Ha enviado un Woop %s aqui!</string>
+    <string name="mensaje_enviado_aqui">Ha enviado un Woop %s aquí!</string>
     <string name="modelo_enviado">Woop Enviado: </string>
     
     <!-- Pantalla de perfil -->
@@ -195,7 +195,7 @@
     <string name="notificacion_peticion_aceptada">Te ha aceptado! Enviale un Woop</string>
     <string name="notificacion_woopit_actualizado">Nueva versión disponible</string>
     <string name="notificacion_woopit_actualizado2">Toca para actualizar!</string>
-	<string name="notificacion_woopit_sin_senal">Sin conexion presione aqui para intentar de nuevo</string>
+	<string name="notificacion_woopit_sin_senal">Sin conexion presione aquí para intentar de nuevo</string>
 	
 	<string name="woop_enviado_para"><Data><![CDATA[<b> Para: </b>]]> </Data></string>
 	<string name="woop_enviado_status"><Data><![CDATA[<b>Estado del Mensaje:</b>]]> </Data></string>
@@ -216,6 +216,8 @@
     <string name="enviando_mensaje">Enviando mensaje&#8230;</string>
     
     <!-- Version 1.0.3 -->
-    <string name="error_camara">Error abriendo camara, puede que tengas que reiniciar tu dispositivo</string>
+    <string name="error_camara">Error abriendo cámara, puede que tengas que reiniciar tu dispositivo</string>
+    <string name="nueva_version_disponible">Hay una nueva versión disponible de Woopit, es necesario que la descargues porque las versiones anteriores no funcionaran bien</string>
+    <string name="actualizar_ahora">Actualizar ahora</string>
     
 </resources>

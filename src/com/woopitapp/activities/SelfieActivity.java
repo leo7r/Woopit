@@ -649,7 +649,6 @@ public class SelfieActivity extends WoopitActivity {
     
     /* Descarga el modelo si no esta ya descargado */
     
-    
     public class LocationChangeListener  implements LocationListener{
 
 

@@ -47,12 +47,17 @@
    	    android:background="#4000"
    	    android:textColor="#fff"
    	    android:singleLine="true"
-   	    android:ellipsize="end"
+   	    android:ellipsize="marquee"
+	    android:marqueeRepeatLimit="marquee_forever"
+	    android:scrollHorizontally="true" 
    	    android:layout_alignParentBottom="true"
    	    android:layout_marginBottom="40dp"
    	    android:textSize="@dimen/normal_text"
    	    android:padding="5dp"
    	    android:gravity="center"
+	    android:focusable="true" 
+	    android:focusableInTouchMode="true" 
+	    android:freezesText="true"
    	    />
    	   	
     <RelativeLayout 

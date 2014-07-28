@@ -433,6 +433,7 @@ public class CameraActivity extends WoopitActivity {
             
             i.putExtra("image", encodedImage);
             startActivityForResult(i,IMAGE_REQUEST);
+			Utils.onMessageImageNew(getApplicationContext());
             
             //new sendImageMessage( 26 , "leo" , "" , "fru" , 500 , 500 , encodedImage ).execute();
             //bitmap2.recycle();
