@@ -430,28 +430,23 @@ public class SelfieActivity extends WoopitActivity {
 	        gl.glDepthFunc(GL10.GL_LESS);
             gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
             gl.glClear(GL10.GL_DEPTH_BUFFER_BIT);
-            
+	        gl.glFrontFace(GL10.GL_CW);
+
 
 	  
             gl.glPushMatrix();  
+            
             gl.glLoadIdentity();
-            double latitudVal = Double.parseDouble(latitud);
             
             gl.glRotatef(rotationX, 0,1, 0);
         	gl.glRotatef(rotationY,1 ,0, 0);
-            
-            
-            //gl.glRotatef(rotationX, 0,1, 0);
-            //gl.glRotatef(rotationY,1 ,0, 0);
-            
+        	
 	        gl.glTranslatef(0.0f, -1.5f, -13.5f);
-	        gl.glRotatef(180, 0, 1, 0);
-	        //corazon.draw(gl);
+	       // gl.glRotatef(mCubeRotation, 0, 1, 0);
 	        
-        	//Log.e("PASO", "Modeloooo");
         	corazon.draw(gl);
-	        
             mCubeRotation -= 0.70f;
+            
             gl.glPopMatrix();   
            
             

@@ -88,7 +88,7 @@ public class Objeto {
 			
 							GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, bmSelfie, 0);
 					    }else{
-					    	GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture(), 0);
+					    	GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture()  , 0);
 					    }
 			       	
 			    	Log.e("textura ","textura " +  g.getMaterial().getName() + " tam " + g.getMaterial().getTexture() );
@@ -121,7 +121,9 @@ public class Objeto {
 		    gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, g.getMaterial().getSpecular(), 0);
 		    gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS,g.getMaterial().getSIndex());
 	        
-	        gl.glFrontFace(GL10.GL_CCW);
+		    if( bmSelfie != null ){
+		        gl.glFrontFace(GL10.GL_CW);
+		    }
 	
 	        gl.glEnable(GL10.GL_CULL_FACE);
 	        

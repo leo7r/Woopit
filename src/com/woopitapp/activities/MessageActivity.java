@@ -51,18 +51,14 @@ public class MessageActivity extends WoopitActivity {
 	CameraView cameraView;
 	float x = 0.0f;
 	TextView messageText;
-	float c = 0.1f;
 	double angulo = 0;
 	float distanciaZ = -10.0f;
 	String latitud = "";
 	String longitud = "";
 	String text;
 	String acelerometro = "X";
-	private FloatBuffer mTextureBuffer;
 	static final float ALPHA = 0.1f;
-	private int mTextureId = -1;
 	Bitmap bitmap;
-	int indice = 0;
 	GLClearRenderer render;
 	Objeto corazon;
 	int modelo;
@@ -71,14 +67,8 @@ public class MessageActivity extends WoopitActivity {
 	boolean notif = false;
 	LocationChangeListener location_listener;
 	int msgId;
-	
-	String vertexShaderSource = "attribute vec4 vPosition; \n"
-			+	"void main () \n"
-			+	"{ \n"
-			+ 	" gl_Position = Matrix*vPosition; \n"
-			+	"} \n";
 	String nombre = "";
-	//int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
+
 	CustomCameraView cv;
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,12 +81,10 @@ public class MessageActivity extends WoopitActivity {
         modelo = extras.getInt("modelo");
         text = extras.getString("text");
         nombre = extras.getString("nombre");
-        
         msgId = extras.getInt("messageId");
                 
         Log.e("latitud","lat " + latitud);
         new MDownloader(this,modelo).execute();
-		//crearCamara();
         
     }
 	
@@ -115,7 +103,6 @@ public class MessageActivity extends WoopitActivity {
 		super.onStop();
 		
 		if ( sensorMan != null ){
-	 		sensorMan.unregisterListener(listener);
 	 		sensorMan.unregisterListener(listener2);
 		}
 		
@@ -135,26 +122,12 @@ public class MessageActivity extends WoopitActivity {
  		
  	}
 	
-	SensorEventListener listener = new SensorEventListener(){
-		 
- 	   public void onAccuracyChanged(Sensor arg0, int a){
- 		   
- 	   }
 
- 	   public void onSensorChanged(SensorEvent evt){
- 		   float vals[] = evt.values;
- 		   float direction = vals[0];
-
- 	   }
-
- 	};
  	
  	private SensorEventListener listener2 = new SensorEventListener(){
   	  
     	float[] mGravity;
     	float[] mGeomagnetic;
-    	public  volatile float kFilteringFactor = (float) 0.05;
-    	public  float aboveOrBelow = (float )0;
     	
     	public void onAccuracyChanged(Sensor arg0, int arg1){}
     	
@@ -178,15 +151,7 @@ public class MessageActivity extends WoopitActivity {
 		        float I[] = new float[9];
 		        float R2[] = new float[9];
 		        boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-		        
-		       /* 
-		        if(acelerometro.equalsIgnoreCase("Y")){
-		        	SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, R2);
-		        }else{
-	
-		        	SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_Z, SensorManager.AXIS_MINUS_X, R2);
-		        }*/
-		        
+
 		        SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_Z, SensorManager.AXIS_MINUS_X, R2);
 			      
 		        if (success) {
@@ -213,61 +178,14 @@ public class MessageActivity extends WoopitActivity {
 	    		render.rotarMundoX(offset);
 	    		render.rotarMundoY(vertical);
     		}
-	  		    sensorOk = true;
+	  		sensorOk = true;
     		
-
-    		// Set the Icon for the Dialog
     	}
 
 
     };
     
  	
-    LocationListener gpsListener = new LocationListener(){
- 		
- 		Location curLocation;
- 		boolean locationChanged = false; 
- 
- 		public void onLocationChanged(Location location){
- 			
- 			if(curLocation == null){
- 				curLocation = location;
- 				locationChanged = true;
- 			}
- 			
- 			if( curLocation.getLatitude() == location.getLatitude() && curLocation.getLongitude() == location.getLongitude() ){
- 				locationChanged = false;
- 			}
- 			else{
- 				locationChanged = true;
- 			}
- 			
- 			angulo = getBearing(location.getLatitude(), location.getLongitude(),Double.parseDouble(latitud),Double.parseDouble(longitud));
- 			double distancia = getDistance(Double.parseDouble(latitud),Double.parseDouble(longitud),location.getLatitude(), location.getLongitude());
- 			distancia = convertir(distancia);
- 			
- 			render.transladarMundo((float) distancia);
- 			curLocation = location;
-    	         
- 		}
- 		
- 		public void onProviderDisabled(String provider){}
- 		
- 		public void onProviderEnabled(String provider){}
- 		
- 		public void onStatusChanged(String provider, int status, Bundle extras){}
- 		
- 		private double convertir(double i){
-    		return i*(-10.0)/0.02;
-    	}
-    	
- 		private double getLast(double i){
-    		
-    		String num = String.valueOf(i);
-    		return Double.parseDouble(num.substring(num.length()-5,num.length()-1)+"");
-    	}
-
-    	}; 
     
     public class CustomCameraView extends SurfaceView{
     	
@@ -295,11 +213,7 @@ public class MessageActivity extends WoopitActivity {
    	   
         	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
         		Parameters params = camera.getParameters();
-        		//params.setPreviewSize(width, height);
-				//params.setPictureFormat(PixelFormat.JPEG);
-	      
         		params.setRotation(90);
-        		
         		camera.setParameters(params);
         		camera.setDisplayOrientation(90);
         		camera.startPreview();
@@ -383,23 +297,6 @@ public class MessageActivity extends WoopitActivity {
         }
     }
     
-    public int loadShader(int shaderType, String source){
-    	int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
-    	if(shader != 0){
-		    GLES20.glShaderSource(shader,source);
-		    GLES20.glCompileShader(shader);
-		    int[] compiled = new int[1];
-		    GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
-		    if(compiled[0] == 0){
-		    	Log.e("ShaderLoader","Could not compile shader " + shaderType+": ");
-		    	Log.e("ShaderLoader", GLES20.glGetShaderInfoLog(shader));
-		    	GLES20.glDeleteShader(shader);
-		    	shader = 0;
-		    }
-    	}
-    	return shader;
-    }
-    
     /* Renderer */
     public class GLClearRenderer implements Renderer {
     	
@@ -412,8 +309,6 @@ public class MessageActivity extends WoopitActivity {
 		public void onDrawFrame( GL10 gl ) {
 			
             gl.glLoadIdentity();
-			c -= 1.0f;
-                  
 			gl.glClearColor( 0.1f,0.1f,0.1f, 0.1f );
 	        gl.glClearDepthf(1.0f);
 	        //gl.glDepthMask(true);
@@ -425,21 +320,13 @@ public class MessageActivity extends WoopitActivity {
 
 	  
             gl.glPushMatrix();  
-            gl.glLoadIdentity();
-            double latitudVal = Double.parseDouble(latitud);
-            
+            gl.glLoadIdentity();            
             gl.glRotatef(rotationX, 0,1, 0);
         	gl.glRotatef(rotationY,1 ,0, 0);
-            
-            
-            //gl.glRotatef(rotationX, 0,1, 0);
-            //gl.glRotatef(rotationY,1 ,0, 0);
-            
 	        gl.glTranslatef(0.0f, -1.5f, -15.0f);
 	        gl.glRotatef(mCubeRotation, 0, 1, 0);
 	        //corazon.draw(gl);
 	        
-        	//Log.e("PASO", "Modeloooo");
         	corazon.draw(gl);
 	        
             mCubeRotation -= 0.70f;
@@ -495,11 +382,7 @@ public class MessageActivity extends WoopitActivity {
     		}
 
 		public void onSurfaceCreated( GL10 gl, EGLConfig config ) {
-				
-					
-				 //   loadShader(GLES20.GL_VERTEX_SHADER,vertexShaderSource);
-				    
-
+			
 		}
 		
     }
@@ -535,23 +418,6 @@ public class MessageActivity extends WoopitActivity {
 
 
     }
-   /* private double getBearing(double lat1,double lon1, double lat2,double lon2){
-    	int R = 6371; // km
-    	double dLat =  Math.toRadians(lat2-lat1);
-    	double dLon = Math.toRadians(lon2-lon1);
-    	lat1 = Math.toRadians(lat1);
-    	lat2 = Math.toRadians(lat2);
-
-    	double a =  (Math.sin(dLat/2) * Math.sin(dLat/2) +
-    	        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2)); 
-    	double c =  (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))); 
-    	double d = R * c;
-        double y = Math.sin(dLon) * Math.cos(lat2);
-        double x = Math.cos(lat1)*Math.sin(lat2) -
-                Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
-        double brng = Math.toDegrees(Math.atan2(y, x));
-    	return brng;
-    }*/
  
     protected float[] lowPass(float[] input, float[] output){
         
@@ -585,16 +451,8 @@ public class MessageActivity extends WoopitActivity {
     	
     	if(isNumeric(latitud) && isNumeric(longitud)){
     		try{
-    			//setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
-    			//requestWindowFeature( Window.FEATURE_NO_TITLE );
-    			//getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
-    			//WindowManager.LayoutParams.FLAG_FULLSCREEN );
-    			    			
+
     			cv = new CustomCameraView(this);
-    			//setContentView(rl);
-    			//rl.addView(cv);
-    			//cameraView = new CameraView( this );
-    			
     			glView = new GLSurfaceView( this );
     			glView.setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
     			glView.getHolder().setFormat( PixelFormat.TRANSLUCENT );
@@ -619,7 +477,6 @@ public class MessageActivity extends WoopitActivity {
     				messageText.setVisibility(View.GONE);
     				if ( text.length() > 0 ){
     					messageText.setText(text);
-    					
     				}
     				
     				((RelativeLayout)findViewById(R.id.loading_layout)).setVisibility(View.GONE);
@@ -631,12 +488,7 @@ public class MessageActivity extends WoopitActivity {
     		}
     	}
     }
-    
-    public void recopilar(int num) {
-    	//TextView editText = (TextView) findViewById(R.id.texto);
-    	//editText.setText(editText.getText() + "" + num);
-    }
-    
+
     /* Descarga el modelo si no esta ya descargado */
     
     class MDownloader extends ModelDownloader{
@@ -699,15 +551,11 @@ public class MessageActivity extends WoopitActivity {
 
     	    LocationListener listener = this;       
     	    mLocationManager.requestLocationUpdates(provider, refreshPeriod, accuracyInMeters, listener);
-    	    //mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
-    	    //mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
 
     	    this.onLocationChanged(location);
 
-    	    // Initialize the location fields
     	    if (location == null) {
     	        //Location not available
-
     	        mLocationManager.removeUpdates(this);
     	    }
 
@@ -751,9 +599,8 @@ public class MessageActivity extends WoopitActivity {
     	        currentBestLocation = location;
     	    }
     	}
-    	private double convertir(double i){
-    		return i*(-10.0)/0.02;
-    	}
+
+    	
     	public void onLocationChanged(Location location) {
 
 			((RelativeLayout)findViewById(R.id.loading_layout)).setVisibility(View.GONE);
@@ -766,10 +613,7 @@ public class MessageActivity extends WoopitActivity {
  			
  			angulo = getBearing(location.getLatitude(), location.getLongitude(),Double.parseDouble(latitud),Double.parseDouble(longitud));
  			double distancia = getDistance(Double.parseDouble(latitud),Double.parseDouble(longitud),location.getLatitude(), location.getLongitude());
- 			//distancia = convertir(distancia);
-    		Log.e("pos","lat lalon1: " +latitud + " " + longitud );
-
- 			//direccion.setText(distancia + "  lalon1: " +latitud + " " + longitud + " lalon2: " +  location.getLatitude() + " " + location.getLongitude());
+ 			
  			if(render != null && Double.parseDouble(latitud) < 500.0){
  				render.transladarMundo(((float) (distancia+0.190)*-100.0f));
  			}

@@ -228,52 +228,7 @@ public class TestActivity extends WoopitActivity {
     };
     
  	
-    LocationListener gpsListener = new LocationListener(){
- 		
- 		Location curLocation;
- 		boolean locationChanged = false; 
- 
- 		public void onLocationChanged(Location location){
- 			
- 			if(curLocation == null){
- 				curLocation = location;
- 				locationChanged = true;
- 			}
- 			
- 			if( curLocation.getLatitude() == location.getLatitude() && curLocation.getLongitude() == location.getLongitude() ){
- 				locationChanged = false;
- 			}
- 			else{
- 				locationChanged = true;
- 			}
- 			
- 			angulo = getBearing(location.getLatitude(), location.getLongitude(),Double.parseDouble(latitud),Double.parseDouble(longitud));
- 			double distancia = getDistance(Double.parseDouble(latitud),Double.parseDouble(longitud),location.getLatitude(), location.getLongitude());
- 			distancia = convertir(distancia);
- 			
- 			render.transladarMundo((float) distancia);
- 			curLocation = location;
-    	         
- 		}
- 		
- 		public void onProviderDisabled(String provider){}
- 		
- 		public void onProviderEnabled(String provider){}
- 		
- 		public void onStatusChanged(String provider, int status, Bundle extras){}
- 		
- 		private double convertir(double i){
-    		return i*(-10.0)/0.02;
-    	}
-    	
- 		private double getLast(double i){
-    		
-    		String num = String.valueOf(i);
-    		return Double.parseDouble(num.substring(num.length()-5,num.length()-1)+"");
-    	}
 
-    	}; 
-    
     public class CustomCameraView extends SurfaceView{
     	
     	Camera camera;
@@ -300,11 +255,7 @@ public class TestActivity extends WoopitActivity {
    	   
         	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
         		Parameters params = camera.getParameters();
-        		//params.setPreviewSize(width, height);
-				//params.setPictureFormat(PixelFormat.JPEG);
-	      
         		params.setRotation(90);
-        		
         		camera.setParameters(params);
         		camera.setDisplayOrientation(90);
         		camera.startPreview();
@@ -386,23 +337,6 @@ public class TestActivity extends WoopitActivity {
             camera.release();
             camera = null;
         }
-    }
-    
-    public int loadShader(int shaderType, String source){
-    	int shader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
-    	if(shader != 0){
-		    GLES20.glShaderSource(shader,source);
-		    GLES20.glCompileShader(shader);
-		    int[] compiled = new int[1];
-		    GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
-		    if(compiled[0] == 0){
-		    	Log.e("ShaderLoader","Could not compile shader " + shaderType+": ");
-		    	Log.e("ShaderLoader", GLES20.glGetShaderInfoLog(shader));
-		    	GLES20.glDeleteShader(shader);
-		    	shader = 0;
-		    }
-    	}
-    	return shader;
     }
     
     /* Renderer */

@@ -295,7 +295,7 @@ public class HomeFragment extends Fragment {
 		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), message.id).execute();
 		}
 	    Intent newMessagei;
-	    if(!message.imagen.equals("-1")){
+	    if( message.imagen.length() > 0 && message.model == -1 ){
 	    	newMessagei =  new  Intent(getActivity(),SelfieActivity.class);
 	    	newMessagei.putExtra("nombreImagen",message.imagen);
 	    }else{
