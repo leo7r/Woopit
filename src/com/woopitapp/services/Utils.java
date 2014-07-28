@@ -536,18 +536,14 @@ public class Utils {
     
     public static void onMessageNew( Context c , String from , int user_id ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Mensajes", "Crear", from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("usuario", user_id+"")
+		    .createEvent("Mensajes", "Crear", User.get(c).id+"", null)
 		    .build()
 		); 
     }
     
     public static void onMessageNew( Context c , String from ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Mensajes", "Crear", from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("usuario", null)
+		    .createEvent("Mensajes", "Crear", User.get(c).id+"", null)
 		    .build()
 		); 
     }
@@ -555,10 +551,7 @@ public class Utils {
     public static void onMessageSent( Context c , String from , int modelId , String text , Double lat , Double lon ){
     	
     	getTracker(c).send(MapBuilder
-		    .createEvent("Mensajes", "Envio", from, (long) modelId)
-		    .set("&uid", User.get(c).id+"")
-		    .set("con_texto", text.length() > 0 ? "Si" : "No" )
-		    .set("con_ubicacion", lat == 500 && lon == 500 ? "No" : "Si" )
+		    .createEvent("Mensajes", "Envio", User.get(c).id+"" , null)
 		    .build()
 		);    	
     }
@@ -566,36 +559,59 @@ public class Utils {
     public static void onMessageView( Context c , Message m , String from ){
     	
     	getTracker(c).send(MapBuilder
-		    .createEvent("Mensajes", "Visto", from, (long) m.model)
-		    .set("&uid", User.get(c).id+"")
-		    .set("con_texto", m.text.length() > 0 ? "Si" : "No" )
-		    .set("con_ubicacion", m.latitud == 500 && m.longitud == 500 ? "No" : "Si" )
-		    .set("es_enviado", m.sender == User.get(c).id ? "Si" : "No" )
+		    .createEvent("Mensajes", "Visto", User.get(c).id+"" , null)
 		    .build()
 		);    	
     }
     
+    public static void onMessageImageNew( Context c , String from , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes con imagen", "Crear", User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    public static void onMessageImageNew( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes con imagen", "Crear", User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    public static void onMessageImageSent( Context c , String from , int modelId , String text , Double lat , Double lon ){
+    	
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes con imagen", "Envio", User.get(c).id+"" , null)
+		    .build()
+		);    	
+    }
+    
+    public static void onMessageImageView( Context c , Message m , String from ){
+    	
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes con imagen", "Visto", User.get(c).id+"" , null)
+		    .build()
+		);    	
+    }
+        
     // Perfil
     public static void onEditProfileEnter( Context c , String from ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Editar perfil", "Entrar", from, null)
-		    .set("&uid", User.get(c).id+"")
+		    .createEvent("Editar perfil", "Entrar", User.get(c).id+"", null)
 		    .build()
 		); 
     }
     
     public static void onEditProfileEdit( Context c , String type ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Editar perfil", "Editar", type, null)
-		    .set("&uid", User.get(c).id+"")
+		    .createEvent("Editar perfil", "Editar", User.get(c).id+"", null)
 		    .build()
 		); 
     }
     
     public static void onProfileCreateModel( Context c ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Perfil", "Crear modelo", null, null)
-		    .set("&uid", User.get(c).id+"")
+		    .createEvent("Perfil", "Crear modelo", User.get(c).id+"", null)
 		    .build()
 		); 
     }
@@ -603,8 +619,7 @@ public class Utils {
     // Compartir
     public static void onShareWoopit( Context c , String from , String action ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Compartir Woopit", action , from, null)
-		    .set("&uid", User.get(c).id+"")
+		    .createEvent("Compartir Woopit", action , User.get(c).id+"", null)
 		    .build()
 		); 
     }
@@ -612,8 +627,7 @@ public class Utils {
     // Enviar feedback
     public static void onSendFeedback( Context c , String from , String action ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Enviar feedback", action , from, null)
-		    .set("&uid", User.get(c).id+"")
+		    .createEvent("Enviar feedback", action , User.get(c).id+"", null)
 		    .build()
 		);
     }
@@ -621,27 +635,21 @@ public class Utils {
     // Usuarios
     public static void onUserSearch( Context c , String from , String query ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Usuarios", "Buscar" , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("texto", query)
+		    .createEvent("Usuarios", "Buscar" , User.get(c).id+"", null)
 		    .build()
 		);
     }
     
     public static void onUserAddOrReject( Context c , String from , String action , int user_id ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Usuarios", action , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("usuario", user_id+"")
+		    .createEvent("Usuarios", action , User.get(c).id+"", null)
 		    .build()
 		);
     }
     
     public static void onUserProfileEnter( Context c , String from , int user_id ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Usuarios", "Perfil" , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("usuario", user_id+"")
+		    .createEvent("Usuarios", "Perfil" , User.get(c).id+"", null)
 		    .build()
 		);
     }
@@ -649,26 +657,21 @@ public class Utils {
     // Encontrar amigos
     public static void onFriendsSearchEnter( Context c , String from ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Encontrar amigos", "Entrar" , from, null)
-		    .set("&uid", User.get(c).id+"")
+		    .createEvent("Encontrar amigos", "Entrar" , User.get(c).id+"", null)
 		    .build()
 		);
     }
     
     public static void onFriendsSearch( Context c , String from , int number_of_friends ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Encontrar amigos", "Buscar" , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("numero_de_amigos", number_of_friends+"")
+		    .createEvent("Encontrar amigos", "Buscar" , User.get(c).id+"", null)
 		    .build()
 		);
     }
     
     public static void onFriendsAddOrReject( Context c , String from , String action , int user_id ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Encontrar amigos", action , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("amigo", user_id+"")
+		    .createEvent("Encontrar amigos", action , User.get(c).id+"", null)
 		    .build()
 		);
     }
@@ -676,27 +679,21 @@ public class Utils {
     // Modelos
     public static void onModelOpen( Context c , String from , int model_id ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Modelos", "Abrir" , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("modelo", model_id+"")
+		    .createEvent("Modelos", "Abrir" , User.get(c).id+"", null)
 		    .build()
 		);
     }
     
     public static void onModelSearch( Context c , String from , String query ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Modelos", "Buscar" , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("texto", query)
+		    .createEvent("Modelos", "Buscar" , User.get(c).id+"", null)
 		    .build()
 		);
     }
     
     public static void onModelBuy( Context c , String from , String action , int model_id ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Comprar modelo", action , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("modelo", model_id+"")
+		    .createEvent("Comprar modelo", action , User.get(c).id+"", null)
 		    .build()
 		);
     }
@@ -704,27 +701,21 @@ public class Utils {
     // Monedas
     public static void onCoinsEnter( Context c , String from ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Monedas", "Entrar" , from, null)
-		    .set("&uid", User.get(c).id+"")
+		    .createEvent("Monedas", "Entrar" , User.get(c).id+"", null)
 		    .build()
 		);
     }
     
     public static void onCoinsBuy( Context c , String from , String action , String coins_id , int user_coins ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Monedas", action , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("monedas", coins_id)
-		    .set("monedas_usuario", user_coins+"")
+		    .createEvent("Monedas", action , User.get(c).id+"", null)
 		    .build()
 		);
     }
     
     public static void onCoinsBuyError( Context c , String from , String coins_id ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Monedas", "Error" , from, null)
-		    .set("&uid", User.get(c).id+"")
-		    .set("monedas", coins_id)
+		    .createEvent("Monedas", "Error" , User.get(c).id+"", null)
 		    .build()
 		);
     }
@@ -732,8 +723,7 @@ public class Utils {
     // Login y registro
     public static void onLogin( Context c , String from , String social_network ){
     	getTracker(c).send(MapBuilder
-		    .createEvent("Bienvenida", "Entrar" , from, null)
-		    .set("red_social", social_network)
+		    .createEvent("Bienvenida", "Entrar" , social_network, null)
 		    .build()
 		);
     }

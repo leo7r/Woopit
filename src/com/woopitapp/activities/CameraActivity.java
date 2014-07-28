@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,7 +28,6 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -38,11 +35,12 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
-public class CameraActivity extends Activity {
+public class CameraActivity extends WoopitActivity {
 
 	private Camera camera;
 	private int cameraId = 0;
@@ -62,7 +60,7 @@ public class CameraActivity extends Activity {
 	
 	@SuppressLint("NewApi")
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		/*

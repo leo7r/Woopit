@@ -139,7 +139,7 @@ public class WelcomeActivity extends FragmentActivity {
 			if ( result.toLowerCase(Locale.getDefault()).equals("ok")){
 				
 				if ( automaticLogin ){
-					new LoginTask( act, this.email , this.password , this.facebook_hash , this.gplus_hash ).execute();
+					new LoginTask( act, this.email , name , this.password , this.facebook_hash , this.gplus_hash ).execute();
 				}
 				
 			}
@@ -147,7 +147,7 @@ public class WelcomeActivity extends FragmentActivity {
 				if ( result.toLowerCase(Locale.getDefault()).equals("already_registered") ){
 					
 					if ( this.facebook_hash.length() > 0 || this.gplus_hash.length() > 0 ){
-						new LoginTask( act, this.email , this.password , this.facebook_hash , this.gplus_hash ).execute();						
+						new LoginTask( act, this.email , name , this.password , this.facebook_hash , this.gplus_hash ).execute();						
 					}
 					else{
 						Toast.makeText(act, act.getResources().getString(R.string.correo_ya_registrado),Toast.LENGTH_SHORT).show();
@@ -167,12 +167,13 @@ public class WelcomeActivity extends FragmentActivity {
 
 		Activity act;
 		String email;
+		String name;
 		String password;
 		String facebook_hash;
 		String gplus_hash;
 		ProgressDialog dialog;
 		
-		public LoginTask( Activity act , String email , String password , String facebook_hash , String gplus_hash ){
+		public LoginTask( Activity act , String email , String name , String password , String facebook_hash , String gplus_hash ){
 			super();
 			
 			if ( facebook_hash != null || gplus_hash != null ){
@@ -184,6 +185,7 @@ public class WelcomeActivity extends FragmentActivity {
 			
 			this.act = act;
 			this.email = email;
+			this.name = name;
 			this.password = password != null ? password : "";
 			this.facebook_hash = facebook_hash != null ? facebook_hash : "";
 			this.gplus_hash = gplus_hash != null ? gplus_hash : "";
@@ -196,8 +198,8 @@ public class WelcomeActivity extends FragmentActivity {
 		public void onComplete(String result) {
 			
 			dialog.dismiss();
-						
-			if ( result != null && result.length() > 0 ){
+			
+			if ( result != null && !result.equals("invalid") && !result.equals("not_registered") && !result.equals("error") ){
 				
 				try{
 					JSONObject userInfo = new JSONObject(result);
@@ -238,7 +240,30 @@ public class WelcomeActivity extends FragmentActivity {
 				}
 			}
 			else{
-				Toast.makeText(act, act.getResources().getString(R.string.error_iniciar_sesion),Toast.LENGTH_SHORT).show();
+				
+				if ( result == null ){
+					Toast.makeText(act, act.getResources().getString(R.string.error_de_conexion),Toast.LENGTH_SHORT).show();
+				}
+				else if ( result.equals("not_registered") && (facebook_hash.length() > 0 || gplus_hash.length() > 0) ){
+					
+					if ( facebook_hash.length() > 0 ){
+						new WelcomeActivity.NewUser( act , email , name, null , facebook_hash , null , true ).execute();
+					}
+					else{
+						new WelcomeActivity.NewUser( act , email , name, null , null , gplus_hash , true ).execute();
+					}
+					
+				}
+				else{
+					
+					if ( result.equals("invalid") ){
+						Toast.makeText(act, act.getResources().getString(R.string.error_iniciar_sesion),Toast.LENGTH_SHORT).show();
+					}
+					else if ( result.equals("error") ){
+						Toast.makeText(act, act.getResources().getString(R.string.error_desconocido),Toast.LENGTH_SHORT).show();
+					}
+					
+				}
 			}
 		}
 		

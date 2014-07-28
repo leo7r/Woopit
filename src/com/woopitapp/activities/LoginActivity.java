@@ -199,7 +199,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	}
     
 	public void login( View v ){
-		new WelcomeActivity.LoginTask(this, email.getText().toString(), password.getText().toString(), null, null).execute();
+		new WelcomeActivity.LoginTask(this, email.getText().toString(), "" , password.getText().toString(), null, null).execute();
 	}
 	
 	public void showLoginButton(){
@@ -234,11 +234,12 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 					
                     String id = user.getId();
                     String email = user.getProperty("email").toString();
+					String name = user.getFirstName() + " " + user.getLastName();
 
                     Log.i("facebookid", id);
                     Log.i("email", email);
 
-                    new WelcomeActivity.LoginTask( act , email , null , id , null ).execute();
+                    new WelcomeActivity.LoginTask( act , email , name , null , id , null ).execute();
                     fb_info_ready = true;
 				}
 			}).executeAsync();
@@ -287,9 +288,10 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		Person person = personBuffer.get(0);
 		String id = person.getId();
 		String email = mPlusClient.getAccountName();
+		String name = person.getDisplayName();
 		personBuffer.close();
 
-        new WelcomeActivity.LoginTask( this , email , null , null , id ).execute();
+        new WelcomeActivity.LoginTask( this , email , name , null , null , id ).execute();
         gp_info_ready = true;				
 	}
 
