@@ -25,6 +25,7 @@ import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class SearchUsers extends WoopitActivity {
 
@@ -33,7 +34,7 @@ public class SearchUsers extends WoopitActivity {
 	UserAdapter uAdapter;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 						
 		Bundle extras = getIntent().getExtras();
@@ -78,13 +79,15 @@ public class SearchUsers extends WoopitActivity {
 			ImageView image = (ImageView) convertView.findViewById(R.id.image);	
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView username = (TextView) convertView.findViewById(R.id.username);
-			ImageView add_friend = (ImageView) convertView.findViewById(R.id.add_friend);			
+			final ImageView add_friend = (ImageView) convertView.findViewById(R.id.add_friend);			
+			final ProgressBar loading = (ProgressBar) convertView.findViewById(R.id.loading);
 			
-			image.setImageBitmap(user.getImage(getApplicationContext()));
+			Utils.setUserImage(getApplicationContext(), image, user.id);
 			name.setText(user.name);
 			username.setText("@"+user.username);
 			add_friend.setVisibility(View.VISIBLE);
-						
+			loading.setVisibility(View.GONE);
+			
 			switch( user.request_status ){
 			
 			// No hay pedido de ser amigos o fue rechazada
@@ -104,6 +107,10 @@ public class SearchUsers extends WoopitActivity {
 
 				@Override
 				public void onClick(View arg0) {
+					
+					add_friend.setVisibility(View.GONE);
+					loading.setVisibility(View.VISIBLE);
+					
 					new AddOrRejectFriend(user.id).execute();
 				}
 			});
@@ -124,7 +131,7 @@ public class SearchUsers extends WoopitActivity {
 		public SearchUserTask( String query ){
 			super();
 			
-			this.query = query;
+			this.query = query.trim();
 		
 			init(getApplicationContext(),"search_users",new Object[]{ User.get(getApplicationContext()).id , query });
 		}
@@ -182,6 +189,7 @@ public class SearchUsers extends WoopitActivity {
 			
 			this.to_user = to_user;
 			init(getApplicationContext(),"add_or_reject_friend",new Object[]{ User.get(getApplicationContext()).id , to_user });
+			
 		}
 
 		@Override
@@ -190,6 +198,8 @@ public class SearchUsers extends WoopitActivity {
 			if ( result != null && result.length() > 0 ){
 				
 				int new_status = Integer.parseInt(result);
+				
+				Utils.onUserAddOrReject(getApplicationContext(), "SearchUsers", new_status == 1 ? "Agregar" : "Borrar" , to_user);
 				
 				// Busco el usuario y cambio su request_status
 				for ( User u : uAdapter.items ){

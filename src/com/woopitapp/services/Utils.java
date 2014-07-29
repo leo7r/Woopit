@@ -31,6 +31,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -38,6 +41,8 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.suredigit.inappfeedback.FeedbackDialog;
 import com.suredigit.inappfeedback.FeedbackSettings;
 import com.woopitapp.R;
+import com.woopitapp.entities.Message;
+import com.woopitapp.entities.User;
 
 
 public class Utils {
@@ -426,7 +431,11 @@ public class Utils {
 	}
 	
 	public static String getUserImageURI( int id ){
-		return "http://"+ServerConnection.HOST+":7778/users/images/"+id+".jpg";
+		return "http://"+ServerConnection.HOST+"/users/images/"+id+".jpg";
+	}
+
+	public static String getModelImageURI( int id ){
+		return "http://"+ServerConnection.HOST+"/models/previews/"+id+".jpg";
 	}
 	
 	public static void setUserImage( Context con , ImageView iv , int id_user ){
@@ -441,6 +450,20 @@ public class Utils {
 		
 		imageLoader = getImageLoader(con);		
 		imageLoader.displayImage(getUserImageURI(id_user), iv, options );
+	}
+
+	public static void setModelImage( Context con , ImageView iv , int model_id ){
+		
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+        .showStubImage(R.drawable.model_image)
+        .showImageForEmptyUri(R.drawable.model_image)
+        .showImageOnFail(R.drawable.model_image)
+        .cacheOnDisc()
+        .displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, con)))
+        .build();
+		
+		imageLoader = getImageLoader(con);		
+		imageLoader.displayImage(getModelImageURI(model_id), iv, options );
 	}
 	
 	/* Send feedback */
@@ -480,7 +503,7 @@ public class Utils {
 		feedbackSettings.setReplyTitle(res.getString(R.string.feedback_respuesta));
 		feedbackSettings.setReplyCloseButtonText(res.getString(R.string.feedback_cerrar));
 		feedbackSettings.setReplyRateButtonText(res.getString(R.string.feedback_calificanos));
-		
+				
 		return new FeedbackDialog(act, act.getResources().getString(R.string.feedback_key), feedbackSettings);
 	}
 
@@ -499,6 +522,211 @@ public class Utils {
 		
 		return sb.toString();
 	}
+	
+    
+	/* Google analytics methods */    
+	static Tracker getTracker( Context c ){
+		
+		Tracker t = GoogleAnalytics.getInstance(c).getTracker(c.getString(R.string.ga_trackingId));
+		
+		return t;
+	}
+	
+    // Mensajes
+    
+    public static void onMessageNew( Context c , String from , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes", "Crear", User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    public static void onMessageNew( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes", "Crear", User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    public static void onMessageSent( Context c , String from , int modelId , String text , Double lat , Double lon ){
+    	
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes", "Envio", User.get(c).id+"" , null)
+		    .build()
+		);    	
+    }
+    
+    public static void onMessageView( Context c , Message m , String from ){
+    	
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes", "Visto", User.get(c).id+"" , null)
+		    .build()
+		);    	
+    }
+        
+    public static void onMessageImageNew( Context c ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes con imagen", "Crear", User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    public static void onMessageImageSent( Context c ){
+    	
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes con imagen", "Envio", User.get(c).id+"" , null)
+		    .build()
+		);    	
+    }
+    
+    public static void onMessageImageView( Context c ){
+    	
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Mensajes con imagen", "Visto", User.get(c).id+"" , null)
+		    .build()
+		);    	
+    }
+        
+    // Perfil
+    public static void onEditProfileEnter( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Editar perfil", "Entrar", User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    public static void onEditProfileEdit( Context c , String type ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Editar perfil", "Editar", User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    public static void onProfileCreateModel( Context c ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Perfil", "Crear modelo", User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    // Compartir
+    public static void onShareWoopit( Context c , String from , String action ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Compartir Woopit", action , User.get(c).id+"", null)
+		    .build()
+		); 
+    }
+    
+    // Enviar feedback
+    public static void onSendFeedback( Context c , String from , String action ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Enviar feedback", action , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    // Usuarios
+    public static void onUserSearch( Context c , String from , String query ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Usuarios", "Buscar" , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    public static void onUserAddOrReject( Context c , String from , String action , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Usuarios", action , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    public static void onUserProfileEnter( Context c , String from , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Usuarios", "Perfil" , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    // Encontrar amigos
+    public static void onFriendsSearchEnter( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Encontrar amigos", "Entrar" , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    public static void onFriendsSearch( Context c , String from , int number_of_friends ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Encontrar amigos", "Buscar" , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    public static void onFriendsAddOrReject( Context c , String from , String action , int user_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Encontrar amigos", action , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    // Modelos
+    public static void onModelOpen( Context c , String from , int model_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Modelos", "Abrir" , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    public static void onModelSearch( Context c , String from , String query ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Modelos", "Buscar" , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    public static void onModelBuy( Context c , String from , String action , int model_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Comprar modelo", action , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    // Monedas
+    public static void onCoinsEnter( Context c , String from ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Monedas", "Entrar" , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    public static void onCoinsBuy( Context c , String from , String action , String coins_id , int user_coins ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Monedas", action , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    public static void onCoinsBuyError( Context c , String from , String coins_id ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Monedas", "Error" , User.get(c).id+"", null)
+		    .build()
+		);
+    }
+    
+    // Login y registro
+    public static void onLogin( Context c , String from , String social_network ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Bienvenida", "Entrar" , social_network, null)
+		    .build()
+		);
+    }
+    
+    public static void onRegister( Context c , String from , String social_network ){
+    	getTracker(c).send(MapBuilder
+		    .createEvent("Bienvenida", "Registrarse" , social_network, null)
+		    .build()
+		);
+    }
 	
 }
 

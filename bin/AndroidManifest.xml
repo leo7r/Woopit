@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.woopitapp"
-    android:versionCode="3"
-    android:versionName="0.1" >
+    android:versionCode="9"
+    android:versionName="1.0.4" >
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.LOCATION" />
@@ -13,24 +13,44 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:name="com.woopitapp.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.woopitapp.permission.C2D_MESSAGE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="18" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/launcher_logo"
+        android:icon="@drawable/launcher_logo2"
         android:label="@string/app_name"
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme" >
-        
-        <service android:name="com.woopitapp.services.WoopitService" />
-		
+        <service android:name=".services.WoopitService" />
+
+        <receiver
+            android:name=".services.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.woopitapp" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.GcmIntentService" />
+
         <!-- Login con Facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -53,8 +73,8 @@
         <activity
             android:name=".activities.WelcomeActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,6 +88,11 @@
         </activity>
         <activity
             android:name=".activities.MessageActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activities.SelfieActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
@@ -90,18 +115,17 @@
         </activity>
         <activity
             android:name=".activities.ModelPreviewActivity"
-            android:label="@string/title_activity_map" >
+            android:label="@string/title_activity_map"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity
             android:name=".activities.ModelListActivity"
             android:label="@string/title_activity_map"
             android:parentActivityName=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" >
-            
             <meta-data
-		        android:name="android.support.PARENT_ACTIVITY"
-		        android:value=".activities.MainActivity"/>
-            
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
             android:name=".activities.ProfileActivity"
@@ -132,8 +156,48 @@
             android:label="@string/title_activity_map" >
         </activity>
         <activity
-            android:name=".activities.BuyModelActivity"
+            android:name=".activities.MapSentDirectMessageActivity"
+            android:label="@string/title_activity_map"
+            android:theme="@style/Dialog" >
+        </activity>
+        <activity
+            android:name=".activities.BuyCoinActivity"
             android:label="@string/title_activity_buy_model" >
+        </activity>
+        <activity
+            android:name=".dialogs.BuyModelDialog"
+            android:label="@string/title_activity_buy_model_dialog"
+            android:theme="@style/Dialog" >
+        </activity>
+        <activity
+            android:name=".activities.SignupActivity"
+            android:label="@string/title_activity_signup"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+        <activity
+            android:name=".activities.FindFriendsList"
+            android:label="@string/title_activity_find_friends_list" >
+        </activity>
+        <activity
+            android:name=".activities.CameraActivity"
+            android:label="@string/title_activity_camera"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activities.ImagePreviewActivity"
+            android:label="@string/title_activity_image_preview" >
+        </activity>
+        <activity
+            android:name=".NewVersionDialog"
+            android:label="@string/title_activity_new_version_dialog"
+            android:theme="@style/Dialog" >
         </activity>
     </application>
 

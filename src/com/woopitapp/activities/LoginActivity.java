@@ -1,4 +1,4 @@
-package com.woopitapp.fragments;
+package com.woopitapp.activities;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -8,17 +8,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -35,78 +34,88 @@ import com.google.android.gms.plus.PlusClient.OnPeopleLoadedListener;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.woopitapp.R;
-import com.woopitapp.activities.WelcomeActivity;
 
-public class SignupFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener {
-    
+public class LoginActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener {
+	
 	/* Facebook */
 	private static final String TAG = "Signup";
 	private UiLifecycleHelper uiHelper;
 	
 	/* Google+ */
-	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
-
+	public static final int REQUEST_CODE_RESOLVE_ERR = 9000;
+	
     private ProgressDialog mConnectionProgressDialog;
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
-    
+
+    EditText email, password;
     boolean fb_info_ready = false;
-    boolean gp_info_ready = false;
-    
-    EditText email, password,rPassword, name;
-    
-	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    boolean gp_info_ready = false;	
+    Activity act;
+	
+    public void onCreate( Bundle savedInstanceState ){
     	
-        View view = inflater.inflate(R.layout.signup_fragment, container, false);
-        
-        /* Login con Facebook */
-        uiHelper = new UiLifecycleHelper(getActivity(), callback);
+    	super.onCreate(savedInstanceState);
+    	setContentView(R.layout.activity_login);
+    	act = this;
+    	
+    	/* Login con Facebook */
+        uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
-        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
-        authButton.setFragment(this);
+        LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
         authButton.setReadPermissions(Arrays.asList("email","public_profile","user_friends"));
         
+        TextView reset_password = (TextView) findViewById(R.id.reset_password);
+        reset_password.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				
+				if ( email.getText().toString().length() > 4 ){
+					new WelcomeActivity.ResetPassword(getApplicationContext(), email.getText().toString()).execute();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), R.string.error_restablecer_contrasena, Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+		});
         
         /* Login con Google+ */
-        
+                
         mPlusClient =
-        	    new PlusClient.Builder(getActivity(), this, this).setActions(
+        	    new PlusClient.Builder(this, this, this).setActions(
         	        "http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
         	        .build();
-        
-        
-		mConnectionProgressDialog = new ProgressDialog(getActivity());
-		mConnectionProgressDialog.setMessage("Signing in...");
 		
-		view.findViewById(R.id.sign_in_button).setOnClickListener(new OnClickListener(){
+		mConnectionProgressDialog = new ProgressDialog(this);
+		mConnectionProgressDialog.setMessage(getResources().getString(R.string.entrando));
+		
+		findViewById(R.id.sign_in_button).setOnClickListener(new OnClickListener(){
 			
 			@Override
 			public void onClick(View view) {
 				
-				// Se tiene que mostrar esta barra de progreso si no se resuelve el fallo de conexi�n.
-				
 			    if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 			        if (mConnectionResult == null) {
-			            //mConnectionProgressDialog.show();
+			            mConnectionProgressDialog.show();
 			            mPlusClient.connect();
 			        } else {
-		                mConnectionResult = null;
-		                mPlusClient.connect();
+			            mConnectionResult = null;
+						mPlusClient.connect();
+						//mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
 			        }
 			    }
 			}
 		});
-		
-		email = (EditText) view.findViewById(R.id.email);
-		password = (EditText) view.findViewById(R.id.password);
-		rPassword = (EditText) view.findViewById(R.id.repeatedPassword);
-		name = (EditText) view.findViewById(R.id.name);
+				
+        email = (EditText) findViewById(R.id.email);
+		password = (EditText) findViewById(R.id.password);
 		
 		TextWatcher validWatcher = new TextWatcher() {
 	        @Override
 	        public void afterTextChanged(Editable s) {
-	        	showSignUpButton();
+	        	showLoginButton();
 	        }
 
 	        @Override
@@ -118,23 +127,22 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 		
 		email.addTextChangedListener(validWatcher);
 		password.addTextChangedListener(validWatcher);
-		rPassword.addTextChangedListener(validWatcher);
 		
-		WelcomeActivity.setGoogleEmail(email,getActivity());
+		WelcomeActivity.setGoogleEmail(email,this);
 		
-		Button signUp = (Button) view.findViewById(R.id.signUp);
-		signUp.setOnClickListener(new OnClickListener(){
+		Button login = (Button) findViewById(R.id.login);
+		login.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				signUp(v);
+				login(v);
 			}
 		});
 		
-        return view;
+    	
     }
-	
-	public void onStart(){
+    
+    public void onStart(){
 		super.onStart();
 	}
 	
@@ -142,7 +150,7 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 		super.onStop();
 		mPlusClient.disconnect();
 	}
-		
+	
 	@Override
 	public void onResume() {
 	    super.onResume();
@@ -161,18 +169,17 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		
 		if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
-	        mConnectionResult = null;
+			mConnectionResult = null;
 	        mPlusClient.connect();
 	    }
 		
-	    super.onActivityResult(requestCode, resultCode, data);
-	    
-		
 	    uiHelper.onActivityResult(requestCode, resultCode, data);
 	}
-	
+		
 	@Override
 	public void onPause() {
 	    super.onPause();
@@ -190,29 +197,24 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 	    super.onSaveInstanceState(outState);
 	    uiHelper.onSaveInstanceState(outState);
 	}
+    
+	public void login( View v ){
+		new WelcomeActivity.LoginTask(this, email.getText().toString(), "" , password.getText().toString(), null, null).execute();
+	}
 	
-	public void showSignUpButton(){
-		
-		if ( getView() == null )
-			return;
-		
+	public void showLoginButton(){
+				
 		Pattern pattern = Patterns.EMAIL_ADDRESS;
 	    boolean email_valid = pattern.matcher(email.getText()).matches();
 	    
-		Button button = (Button) getView().findViewById(R.id.signUp);
+		Button button = (Button) findViewById(R.id.login);
 		
-		if ( email_valid && password.getText().length() >= 6 && (password.getText()+"").equals(rPassword.getText()+"") ){
+		if ( email_valid && password.getText().length() >= 6 ){
 			button.setVisibility(View.VISIBLE);
 		}
 		else{
 			button.setVisibility(View.GONE);
 		}
-	}
-	
-	public void signUp( View v ){
-		new WelcomeActivity.NewUser( getActivity() , 
-				email.getText().toString() , name.getText().toString() ,
-				password.getText().toString() , null , null , true ).execute();
 	}
 	
 	/* Metodos del login de Facebook */
@@ -230,15 +232,14 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 					if ( fb_info_ready )
 						return;
 					
-					String name = user.getFirstName() + " " + user.getLastName();
                     String id = user.getId();
                     String email = user.getProperty("email").toString();
+					String name = user.getFirstName() + " " + user.getLastName();
 
                     Log.i("facebookid", id);
-                    Log.i("Name", name);
                     Log.i("email", email);
-                    
-                    new WelcomeActivity.NewUser( getActivity() , email , name , null , id , null , true ).execute();
+
+                    new WelcomeActivity.LoginTask( act , email , name , null , id , null ).execute();
                     fb_info_ready = true;
 				}
 			}).executeAsync();
@@ -263,7 +264,8 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 		if (result.hasResolution()) {
             
 			try {
-                result.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
+                result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
+                //mPlusClient.connect();
             } catch (SendIntentException e) {
                 mPlusClient.connect();
             }
@@ -274,7 +276,8 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		
+
+        mConnectionProgressDialog.dismiss();
 		Log.i(TAG, "Conectado");
 		mPlusClient.loadPeople(this, "me");
 	}
@@ -288,7 +291,7 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 		String name = person.getDisplayName();
 		personBuffer.close();
 
-        new WelcomeActivity.NewUser( getActivity() , email , name , null , null , id , true ).execute();
+        new WelcomeActivity.LoginTask( this , email , name , null , null , id ).execute();
         gp_info_ready = true;				
 	}
 
@@ -297,4 +300,5 @@ public class SignupFragment extends Fragment implements ConnectionCallbacks, OnC
 		Log.i(TAG, "Desconectado");
 	}
 	
+    
 }

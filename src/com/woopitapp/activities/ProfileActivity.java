@@ -47,7 +47,7 @@ public class ProfileActivity extends WoopitActivity {
 	ProfileChangeReceiver p_receiver;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
 		
@@ -130,13 +130,15 @@ public class ProfileActivity extends WoopitActivity {
 	
 	public void goEditProfile( View v ){
 		
-		Intent i = new Intent(this,EditProfileActivity.class);
-		
+		Utils.onEditProfileEnter(getApplicationContext(), "ProfileActivity");
+		Intent i = new Intent(this,EditProfileActivity.class);		
 		startActivity(i);
 	}
 	
 	public void goContactNewModel( View v ){
-				
+		
+		Utils.onProfileCreateModel(getApplicationContext());
+		
 		Intent send = new Intent(Intent.ACTION_SENDTO);
 		String uriText = "mailto:" + Uri.encode("brattrinc@gmail.com") + 
 		          "?subject=" + Uri.encode(getResources().getString(R.string.peticion_nuevo_modelo));
@@ -174,7 +176,7 @@ public class ProfileActivity extends WoopitActivity {
 			
 			name.setText(model.name);
 			price.setText(model.price);
-			image.setImageResource(R.drawable.model_image);
+			Utils.setModelImage(getApplicationContext(), image, model.id);
 			
 			convertView.setOnClickListener(new OnClickListener(){
 

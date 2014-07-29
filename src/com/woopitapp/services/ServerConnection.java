@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -16,9 +17,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public abstract class ServerConnection extends AsyncTask<Void,Void,Void> {
-
-	final public static String HOST = "54.186.75.251";
-	final int PORT = 7777; // PRUEBA! CAMBIAR A HTTPS en produccion
+	
+	final public static String HOST = "54.191.83.73";
+	final int PORT = 443; // PRUEBA! CAMBIAR A HTTPS en produccion
 	
 	Socket socket;
 	DataOutputStream outStream;
@@ -34,7 +35,12 @@ public abstract class ServerConnection extends AsyncTask<Void,Void,Void> {
 		this.args = new String[args.length];
 		
 		for ( int i = 0 ; i < args.length ; ++i ){
-			this.args[i] = args[i].toString();
+			//this.args[i] = args[i].toString();
+			try {
+				this.args[i] = new String(args[i].toString().getBytes("UTF-8"), "ISO-8859-1");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

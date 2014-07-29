@@ -41,7 +41,7 @@ public class SearchModelsActivity extends WoopitActivity {
 	LinearLayout list_loading;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search_models);
 		
@@ -110,7 +110,7 @@ public class SearchModelsActivity extends WoopitActivity {
 			
 			name.setText(model.name);
 			price.setText(model.price);
-			image.setImageResource(R.drawable.model_image);
+			Utils.setModelImage(getApplicationContext(), image, model.id);
 			
 			convertView.setOnClickListener(new OnClickListener(){
 
@@ -175,7 +175,11 @@ public class SearchModelsActivity extends WoopitActivity {
 					}
 					
 					if ( mAdapter != null ){
-						mAdapter.addAll(models_list);
+						
+						for (Model m : models_list){
+							mAdapter.add(m);
+						}
+						
 						mAdapter.notifyDataSetChanged();
 					}
 					else{

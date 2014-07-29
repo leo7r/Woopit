@@ -29,12 +29,15 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.scythe.bucket.BucketListAdapter;
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.Model;
 import com.woopitapp.entities.User;
+import com.woopitapp.fragments.HomeFragment.get_messages;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
@@ -57,7 +60,7 @@ public class ModelListActivity extends WoopitActivity {
 	ModelPurchaseReceiver m_receiver;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.model_message_list);
 		
@@ -162,18 +165,44 @@ public class ModelListActivity extends WoopitActivity {
 			TextView price = (TextView) convertView.findViewById(R.id.price);
 			ImageView image = (ImageView) convertView.findViewById(R.id.image);
 			
-			name.setText(model.name);
-			price.setText(model.price);
-			image.setImageResource(R.drawable.model_image);
-			
-			convertView.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View arg0) {
-					goToMessage(userId,model);
+			if ( model.id == 0 ){
+				name.setText(R.string.tomar_foto);
+				price.setText("free");
+				image.setImageResource(R.drawable.camera_circle);
+				
+				DisplayImageOptions options = new DisplayImageOptions.Builder()
+		        .showStubImage(R.drawable.model_image)
+		        .showImageForEmptyUri(R.drawable.model_image)
+		        .showImageOnFail(R.drawable.model_image)
+		        .cacheOnDisc()
+		        .displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, getApplicationContext())))
+		        .build();
+				
+				 Utils.getImageLoader(getApplicationContext()).displayImage("drawable://" + R.drawable.camera_circle,image);//.displayImage(R.drawable.camera_circle, image, options );
+				
+				convertView.setOnClickListener(new OnClickListener(){
 					
-				}
-			});
+					@Override
+					public void onClick(View arg0) {
+						
+						goToCamera(userId);
+					}
+				});
+			}
+			else{
+				name.setText(model.name);
+				price.setText(model.price);
+				Utils.setModelImage(getApplicationContext(), image, model.id);
+				
+				convertView.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						goToMessage(userId,model);
+						
+					}
+				});
+			}			
 			
 			return convertView;
 		}
@@ -200,6 +229,25 @@ public class ModelListActivity extends WoopitActivity {
 		i.putExtra("modelId", m.id);
 		i.putExtra("enable", m.enable);
 		startActivityForResult(i, REQUEST_SEND_MESSAGE);
+		
+		Utils.onMessageNew(getApplicationContext(), "ModelListActivity", userId);
+	}
+
+    public void goToCamera( int userId ){
+    	Intent i = new Intent( this , CameraActivity.class );
+    	i.putExtra("userId", userId);
+    	i.putExtra("userName", userName);
+    	startActivity(i);
+    }
+    
+	public void refresh(){
+	    ((ImageView)findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+		((TextView) findViewById(R.id.reload_button)).setVisibility(View.GONE);		
+		if(mAdapter == null){
+				
+			new GetUserModels(getApplicationContext(), page ).execute();
+	    		
+	    }
 	}
 	
 	public class GetUserModels extends ServerConnection{
@@ -214,6 +262,11 @@ public class ModelListActivity extends WoopitActivity {
     		this.user_id = User.get(con).id;
     		this.page = page;
     		loader = (ProgressBar) findViewById(R.id.loaderModel);		
+     		if(mAdapter == null){
+    			loader.setVisibility(View.VISIBLE);
+    		}
+     		((ImageView)findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+    		((TextView) findViewById(R.id.reload_button)).setVisibility(View.GONE);	
     		init(con,"get_user_models",new Object[]{ User.get(con).id+"" , page });
     	}
     	
@@ -241,10 +294,14 @@ public class ModelListActivity extends WoopitActivity {
 					}
 					
 					if ( mAdapter != null ){
-						mAdapter.addAll(models_list);
+						
+						for (Model m : models_list){
+							mAdapter.add(m);	
+						}
 						mAdapter.notifyDataSetChanged();
 					}
 					else{
+						models_list.add(0, new Model(0,"","","",true));
 						setModelList(models_list);
 					}
 					
@@ -261,10 +318,23 @@ public class ModelListActivity extends WoopitActivity {
 				} catch (JSONException e) {	
 					e.printStackTrace();
 				}
-				
+			
 			}
 			else{
-				Toast.makeText(con, R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				((ImageView) findViewById(R.id.notSignalImage)).setVisibility(View.VISIBLE);
+				TextView reload = (TextView) findViewById(R.id.reload_button);		
+				reload.setVisibility(View.VISIBLE);
+				if(mAdapter != null){
+					mAdapter.clear();
+				}
+				if(list_loading != null){
+					list_loading.setVisibility(View.GONE);
+				}
+				reload.setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
 			}
 			
 		}

@@ -38,7 +38,9 @@ public class Data{
 	}
 
 	public void close() {
-		this.dbHelper.close();
+		if ( dbHelper != null ){
+			this.dbHelper.close();
+		}
 	}
 	
 	
@@ -295,6 +297,11 @@ public class Data{
 	public boolean deleteFriendRequest( int id ){
 		
 		return database.delete(DBHelper.FRIEND_REQUEST_TABLE, DBHelper.fr_id+" = ?", new String[]{ id+"" }) != -1;
+	}
+	
+	public boolean deleteAllFriendRequests( ){
+		
+		return database.delete(DBHelper.FRIEND_REQUEST_TABLE, null, null ) != -1;
 	}
 	
 	/* Modelos */

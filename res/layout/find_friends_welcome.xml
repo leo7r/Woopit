@@ -2,18 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#fff" >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        style="@style/top_bar">
+        
+        <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="@string/encontrar_amigos"
+	        android:layout_alignParentLeft="true"
+	        style="@style/back_button"
+	        />
+        
+    </RelativeLayout>
     
     <TextView 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textSize="@dimen/normal_text"
         android:text="@string/encontrar_amigos_info"
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/dashed_border_bg"
+        android:padding="15dp"
         />
     
     <com.facebook.widget.LoginButton
@@ -30,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/facebook_button"
-        android:text="@string/encontrar_amigos"
+        android:text="@string/encontrar_amigos_facebook"
         android:layout_margin="20dp"
         android:drawableLeft="@drawable/facebook_badge"
         />
@@ -40,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/gplus_button"
-        android:text="@string/encontrar_amigos"
+        android:text="@string/encontrar_amigos_gPlus"
         android:layout_margin="20dp"
         android:drawableLeft="@drawable/gplus_badge"
         />

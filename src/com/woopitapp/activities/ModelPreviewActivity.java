@@ -17,16 +17,21 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
+import com.woopitapp.dialogs.BuyModelDialog;
+import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
 import com.woopitapp.graphics.Objeto;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.server_connections.ModelDownloader;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class ModelPreviewActivity extends WoopitActivity {
 
@@ -41,11 +46,10 @@ public class ModelPreviewActivity extends WoopitActivity {
 	Objeto o;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.model_preview);
-		
 		Bundle extras = getIntent().getExtras();
 		user = User.get(getApplicationContext());
 		modelId = extras.getInt("modelId");
@@ -108,6 +112,8 @@ public class ModelPreviewActivity extends WoopitActivity {
 					lookOnMapi.putExtra("message", text.getText().toString());
 					
 					startActivityForResult(lookOnMapi,REQUEST_SEND_MESSAGE);
+
+					Utils.onMessageNew(getApplicationContext(), "ModelPreviewActivity", userId);
 				}
 			});
 		 
@@ -139,18 +145,20 @@ public class ModelPreviewActivity extends WoopitActivity {
 						Intent i = new Intent(getApplicationContext(),ChooseFriendActivity.class);
 						i.putExtra("modelId", modelId);
 						startActivity(i);
+						Utils.onMessageNew(getApplicationContext(), "ModelPreviewActivity");
 					}
 				});
 			}
 			else{
 				button.setText(R.string.comprar_modelo);
 				button.setOnClickListener(new OnClickListener(){
-
+					
 					@Override
 					public void onClick(View arg0) {
-						Intent i = new Intent(getApplicationContext(),BuyModelActivity.class);
+						Intent i = new Intent(getApplicationContext(),BuyModelDialog.class);
 						i.putExtra("modelId", modelId);
 						startActivityForResult( i , REQUEST_BUY_MODEL );
+						Utils.onModelBuy(getApplicationContext(), "ModelPreviewActivity", "Entrar", modelId);
 					}
 				});
 			}
@@ -162,8 +170,11 @@ public class ModelPreviewActivity extends WoopitActivity {
 		
 		String message = ((EditText)findViewById(R.id.message_text)).getText().toString();
 		
-		Send_Message sm = new Send_Message(getApplicationContext(), "",message,500,500);
-		sm.execute();		
+		Send_Message sm = new Send_Message(this, "",message,500,500);
+		sm.execute();
+
+		setResult(RESULT_OK);
+	    finish();
 	}
 	
 	public class GLClearRenderer implements Renderer {
@@ -178,7 +189,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 	            gl.glLoadIdentity();	                  
 				gl.glClearColor(0.039f,0.0f,0.16f, 0.0f );
 		        gl.glClearDepthf(1.0f);
-		        //gl.glDepthMask(true);
+		        gl.glDepthMask(true);
 		        gl.glEnable(GL10.GL_DEPTH_TEST);
 		        gl.glDepthFunc(GL10.GL_LESS);
 	            gl.glClear( GL10.GL_COLOR_BUFFER_BIT );
@@ -226,7 +237,7 @@ public class ModelPreviewActivity extends WoopitActivity {
 	    		     
 	                float[] lightAmbient = {1.0f, 1.0f, 1.0f, 0.5f};
 	    		    float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 0.5f};
-	    		    float[] lightPos = {0.1f, 0.1f, 0.1f, 1.0f};
+	    		    float[] lightPos = {0.1f, 5.1f, 0.1f, 1.0f};
 	    		    gl.glEnable(GL10.GL_LIGHTING);
 	    		    gl.glEnable(GL10.GL_LIGHT0);
 	    		    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, lightAmbient, 0);
@@ -258,23 +269,30 @@ public class ModelPreviewActivity extends WoopitActivity {
 	
 	class Send_Message extends ServerConnection{
     	
-		Context con;
+		Activity act;
+		int cantCoins = 1;
+		String text;
+		double latitude, longitude;
 		
-		public Send_Message(Context context,String title,String text,double latitud, double longitud){
-			this.con = context;
+		public Send_Message(Activity act,String title,String text,double latitud, double longitud){
+			this.act = act;
+			this.text = text;
+			this.latitude = latitud;
+			this.longitude = longitud;
 			
-			init(con,"send_message",new Object[]{user.id,userId,modelId,title,text,latitud,longitud});
+			init(act,"send_message",new Object[]{user.id,userId,modelId,title,text,latitud,longitud});
 		}
 
 		@Override
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
+
+				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
+				Utils.onMessageSent(getApplicationContext(), "ModelPreviewActivity", modelId, text, latitude, longitude);
+				Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 				
-				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
-				setResult(RESULT_OK);
-			    finish();
-				
+				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();				
 			}
 			else{
 				
@@ -293,19 +311,23 @@ public class ModelPreviewActivity extends WoopitActivity {
     /* Descarga el modelo si no esta ya descargado */
     
     class MDownloader extends ModelDownloader{
-
+    	RelativeLayout loader;
 		public MDownloader(Activity act, int modelId) {
 			super(act, modelId);
+			loader = (RelativeLayout)findViewById(R.id.loaderModel);
+			loader.setVisibility(View.VISIBLE);
 		}
 
 		@Override
 		protected void onPostExecute(Boolean success) {
-			
+			loader.setVisibility(View.GONE);
 			if ( success ){
+				
 				init();
 			}
 			else{
 				Toast.makeText(getApplicationContext(), "ERROR EN MODEL DOWNLOADER", Toast.LENGTH_SHORT).show();
+				finish();
 			}
 			
 		}

@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/models_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -18,6 +19,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
         />
+	
 	 <ProgressBar 
         android:id="@+id/loaderModel"
         android:layout_width="25dp"
@@ -26,6 +28,28 @@
         style="@style/progress_bar"
         android:layout_margin="15dp"
         />
+	 
+	<ImageView 
+		android:id="@+id/notSignalImage"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:src="@drawable/notsignal"
+		android:visibility="gone"
+		android:layout_marginTop="50dp"
+	 	/>
+       
+    <TextView
+	    android:id="@+id/reload_button"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/notificacion_woopit_sin_senal"
+	    android:visibility="gone" 
+	    android:layout_gravity="center"
+	    android:layout_margin="20dp"
+	    android:textColor="#d3d3d3"
+	    android:gravity="center_horizontal"
+    	/>
+    
 	<ListView 
         android:id="@+id/models_list"
         android:layout_width="match_parent"
@@ -33,5 +57,5 @@
         android:divider="@null"
 	    android:gravity="center"
         />
-    
+
 </LinearLayout>

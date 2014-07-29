@@ -27,9 +27,10 @@ public class ChooseFriendActivity extends WoopitActivity {
 	int modelId;
 	ListView user_list;
 	ListAdapter uAdapter;
+	String encoded_image;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.choose_friend);
 		
@@ -38,33 +39,32 @@ public class ChooseFriendActivity extends WoopitActivity {
 		if ( extras.containsKey("modelId") ){
 			
 			modelId = extras.getInt("modelId");
-			user_list = (ListView) findViewById(R.id.user_list);
+			encoded_image = null;
+		}
+		else{
 			
-			Data data = new Data(this);
-			data.open();
-			ArrayList<User> friends = data.getFriends();
-			data.close();
-			
-			if ( friends.size() == 0 ){
-				LinearLayout no_friends = (LinearLayout) findViewById(R.id.no_friends);
-				no_friends.setVisibility(View.VISIBLE);
+			if ( extras.containsKey("image") ){
+				encoded_image = extras.getString("image");
+				modelId = -1;
 			}
-			else{
-				uAdapter = new ListAdapter(this, R.id.user_list, friends );
-		        user_list.setAdapter(uAdapter);
-			}			
 		}
 		
-	}
-
-	public void inviteFriends( View v ){
+		user_list = (ListView) findViewById(R.id.user_list);
 		
-		Intent sendIntent = new Intent();
-		sendIntent.setAction(Intent.ACTION_SEND);
-		sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.compartir_woopit_texto));
-		sendIntent.setType("text/plain");
+		Data data = new Data(this);
+		data.open();
+		ArrayList<User> friends = data.getFriends();
+		data.close();
 		
-		startActivity(Intent.createChooser(sendIntent, getResources().getString(R.string.compartir_woopit)));
+		if ( friends.size() == 0 ){
+			LinearLayout no_friends = (LinearLayout) findViewById(R.id.no_friends);
+			no_friends.setVisibility(View.VISIBLE);
+		}
+		else{
+			uAdapter = new ListAdapter(this, R.id.user_list, friends );
+	        user_list.setAdapter(uAdapter);
+		}
+		
 	}
 	
     public class ListAdapter extends ArrayAdapter<User>{
@@ -105,12 +105,25 @@ public class ChooseFriendActivity extends WoopitActivity {
 
 				@Override
 				public void onClick(View v) {
-					Intent i = new Intent(getApplicationContext(),ModelPreviewActivity.class);
-					i.putExtra("userId", user.id);
-					i.putExtra("userName",user.username);
-					i.putExtra("modelId", modelId);
-					i.putExtra("enable", true);
-					startActivity(i);
+					
+					if ( encoded_image == null ){
+						Intent i = new Intent(getApplicationContext(),ModelPreviewActivity.class);
+						i.putExtra("userId", user.id);
+						i.putExtra("userName",user.username);
+						i.putExtra("modelId", modelId);
+						i.putExtra("enable", true);
+						startActivity(i);
+					}
+					else{
+						Intent i = new Intent(getApplicationContext(),ImagePreviewActivity.class);
+						i.putExtra("userId", user.id);
+						i.putExtra("userName",user.username);
+						i.putExtra("image", encoded_image);
+						startActivity(i);
+						Utils.onMessageImageNew(getApplicationContext());
+					}
+					
+					finish();
 				}
 			});
 			

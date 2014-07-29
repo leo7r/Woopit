@@ -24,15 +24,28 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.woopitapp.R;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
-public class BuyModelActivity extends Activity {
+public class BuyCoinActivity extends WoopitActivity {
 	
 	IInAppBillingService mService;
 	String TAG = "In-app billing";
@@ -41,24 +54,37 @@ public class BuyModelActivity extends Activity {
 	private int id_model;
 	Activity act;
 	private final int error_notification_id = 77;
+	int user_coins;
+	
+	ListView package_list;
+	PackageAdapter mAdapter;
+	
+	private final String coins_20 = "com.woopitapp.coins.20";
+	private final String coins_50 = "com.woopitapp.coins.50";
+	private final String coins_130 = "com.woopitapp.coins.130";
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.test);
+		setContentView(R.layout.buy_coins);
 		act = this;
 		
 		Bundle extras = getIntent().getExtras();
+		id_model = extras.getInt("modelId");
 		
-		if ( extras.containsKey("modelId") ){
-			id_model = extras.getInt("modelId");
-			bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"), mServiceConn, Context.BIND_AUTO_CREATE);
-		}
-		else{
-			finish();
-		}
+		package_list = (ListView) findViewById(R.id.package_list);
+		ArrayList<BuyPackage> pkgs = new ArrayList<BuyPackage>();
+		pkgs.add(new BuyPackage(coins_20,getResources().getString(R.string.monedas_20),getResources().getString(R.string.info_monedas),R.drawable.coins_20,"0.99",20));
+		pkgs.add(new BuyPackage(coins_50,getResources().getString(R.string.monedas_50),getResources().getString(R.string.info_monedas),R.drawable.coins_50,"1.99",50));
+		pkgs.add(new BuyPackage(coins_130,getResources().getString(R.string.monedas_130),getResources().getString(R.string.info_monedas),R.drawable.coins_130,"4.99",130));
+				
+		mAdapter = new PackageAdapter(this,R.id.package_list,pkgs);
+		package_list.setAdapter(mAdapter);
 		
+		bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"), mServiceConn, Context.BIND_AUTO_CREATE);
+		
+		new GetUserCoins().execute();
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -78,13 +104,13 @@ public class BuyModelActivity extends Activity {
 						Log.i(TAG,dataSignature);
 						Log.i(TAG,responseCode+"");
 						
-						 String purchase_token = jsonData.getString("purchaseToken");
-						 String order_id = jsonData.getString("orderId");
-						 long purchase_time = jsonData.getLong("purchaseTime");
-						 String product_id = jsonData.getString("productId");
+						String purchase_token = jsonData.getString("purchaseToken");
+						String order_id = jsonData.getString("orderId");
+						long purchase_time = jsonData.getLong("purchaseTime");
+						String product_id = jsonData.getString("productId");
 						
-						//new ConsumeModel().execute();
-						new SavePurchase(this,id_model,purchase_token,order_id,purchase_time,product_id,true).execute();
+						new ConsumePurchase(act,purchase_token,order_id,purchase_time,product_id).execute();
+												
 					}
 					else{
 						Log.e(TAG, "Error, fallaron los token");
@@ -128,20 +154,131 @@ public class BuyModelActivity extends Activity {
 			mService = IInAppBillingService.Stub.asInterface(service);
 			Log.i(TAG,"Connected");
 			
-			new VerifyItemDisponibility().execute();
 		}
 	};
+	
+	class BuyPackage{
+		
+		String id;
+		String name,description,price;
+		int image_resource;
+		int coins;
+		
+		public BuyPackage( String id , String name , String description , int image_resource , String price , int coins ){
+			
+			this.id = id;
+			this.name = name;
+			this.description = description;
+			this.image_resource = image_resource;
+			this.price = price;
+			this.coins = coins;
+		}
+		
+	}
+	
+    public class PackageAdapter extends ArrayAdapter<BuyPackage>{
+    	
+		ArrayList<BuyPackage> items;
+		Context context;
+		Filter filter;
+		LayoutInflater inflater;
+
+		public PackageAdapter(Context context, int textViewResourceId, ArrayList<BuyPackage> objects){
+			super(context, textViewResourceId, objects);
+			this.items = objects;
+			this.context = context;
+			inflater = (LayoutInflater)this.context.getSystemService("layout_inflater");
+		}
+
+		public View getView(final int position, View convertView, ViewGroup parent){
+			
+			if ( convertView == null ){
+				convertView = inflater.inflate(R.layout.coin_package_item, null);
+			}
+			
+			final BuyPackage item = getItem(position);
+			
+			TextView name = (TextView) convertView.findViewById(R.id.name);
+			TextView description = (TextView) convertView.findViewById(R.id.description);
+			TextView price = (TextView) convertView.findViewById(R.id.price);
+			ImageView image = (ImageView) convertView.findViewById(R.id.image);
+			
+			image.setImageResource(item.image_resource);
+			name.setText(item.name);
+			description.setText(item.description);
+			price.setText("$"+item.price);
+			
+			convertView.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View arg0) {
+					
+					new VerifyItemDisponibility( item.id ).execute();
+				}
+			});
+			
+			return convertView;
+		}
+		
+		public BuyPackage getItem( int position ){
+			return items.get(position);
+		}
+		
+    }
+    
+    class GetUserCoins extends ServerConnection{
+    	
+    	public GetUserCoins(){
+    		super();
+    		
+    		init(getApplicationContext(),"get_user_coins",new Object[]{ User.get(getApplicationContext()).id });
+    	}
+    	
+		@Override
+		public void onComplete(String result) {
+			
+			((RelativeLayout)findViewById(R.id.loading)).setVisibility(View.GONE);
+			
+			if ( result != null ){
+				
+				try {
+					JSONObject coins = new JSONObject(result);
+					
+					user_coins = coins.getInt("c");
+					((TextView)findViewById(R.id.user_coins)).setText(user_coins+"");
+					
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			else{
+				Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+    	
+    }
+	
+	/* Buy methods */
 	
 	class VerifyItemDisponibility extends AsyncTask<Void,Void,Boolean>{
 		
 		Bundle skuDetails;
+		String id;
+		
+		public VerifyItemDisponibility( String id ){
+			super();
+			
+			this.id = id;
+		}
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			
 			ArrayList<String> skuList = new ArrayList<String> ();
 			
-			skuList.add("5_corazon");
+			skuList.add(id);
 			
 			Bundle querySkus = new Bundle();
 			querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
@@ -173,7 +310,8 @@ public class BuyModelActivity extends Activity {
 					   finish();
 				   }
 				   else{
-						new VerifyItemNotOwned( act ).execute();
+						new BuyModel(id).execute();
+					   //new VerifyItemNotOwned( act ).execute();
 				   }
 				   
 				}
@@ -187,6 +325,7 @@ public class BuyModelActivity extends Activity {
 		
 	}
 	
+	/*
 	class VerifyItemNotOwned extends ServerConnection{
 
 		ProgressDialog dialog;
@@ -222,9 +361,17 @@ public class BuyModelActivity extends Activity {
 		}
 		
 	}
+	*/
 	
 	class BuyModel extends AsyncTask<Void,Void,Boolean>{
 
+		String id;
+		
+		public BuyModel( String id ){
+			super();
+			this.id = id;
+		}
+		
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
 			
@@ -232,7 +379,7 @@ public class BuyModelActivity extends Activity {
 				
 				security_token = Utils.randomToken();
 				
-				Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), "android.test.purchased", "inapp", security_token);
+				Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), id, "inapp", security_token);
 				int response_code = buyIntentBundle.getInt("RESPONSE_CODE");
 				
 				if ( response_code == 0  ){
@@ -241,13 +388,15 @@ public class BuyModelActivity extends Activity {
 					
 					startIntentSenderForResult(pendingIntent.getIntentSender(), BUY_REQUEST_CODE , new Intent(), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0) );
 					
+					Utils.onCoinsBuy(getApplicationContext(), "BuyCoinActivity", "Comprar", id, user_coins);
+					
 					return true;
 				}
 				else{
 					
 					// Item already owned
 					if ( response_code == 7 ){
-						new ConsumeModel().execute();
+						Log.e("Item","Item ya adquirido");
 					}
 					
 					Log.e(TAG, "Error response code "+response_code);
@@ -266,16 +415,35 @@ public class BuyModelActivity extends Activity {
 			return false;
 		}
 		
+		protected void onPostExecute( Boolean b ){
+			
+			if ( !b ){
+				Toast.makeText(getApplicationContext(), R.string.error_compra, Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+		
 	}
 	
-	class ConsumeModel extends AsyncTask<Void,Void,Boolean>{
+	class ConsumePurchase extends AsyncTask<Void,Void,Boolean>{
+		
+		String purchase_token,order_id,product_id;
+		long purchase_time;
+		Activity act;
+		
+		public ConsumePurchase( Activity act , String purchase_token , String order_id , long purchase_time , String product_id ){
+			this.act = act;
+			this.purchase_token = purchase_token;
+    		this.order_id = order_id;
+    		this.purchase_time = purchase_time;
+    		this.product_id = product_id;
+		}
 		
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
 			
-			String purchaseToken = "inapp:"+getPackageName()+":android.test.purchased";
 			try {
-				int response = mService.consumePurchase(3, getPackageName(),purchaseToken);
+				int response = mService.consumePurchase(3, getPackageName(),purchase_token);
 				
 				if ( response == 0 ){
 					return true;
@@ -291,10 +459,28 @@ public class BuyModelActivity extends Activity {
 		public void onPostExecute( Boolean b ){
 			
 			if ( b ){
-				Toast.makeText(getApplicationContext(), "Listo, consumido", Toast.LENGTH_SHORT).show();
+				Log.i("Item","Consumido");
+				new SavePurchase(act,purchase_token,order_id,purchase_time,product_id,true).execute();
+				//Toast.makeText(getApplicationContext(), "Listo, consumido", Toast.LENGTH_SHORT).show();
 			}
 			else{
-				Toast.makeText(getApplicationContext(), "NO FUE consumido", Toast.LENGTH_SHORT).show();
+				Log.e("Item","NO Consumido");
+				/*
+				if ( retry_count > 0 ){
+
+					Log.e("Item","Intentando de nuevo");
+					new Handler().postDelayed(new Runnable(){
+						
+						@Override
+						public void run() {
+							new ConsumePurchase(id,retry_count-1).execute();
+						}
+					}, 60*1000/retry_count);
+					
+					
+				}
+				*/
+				//Toast.makeText(getApplicationContext(), "NO FUE consumido", Toast.LENGTH_SHORT).show();
 			}
 			
 		}
@@ -304,18 +490,18 @@ public class BuyModelActivity extends Activity {
 	class SavePurchase extends ServerConnection{
 
 		Activity act;
-		int id_model;
+		//int id_model;
 		String purchase_token, order_id, product_id;
 		long purchase_time;
 		ProgressDialog dialog;
 		int count = 10;
 		SavePurchase sp;
     	
-    	public SavePurchase( Activity act , int id_model , String purchase_token , String order_id , long purchase_time , String product_id , final boolean show_dialog ){
+    	public SavePurchase( Activity act , String purchase_token , String order_id , long purchase_time , String product_id , final boolean show_dialog ){
     		super();
     		
     		this.act = act;
-    		this.id_model = id_model;
+    		//this.id_model = id_model;
     		this.purchase_token = purchase_token;
     		this.order_id = order_id;
     		this.purchase_time = purchase_time;
@@ -334,18 +520,25 @@ public class BuyModelActivity extends Activity {
     			});
     		}
     		
-    		init(act,"save_purchase",new Object[]{ User.get(act).id+"" , id_model+"" , purchase_token , order_id , purchase_time+"" , product_id });
+    		init(act,"save_purchase",new Object[]{ User.get(act).id+"" , purchase_token , order_id , purchase_time+"" , product_id });
     	}
     	
     	public void setNotification(){
     		NotificationCompat.Builder mBuilder =
     		        new NotificationCompat.Builder(act)
-    		        .setSmallIcon(R.drawable.launcher_logo)
+    		        .setSmallIcon(R.drawable.notif_icon)
     		        .setContentTitle(getResources().getString(R.string.conectando_con_servidor))
     		        .setContentText(getResources().getString(R.string.para_completar_compra));
     		// Creates an explicit intent for an Activity in your app
-    		Intent resultIntent = new Intent(act, ModelPreviewActivity.class);
-    		resultIntent.putExtra("modelId", id_model);
+    		Intent resultIntent;
+    		
+    		if ( id_model != -1 ){
+        		resultIntent = new Intent(act, ModelPreviewActivity.class);
+        		resultIntent.putExtra("modelId", id_model);
+    		}
+    		else{
+        		resultIntent = new Intent(act, MainActivity.class);
+    		}
 
     		// The stack builder object will contain an artificial back stack for the
     		// started Activity.
@@ -377,7 +570,7 @@ public class BuyModelActivity extends Activity {
     	
     	public void onError(){
     		
-			sp = new SavePurchase( this.act , this.id_model , this.purchase_token , this.order_id , this.purchase_time , this.product_id , false  );
+			sp = new SavePurchase( this.act , this.purchase_token , this.order_id , this.purchase_time , this.product_id , false  );
 			sp.count = count-1;
 			
 			if ( sp.count > 0 ){
@@ -404,9 +597,31 @@ public class BuyModelActivity extends Activity {
 				
 				if ( result.equals("ok")){
 					
-					Toast.makeText(getApplicationContext(), R.string.compra_hecha, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), R.string.compra_monedas_hecha, Toast.LENGTH_LONG).show();
 					Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_model_purchase);
 					cancelNotification();
+					
+					Utils.onCoinsBuy(getApplicationContext(), "BuyCoinActivity", "Comprado", product_id, user_coins);
+					
+					EasyTracker easyTracker = EasyTracker.getInstance(act);
+					
+					double revenue = 0.0;
+					
+					if ( product_id.equals(coins_20) ){
+						revenue = 0.99;
+					}
+					else{
+						if ( product_id.equals(coins_50) ){
+							revenue = 1.99;
+						}
+						else{
+							if ( product_id.equals(coins_130) ){
+								revenue = 4.99;
+							}
+						}
+					}
+					
+					easyTracker.send( MapBuilder.createTransaction(order_id, "In-app store", revenue, 0.0, 0.0, "USD").build() );
 					
 					setResult(RESULT_OK);
 					finish();
@@ -420,6 +635,7 @@ public class BuyModelActivity extends Activity {
 				//Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
 				Toast.makeText(getApplicationContext(), R.string.error_compra_reintentando, Toast.LENGTH_SHORT).show();
 				onError();
+				Utils.onCoinsBuyError(getApplicationContext(), "BuyCoinActivity", product_id);
 			}
 			
 		}

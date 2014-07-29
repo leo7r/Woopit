@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Address;
@@ -38,6 +37,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.woopitapp.R;
 import com.woopitapp.entities.User;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.ServerConnection;
 import com.woopitapp.services.Utils;
 
@@ -63,7 +63,7 @@ public class MapActivity extends FragmentActivity implements
 	Circle area;
 	float default_zoom = 17.0f;
 	int userId,modelId;
-	String userName,message;
+	String userName,message,encoded_image;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +76,13 @@ public class MapActivity extends FragmentActivity implements
 		modelId = extras.getInt("modelId");
 		userName = extras.getString("userName");
 		message = extras.getString("message");
+		
+		if ( extras.containsKey("image") ){
+			encoded_image = extras.getString("image");
+		}
+		else{
+			encoded_image = null;
+		}
 		
 		search_address = (EditText) findViewById(R.id.search_address);
 		send_woop = (Button) findViewById(R.id.send_woop);
@@ -151,27 +158,80 @@ public class MapActivity extends FragmentActivity implements
 	
 	public void sendWoop( View v ){
 		
-		new Send_Message(getApplicationContext() , selectedLatitude , selectedLongitude ).execute();
+		if ( encoded_image == null ){
+			new Send_Message(this, selectedLatitude , selectedLongitude ).execute();
+		}
+		else{
+			new sendImageMessage(userId,userName,"",message,selectedLatitude,selectedLongitude,encoded_image).execute();
+		}
+		
+		setResult(RESULT_OK);
+	    finish();
 	}
 	
 	class Send_Message extends ServerConnection{
     	
-		Context con;
-		
-		public Send_Message(Context context,double latitud, double longitud){
-			this.con = context;
+		Activity act;
+		int cantCoins = 1;
+		double lat,lon;
+		public Send_Message(Activity act ,double latitud, double longitud){
+			this.act = act;
+			this.lat = latitud;
+			this.lon = longitud;
 			
-			init(con,"send_message",new Object[]{User.get(con).id,userId,modelId,"",message,latitud,longitud});
+			init(act,"send_message",new Object[]{User.get(act).id,userId,modelId,"",message,latitud,longitud});
 		}
 
 		@Override
 		public void onComplete(String result) {
 			
 			if( result != null && result.equals("OK") ){
+				new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
+				
+				Utils.onMessageSent(getApplicationContext(), "MapActivity", modelId, message, lat, lon);
+				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
+			}
+			else{
+				
+				if ( result == null ){
+					Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), R.string.error_desconocido, Toast.LENGTH_SHORT).show();
+					Log.e("Error sending message","result: "+result);
+				}
+				
+			}
+		}
+	}
+	
+	class sendImageMessage extends ServerConnection{
+    	
+		int cantCoins = 1;
+		int receiver;
+		String text, userName;
+		double latitude, longitude;
+		
+		public sendImageMessage(int receiver , String userName , String title,String text,double latitud, double longitud , String encoded_image ){
+			this.text = text;
+			this.receiver = receiver;
+			this.userName = userName;
+			this.latitude = latitud;
+			this.longitude = longitud;
+			
+			init(getApplicationContext(),"send_image_message",new Object[]{User.get(getApplicationContext()).id,receiver,title,text,latitud,longitud,encoded_image});
+		}
+
+		@Override
+		public void onComplete(String result) {
+			
+			if( result != null && result.equals("ok") ){
+
+				//new InsertCoins(act , cantCoins , R.string.por_enviar_mensaje ).execute();
+				//Utils.onMessageSent(getApplicationContext(), "CameraActivity", 0, text, latitude, longitude);
+				//Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 				
 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
-				setResult(RESULT_OK);
-			    finish();
 			}
 			else{
 				

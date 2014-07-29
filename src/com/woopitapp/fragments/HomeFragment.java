@@ -1,25 +1,21 @@
 package com.woopitapp.fragments;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
@@ -29,14 +25,15 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 
+import com.google.analytics.tracking.android.Log;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.woopitapp.R;
+import com.woopitapp.activities.MapSentDirectMessageActivity;
 import com.woopitapp.activities.MapSentMessageActivity;
 import com.woopitapp.activities.MapUnMessageActivity;
 import com.woopitapp.activities.MessageActivity;
-import com.woopitapp.activities.ModelListActivity.GetUserModels;
+import com.woopitapp.activities.SelfieActivity;
 import com.woopitapp.entities.Message;
 import com.woopitapp.entities.User;
 import com.woopitapp.services.ServerConnection;
@@ -45,20 +42,22 @@ import com.woopitapp.services.Utils;
 public class HomeFragment extends Fragment {
 	
 	private static final int REQUEST_DOWNLOAD_MODEL = 0;
-	private static final int REQUEST_MESSAGE = 1;
+	public static final int REQUEST_MESSAGE = 1;
 	ListView message_list;
 	ListAdapter mAdapter;
 	TabHost tabHost;
-	ArrayList<Object> messages_list;
+	ArrayList<Message> messages_list;
 	EditText search_message;
 	int page = 0;
 	boolean loadingMore;
 	LinearLayout list_loading;
-	
+	LayoutInflater li;
+	ViewGroup viewGroup;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	
+    	li = inflater;
+    	viewGroup = container;
         View view = (LinearLayout)inflater.inflate(R.layout.home_fragment, container, false);
-		list_loading = (LinearLayout) getView().inflate(this.getActivity().getApplicationContext(), R.layout.list_footer_loading, null);
+		list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
 		message_list = (ListView) view.findViewById(R.id.messages_list);
 		message_list.addFooterView(list_loading);
 
@@ -74,8 +73,10 @@ public class HomeFragment extends Fragment {
 					
 					page++;
 					Context c = getActivity().getApplicationContext();
-    	        	new get_messages( c,User.get(c).id, page ).execute();
+					list_loading.setVisibility(View.VISIBLE);
+					new get_messages( c,User.get(c).id, page ).execute();
 					loadingMore = true;
+					
 				}
 			}
 
@@ -90,18 +91,44 @@ public class HomeFragment extends Fragment {
     
     public void onStart(){
     	super.onStart();
+    	if(mAdapter == null){
+    		Context c = this.getActivity().getApplicationContext();
+    		new get_messages(c,User.get(c).id,page).execute();
+    	}
 
-        Context c = this.getActivity().getApplicationContext();
-        new get_messages(c,User.get(c).id,page).execute();
+    	
+    
     }
     
     public void onStop(){
     	super.onStop();
-    	
-    	page = 0;
-    	mAdapter = null;
+
+
     }
     
+    public void onDestroyView(){
+    	super.onDestroyView();
+    	page = 0;
+    	if(mAdapter != null){
+    		mAdapter.clear();
+    	}
+    	mAdapter = null;
+    	
+
+    }
+    
+    public void refresh(){
+    	((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);	
+		list_loading.setVisibility(View.VISIBLE);
+		if(mAdapter == null){
+			
+    		Context c = this.getActivity().getApplicationContext();
+    		new get_messages(c,User.get(c).id,page).execute();
+    		
+    	}
+    }
+
     public class get_messages extends ServerConnection{
     	
     	Context con;
@@ -113,20 +140,24 @@ public class HomeFragment extends Fragment {
     		this.con = con;
     		this.user_id = user_id;
     		this.page = page;
-    		if ( getView() != null ){
-    			loader = (ProgressBar) getView().findViewById(R.id.loader);
+
+    		loader = (ProgressBar) getView().findViewById(R.id.loader);
+    		if(mAdapter == null){
+    			loader.setVisibility(View.VISIBLE);
     		}
+    		((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+    		((TextView)  getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);	
     		init(con,"get_messages",new Object[]{ ""+user_id,""+ page });
     	}
 
 		@Override
 		public void onComplete(String result) {
 			
-			if ( loader != null ){
-				loader.setVisibility(View.GONE);
-			}
+		
+			loader.setVisibility(View.GONE);
+			
 
-			messages_list = new ArrayList<Object>();
+			messages_list = new ArrayList<Message>();
 			
 			if ( result != null && result.length() > 0 ){
 
@@ -148,9 +179,10 @@ public class HomeFragment extends Fragment {
 						long timestamp = message.getLong("d");
 						Date date = new Date(timestamp);
 						String modelName = message.getString("mn");
+						String imagen = message.getString("im");
 						int status = message.getInt("e");
 						
-						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name,modelName);
+						Message m = new Message(id,sender,recevier,model,title,text,date,latitud,longitud,status,name,modelName,imagen);
 						
 						messages_list.add(m);
 						
@@ -167,21 +199,63 @@ public class HomeFragment extends Fragment {
 				}catch(Exception e){
 					e.printStackTrace();
 				}
-			}
+				
+				if(mAdapter == null){
+				    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
+				    message_list.setAdapter(mAdapter);
+				}else{
+					
+					for (Message m : messages_list){
+						mAdapter.add(m);
+					}
+					
+					mAdapter.notifyDataSetChanged();
+				}
+				
+				if ( messages_list.size() == 0 && page == 0){
+					Date date = new Date();
+					Message m = new Message(0,1,User.get(con).id,8,"",getResources().getString(R.string.bienvenido_a_woopit),date,500,500,0,"Woopit","Welcome Woop","");
+					messages_list.add(m);
+		
+					if ( getView() != null ){
+						((TextView) getView().findViewById(R.id.welcome_message)).setVisibility(View.VISIBLE);
+					}
+					if ( loader != null ){
+						loader.setVisibility(View.GONE);
+					}
+					if ( list_loading != null ){
+						list_loading.setVisibility(View.GONE);
+					}
+					mAdapter = null;
+					
+				}
 			
-			if ( messages_list.size() == 0 && page == 0){
-				Date date = new Date();
-				Message m = new Message(0,1,User.get(con).id,1,"","Bienvenido a Woopit :D",date,500,500,0,"Woopit","Welcome Woop");
-				messages_list.add(m);
-				((TextView) getView().findViewById(R.id.welcome_message)).setVisibility(View.VISIBLE);
-			}
-			if(mAdapter == null){
-			    mAdapter = new ListAdapter(con, R.id.messages_list, messages_list);
-			    message_list.setAdapter(mAdapter);
+			
+			
+			
 			}else{
-				mAdapter.addAll(messages_list);
-				mAdapter.notifyDataSetChanged();
+				((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.VISIBLE);
+				TextView reload = (TextView) getView().findViewById(R.id.reload_button);		
+				reload.setVisibility(View.VISIBLE);
+				if(mAdapter != null){
+					mAdapter.clear();
+				}
+				if(list_loading != null){
+					list_loading.setVisibility(View.GONE);
+				}
+				((ImageView) getView().findViewById(R.id.notSignalImage)).setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
+				reload.setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
 			}
+				
+			
 			
 		   
 			
@@ -206,28 +280,59 @@ public class HomeFragment extends Fragment {
 	   
 	 }
     
+    public void updateContent(){
+
+    	page = 0;
+    	mAdapter = null;
+    	
+        Context c = this.getActivity().getApplicationContext();
+        new get_messages(c,User.get(c).id,page).execute();
+    }
+    
     public void verMensajeRecibido( Message message ){
     	
 	    if( message.status == 0){
 		  new UpdateMessageStatus(this.getActivity().getApplicationContext(), message.id).execute();
 		}
-		Intent newMessagei =  new  Intent(getActivity(),MessageActivity.class);
+	    Intent newMessagei;
+	    if( message.imagen.length() > 0 && message.model == -1 ){
+	    	newMessagei =  new  Intent(getActivity(),SelfieActivity.class);
+	    	newMessagei.putExtra("nombreImagen",message.imagen);
+			Utils.onMessageImageView(getActivity());
+	    }else{
+	    	newMessagei =  new  Intent(getActivity(),MessageActivity.class);
+	    	newMessagei.putExtra("modelo",message.model);
+			Utils.onMessageView(getActivity(), message, "HomeFragment");
+	    }
 		newMessagei.putExtra("latitud", message.latitud+"");
 		newMessagei.putExtra("longitud",message.longitud+"");
-		newMessagei.putExtra("modelo",message.model);
+		
 		newMessagei.putExtra("text", message.text);
 		newMessagei.putExtra("nombre", message.name);
-		startActivityForResult(newMessagei,REQUEST_MESSAGE);
+		newMessagei.putExtra("messageId", message.id);
+		getActivity().startActivityForResult(newMessagei,REQUEST_MESSAGE);
+		
 	}
   
     public void verMensajeEnviado( Message message ){
-    	Log.e("MAPA", "MAPA");
-		Intent newMessagei =  new  Intent(getActivity(),MapSentMessageActivity.class);
-		newMessagei.putExtra("latitud", message.latitud);
-		newMessagei.putExtra("longitud",message.longitud);
-		newMessagei.putExtra("modelName",message.modelName+"");
-		newMessagei.putExtra("nombre", message.name);
-		startActivity(newMessagei);
+    	if(message.latitud == 500){
+    		Intent newMessagei =  new  Intent(getActivity(),MapSentDirectMessageActivity.class);
+    		newMessagei.putExtra("leido", message.status);
+    		newMessagei.putExtra("modelName",message.modelName+"");
+    		newMessagei.putExtra("nombre", message.name);
+    		newMessagei.putExtra("texto", message.text);
+    		newMessagei.putExtra("fecha",message.date.getTime());
+    		startActivity(newMessagei);
+    	}else{
+    		Intent newMessagei =  new  Intent(getActivity(),MapSentMessageActivity.class);
+    		newMessagei.putExtra("latitud", message.latitud);
+    		newMessagei.putExtra("longitud",message.longitud);
+    		newMessagei.putExtra("modelName",message.modelName+"");
+    		newMessagei.putExtra("texto", message.text);
+    		newMessagei.putExtra("nombre", message.name);
+    		startActivity(newMessagei);
+    	}
+    	Utils.onMessageView(getActivity(), message, "HomeFragment");
 	}
     
     class UpdateMessageStatus extends ServerConnection{
@@ -249,37 +354,20 @@ public class HomeFragment extends Fragment {
 		public void onComplete(String result) {
 			
 			if ( result != null ){
-				
-				/*try{
-					JSONObject user = new JSONObject(result);
-				
-					int id = user.getInt("i");
-					String name = user.getString("n");
-					String username = user.getString("u");
-					String image = user.getString("m");
-					
-					User u = new User(id,username,name,image);
-					current_user = u;
-					setProfile();
-				}
-				catch( Exception e ){
-					e.printStackTrace()	;
-				}	*/
-			}else{
-				//Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
-			}				
+				Utils.sendBroadcast(getActivity(), R.string.broadcast_messages);
+			}		
 		}
     	
     }
     
-    public class ListAdapter extends ArrayAdapter<Object>{
+    public class ListAdapter extends ArrayAdapter<Message>{
 		
- 		ArrayList<Object> l_items;
+ 		ArrayList<Message> l_items;
  		Context context;
  		Filter filter;
  		LayoutInflater infalInflater;
 
- 		public ListAdapter(Context context, int textViewResourceId, ArrayList<Object> objects) {
+ 		public ListAdapter(Context context, int textViewResourceId, ArrayList<Message> objects) {
  			
  			super(context, textViewResourceId, objects);
  			this.l_items = objects;
@@ -292,7 +380,7 @@ public class HomeFragment extends Fragment {
  			
 
  			int user_id = User.get(this.context).id;
- 			final Message item = (Message)getItem(position);
+ 			final Message item = getItem(position);
  			
  			if ( convertView == null ){
  				convertView = infalInflater.inflate(R.layout.message_item, null);
@@ -303,9 +391,10 @@ public class HomeFragment extends Fragment {
  			
  			if(item.receiver == user_id){
  				if(item.status == 0){
- 					//aqui el otro icono de mensaje nuevo; 					
+ 					imagen.setImageResource(R.drawable.message_not_viewed);					
+ 				}else{
+ 	 				imagen.setImageResource(R.drawable.message_received);
  				}
- 				imagen.setImageResource(R.drawable.message_received);
 				convertView.setOnClickListener(new OnClickListener(){
 
 					@Override
@@ -351,7 +440,7 @@ public class HomeFragment extends Fragment {
  			return l_items != null ? l_items.size() : 0;
  		}
  		
- 		public Object getItem( int pos ){
+ 		public Message getItem( int pos ){
  			return l_items.get(pos);
  		}
 

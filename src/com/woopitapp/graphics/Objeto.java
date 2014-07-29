@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -14,12 +15,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.os.Environment;
 import android.util.Log;
-
- 
 
 public class Objeto {
 
@@ -30,10 +30,29 @@ public class Objeto {
 	private Vector<GroupMesh> groups;
 	private int renderCount = 0;
 	private int primitive = GL10.GL_TRIANGLES;
+	private int[] textureIds;
+	private Bitmap bmSelfie = null;
+	private Context context;
 
+	public Objeto(String nombre,Context context,Bitmap bmSelfie){
+		try{
+			this.bmSelfie = bmSelfie;
+			this.context = context;
+			groups = new Vector<GroupMesh>();
+			this.crearBuffers(context,nombre);
+		}catch(Exception e){
+			System.gc();
+			this.bmSelfie = bmSelfie;
+			this.context = context;
+			groups = new Vector<GroupMesh>();
+			this.crearBuffers(context,nombre);
+		}
+	}
 
 	public Objeto(String nombre,Context context){
 		try{
+			this.context = context;
+
 			groups = new Vector<GroupMesh>();
 			this.crearBuffers(context,nombre);
 		}catch(Exception e){
@@ -42,25 +61,40 @@ public class Objeto {
 			this.crearBuffers(context,nombre);
 		}
 	}
-
-
 	public void draw(GL10 gl){
          
 
 
 
 		if(renderCount == 0){
-			
+
+			textureIds = new int[groups.size()];
+			gl.glGenTextures(groups.size(), textureIds, 0 );
+
 			for(int i = 0 ; i < groups.size();i++){
 				
 				GroupMesh g  = groups.get(i);
-				gl.glBindTexture(GL10.GL_TEXTURE_2D, i);
-			    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-			    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-			    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-			    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-			    if( g.getMaterial().getTexture() != null){
-			    	GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture(), 0);
+
+			    if( g.getMaterial().getTexture() != null || bmSelfie != null){
+			       
+			       
+				    	gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
+					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
+					    if(bmSelfie != null){
+							String nombre = "selfie";
+			
+							GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, bmSelfie, 0);
+					    }else{
+					    	GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, g.getMaterial().getTexture()  , 0);
+					    }
+			       	
+			    	Log.e("textura ","textura " +  g.getMaterial().getName() + " tam " + g.getMaterial().getTexture() );
+			    }else{
+				
+
 			    }
 			}
 			renderCount++;
@@ -69,24 +103,27 @@ public class Objeto {
 			
 		
 			GroupMesh g  = groups.get(i);
-			if(g.getMaterial() != null && g.getMaterial().getTexture() != null){
+			if((g.getMaterial() != null && g.getMaterial().getTexture() != null) || bmSelfie != null){
 				gl.glEnable(GL10.GL_TEXTURE_2D);
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
 			}
+		
 			gl.glEnable(GL10.GL_DEPTH_TEST);
 			gl.glEnable(GL10.GL_BLEND);
 	        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 	        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-	        gl.glBindTexture(GL10.GL_TEXTURE_2D, i);
 	        gl.glShadeModel(GL10.GL_SMOOTH);
 	        gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-	    
+	        gl.glEnableClientState(GL10.GL_COLOR_MATERIAL);
 		    gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT,g.getMaterial().getAmbient(), 0);			   			        
 		    gl.glMaterialfv(GL10.GL_FRONT_AND_BACK ,GL10.GL_DIFFUSE, g.getMaterial().getDiffusse(), 0);
 		    gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, g.getMaterial().getSpecular(), 0);
 		    gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS,g.getMaterial().getSIndex());
 	        
-	        gl.glFrontFace(GL10.GL_CCW);
+		    if( bmSelfie != null ){
+		        gl.glFrontFace(GL10.GL_CW);
+		    }
 	
 	        gl.glEnable(GL10.GL_CULL_FACE);
 	        
@@ -102,7 +139,7 @@ public class Objeto {
 	        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	        gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	        gl.glDisable(GL10.GL_TEXTURE_2D);
-	        	
+			
 	        		
 	        	
 		}
@@ -128,11 +165,10 @@ public class Objeto {
 				in.read(matBuff);	
 				matBuff.position(0);
 				int tamMat = matBuff.getInt();
-				matBuff.clear();
 				if(tamMat == -1){
 					break;
 				}
-				byteBuf.clear();
+		
 				
 				byteBuf = ByteBuffer.allocateDirect(tamMat*2);
 				byteBuf.order(ByteOrder.nativeOrder());
@@ -145,7 +181,7 @@ public class Objeto {
 
 				}
 				m.setName(lineaNombre);
-				byteBuf.clear();
+	
 				
 				//setear Ambient
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -160,7 +196,6 @@ public class Objeto {
 				float aA = extraBuff.getFloat();
 				float [] ambient = {aR,aG,aB,aA};
 				m.setAmbient(ambient);
-				byteBuf.clear();
 				
 				//setear Diffuse
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -175,7 +210,7 @@ public class Objeto {
 				float dA = extraBuff.getFloat();
 				float [] diffuse = {dR,dG,dB,dA};
 				m.setDiffusse(diffuse);
-				byteBuf.clear();
+		
 				
 				//setear Specular
 				byteBuf = ByteBuffer.allocateDirect(4*4);
@@ -190,7 +225,7 @@ public class Objeto {
 				float sA = extraBuff.getFloat();
 				float [] specular = {sR,sG,sB,sA};
 				m.setSpecular(specular);
-				byteBuf.clear();
+			
 				
 				//setear Ni, Si
 				byteBuf = ByteBuffer.allocateDirect(4*2);
@@ -204,7 +239,7 @@ public class Objeto {
 				
 				m.setNi(Ni);
 				m.setSIndex(Si);
-				byteBuf.clear();
+	
 				
 				byteBuf = ByteBuffer.allocateDirect(4);
 				byteBuf.order(ByteOrder.nativeOrder());
@@ -220,10 +255,11 @@ public class Objeto {
 					in.read(extraBuff);	
 					extraBuff.position(0);
 					m.setTexture(BitmapFactory.decodeByteArray(extraBuff.array(), 0, tamTex));
-					byteBuf.clear();
+					if(tamTex >0){
+						Log.e("hay textura", "hay texturaaa " + m.getName() + " tam: " + tamTex);
+					}
 				}
-				byteBuf.clear();
-				extraBuff.clear();
+		
 				this.materiales.add(m);
 			}
 		}catch(Exception e){
@@ -233,15 +269,25 @@ public class Objeto {
 	
 	private  void crearBuffers(Context context,String nombre){
 			try{
+					
 				File dir = Environment.getExternalStorageDirectory();
-				File woopitDir = new File(dir,"/Woopit/models/"+nombre);
-				FileInputStream inStream = new FileInputStream(woopitDir);
-				FileChannel in =  inStream.getChannel();
+				File woopitDir;
+				FileInputStream inStream = null;
+				FileChannel in ;
+				if(bmSelfie != null){
+					AssetFileDescriptor afd = context.getAssets().openFd(nombre);  
+				 	FileInputStream fis = afd.createInputStream();
+				 	in = fis.getChannel();
+				}else{
+					 woopitDir = new File(dir,"/Woopit/models/"+nombre);
+					 inStream = new FileInputStream(woopitDir);
+					 in = inStream.getChannel();
+
+				}
 				
 				crearMateriales(in);
-				
 				ByteBuffer byteBuf = ByteBuffer.allocateDirect(4);
-
+				
 				while(true){
 					
 					GroupMesh group = new GroupMesh();
@@ -261,8 +307,11 @@ public class Objeto {
 					group.setMaterial(materiales.get(material));
 					groups.add(group);
 					
+				
 				}
-				inStream.close();
+				if(inStream != null){
+					inStream.close();
+				}
 			}catch(Exception e){
 				Log.e("PASO","Error " + e);
 			}

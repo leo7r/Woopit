@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Woopit</string>
+    <string name="action_settings">Settings</string>
+    <string name="edit_message">latitud</string>
+    <string name="edit_message2">longitud</string>
+    <string name="button_send">Send</string>
+    <string name="title_activity_display_message">My Message</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    
+    <!-- Terminos generales -->
+    <string name="error_desconocido">Unknown Error</string>
+    <string name="error_de_conexion">Connection error, try again</string>
+    <string name="configuracion">Settings</string>
+    <string name="compartir_woopit">Share Woopit</string>
+    <string name="enviar_comentarios">Send Feedback</string>
+    <string name="continuar">Next</string>
+    <string name="busqueda">Search</string>
+    <string name="no">No</string>
+    <string name="enviar">Send</string>
+    <string name="peticion_nuevo_modelo">Request to create model</string>
+    <string name="enviar_email">Send email</string>
+    <string name="bienvenido_a_woopit">Welcome to Woopit! :)</string>
+    <string name="welcome_message_info">Look around you and find the Woop in 3D</string>
+
+    <!-- Pantalla de Bienvenida, login y registro -->
+    <string name="iniciar_sesion">Log in</string>
+    <string name="registrarse">Sign up</string>
+    <string name="correo_electronico">Email address</string>
+    <string name="constrasena">Password</string>
+    <string name="contrasena_olvidada">Forgot password?</string>
+    <string name="registro">Sign up</string>
+    <string name="nueva_contrasena">New password</string>
+    <string name="repetir_contrasena">Repeat password</string>
+    <string name="tu_nombre">Your name</string>
+    <string name="creando_cuenta">Creating account&#8230;</string>
+    <string name="entrando">Logging&#8230;</string>
+    <string name="correo_ya_registrado">Email address already registered</string>
+    <string name="error_iniciar_sesion">Email and password doesn\'t match</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_choose_username">ChooseUsernameActivity</string>
+    <string name="elige_nombre_usuario">Choose your username</string>
+    <string name="info_nombre_usuario">Your username is your unique identifier in Woopit!</string>
+    <string name="nombre_usuario">Username</string>
+    <string name="verificando_usuario">Checking user&#8230;</string>
+    <string name="nombre_usuario_ya_tomado">Username <b>%s</b> is already taken.</string>
+    <string name="error_restablecer_contrasena">Error, you must provide an email</string>
+    <string name="enviando_correo_restauracion">Sending reset email&#8230;</string>
+    <string name="enviado_correo_restauracion">Reset password email sended to %s</string>
+    <string name="welcome_tip_home">Touch to view your profile</string>
+
+    <!-- Pantalla de Amigos -->
+    <string name="title_activity_search_users">SearchUsers</string>
+    <string name="title_activity_find_friends">FindFriendsActivity</string>
+    <string name="amigos">Friends</string>
+    <string name="encontrar_amigos">Search friends</string>
+    <string name="encontrar_amigos_facebook">Search friends on Facebook</string>
+    <string name="encontrar_amigos_gPlus">Search friends on Google Plus</string>
+    <string name="encontrar_amigos_info">Woopit uses social networks to help you find your friends. We won\'t send any message without your approval.</string>
+    <string name="buscar_usuarios">Search users&#8230;</string>
+    <string name="buscar_modelos">Search Woops&#8230;</string>
+    <string name="buscar_amigos">Search friends \"%s\"</string>
+    <string name="solicitudes_de_amistad">Friend requests</string>
+    <string name="buscando_amigos">Searching friends&#8230;</string>
+    <string name="ningun_amigo">You have no friends in Woopit :(</string>
+    <string name="invitalos">¡Invite them!</string>
+    <string name="compartir_woopit_texto">Heeyy! I just try Woopit. It\'s a pretty awesome chat with augmented reality! www.goo.gl/689Brd</string>
+    <string name="title_activity_map">MapActivity</string>
+
+    <!-- Pantalla del mapa -->
+    <string name="cargando_mapa">Loading map</string>
+    <string name="buscar_lugar">Search places&#8230;</string>
+    <string name="podra_ver_woop">May see your message in this area</string>
+    <string name="error_buscando_lugar">Error searching place</string>
+    <string name="lugar_no_encontrado">%s not found</string>
+    <string name="enviar_woop">Send Woop</string>
+    <string name="ubicacion_woop">May see your message near here</string>
+    <string name="mensaje_recibido_lejos"> has left you a Woop!</string>
+    <string name="mensaje_enviado_aqui">Has sent a Woop %s here!</string>
+    <string name="modelo_enviado">Woop sent: </string>
+    
+    <!-- Pantalla de perfil -->
+    <string name="perfil">Profile</string>
+    <string name="woops">Woops</string>
+    <string name="mis_modelos">My Woops</string>
+    <string name="no_creditos">You don\'t have coins</string>
+    <string name="modelos_disponibles">Woops available</string>
+    <string name="modelos_a_comprar">Paid Woops</string>
+    <string name="editar_perfil">Edit profile</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="guardar_cambios">Save changes</string>
+    <string name="cambiar_imagen"><u>Change image</u></string>
+    <string name="informacion_actualizada">Your information has been updated</string>
+    <string name="guardando_informacion">Saving your information&#8230;</string>
+
+    <!-- Pantalla de listado -->
+    <string name="encuentra_mas_modelos">Find more Woops</string>
+    <string name="lista_de_modelos">Listing</string>
+
+    <!-- Pantalla de busqueda de modelos -->
+    <string name="busqueda_modelos">Search for Woops \"%s\"</string>
+
+    <!-- Pantalla de Preview -->
+    <string name="enviar_a">Send to: %s</string>
+    <string name="enviar_actual">Current location</string>
+    <string name="enviar_mapa">Search on map</string>
+    <string name="vista_previa">Preview</string>
+    <string name="comprar_modelo">Buy Woop</string>
+    <string name="title_activity_choose_friend">ChooseFriendActivity</string>
+    <string name="escoger_amigo">Choose a friend</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="descargando_modelo">Configuring Woop&#8230;</string>
+    <string name="title_activity_search_models">SearchModelsActivity</string>
+    <string name="mensaje_enviado">Woop sent to %s</string>
+    <string name="hint_mensaje">Write your message&#8230;</string>
+
+    <!-- Feedback -->
+    <string name="feedback_texto">Hey would you like to send some comments to improve your experience?</string>
+    <string name="feedback_hint_pregunta">Write your question&#8230;</string>
+    <string name="feedback_titulo">Send comments</string>
+    <string name="feedback_gracias">Thank you!</string>
+    <string name="feedback_error">Error</string>
+    <string name="feedback_idea">Idea</string>
+    <string name="feedback_pregunta">Question</string>
+    <string name="feedback_respuesta">Message from Woopit</string>
+    <string name="feedback_cerrar">Close</string>
+    <string name="feedback_calificanos">Rate us</string>
+
+    <!-- Compras -->
+    <string name="title_activity_buy_model">BuyModelActivity</string>
+    <string name="guardando_compra">Saving purchase&#8230;</string>
+    <string name="error_compra">Error on purchase, try again</string>
+    <string name="error_compra_reintentando">Error on purchase, trying again&#8230;</string>
+    <string name="conectando_con_servidor">Contacting server&#8230;</string>
+    <string name="para_completar_compra">To finish your purchase</string>
+    <string name="compra_monedas_hecha">Thank you! your purchase was successful</string>
+    <string name="compra_hecha">Done! Now you can send this Woop</string>
+    <string name="verificando_disponibilidad">Verifying</string>
+    <string name="error_disponibilidad_modelo">Error, this package is not for sale</string>
+    <string name="comprar_monedas">Buy coins</string>
+    <string name="saldo_actual">Current balance</string>
+    <string name="compra_segura">You are protected, your purchase is safe</string>
+    <string name="comprar_ahora"><u>BUY NOW</u></string>
+    <string name="comprar_precio_modelo">Woop\'s price: %s coins</string>
+    <string name="comprar_monedas_usuario">Your coins: %s</string>
+    <string name="info_monedas">With this coins you can buy Woops to share with your friends</string>
+    <string name="monedas_20">20 Coins</string>
+    <string name="monedas_50">50 Coins</string>
+    <string name="monedas_130">130 Coins</string>
+
+    <!-- Mensajes de bienvenida -->
+    <string name="bienvenida_mensajes"><b>Look! a new message.</b>\nTouch it to discover what\'s inside</string>
+    <string name="bienvenida_amigos"><b>Here are your friends!</b>\nSearch some of them to have fun.</string>
+    <string name="bienvenida_modelos"><b>You haven\'t created a Woop yet</b>\n\nIf you want to make your own Woops and sell them</string>
+    <string name="contactanos">Contact us</string>
+    
+    <!-- Ganar monedas -->
+	<string name="ganaste_moneda">You won <b>%1$s</b> coins%2$s for %3$s</string>
+    <string name="por_enviar_mensaje">send a message</string>
+    <string name="por_compartir">share Woopit</string>
+    
+    <!-- Tips -->
+    <string name="tip1">You can earn coins by sending Woops</string>
+    <string name="tip2">You can earn coins by invite your friends</string>
+    <string name="tip3">You can make your own 3D models and sell them!</string>
+    <string name="tip4">You can set a message when your send a Woop</string>
+    <string name="tip5">You can find your friends on Facebook</string>
+    <string name="tip6">You can find your friends on Google+</string>
+    <string name="tip7">In the messages, the circle means <i>received</i></string>
+    <string name="tip8">In the messages, the simple arrow means <i>sent</i></string>
+    <string name="tip9">In the messages, the double arrow means <i>read</i></string>
+    <string name="tip10">Place a profile picture so your friends can find you</string>
+    <string name="tip11">If you find an error, please contact us</string>
+    <string name="tip12">If you like Woopit share it with your friends!</string>
+    <string name="tip13">If you have any ideas on a new 3D model, contact us</string>
+
+    <!-- Tiempo -->
+    <string name="just_now">Right now</string>
+    <string name="time_ago">%s ago</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="minute">A minute</string>
+    <string name="minutes">%d minutes</string>
+    <string name="hour">One hour</string>
+    <string name="hours">%d hours</string>
+    <string name="day">One day</string>
+    <string name="days">%d days</string>
+    <string name="weeks">Weeks</string>
+	
+    <!-- Notificaciones -->
+    <string name="notificacion_peticion_amigos">Wants to be your friend on Woopit</string>
+    <string name="notificacion_nuevo_mensaje">Has sent a Woop to you! Tap to see it</string>
+    <string name="notificacion_peticion_aceptada">Has accepted you! Send him/her a Woop</string>
+    <string name="notificacion_woopit_actualizado">New version available</string>
+    <string name="notificacion_woopit_actualizado2">Tap to update!</string>
+	<string name="notificacion_woopit_sin_senal">No connection detected, tap to reload</string>
+	
+	<string name="woop_enviado_para"><Data><![CDATA[<b>To:</b>]]> </Data></string>
+	<string name="woop_enviado_status"><Data><![CDATA[<b>Message Status:</b>]]> </Data></string>
+	<string name="woop_enviado"><Data><![CDATA[<b>Woop Name:</b>]]> </Data></string>
+	<string name="woop_enviado_leido">Read</string>
+	<string name="woop_enviado_noLeido">Unread</string>
+	<string name="woop_enviado_fecha"><Data><![CDATA[<b>Date:</b>]]> </Data></string>
+	<string name="woop_enviado_texto"><Data><![CDATA[<b>Text:</b>]]> </Data></string>
+    <string name="title_activity_buy_model_dialog">BuyModelDialog</string>
+	
+    <!-- Version 1.0.2 -->
+
+    <string name="enviar_foto">Send photo!</string>
+    <string name="tomar_foto">Take photo</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_image_preview">ImagePreviewActivity</string>
+    <string name="enviando_mensaje">Sending message&#8230;</string>
+
+    <!-- Version 1.0.3 -->
+    <string name="error_camara">Error opening camera, maybe you have to restart your device</string>
+    <string name="nueva_version_disponible">There is an update for Woopit available. You must update because older versions will not work.</string>
+    <string name="actualizar_ahora">Update now</string>
+    
+</resources>

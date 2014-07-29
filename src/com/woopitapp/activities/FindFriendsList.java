@@ -1,4 +1,4 @@
-package com.woopitapp.fragments;
+package com.woopitapp.activities;
 
 import java.util.ArrayList;
 
@@ -7,41 +7,47 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.woopitapp.R;
-import com.woopitapp.activities.SearchUsers.UserAdapter;
+import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
+import com.woopitapp.fragments.HomeFragment;
+import com.woopitapp.server_connections.InsertCoins;
 import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
-public class FindFriendsList extends Fragment {
+public class FindFriendsList extends WoopitActivity {
 
 	ListView user_list;
 	UserAdapter uAdapter;
+    boolean share_launched = false , share_clicked = false;
+	private int SHARE_REQUEST_CODE = 1;
 	
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	
-        View view = (LinearLayout)inflater.inflate(R.layout.find_friends_list, container, false);
-        
-        Bundle arguments = getArguments();
-        
-        if(arguments != null){
+	public void onCreate( Bundle savedInstanceState ){
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.find_friends_list);
+		
+		Bundle extras = getIntent().getExtras();
+		
+		if(extras != null){
         	
-        	user_list = (ListView) view.findViewById(R.id.user_list);
-            String result = arguments.getString("result");
+        	user_list = (ListView) findViewById(R.id.user_list);
+            String result = extras.getString("result");
             
             try {
 				JSONArray users = new JSONArray(result);
@@ -63,21 +69,31 @@ public class FindFriendsList extends Fragment {
 						list.add(u);
 					}
 					
-					uAdapter = new UserAdapter(getActivity(), R.id.user_list, list );
+					uAdapter = new UserAdapter(this, R.id.user_list, list );
 			        user_list.setAdapter(uAdapter);
 				}
 				else{
-					((LinearLayout)view.findViewById(R.id.no_friends)).setVisibility(View.VISIBLE);
+					((LinearLayout) findViewById(R.id.no_friends)).setVisibility(View.VISIBLE);
 				}
 
 			} catch (JSONException e) {					
 				e.printStackTrace();
 			}
         }
-        
-        return view;
-    }
-    
+	}
+	
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if ( requestCode == SHARE_REQUEST_CODE && share_launched && share_clicked ){
+			
+			Utils.onShareWoopit(getApplicationContext(), "SlidingMenu", "Compartido");
+			new InsertCoins(this , 1 , R.string.por_compartir ).execute();
+		}
+		
+		share_launched = false;
+		share_clicked = false;
+	}
+    	
     public class UserAdapter extends ArrayAdapter<User>{
     	
 		ArrayList<User> items;
@@ -103,12 +119,14 @@ public class FindFriendsList extends Fragment {
 			ImageView image = (ImageView) convertView.findViewById(R.id.image);
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView username = (TextView) convertView.findViewById(R.id.username);
-			ImageView add_friend = (ImageView) convertView.findViewById(R.id.add_friend);			
+			final ImageView add_friend = (ImageView) convertView.findViewById(R.id.add_friend);		
+			final ProgressBar loading = (ProgressBar) convertView.findViewById(R.id.loading);
 			
-			image.setImageBitmap(user.getImage(getActivity()));
+			Utils.setUserImage(context, image, user.id);
 			name.setText(user.name);
 			username.setText("@"+user.username);
 			add_friend.setVisibility(View.VISIBLE);
+			loading.setVisibility(View.GONE);
 						
 			switch( user.request_status ){
 			
@@ -129,6 +147,10 @@ public class FindFriendsList extends Fragment {
 
 				@Override
 				public void onClick(View arg0) {
+					
+					add_friend.setVisibility(View.GONE);
+					loading.setVisibility(View.VISIBLE);
+					
 					new AddOrRejectFriend(user.id).execute();
 				}
 			});
@@ -141,6 +163,20 @@ public class FindFriendsList extends Fragment {
 		}
 		
     }
+
+    public void inviteFriends( View v ){
+		
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.compartir_woopit_texto));
+		sendIntent.setType("text/plain");
+		
+		startActivityForResult(Intent.createChooser(sendIntent, getResources().getString(R.string.compartir_woopit)),SHARE_REQUEST_CODE);
+		
+		Utils.onShareWoopit(getApplicationContext(), "FindFriendsList", "Entrar");
+		share_launched = true;
+		
+	}
     
  // Si ya esta la amistad la rompe, si no esta crea un request, si ya habia un request lo acepta.
  	class AddOrRejectFriend extends ServerConnection{
@@ -151,7 +187,7 @@ public class FindFriendsList extends Fragment {
  			super();
  			
  			this.to_user = to_user;
- 			init(getActivity(),"add_or_reject_friend",new Object[]{ User.get(getActivity()).id , to_user });
+ 			init(getApplicationContext(),"add_or_reject_friend",new Object[]{ User.get(getApplicationContext()).id , to_user });
  		}
 
  		@Override
@@ -160,7 +196,9 @@ public class FindFriendsList extends Fragment {
  			if ( result != null && result.length() > 0 ){
  				
  				int new_status = Integer.parseInt(result);
- 				
+
+				Utils.onFriendsAddOrReject(getApplicationContext(), "FindFriendsList", new_status == 1 ? "Agregar" : "Borrar" , to_user);
+				
  				// Busco el usuario y cambio su request_status
  				for ( User u : uAdapter.items ){
  					if ( u.id == to_user ){
@@ -170,7 +208,7 @@ public class FindFriendsList extends Fragment {
  				
  				if ( new_status == -1 || new_status == 1 ){
  			        // Refresco lista de amigos
- 			        new User.GetFriends(getActivity(), User.get(getActivity()).id).execute();
+ 			        new User.GetFriends(getApplicationContext(), User.get(getApplicationContext()).id).execute();
  				}
  				
  				uAdapter.notifyDataSetChanged();
@@ -178,13 +216,12 @@ public class FindFriendsList extends Fragment {
  				Log.i("Add friend", result);		
  			}
  			else{
- 				Toast.makeText(getActivity(), getResources().getString(R.string.error_de_conexion),Toast.LENGTH_SHORT).show();
+ 				Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_de_conexion),Toast.LENGTH_SHORT).show();
  			}
  		}
  		
- 	}
- 	
-    
+ 	}   
     
 }
         
+

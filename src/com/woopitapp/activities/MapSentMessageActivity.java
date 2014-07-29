@@ -1,45 +1,46 @@
 package com.woopitapp.activities;
 
 	import java.io.IOException;
-	import java.util.List;
-	import java.util.Locale;
+import java.util.List;
+import java.util.Locale;
 
 	import android.app.Activity;
-	import android.content.Context;
-	import android.content.Intent;
-	import android.content.IntentSender;
-	import android.location.Address;
-	import android.location.Geocoder;
-	import android.location.Location;
-	import android.os.Bundle;
-	import android.support.v4.app.FragmentActivity;
-	import android.support.v4.app.FragmentTransaction;
-	import android.util.Log;
-	import android.view.KeyEvent;
-	import android.view.View;
-	import android.view.inputmethod.EditorInfo;
-	import android.widget.Button;
-	import android.widget.EditText;
-	import android.widget.TextView;
-	import android.widget.TextView.OnEditorActionListener;
-	import android.widget.Toast;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 	import com.google.android.gms.common.ConnectionResult;
-	import com.google.android.gms.common.GooglePlayServicesClient;
-	import com.google.android.gms.location.LocationClient;
-	import com.google.android.gms.maps.CameraUpdateFactory;
-	import com.google.android.gms.maps.GoogleMap;
-	import com.google.android.gms.maps.GoogleMapOptions;
-	import com.google.android.gms.maps.SupportMapFragment;
-	import com.google.android.gms.maps.model.Circle;
-	import com.google.android.gms.maps.model.CircleOptions;
-	import com.google.android.gms.maps.model.LatLng;
-	import com.google.android.gms.maps.model.Marker;
-	import com.google.android.gms.maps.model.MarkerOptions;
-	import com.woopitapp.R;
-	import com.woopitapp.entities.User;
-	import com.woopitapp.services.ServerConnection;
-	import com.woopitapp.services.Utils;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.woopitapp.R;
+import com.woopitapp.entities.User;
+import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
 public class MapSentMessageActivity extends FragmentActivity implements 
 GooglePlayServicesClient.ConnectionCallbacks,
@@ -67,6 +68,7 @@ GoogleMap.OnMapClickListener {
 		double longitud;
 		String modelName;
 		String nombre;
+		String texto;
 		
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ GoogleMap.OnMapClickListener {
 			longitud = extras.getDouble("longitud");
 			modelName = extras.getString("modelName");
 			nombre = extras.getString("nombre");
+			texto = extras.getString("texto");
 			
 			options = new GoogleMapOptions();
 			options.mapType(GoogleMap.MAP_TYPE_NORMAL)
@@ -141,7 +144,7 @@ GoogleMap.OnMapClickListener {
 		    marker = mMap.addMarker(new MarkerOptions()
 	        .position(latlng)
 	        .title(getResources().getString(R.string.mensaje_enviado_aqui,nombre))
-	        .snippet(getResources().getString(R.string.modelo_enviado) + " " + modelName));
+	        .snippet(Html.fromHtml(getResources().getString(R.string.woop_enviado) + " " + modelName + "\n" +getResources().getString(R.string.woop_enviado_texto) + " " + texto).toString()));
 	        //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 			
 			marker.showInfoWindow();
@@ -168,8 +171,9 @@ GoogleMap.OnMapClickListener {
 			public void onComplete(String result) {
 				
 				if( result != null && result.equals("OK") ){
-					
-				//	Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , userName ) , Toast.LENGTH_LONG).show();
+
+					Toast.makeText(getApplicationContext(), getResources().getString(R.string.mensaje_enviado , nombre ) , Toast.LENGTH_LONG).show();
+					Utils.sendBroadcast(getApplicationContext(), R.string.broadcast_messages);
 					setResult(RESULT_OK);
 				    finish();
 				}

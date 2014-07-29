@@ -5,15 +5,6 @@ import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
-import com.woopitapp.R;
-import com.woopitapp.entities.User;
-import com.woopitapp.fragments.LoginFragment;
-import com.woopitapp.fragments.SignupFragment;
-import com.woopitapp.fragments.WelcomeFragment;
-import com.woopitapp.services.Data;
-import com.woopitapp.services.Preferences;
-import com.woopitapp.services.ServerConnection;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -30,10 +21,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class WelcomeActivity extends FragmentActivity {
+import com.woopitapp.R;
+import com.woopitapp.entities.User;
+import com.woopitapp.fragments.WelcomeFragment;
+import com.woopitapp.services.Data;
+import com.woopitapp.services.Preferences;
+import com.woopitapp.services.ServerConnection;
+import com.woopitapp.services.Utils;
 
+public class WelcomeActivity extends FragmentActivity {
+	
+	Fragment currentFragment;
+	private int SIGNUP_LOGIN_REQUEST = 1;
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		if ( !Preferences.isFirstTime(this) && User.get(this) != null && User.get(this).username != null ){
@@ -52,24 +54,25 @@ public class WelcomeActivity extends FragmentActivity {
 		transaction.commit();
 	}
 	
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if ( requestCode == SIGNUP_LOGIN_REQUEST && resultCode == RESULT_OK ){
+			finish();
+		}
+		
+	}
+	
 	public void goLogin( View v ){
 
-		Fragment fragment = new LoginFragment();
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		
-		transaction.replace(R.id.fragment_container, fragment);
-		transaction.addToBackStack(null);
-		transaction.commit();
+		Intent i = new Intent( this , LoginActivity.class );
+		startActivityForResult(i , SIGNUP_LOGIN_REQUEST  );
 	}
 	
 	public void goSignup( View v ){
-
-		Fragment fragment = new SignupFragment();
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		
-		transaction.replace(R.id.fragment_container, fragment);
-		transaction.addToBackStack(null);
-		transaction.commit();
+		Intent i = new Intent( this , SignupActivity.class );
+		startActivityForResult(i , SIGNUP_LOGIN_REQUEST  );
+		
 	}
 	
 	/* Coloca un email del usuario de una vez */
@@ -103,6 +106,13 @@ public class WelcomeActivity extends FragmentActivity {
 		public NewUser( Activity act , String email , String name , String password , String facebook_hash , String gplus_hash , boolean automaticLogin ){
 			super();
 			
+			if ( facebook_hash != null || gplus_hash != null ){
+				Utils.onRegister(act, "WelcomeActivity", facebook_hash == null ? "Google+" : "Facebook" );
+			}
+			else{
+				Utils.onRegister(act, "WelcomeActivity", "Ninguna" );
+			}
+			
 			this.act = act;
 			this.email = email;
 			this.name = name;
@@ -129,7 +139,7 @@ public class WelcomeActivity extends FragmentActivity {
 			if ( result.toLowerCase(Locale.getDefault()).equals("ok")){
 				
 				if ( automaticLogin ){
-					new LoginTask( act, this.email , this.password , this.facebook_hash , this.gplus_hash ).execute();
+					new LoginTask( act, this.email , name , this.password , this.facebook_hash , this.gplus_hash ).execute();
 				}
 				
 			}
@@ -137,7 +147,7 @@ public class WelcomeActivity extends FragmentActivity {
 				if ( result.toLowerCase(Locale.getDefault()).equals("already_registered") ){
 					
 					if ( this.facebook_hash.length() > 0 || this.gplus_hash.length() > 0 ){
-						new LoginTask( act, this.email , this.password , this.facebook_hash , this.gplus_hash ).execute();						
+						new LoginTask( act, this.email , name , this.password , this.facebook_hash , this.gplus_hash ).execute();						
 					}
 					else{
 						Toast.makeText(act, act.getResources().getString(R.string.correo_ya_registrado),Toast.LENGTH_SHORT).show();
@@ -157,16 +167,25 @@ public class WelcomeActivity extends FragmentActivity {
 
 		Activity act;
 		String email;
+		String name;
 		String password;
 		String facebook_hash;
 		String gplus_hash;
 		ProgressDialog dialog;
 		
-		public LoginTask( Activity act , String email , String password , String facebook_hash , String gplus_hash ){
+		public LoginTask( Activity act , String email , String name , String password , String facebook_hash , String gplus_hash ){
 			super();
+			
+			if ( facebook_hash != null || gplus_hash != null ){
+				Utils.onLogin(act, "WelcomeActivity", facebook_hash == null ? "Google+" : "Facebook" ); 
+			}
+			else{
+				Utils.onLogin(act, "WelcomeActivity", "Ninguna" );
+			}
 			
 			this.act = act;
 			this.email = email;
+			this.name = name;
 			this.password = password != null ? password : "";
 			this.facebook_hash = facebook_hash != null ? facebook_hash : "";
 			this.gplus_hash = gplus_hash != null ? gplus_hash : "";
@@ -179,8 +198,8 @@ public class WelcomeActivity extends FragmentActivity {
 		public void onComplete(String result) {
 			
 			dialog.dismiss();
-						
-			if ( result != null && result.length() > 0 ){
+			
+			if ( result != null && !result.equals("invalid") && !result.equals("not_registered") && !result.equals("error") ){
 				
 				try{
 					JSONObject userInfo = new JSONObject(result);
@@ -201,6 +220,8 @@ public class WelcomeActivity extends FragmentActivity {
 					data.open();
 					data.insertUser(id, email, username , name, image, facebook_user, gplus_user);
 					data.close();
+
+					act.setResult(RESULT_OK);
 					
 					if ( username == null ){
 						Intent i = new Intent(act,ChooseUsernameActivity.class);
@@ -211,7 +232,7 @@ public class WelcomeActivity extends FragmentActivity {
 					
 					Preferences.setFirstTime(act, false);
 					Intent i = new Intent(act,MainActivity.class);
-					act.startActivity(i);	
+					act.startActivity(i);
 					act.finish();
 				}
 				catch ( Exception e ){
@@ -219,10 +240,72 @@ public class WelcomeActivity extends FragmentActivity {
 				}
 			}
 			else{
-				Toast.makeText(act, act.getResources().getString(R.string.error_iniciar_sesion),Toast.LENGTH_SHORT).show();
+				
+				if ( result == null ){
+					Toast.makeText(act, act.getResources().getString(R.string.error_de_conexion),Toast.LENGTH_SHORT).show();
+				}
+				else if ( result.equals("not_registered") && (facebook_hash.length() > 0 || gplus_hash.length() > 0) ){
+					
+					if ( facebook_hash.length() > 0 ){
+						new WelcomeActivity.NewUser( act , email , name, null , facebook_hash , null , true ).execute();
+					}
+					else{
+						new WelcomeActivity.NewUser( act , email , name, null , null , gplus_hash , true ).execute();
+					}
+					
+				}
+				else{
+					
+					if ( result.equals("invalid") ){
+						Toast.makeText(act, act.getResources().getString(R.string.error_iniciar_sesion),Toast.LENGTH_SHORT).show();
+					}
+					else if ( result.equals("error") ){
+						Toast.makeText(act, act.getResources().getString(R.string.error_desconocido),Toast.LENGTH_SHORT).show();
+					}
+					
+				}
 			}
 		}
 		
 	}
+	
+	public static class ResetPassword extends ServerConnection{
+
+		Context c;
+		String email;
+		ProgressDialog dialog;
 		
+		public ResetPassword( Context c , String email ){
+			super();
+			this.c = c;
+			this.email = email;
+			dialog = ProgressDialog.show(c, "",c.getResources().getString(R.string.enviando_correo_restauracion), true);
+			
+			init(c,"request_password_reset", new Object[]{ email });
+		}
+		
+		@Override
+		public void onComplete(String result) {
+			
+			dialog.dismiss();
+			
+			if ( result != null ){
+				
+				if ( result.equals("ok")){
+					
+					Toast.makeText(c, c.getResources().getString(R.string.enviado_correo_restauracion,email), Toast.LENGTH_SHORT).show();
+				}
+				else{
+					Toast.makeText(c, R.string.error_desconocido, Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+			else{
+				Toast.makeText(c, R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+		
+	}
+	
 }

@@ -1,7 +1,21 @@
-package com.woopitapp.fragments;
+package com.woopitapp.activities;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -18,91 +32,78 @@ import com.google.android.gms.plus.PlusClient.OnPeopleLoadedListener;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.woopitapp.R;
-import com.woopitapp.activities.WelcomeActivity;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Patterns;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-
-public class LoginFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener {
-	
+public class SignupActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, OnPeopleLoadedListener {
+    
 	/* Facebook */
 	private static final String TAG = "Signup";
 	private UiLifecycleHelper uiHelper;
 	
 	/* Google+ */
-	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
-	
+	public static final int REQUEST_CODE_RESOLVE_ERR = 9000;
+
     private ProgressDialog mConnectionProgressDialog;
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
-
-    EditText email, password;
+    
     boolean fb_info_ready = false;
     boolean gp_info_ready = false;
-	
-	
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    
+    EditText email, password,rPassword, name;
+    Activity act;
+    
+    public void onCreate( Bundle savedInstanceState ){
     	
-        View view = inflater.inflate(R.layout.login_fragment, container, false);
-        
-        /* Login con Facebook */
-        uiHelper = new UiLifecycleHelper(getActivity(), callback);
+    	super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_signup);
+		act = this;
+		
+		/* Login con Facebook */
+        uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
-        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
-        authButton.setFragment(this);
+        LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
         authButton.setReadPermissions(Arrays.asList("email","public_profile","user_friends"));
         
         
         /* Login con Google+ */
-                
+        
         mPlusClient =
-        	    new PlusClient.Builder(getActivity(), this, this).setActions(
+        	    new PlusClient.Builder(this, this, this).setActions(
         	        "http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
         	        .build();
+        
+        
+		mConnectionProgressDialog = new ProgressDialog(this);
+		mConnectionProgressDialog.setMessage(getResources().getString(R.string.creando_cuenta));
 		
-		mConnectionProgressDialog = new ProgressDialog(getActivity());
-		mConnectionProgressDialog.setMessage("Signing in...");
-		
-		view.findViewById(R.id.sign_in_button).setOnClickListener(new OnClickListener(){
+		findViewById(R.id.sign_in_button).setOnClickListener(new OnClickListener(){
 			
 			@Override
 			public void onClick(View view) {
 				
+				// Se tiene que mostrar esta barra de progreso si no se resuelve el fallo de conexi�n.
+				
 			    if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 			        if (mConnectionResult == null) {
-			            //mConnectionProgressDialog.show();
+			            mConnectionProgressDialog.show();
 			            mPlusClient.connect();
 			        } else {
-			            mConnectionResult = null;
-						mPlusClient.connect();
-						//mConnectionResult.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
+		                mConnectionResult = null;
+		                mPlusClient.connect();
 			        }
 			    }
 			}
 		});
-				
-        email = (EditText) view.findViewById(R.id.email);
-		password = (EditText) view.findViewById(R.id.password);
+		
+		email = (EditText) findViewById(R.id.email);
+		password = (EditText) findViewById(R.id.password);
+		rPassword = (EditText) findViewById(R.id.repeatedPassword);
+		name = (EditText) findViewById(R.id.name);
 		
 		TextWatcher validWatcher = new TextWatcher() {
 	        @Override
 	        public void afterTextChanged(Editable s) {
-	        	showLoginButton();
+	        	showSignUpButton();
 	        }
 
 	        @Override
@@ -114,21 +115,22 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		
 		email.addTextChangedListener(validWatcher);
 		password.addTextChangedListener(validWatcher);
+		rPassword.addTextChangedListener(validWatcher);
 		
-		WelcomeActivity.setGoogleEmail(email,getActivity());
+		WelcomeActivity.setGoogleEmail(email,this);
 		
-		Button login = (Button) view.findViewById(R.id.login);
-		login.setOnClickListener(new OnClickListener(){
+		Button signUp = (Button) findViewById(R.id.signUp);
+		signUp.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				login(v);
+				signUp(v);
 			}
 		});
 		
-        return view;
+    	
     }
-    
+    	
     public void onStart(){
 		super.onStart();
 	}
@@ -156,14 +158,13 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
-	        mConnectionResult = null;
-	        mPlusClient.connect();
-	    }
 		
 	    super.onActivityResult(requestCode, resultCode, data);
 	    
+		if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == Activity.RESULT_OK) {
+			mConnectionResult = null;
+	        mPlusClient.connect();
+	    }
 		
 	    uiHelper.onActivityResult(requestCode, resultCode, data);
 	}
@@ -185,27 +186,26 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	    super.onSaveInstanceState(outState);
 	    uiHelper.onSaveInstanceState(outState);
 	}
-    
-	public void login( View v ){
-		new WelcomeActivity.LoginTask(getActivity(), email.getText().toString(), password.getText().toString(), null, null).execute();
-	}
 	
-	public void showLoginButton(){
-		
-		if ( getView() == null )
-			return;
-		
+	public void showSignUpButton(){
+				
 		Pattern pattern = Patterns.EMAIL_ADDRESS;
 	    boolean email_valid = pattern.matcher(email.getText()).matches();
 	    
-		Button button = (Button) getView().findViewById(R.id.login);
+		Button button = (Button) findViewById(R.id.signUp);
 		
-		if ( email_valid && password.getText().length() >= 6 ){
+		if ( email_valid && password.getText().length() >= 6 && (password.getText()+"").equals(rPassword.getText()+"") ){
 			button.setVisibility(View.VISIBLE);
 		}
 		else{
 			button.setVisibility(View.GONE);
 		}
+	}
+	
+	public void signUp( View v ){
+		new WelcomeActivity.NewUser( this , 
+				email.getText().toString() , name.getText().toString() ,
+				password.getText().toString() , null , null , true ).execute();
 	}
 	
 	/* Metodos del login de Facebook */
@@ -223,13 +223,15 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 					if ( fb_info_ready )
 						return;
 					
+					String name = user.getFirstName() + " " + user.getLastName();
                     String id = user.getId();
                     String email = user.getProperty("email").toString();
 
                     Log.i("facebookid", id);
+                    Log.i("Name", name);
                     Log.i("email", email);
-
-                    new WelcomeActivity.LoginTask( getActivity() , email , null , id , null ).execute();
+                    
+                    new WelcomeActivity.NewUser( act , email , name , null , id , null , true ).execute();
                     fb_info_ready = true;
 				}
 			}).executeAsync();
@@ -254,7 +256,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		if (result.hasResolution()) {
             
 			try {
-                result.startResolutionForResult(getActivity(), REQUEST_CODE_RESOLVE_ERR);
+                result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
             } catch (SendIntentException e) {
                 mPlusClient.connect();
             }
@@ -265,7 +267,8 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		
+
+        mConnectionProgressDialog.dismiss();
 		Log.i(TAG, "Conectado");
 		mPlusClient.loadPeople(this, "me");
 	}
@@ -276,9 +279,10 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		Person person = personBuffer.get(0);
 		String id = person.getId();
 		String email = mPlusClient.getAccountName();
+		String name = person.getDisplayName();
 		personBuffer.close();
 
-        new WelcomeActivity.LoginTask( getActivity() , email , null , null , id ).execute();
+        new WelcomeActivity.NewUser( this , email , name , null , null , id , true ).execute();
         gp_info_ready = true;				
 	}
 
@@ -287,5 +291,4 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		Log.i(TAG, "Desconectado");
 	}
 	
-    
 }

@@ -21,17 +21,20 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.scythe.bucket.BucketListAdapter;
 import com.woopitapp.R;
+import com.woopitapp.activities.MainActivity;
 import com.woopitapp.activities.ModelPreviewActivity;
 import com.woopitapp.activities.SearchModelsActivity;
 import com.woopitapp.entities.Model;
@@ -49,17 +52,20 @@ public class ModelsFragment extends Fragment {
 	EditText search;
 	JSONArray saved_models;
 	
+	
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	
-        View view = (LinearLayout)inflater.inflate(R.layout.models_fragment, container, false);
+    	View view = (LinearLayout)inflater.inflate(R.layout.models_fragment, container, false);
         
         models_list = (ListView) view.findViewById(R.id.models_list);
         list_loading = (LinearLayout) View.inflate(getActivity(), R.layout.list_footer_loading, null);
+        //LinearLayout camera = (LinearLayout) View.inflate(getActivity(), R.layout.camera_on_list, null);
         models_list.addFooterView(list_loading);
+        //models_list.addHeaderView(camera);
         saved_models = new JSONArray();
         
         PauseOnScrollListener listener = new PauseOnScrollListener(Utils.getImageLoader(getActivity()), true, true, new OnScrollListener(){
-
+        	
 			@Override
 			public void onScroll(AbsListView list, int firstVisible, int visibleItems, int totalItems) {
 				
@@ -97,29 +103,38 @@ public class ModelsFragment extends Fragment {
 					i.putExtra("query", query );
 					startActivity(i);
 					
+					Utils.onModelSearch(getActivity(), "ModelsFragment", query);
+					
 					return true;
 				}
 				
 				return false;
 			}
 		});
-        
         return view;
     }
     
     public void onStart(){
     	
     	super.onStart();
-    	new GetUserModels( getActivity() , page ).execute();
-    	 
+    	if(mAdapter == null){
+    		new GetUserModels( getActivity() , page ).execute();
+    	}
     }
     
     public void onStop(){
-    	
+    
     	super.onStop();
-    	
-    	mAdapter = null;
+    }
+    
+    public void onDestroyView(){
+    	super.onDestroyView();
     	page = 0;
+    	if(mAdapter != null){
+    		mAdapter.clear();
+    	}
+    	mAdapter = null;
+    	Log.e("chao", "chao");
     }
     
     public void invalidateModels(){
@@ -149,24 +164,51 @@ public class ModelsFragment extends Fragment {
 			TextView name = (TextView) convertView.findViewById(R.id.name);
 			TextView price = (TextView) convertView.findViewById(R.id.price);
 			ImageView image = (ImageView) convertView.findViewById(R.id.image);
-			
-			name.setText(model.name);
-			price.setText(model.price);
-			image.setImageResource(R.drawable.model_image);
-			
-			convertView.setOnClickListener(new OnClickListener(){
+						
+			if ( model.id == 0 ){
+				name.setText(R.string.tomar_foto);
+				price.setText("free");
+				image.setImageResource(R.drawable.camera_circle);
+				
+				DisplayImageOptions options = new DisplayImageOptions.Builder()
+		        .showStubImage(R.drawable.model_image)
+		        .showImageForEmptyUri(R.drawable.model_image)
+		        .showImageOnFail(R.drawable.model_image)
+		        .cacheOnDisc()
+		        .displayer(new RoundedBitmapDisplayer(Utils.dpToPx(80, getActivity())))
+		        .build();
+				
+				 Utils.getImageLoader(getActivity()).displayImage("drawable://" + R.drawable.camera_circle,image);//.displayImage(R.drawable.camera_circle, image, options );
+				
+				convertView.setOnClickListener(new OnClickListener(){
+					
+					@Override
+					public void onClick(View arg0) {
+						
+						((MainActivity)getActivity()).goToCamera(arg0);
+					}
+				});
+			}
+			else{
+				name.setText(model.name);
+				price.setText(model.price);
+				Utils.setModelImage(getActivity(), image, model.id);
+				
+				convertView.setOnClickListener(new OnClickListener(){
 
-				@Override
-				public void onClick(View arg0) {
-					
-					Intent i = new Intent(getActivity(),ModelPreviewActivity.class);
-					i.putExtra("modelId", model.id);
-					i.putExtra("enable", model.enable);
-					startActivity(i);
-					
-				}
-			});
-			
+					@Override
+					public void onClick(View arg0) {
+						
+						Intent i = new Intent(getActivity(),ModelPreviewActivity.class);
+						i.putExtra("modelId", model.id);
+						i.putExtra("enable", model.enable);
+						startActivity(i);
+						
+						Utils.onModelOpen(getActivity(), "ModelsFragment", model.id);		
+					}
+				});
+			}
+						
 			return convertView;
 		}
 
@@ -179,6 +221,16 @@ public class ModelsFragment extends Fragment {
 	        models_list.setAdapter(mAdapter);
     	}
 	}
+    
+    public void refresh(){
+    	
+    	((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+		((TextView) getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);	
+		
+		if(mAdapter == null){
+    		new GetUserModels( getActivity() , page ).execute();
+    	}
+    }
     
     class GetUserModels extends ServerConnection{
     	
@@ -193,7 +245,16 @@ public class ModelsFragment extends Fragment {
     		this.con = con;
     		this.user_id = User.get(con).id;
     		this.page = page;
+
     		loader = (ProgressBar) getActivity().findViewById(R.id.loaderModel);	
+
+    		if(mAdapter == null){
+    			loader.setVisibility(View.VISIBLE);
+    		}
+        		
+    		((ImageView) getView().findViewById(R.id.notSignalImage)).setVisibility(View.GONE);
+    		((TextView)  getView().findViewById(R.id.reload_button)).setVisibility(View.GONE);	
+    		
     		init(con,"get_user_models",new Object[]{ user_id+"" , page });
     	}
     	
@@ -224,10 +285,17 @@ public class ModelsFragment extends Fragment {
 					}
 					
 					if ( mAdapter != null ){
-						mAdapter.addAll(models_list);
+						
+						for (Model m : models_list){
+							mAdapter.add(m);
+						}
+						
+						//mAdapter.addAll(models_list);
 						mAdapter.notifyDataSetChanged();
 					}
 					else{
+						
+						models_list.add(0, new Model(0,"","","",true));
 						setModelList(models_list);
 					}
 					
@@ -246,10 +314,38 @@ public class ModelsFragment extends Fragment {
 				
 			}
 			else{
-				Toast.makeText(con, R.string.error_de_conexion, Toast.LENGTH_SHORT).show();
+				ImageView notSiganlIcon = ((ImageView) getView().findViewById(R.id.notSignalImage));
+				TextView reload = (TextView) getView().findViewById(R.id.reload_button);		
+				reload.setVisibility(View.VISIBLE);
+				notSiganlIcon.setVisibility(View.VISIBLE);
+				if(mAdapter != null){
+					mAdapter.clear();
+				}
+				if(list_loading != null){
+					list_loading.setVisibility(View.GONE);
+				}
+				notSiganlIcon.setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
+				reload.setOnClickListener(new View.OnClickListener() {
+				    public void onClick(View v) {
+				    	refresh();
+				    }
+				});
 			}
 			
 		}
+	    
+		public void updateContent(){
+
+	    	page = 0;
+	    	mAdapter = null;
+	    	new GetUserModels( getActivity() , page ).execute();
+	       
+	    }
+	    
     	
     }
         

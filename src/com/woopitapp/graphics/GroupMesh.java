@@ -75,7 +75,6 @@ public class GroupMesh{
     }
     public void crearBuffers(FileChannel in,int cantCaras){
     	try{
-
     		carasCount = cantCaras;
 					
 	    	ByteBuffer byteBuf = ByteBuffer.allocateDirect(cantCaras*3*3*4);
@@ -85,11 +84,10 @@ public class GroupMesh{
 			
 			byteBuf = ByteBuffer.allocateDirect(4);
 			byteBuf.order(ByteOrder.nativeOrder());
-			ByteBuffer extraBuff = byteBuf;
-			in.read(extraBuff);
-			extraBuff.position(0);
+			in.read(byteBuf);
+			byteBuf.position(0);
 			
-			if(extraBuff.getInt(0)>0){
+			if(byteBuf.getInt(0)>0){
 				byteBuf = ByteBuffer.allocateDirect(cantCaras*3*2*4);
 				byteBuf.order(ByteOrder.nativeOrder());
 				mTextureBuffer = byteBuf;    
@@ -98,10 +96,11 @@ public class GroupMesh{
 			
 			byteBuf = ByteBuffer.allocateDirect(4);
 			byteBuf.order(ByteOrder.nativeOrder());
-			extraBuff = byteBuf;
-			in.read(extraBuff);
-			extraBuff.position(0);
-			if(extraBuff.getInt(0)>0){
+		
+			in.read(byteBuf);
+			byteBuf.position(0);
+			if(byteBuf.getInt(0)>0){
+				byteBuf.position(0);
 				byteBuf = ByteBuffer.allocateDirect(cantCaras*3*3*4);
 				byteBuf.order(ByteOrder.nativeOrder());
 				mNormalBuffer = byteBuf;
@@ -111,7 +110,7 @@ public class GroupMesh{
 	    	mNormalBuffer.position(0);
 	    	mVertexBuffer.position(0);
 	    	mTextureBuffer.position(0);
-	  
+
     	}catch(Exception e){
     		Log.e("PASOO---","error: " +  e);
     	}
