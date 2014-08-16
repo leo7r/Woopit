@@ -40,6 +40,18 @@
             android:layout_alignParentTop="true"
             />
         
+        <ImageView 
+            android:id="@+id/last_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+           	android:src="@drawable/gallery"
+           	android:padding="10dp"
+           	android:visibility="gone"
+            />
+        
         <ImageButton 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,6 +63,7 @@
             />
         
         <ImageView 
+            android:id="@+id/from_gallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

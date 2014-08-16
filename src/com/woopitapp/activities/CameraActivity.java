@@ -2,8 +2,11 @@ package com.woopitapp.activities;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -28,6 +31,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -58,6 +62,9 @@ public class CameraActivity extends WoopitActivity {
 	private static final String TEMP_PHOTO_FILE = "woopit_user_image.jpg";
 	private final int image_size = 400;
 	
+	/* Multiple shots */
+	ArrayList<Bitmap> shots;
+	
 	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +87,7 @@ public class CameraActivity extends WoopitActivity {
 				
 		setContentView(R.layout.activity_camera);
 		setBorders();
+		shots = new ArrayList<Bitmap>();
 		
 		if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
 		      Toast.makeText(this, "No camera on this device", Toast.LENGTH_LONG).show();
@@ -107,7 +115,7 @@ public class CameraActivity extends WoopitActivity {
         }
         
 	}
-
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
 		if ( requestCode == IMAGE_REQUEST && resultCode == RESULT_OK ){
@@ -138,7 +146,7 @@ public class CameraActivity extends WoopitActivity {
         }
 		
 	}
-
+	
 	public void onStop(){
 		super.onStop();
 		
@@ -151,6 +159,11 @@ public class CameraActivity extends WoopitActivity {
 			camera.release();
 			camera = null;
 		}
+		
+		for ( Bitmap b : shots ){
+			b.recycle();
+		}
+		
 	}
 	
 	class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
@@ -326,7 +339,7 @@ public class CameraActivity extends WoopitActivity {
 	    
 	    return cameraId;
 	  }
-
+	
 	@SuppressLint("NewApi")
 	private void setBorders(){
 		Display display = getWindowManager().getDefaultDisplay();
@@ -358,6 +371,58 @@ public class CameraActivity extends WoopitActivity {
 		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
 		border1.setLayoutParams(params);
+	}
+	
+	public String saveImageToSd( int num , byte[] bytes ){
+		
+		try{
+
+			Random r = new Random();
+			int random = r.nextInt(100000);
+			
+			String uri = Environment.getExternalStorageDirectory()+ File.separator + "Woopit" + File.separator + "wpt_"+ num + "_"+ random +".jpg";
+			
+			File f = new File(uri);
+			f.createNewFile();
+			//write the bytes in file
+			FileOutputStream fo = new FileOutputStream(f);
+			fo.write(bytes);
+			
+			//remember close de FileOutput
+			fo.close();
+			return uri;
+		}
+		catch( Exception e ){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public void goPreview(){
+
+        Intent i = new Intent(getApplicationContext(),ImagePreviewActivity.class);
+        if ( userId != -1 && userName != null ){
+        	i.putExtra("userId", userId);
+        	i.putExtra("userName", userName);
+        }
+        
+		for ( int c = 0 ; c < shots.size() ; c++ ){
+			
+			Bitmap bm = shots.get(c);
+			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+	        byte[] imageBytes = baos.toByteArray();
+	        //String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+	        //i.putExtra("image"+c, encodedImage);
+	        
+	        String uri = saveImageToSd(c,imageBytes);
+	        i.putExtra("image"+c,uri );
+		}
+		
+        startActivityForResult(i,IMAGE_REQUEST);
+		Utils.onMessageImageNew(getApplicationContext());
 	}
 	
 	class PhotoHandler implements PictureCallback {
@@ -419,22 +484,29 @@ public class CameraActivity extends WoopitActivity {
 		    Bitmap bitmap3 = Bitmap.createScaledBitmap(bitmap2, image_size, image_size, false);
 		    bitmap2.recycle();
 		    
-		    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		    bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] imageBytes = baos.toByteArray();
-            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            
-            Intent i = new Intent(getApplicationContext(),ImagePreviewActivity.class);
-            
-            if ( userId != -1 && userName != null ){
-            	i.putExtra("userId", userId);
-            	i.putExtra("userName", userName);
-            }
-            
-            i.putExtra("image", encodedImage);
-            startActivityForResult(i,IMAGE_REQUEST);
-			Utils.onMessageImageNew(getApplicationContext());
-            
+		    shots.add(bitmap3);
+		    
+		    if ( shots.size() >= 4 ){
+		    	goPreview();
+		    }
+		    else{
+		    	ImageView last_image = (ImageView) findViewById(R.id.last_image);
+		    	ImageView done = (ImageView) findViewById(R.id.from_gallery);
+		    	
+		    	last_image.setImageBitmap(bitmap3);
+		    	last_image.setVisibility(View.VISIBLE);
+		    	done.setImageResource(R.drawable.send_message);
+		    	done.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						goPreview();
+					}
+				});
+		    	
+		    	camera.startPreview();
+		    }
+		                
             //new sendImageMessage( 26 , "leo" , "" , "fru" , 500 , 500 , encodedImage ).execute();
             //bitmap2.recycle();
 		}
@@ -472,7 +544,7 @@ public class CameraActivity extends WoopitActivity {
 	private Uri getTempUri() {
 	    return Uri.fromFile(getTempFile());
 	}
-
+	
 	private File getTempFile() {
 
 	    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {

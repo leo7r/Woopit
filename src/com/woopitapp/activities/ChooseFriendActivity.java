@@ -27,7 +27,7 @@ public class ChooseFriendActivity extends WoopitActivity {
 	int modelId;
 	ListView user_list;
 	ListAdapter uAdapter;
-	String encoded_image;
+	ArrayList<String> images;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,18 +35,20 @@ public class ChooseFriendActivity extends WoopitActivity {
 		setContentView(R.layout.choose_friend);
 		
 		Bundle extras = getIntent().getExtras();
+		images = new ArrayList<String>();
 		
 		if ( extras.containsKey("modelId") ){
 			
 			modelId = extras.getInt("modelId");
-			encoded_image = null;
 		}
 		else{
+			modelId = -1;
 			
-			if ( extras.containsKey("image") ){
-				encoded_image = extras.getString("image");
-				modelId = -1;
-			}
+			for ( int i = 0 ; i < 4 ; ++i ){
+				if ( extras.containsKey("image"+i) ){
+					images.add(extras.getString("image"+i));
+				}
+			}			
 		}
 		
 		user_list = (ListView) findViewById(R.id.user_list);
@@ -106,7 +108,7 @@ public class ChooseFriendActivity extends WoopitActivity {
 				@Override
 				public void onClick(View v) {
 					
-					if ( encoded_image == null ){
+					if ( images.size() == 0 ){
 						Intent i = new Intent(getApplicationContext(),ModelPreviewActivity.class);
 						i.putExtra("userId", user.id);
 						i.putExtra("userName",user.username);
@@ -118,7 +120,11 @@ public class ChooseFriendActivity extends WoopitActivity {
 						Intent i = new Intent(getApplicationContext(),ImagePreviewActivity.class);
 						i.putExtra("userId", user.id);
 						i.putExtra("userName",user.username);
-						i.putExtra("image", encoded_image);
+						
+						for ( int j = 0 ; j < images.size() ; ++ j ){
+							i.putExtra("image"+j, images.get(j));
+						}
+						
 						startActivity(i);
 						Utils.onMessageImageNew(getApplicationContext());
 					}

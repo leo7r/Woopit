@@ -1,6 +1,7 @@
 package com.woopitapp.activities;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -25,7 +26,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -42,7 +42,7 @@ import android.widget.Toast;
 import com.woopitapp.R;
 import com.woopitapp.WoopitActivity;
 import com.woopitapp.entities.User;
-import com.woopitapp.graphics.Objeto;
+import com.woopitapp.graphics.MultiTextObject;
 import com.woopitapp.services.ServerConnection;
 
 public class TestActivity extends WoopitActivity {
@@ -67,14 +67,16 @@ public class TestActivity extends WoopitActivity {
 	Bitmap bitmap;
 	int indice = 0;
 	GLClearRenderer render;
-	Objeto corazon;
-	String nombreImagen;
+
+	MultiTextObject corazon;
+	ArrayList<Bitmap> images;
+	int modelo;
+
 	boolean sensorOk = false;
 	boolean sensorDistancia = false;
 	boolean notif = false;
 	LocationChangeListener location_listener;
 	int msgId;
-	
 	int current_frame = 0;
 	int frames[] = new int[]{
 			R.drawable.corazon_anim1,
@@ -116,20 +118,30 @@ public class TestActivity extends WoopitActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
                 
-
-
+        images = new ArrayList<Bitmap>();
         
         Bundle extras = getIntent().getExtras();
         latitud = extras.getString("latitud");
         longitud = extras.getString("longitud");
-        nombreImagen = extras.getString("nombreImagen");
         text = extras.getString("text");
         nombre = extras.getString("nombre");
         msgId = extras.getInt("messageId");
         
-                
-        Log.e("nombreimgaen",nombreImagen);
-        new getImageMessage(nombreImagen).execute();
+        ArrayList<String> image_names = new ArrayList<String>();
+        
+        for ( int i = 0 ; i < 4 ; ++i ){
+        	
+        	if ( extras.containsKey("image"+i) ){
+        		image_names.add(extras.getString("image"+i));
+        	}
+        }
+        
+        for ( int i = 0 ; i < image_names.size() ; ++i ){
+        	String name = image_names.get(i);
+            new getImageMessage( name , i+1 , image_names.size() ).execute();
+        }
+        
+        //Log.e("nombreimgaen",nombreImagen);
 		
         
     }
@@ -463,15 +475,19 @@ public class TestActivity extends WoopitActivity {
             
             gl.glLoadIdentity();
             
-            gl.glRotatef(rotationX, 0,1, 0);
-        	gl.glRotatef(rotationY,1 ,0, 0);
-        	
+
+            //gl.glRotatef(rotationX, 0,1, 0);
+        	//gl.glRotatef(rotationY,1 ,0, 0);
+            
+            
+            //gl.glRotatef(rotationX, 0,1, 0);
+            //gl.glRotatef(rotationY,1 ,0, 0);
+            
 	        gl.glTranslatef(0.0f, -1.5f, -13.5f);
-	       // gl.glRotatef(mCubeRotation, 0, 1, 0);
+	      //  gl.glRotatef(mCubeRotation, 0, 1, 0);
 	        
-	        Bitmap bm = BitmapFactory.decodeResource(getResources(), frames[current_frame%24]);
-			corazon =  new Objeto("selfie.jet",getApplicationContext(),bm);
-			current_frame++;
+        	corazon.draw(gl);
+
 	        
         	corazon.draw(gl);
             mCubeRotation -= 0.70f;
@@ -610,7 +626,7 @@ public class TestActivity extends WoopitActivity {
     	  return true;  
     }
     
-    public void crearCamara(Bitmap bm){
+    public void crearCamara(){
 
        acelerometro = "Z";
        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -634,18 +650,9 @@ public class TestActivity extends WoopitActivity {
     			render = new GLClearRenderer();
     			glView.setRenderer(render);
     			glView.setZOrderOnTop(true);
-    			corazon =  new Objeto("selfie.jet",getApplicationContext(),bm);
     			
-    			/*new Handler().postDelayed(new Runnable(){
-
-					@Override
-					public void run() {
-						
-						corazon.liberarMemoria();
-						
-		    			//bm.recycle();
-		    			current_frame+=1;
-					}}, 300);*/
+    			String[] nombres = {"a1","a2","a3","a4"};
+    			corazon =  new MultiTextObject("selfie.jet",getApplicationContext(),nombres);
     			
     			if(Double.parseDouble(latitud) == 500.0){
 
@@ -920,8 +927,12 @@ public class TestActivity extends WoopitActivity {
     
     class getImageMessage extends ServerConnection{
 
-		public getImageMessage( String image_name ){
+    	int num_images,current_image;
+    	
+		public getImageMessage( String image_name , int current_image , int num_images ){
 			super();
+			this.num_images = num_images;
+			this.current_image = current_image;
 			
 			init(getApplicationContext(),"get_image_message", new Object[]{User.get(getApplicationContext()).id,image_name});
 		}
@@ -933,7 +944,11 @@ public class TestActivity extends WoopitActivity {
 				
 				byte[] decodedString = Base64.decode(result, Base64.DEFAULT);
 				Bitmap bm = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-				crearCamara(bm);
+				images.add(current_image-1,bm);
+				
+				if ( current_image == num_images ){
+					crearCamara();
+				}
 			}
 			else{
 				Toast.makeText(getApplicationContext(), R.string.error_de_conexion, Toast.LENGTH_SHORT).show();

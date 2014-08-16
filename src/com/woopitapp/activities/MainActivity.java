@@ -166,7 +166,9 @@ public class MainActivity extends WoopitFragmentActivity implements TabHost.OnTa
         }
         
         Intent i = new Intent(this,TestActivity.class);
-    	i.putExtra("nombreImagen","52_jAkXbuVy_1406339508");
+    	i.putExtra("image1","26_t3IoBV4b_1408218223");
+    	i.putExtra("image2","26_EmHU8qeb_1408218223");
+    	i.putExtra("image3","26_1gO4f7uM_1408218223");
     	i.putExtra("latitud", "500");
 		i.putExtra("longitud","500");
 		

@@ -1,18 +1,23 @@
 package com.woopitapp.activities;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -63,7 +68,8 @@ public class MapActivity extends FragmentActivity implements
 	Circle area;
 	float default_zoom = 17.0f;
 	int userId,modelId;
-	String userName,message,encoded_image;
+	String userName,message;
+	ArrayList<String> encoded_images;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +77,27 @@ public class MapActivity extends FragmentActivity implements
 		setContentView(R.layout.map);
 		
 		Bundle extras = getIntent().getExtras();
+		encoded_images = new ArrayList<String>();
 		
 		userId = extras.getInt("userId");
 		modelId = extras.getInt("modelId");
 		userName = extras.getString("userName");
 		message = extras.getString("message");
 		
-		if ( extras.containsKey("image") ){
-			encoded_image = extras.getString("image");
-		}
-		else{
-			encoded_image = null;
+		for ( int i = 0 ; i < 4 ; ++i ){
+			
+			if ( extras.containsKey("image"+i)){
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+				String path = extras.getString("image"+i);
+				Bitmap bm = BitmapFactory.decodeFile(path, options);
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+				byte[] byteArray = stream.toByteArray();
+		        String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+				
+				encoded_images.add(encodedImage);
+			}
 		}
 		
 		search_address = (EditText) findViewById(R.id.search_address);
@@ -158,11 +174,11 @@ public class MapActivity extends FragmentActivity implements
 	
 	public void sendWoop( View v ){
 		
-		if ( encoded_image == null ){
+		if ( encoded_images.size() == 0 ){
 			new Send_Message(this, selectedLatitude , selectedLongitude ).execute();
 		}
 		else{
-			new sendImageMessage(userId,userName,"",message,selectedLatitude,selectedLongitude,encoded_image).execute();
+			new sendImageMessage(userId,userName,"",message,selectedLatitude,selectedLongitude,encoded_images).execute();
 		}
 		
 		setResult(RESULT_OK);
@@ -212,14 +228,27 @@ public class MapActivity extends FragmentActivity implements
 		String text, userName;
 		double latitude, longitude;
 		
-		public sendImageMessage(int receiver , String userName , String title,String text,double latitud, double longitud , String encoded_image ){
+		public sendImageMessage(int receiver , String userName , String title,String text,double latitud, double longitud , ArrayList<String> encoded_images ){
 			this.text = text;
 			this.receiver = receiver;
 			this.userName = userName;
 			this.latitude = latitud;
 			this.longitude = longitud;
 			
-			init(getApplicationContext(),"send_image_message",new Object[]{User.get(getApplicationContext()).id,receiver,title,text,latitud,longitud,encoded_image});
+
+			Object params[] = new Object[ 6 + encoded_images.size() ];
+			params[0] = User.get(getApplicationContext()).id;
+			params[1] = receiver;
+			params[2] = title;
+			params[3] = text;
+			params[4] = latitud;
+			params[5] = longitud;
+			
+			for ( int i = 0 ; i < encoded_images.size() ; ++i ){
+				params[6+i] = encoded_images.get(i);
+			}
+			
+			init(getApplicationContext(),"send_image_message",params);
 		}
 
 		@Override
