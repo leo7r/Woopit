@@ -652,7 +652,7 @@ public class TestActivity extends WoopitActivity {
     			glView.setZOrderOnTop(true);
     			
     			String[] nombres = {"a1","a2","a3","a4"};
-    			corazon =  new MultiTextObject("selfie.jet",getApplicationContext(),nombres);
+    			corazon =  new MultiTextObject("selfie.jet",getApplicationContext(),images);
     			
     			if(Double.parseDouble(latitud) == 500.0){
 

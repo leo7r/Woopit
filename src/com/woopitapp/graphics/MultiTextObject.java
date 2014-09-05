@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.Timer;
@@ -34,14 +35,14 @@ public class MultiTextObject {
 	private int[] textureIds;
 	private Bitmap bmSelfie = null;
 	private Context context;
-	private String[] nombres;
+	private ArrayList<Bitmap> images;
 	private int iText = 0;
 	
-	public MultiTextObject(String nombre,Context context,String[] nombres){
+	public MultiTextObject(String nombre,Context context,ArrayList<Bitmap> images){
 		  Timer timer = new Timer("Printer");
 		try{
 			
-			this.nombres = nombres;
+			this.images = images;
 			this.context = context;
 			groups = new Vector<GroupMesh>();
 			this.crearBuffers(context,nombre);
@@ -80,7 +81,7 @@ public class MultiTextObject {
 				
 				GroupMesh g  = groups.get(i);
 
-			    if( g.getMaterial().getTexture() != null || nombres.length > 0){
+			    if( g.getMaterial().getTexture() != null || images.size() > 0){
 			       
 			       
 				    	gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
@@ -89,21 +90,20 @@ public class MultiTextObject {
 					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
 					    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 					    if(renderCount%20 == 0 && renderCount != 0){
-					    	if(iText < (nombres.length-1)){
+					    	if(iText < (images.size()-1)){
 					    		iText++;
 					    	}else{
 					    		iText = 0;
 					    	}
 					    	if(bmSelfie != null){
-					    		bmSelfie.recycle();
+					    		//bmSelfie.recycle();
 					    	}
 					    }
-					    int resID = context.getResources().getIdentifier(nombres[iText], "drawable", context.getPackageName());
-						bmSelfie = BitmapFactory.decodeResource(context.getResources(), resID);
+				//	    int resID = context.getResources().getIdentifier(nombres[iText], "drawable", context.getPackageName());
+						bmSelfie = images.get(iText);
 						GLUtils.texImage2D( GL10.GL_TEXTURE_2D, 0, bmSelfie, 0);
 					  
 			       	
-			    	Log.e("textura ","textura " +  g.getMaterial().getName() + " tam " + g.getMaterial().getTexture() );
 			    }else{
 				
 
@@ -115,7 +115,7 @@ public class MultiTextObject {
 			
 		
 			GroupMesh g  = groups.get(i);
-			if((g.getMaterial() != null && g.getMaterial().getTexture() != null) || nombres.length>0){
+			if((g.getMaterial() != null && g.getMaterial().getTexture() != null) || images.size()>0){
 				gl.glEnable(GL10.GL_TEXTURE_2D);
 				gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
 			}
@@ -267,9 +267,7 @@ public class MultiTextObject {
 					in.read(extraBuff);	
 					extraBuff.position(0);
 					m.setTexture(BitmapFactory.decodeByteArray(extraBuff.array(), 0, tamTex));
-					if(tamTex >0){
-						Log.e("hay textura", "hay texturaaa " + m.getName() + " tam: " + tamTex);
-					}
+
 				}
 		
 				this.materiales.add(m);
@@ -286,7 +284,7 @@ public class MultiTextObject {
 				File woopitDir;
 				FileInputStream inStream = null;
 				FileChannel in ;
-				if(nombres.length > 0){
+				if(images.size() > 0){
 					AssetFileDescriptor afd = context.getAssets().openFd(nombre);  
 				 	FileInputStream fis = afd.createInputStream();
 				 	in = fis.getChannel();
